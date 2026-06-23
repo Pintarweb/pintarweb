@@ -1,0 +1,86 @@
+{
+    "id": "test-razif",
+    "business_name": "Razif Aircond & Renovation",
+    "tagline": "Pakar Aircond & Renovation Cheras",
+    "phone": "012-345 6789",
+    "whatsapp": "60123456789",
+    "area": "Cheras, Selangor",
+    "service_areas": [
+        "Cheras",
+        "Ampang",
+        "Pandan Jaya",
+        "Taman Connaught"
+    ],
+    "niche": "aircond-contractor",
+    "services": [
+        "Pemasangan Aircond Baru",
+        "Servis & Cuci Aircond",
+        "Pembaikan Aircond Rosak",
+        "Renovation Ringan"
+    ],
+    "established": "2015",
+    "mood": "trustworthy-local",
+    "hero_variant": "split",
+    "google_rating": 4.3,
+    "google_review_count": 31,
+    "testimonials": [
+        {
+            "name": "Puan Siti",
+            "area": "Taman Connaught",
+            "text": "Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended.",
+            "rating": 5
+        },
+        {
+            "name": "En. Hafiz",
+            "area": "Ampang",
+            "text": "Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap.",
+            "rating": 5
+        },
+        {
+            "name": "Cik Nurul",
+            "area": "Cheras",
+            "text": "Pasang aircond baru, kemas kerja dia. Explain elok pasal warranty. Puas hati.",
+            "rating": 5
+        }
+    ],
+    "gallery_images": [],
+    "social": {
+        "instagram_handle": "razifaircond",
+        "instagram_followers": 2100,
+        "instagram_active": true,
+        "instagram_content_type": "project-photos",
+        "instagram_link_in_bio": "whatsapp",
+        "tiktok_handle": null,
+        "tiktok_followers": 0,
+        "tiktok_active": false
+    },
+    "audit": {
+        "has_website": false,
+        "website_url": null,
+        "visibility_score": 50,
+        "trust_score": 70,
+        "first_impression_score": null,
+        "competitor_gap": -25,
+        "monthly_search_volume": 290,
+        "search_keyword": "aircond service cheras",
+        "competitors": [
+            {
+                "name": "Cheras Aircond Pro",
+                "has_website": true,
+                "rating": 4.5,
+                "reviews": 67
+            },
+            {
+                "name": "AC Masters Cheras",
+                "has_website": true,
+                "rating": 4.2,
+                "reviews": 43
+            }
+        ],
+        "generated_copy": {
+            "para1": "You have 31 Google reviews at 4.3 stars and have been operating since 2015 — that's a stronger trust foundation than either of your two nearest competitors. Your Instagram account @razifaircond has 2,100 followers, which shows real community presence in Cheras.",
+            "para2": "The keyword \"aircond service cheras\" gets searched roughly 290 times a month. Right now, none of those searches lead to your business. Cheras Aircond Pro (67 reviews) and AC Masters Cheras (43 reviews) both rank above you — not because their work is better, but because they have websites that show up when someone searches. Your 4.3 stars and your Instagram following are invisible to those 290 monthly searchers.",
+            "para3": "The website we built surfaces your 31 reviews, your service coverage across Cheras, Ampang, Pandan Jaya and Taman Connaught, and your WhatsApp contact immediately — everything someone searching \"aircond service cheras\" right now needs to see before they decide who to call."
+        }
+    }
+}

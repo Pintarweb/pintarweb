@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan + Demo — Razif Aircond & Renovation</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gd: #0F6E56; --gm: #1D9E75; --gl: #E1F5EE; --gt: #085041;
+  --am: #BA7517; --al: #FAEEDA;
+  --rd: #A32D2D; --rl: #FCEBEB;
+  --bg: #F8F4F0;
+  --r: 12px;
+  --color-background-primary: #FFFFFF;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #57534E;
+  --color-border-tertiary: #E5E7EB;
+}
+body { font-family: sans-serif; background: var(--bg); color: var(--color-text-primary); }
+.page { max-width: 680px; margin: 0 auto; padding-bottom: 3rem; }
+
+.navbar { background: var(--gd); padding: 1.5rem 1.5rem 0.5rem; display: flex; justify-content: center; align-items: center; position: relative; }
+.nav-logo { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: 0.03em; }
+.toggle-pill { position: absolute; right: 1.5rem; top: 1.5rem; display: flex; background: rgba(255,255,255,0.15); border-radius: 20px; overflow: hidden; }
+.toggle-pill button { border: none; background: transparent; color: rgba(255,255,255,0.65); font-size: 12px; font-weight: 600; padding: 5px 14px; cursor: pointer; border-radius: 20px; transition: background 0.2s, color 0.2s; }
+.toggle-pill button.active { background: #fff; color: var(--gd); }
+
+.header { background: var(--gd); color: #fff; padding: 0.5rem 1.5rem 2rem; border-bottom: 1px solid rgba(0,0,0,0.1); }
+.header-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; }
+.header-biz { font-size: 24px; font-weight: 800; margin-bottom: 6px; text-transform: uppercase; letter-spacing: -0.02em; }
+.header-title { font-size: 14px; font-weight: 500; opacity: 0.9; }
+.header-date { font-size: 12px; opacity: 0.7; margin-top: 8px; }
+
+.scores-section { padding: 1.5rem 1rem 0; }
+.scores-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.score-card { background: var(--color-background-primary); border-radius: var(--r); padding: 1.25rem 1rem; border: 1px solid var(--color-border-tertiary); box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.score-ring { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; position: relative; flex-shrink: 0; }
+.score-ring-inner { width: 52px; height: 52px; border-radius: 50%; background: var(--color-background-primary); display: grid; place-items: center; position: absolute; top: 10px; left: 10px; }
+.score-num { font-size: 20px; font-weight: 800; }
+.score-label { font-size: 13px; font-weight: 700; color: var(--color-text-primary); text-align: center; }
+.score-summary { font-size: 11px; color: var(--color-text-secondary); text-align: center; line-height: 1.4; font-weight: 500; }
+
+.section { margin: 1.25rem 1rem 0; background: var(--color-background-primary); border-radius: var(--r); border: 1px solid var(--color-border-tertiary); box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden; }
+.section-header { padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--color-border-tertiary); }
+.stag { display: inline-block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 8px; font-weight: 700; }
+.tw { background: var(--al); color: var(--am); }
+.td { background: var(--rl); color: var(--rd); }
+.ti { background: var(--gl); color: var(--gt); }
+.section-title { font-size: 15px; font-weight: 800; text-transform: uppercase; color: var(--color-text-primary); letter-spacing: 0.02em; }
+.section-body { padding: 1.25rem; }
+
+.checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.5; }
+.ci { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-size: 10px; font-weight: 700; }
+.cx { background: var(--rl); color: var(--rd); }
+.co { background: var(--gl); color: var(--gt); }
+
+.journey { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 1.25rem; }
+@media (min-width: 480px) { .journey { grid-template-columns: 1fr 1fr; } }
+.jcol { border-radius: 10px; padding: 12px; }
+.jcol.now { background: var(--rl); }
+.jcol.after { background: var(--gl); }
+.jlbl { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
+.jcol.now .jlbl { color: var(--rd); }
+.jcol.after .jlbl { color: var(--gt); }
+.jstep { font-size: 12px; line-height: 1.6; color: var(--color-text-secondary); font-weight: 500; }
+
+.sstat { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--color-border-tertiary); }
+.sstat:last-child { border-bottom: none; }
+.snum { font-size: 24px; font-weight: 800; color: var(--gd); min-width: 65px; }
+.sdesc { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); line-height: 1.5; }
+
+.narrative p { font-size: 13px; font-weight: 500; line-height: 1.7; color: var(--color-text-secondary); margin-bottom: 1rem; }
+.narrative p:last-child { margin-bottom: 0; }
+.narrative strong { color: var(--color-text-primary); font-weight: 700; }
+
+.kblock { background: #F8F4F0; border-radius: 8px; border-left: 4px solid var(--gd); padding: 14px; margin-bottom: 10px; }
+.kword { font-size: 15px; font-weight: 700; color: var(--gd); }
+.kstat { font-size: 12px; font-weight: 600; color: var(--gt); margin-top: 4px; }
+.kmiss { font-size: 12px; font-weight: 600; color: var(--rd); margin-top: 4px; }
+
+.comp-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.comp-table th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-tertiary); }
+.comp-table td { padding: 10px; border-bottom: 1px solid var(--color-border-tertiary); color: var(--color-text-secondary); vertical-align: middle; }
+.comp-table tr:last-child td { border-bottom: none; }
+.comp-table .hl td { background: var(--gl); color: var(--gt); font-weight: 600; }
+.pill { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 700; }
+.pg { background: var(--gl); color: var(--gt); }
+.pr { background: var(--rl); color: var(--rd); }
+.pa { background: var(--al); color: var(--am); }
+
+.demo-box { background: #F8F4F0; border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.demo-screen { width: 100%; height: 140px; background: var(--gd); border-radius: 8px; display: grid; place-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.demo-screen span { color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+.demo-note { font-size: 13px; font-weight: 600; color: var(--gt); text-align: center; line-height: 1.5; }
+.btn-demo { background: var(--gd); color: #fff; font-size: 14px; font-weight: 700; padding: 12px 28px; border-radius: 24px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(15,110,86,0.2); transition: transform 0.2s, box-shadow 0.2s; }
+.btn-demo:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(15,110,86,0.3); }
+
+.cta-section { margin: 1.5rem 1rem 0; background: var(--gd); border-radius: var(--r); padding: 1.75rem 1.25rem; text-align: center; box-shadow: 0 8px 24px rgba(15,110,86,0.15); }
+.cta-price { font-size: 32px; font-weight: 800; color: #fff; }
+.cta-period { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); }
+.cta-monthly { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); margin-top: 4px; margin-bottom: 1.25rem; }
+.btn-wa { display: flex; align-items: center; justify-content: center; gap: 10px; background: #25D366; color: #fff; font-size: 15px; font-weight: 700; padding: 14px 20px; border-radius: 12px; border: none; cursor: pointer; width: 100%; box-shadow: 0 4px 12px rgba(37,211,102,0.2); transition: transform 0.2s, box-shadow 0.2s; }
+.btn-wa:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
+.btn-wa svg { width: 20px; height: 20px; flex-shrink: 0; }
+.cta-note { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.6); text-align: center; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="navbar">
+    <img src="../../resources/pintarweb-logo.webp" alt="Pintarweb" style="height:96px; display:block;">
+    <div class="toggle-pill">
+      <button class="active" id="btn-bm" onclick="setLang('bm')">BM</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="header-label" data-bm="Laporan Online Presence" data-en="Online Presence Report">Laporan Online Presence
+    </div>
+    <div class="header-biz">Razif Aircond &amp; Renovation</div>
+    <div class="header-title" data-bm="Audit Kehadiran Digital — Cheras, Selangor"
+      data-en="Digital Presence Audit — Cheras, Selangor">Audit Kehadiran Digital — Cheras, Selangor</div>
+    <div class="header-date" data-bm="Disediakan pada: 19 Mei 2026" data-en="Prepared on: 19 May 2026">Disediakan pada:
+      19 Mei 2026</div>
+  </div>
+
+  <div class="scores-section">
+    <div class="scores-grid">
+      <div class="score-card">
+        <div class="score-ring" style="background: conic-gradient(#A32D2D calc(50 * 1%), #E5E7EB calc(50 * 1%));">
+          <div class="score-ring-inner"><span class="score-num" style="color:#A32D2D;">50</span></div>
+        </div>
+        <div class="score-label" data-bm="Visibility" data-en="Visibility">Visibility</div>
+        <div class="score-summary" data-bm="Hampir tiada dalam carian Google"
+          data-en="Almost invisible in Google search">Hampir tiada dalam carian Google</div>
+      </div>
+      <div class="score-card">
+        <div class="score-ring" style="background: conic-gradient(#1D9E75 calc(70 * 1%), #E5E7EB calc(70 * 1%));">
+          <div class="score-ring-inner"><span class="score-num" style="color:#1D9E75;">70</span></div>
+        </div>
+        <div class="score-label" data-bm="Kepercayaan" data-en="Trust">Kepercayaan</div>
+        <div class="score-summary" data-bm="4.3★ Google, 31 ulasan — bagus tapi tersembunyi"
+          data-en="4.3★ Google, 31 reviews — good but hidden">4.3★ Google, 31 ulasan — bagus tapi tersembunyi</div>
+      </div>
+      <div class="score-card">
+        <div class="score-ring" style="background: conic-gradient(#BA7517 calc(35 * 1%), #E5E7EB calc(35 * 1%));">
+          <div class="score-ring-inner"><span class="score-num" style="color:#BA7517;">35</span></div>
+        </div>
+        <div class="score-label" data-bm="Tanggapan Pertama" data-en="First Impression">Tanggapan Pertama</div>
+        <div class="score-summary" data-bm="Tiada website — pelanggan tak nampak apa"
+          data-en="No website — customers see nothing">Tiada website — pelanggan tak nampak apa</div>
+      </div>
+      <div class="score-card">
+        <div class="score-ring" style="background: conic-gradient(#A32D2D calc(25 * 1%), #E5E7EB calc(25 * 1%));">
+          <div class="score-ring-inner"><span class="score-num" style="color:#A32D2D;">-25</span></div>
+        </div>
+        <div class="score-label" data-bm="Jurang Pesaing" data-en="Competitor Gap">Jurang Pesaing</div>
+        <div class="score-summary" data-bm="Pesaing jauh lebih kelihatan online"
+          data-en="Competitors far more visible online">Pesaing jauh lebih kelihatan online</div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div style="margin: 1.25rem 1rem 0; display:flex; align-items:center; gap:12px;">
+    <div style="flex:1; height:1px; background:#D3D1C7;"></div>
+    <div style="background:#0F6E56; color:#fff; font-size:11px; font-weight:700; padding:7px 16px; border-radius:20px; white-space:nowrap; letter-spacing:0.04em;" data-bm="Website Demo Awak" data-en="Your Demo Website">Website Demo Awak</div>
+    <div style="flex:1; height:1px; background:#D3D1C7;"></div>
+  </div>
+
+  <div style="margin: 1rem 1rem 0; background:#fff; border-radius:12px; border:1px solid #E5E7EB; overflow:hidden;">
+    <div style="background:#0F6E56; padding:1rem 1.25rem;">
+      <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); font-weight:600; margin-bottom:4px;" data-bm="Dah siap untuk awak" data-en="Ready for you">Dah siap untuk awak</div>
+      <div style="font-size:16px; font-weight:800; color:#fff; font-family:Georgia,serif;">razifaircond.pintarweb.com</div>
+      <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:3px;" data-bm="Website penuh — mobile-first, BM/EN toggle, WhatsApp CTA" data-en="Full website — mobile-first, BM/EN toggle, WhatsApp CTA">Website penuh — mobile-first, BM/EN toggle, WhatsApp CTA</div>
+    </div>
+    <img src="images/audit-screenshot.webp" alt="Razif Aircond &amp; Renovation — demo site preview" style="width:100%; display:block; max-height:220px; object-fit:cover; object-position:top;">
+    <div style="padding:1rem 1.25rem; display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px;">
+        <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Pemasangan Aircond" data-en="Aircond Installation">Pemasangan Aircond</span>
+        <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Servis & Cuci" data-en="Service & Clean">Servis & Cuci</span>
+        <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Renovation" data-en="Renovation">Renovation</span>
+      </div>
+      <div style="font-size:12px; color:#5F5E5A;">
+        <span style="color:#BA7517;">★★★★</span> 4.3 · 31 <span data-bm="ulasan Google · Sejak 2015 · Cheras, Ampang, Pandan Jaya" data-en="Google reviews · Since 2015 · Cheras, Ampang, Pandan Jaya">ulasan Google · Sejak 2015 · Cheras, Ampang, Pandan Jaya</span>
+      </div>
+      <a href="https://preview.pintarweb.com/clients/test-razif/" target="_blank"
+         style="display:block; background:#0F6E56; color:#fff; text-align:center; font-size:14px; font-weight:700; padding:13px; border-radius:10px; text-decoration:none;"
+         data-bm="Tengok Demo Website Penuh →" data-en="View Full Demo Website →">Tengok Demo Website Penuh →</a>
+    </div>
+  </div>
+
+  <div style="margin: 1.5rem 1rem 0.5rem; display:flex; align-items:center; gap:12px;">
+    <div style="flex:1; height:1px; background:#D3D1C7;"></div>
+    <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#888780; font-weight:600; white-space:nowrap;" data-bm="Kenapa awak perlu tahu ini" data-en="Why you need to know this">Kenapa awak perlu tahu ini</div>
+    <div style="flex:1; height:1px; background:#D3D1C7;"></div>
+  </div>
+
+<div class="section">
+    <div class="section-header">
+      <span class="stag td" data-bm="Tiada Website" data-en="No Website">Tiada Website</span>
+      <div class="section-title" data-bm="Apa yang pelanggan nampak sekarang" data-en="What customers see right now">Apa
+        yang pelanggan nampak sekarang</div>
+    </div>
+    <div class="section-body">
+      <ul class="checklist">
+        <li><span class="ci cx">✕</span><span
+            data-bm="Tiada website — pelanggan tak boleh buat penyelidikan sebelum hubungi"
+            data-en="No website — customers can't research before calling">Tiada website — pelanggan tak boleh buat
+            penyelidikan sebelum hubungi</span></li>
+        <li><span class="ci cx">✕</span><span
+            data-bm="Google listing ada tapi kosong — tiada gambar kerja, tiada senarai servis"
+            data-en="Google listing exists but empty — no work photos, no service list">Google listing ada tapi kosong —
+            tiada gambar kerja, tiada senarai servis</span></li>
+        <li><span class="ci cx">✕</span><span
+            data-bm="Tiada harga, tiada testimoni — pelanggan kena tanya dulu sebelum percaya"
+            data-en="No pricing, no testimonials — customers must ask before trusting">Tiada harga, tiada testimoni —
+            pelanggan kena tanya dulu sebelum percaya</span></li>
+        <li><span class="ci co">✓</span><span data-bm="4.3★ dari 31 ulasan Google — aset berharga yang tersembunyi"
+            data-en="4.3★ from 31 Google reviews — valuable asset that's hidden">4.3★ dari 31 ulasan Google — aset
+            berharga yang tersembunyi</span></li>
+      </ul>
+      <div class="journey">
+        <div class="jcol now">
+          <div class="jlbl" data-bm="Sekarang" data-en="Right Now">Sekarang</div>
+          <div class="jstep"
+            data-bm="Pelanggan Google 'aircond service cheras' → Nampak pesaing ada website → Terus hubungi pesaing → Awak tak dapat lead"
+            data-en="Customer Googles 'aircond service cheras' → Sees competitor with website → Calls competitor → You lose the lead">
+            Pelanggan Google 'aircond service cheras' → Nampak pesaing ada website → Terus hubungi pesaing → Awak tak
+            dapat lead</div>
+        </div>
+        <div class="jcol after">
+          <div class="jlbl" data-bm="Dengan Pintarweb" data-en="With Pintarweb">Dengan Pintarweb</div>
+          <div class="jstep"
+            data-bm="Pelanggan Google → Nampak website awak → Baca servis & testimoni → Tekan WhatsApp → Awak dapat job"
+            data-en="Customer Googles → Finds your website → Reads services & reviews → Taps WhatsApp → You get the job">
+            Pelanggan Google → Nampak website awak → Baca servis & testimoni → Tekan WhatsApp → Awak dapat job</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="stag tw" data-bm="Instagram Aktif" data-en="Instagram Active">Instagram Aktif</span>
+      <div class="section-title" data-bm="Media sosial awak bekerja keras tapi terkunci"
+        data-en="Your social media works hard but stays locked in">Media sosial awak bekerja keras tapi terkunci</div>
+    </div>
+    <div class="section-body">
+      <div class="sstat">
+        <div class="snum">2,100</div>
+        <div class="sdesc"
+          data-bm="followers di Instagram @razifaircond — kerja keras awak kumpul ini. Tapi mereka terkunci dalam platform Instagram sahaja."
+          data-en="Instagram followers @razifaircond — you worked hard to build this. But they're locked inside Instagram's platform only.">
+          followers di Instagram @razifaircond — kerja keras awak kumpul ini. Tapi mereka terkunci dalam platform
+          Instagram sahaja.</div>
+      </div>
+      <div class="sstat">
+        <div class="snum">0</div>
+        <div class="sdesc"
+          data-bm="daripada followers ini boleh Google awak dan jumpa apa-apa. Di luar Instagram, awak tak wujud."
+          data-en="of those followers can Google you and find anything. Outside Instagram, you don't exist.">daripada
+          followers ini boleh Google awak dan jumpa apa-apa. Di luar Instagram, awak tak wujud.</div>
+      </div>
+      <div class="sstat">
+        <div class="snum">290</div>
+        <div class="sdesc"
+          data-bm="orang Google 'aircond service cheras' setiap bulan — mereka tak scroll Instagram. Mereka Google."
+          data-en="people Google 'aircond service cheras' every month — they don't scroll Instagram. They Google.">orang
+          Google 'aircond service cheras' setiap bulan — mereka tak scroll Instagram. Mereka Google.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="stag ti" data-bm="Penemuan" data-en="Findings">Penemuan</span>
+      <div class="section-title" data-bm="Apa yang kami perhatikan" data-en="What we observed">Apa yang kami perhatikan
+      </div>
+    </div>
+    <div class="section-body narrative">
+      <p data-bm="Razif Aircond &amp; Renovation ada reputasi yang solid — 4.3 bintang dari 31 ulasan Google, aktif di Instagram dengan 2,100 followers, dan dah operate sejak 2015. Tapi ada satu jurang besar: <strong>bila seseorang Google 'aircond service cheras' pukul 11 malam masa aircond rosak, awak tak muncul.</strong> Pesaing yang ada website mudah jumpa, dan mereka dapat panggilan itu."
+        data-en="Razif Aircond &amp; Renovation has a solid reputation — 4.3 stars from 31 Google reviews, active on Instagram with 2,100 followers, and operating since 2015. But there's one big gap: <strong>when someone Googles 'aircond service cheras' at 11pm when their aircon breaks down, you don't show up.</strong> Competitors with websites are found easily, and they get that call.">
+        Razif Aircond &amp; Renovation ada reputasi yang solid — 4.3 bintang dari 31 ulasan Google, aktif di Instagram
+        dengan 2,100 followers, dan dah operate sejak 2015. Tapi ada satu jurang besar: <strong>bila seseorang Google
+          'aircond service cheras' pukul 11 malam masa aircond rosak, awak tak muncul.</strong> Pesaing yang ada website
+        mudah jumpa, dan mereka dapat panggilan itu.</p>
+      <p data-bm="Kami semak pesaing terdekat — Cheras Aircond Pro (67 ulasan, 4.5★) dan AC Masters Cheras (43 ulasan, 4.2★). Kedua-dua ada website. Bukan sebab mereka lagi bagus dari awak. Sebab mereka <strong>lagi mudah dijumpai</strong> bila orang cari."
+        data-en="We checked your nearest competitors — Cheras Aircond Pro (67 reviews, 4.5★) and AC Masters Cheras (43 reviews, 4.2★). Both have websites. Not because they're better than you. Because they're <strong>easier to find</strong> when people search.">
+        Kami semak pesaing terdekat — Cheras Aircond Pro (67 ulasan, 4.5★) dan AC Masters Cheras (43 ulasan, 4.2★).
+        Kedua-dua ada website. Bukan sebab mereka lagi bagus dari awak. Sebab mereka <strong>lagi mudah
+          dijumpai</strong> bila orang cari.</p>
+      <p data-bm="Awak dah ada asas yang kuat — kemahiran, pengalaman sejak 2015, ulasan positif, servis Cheras hingga Taman Connaught. Yang tinggal adalah <strong>satu tempat dalam internet yang ceritakan semua ini</strong> untuk pelanggan yang belum kenal awak lagi."
+        data-en="You already have a strong foundation — skills, experience since 2015, positive reviews, serving Cheras through Taman Connaught. What's missing is <strong>one place on the internet that tells this story</strong> for customers who haven't met you yet.">
+        Awak dah ada asas yang kuat — kemahiran, pengalaman sejak 2015, ulasan positif, servis Cheras hingga Taman
+        Connaught. Yang tinggal adalah <strong>satu tempat dalam internet yang ceritakan semua ini</strong> untuk
+        pelanggan yang belum kenal awak lagi.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="stag td" data-bm="Peluang Terlepas" data-en="Missed Opportunities">Peluang Terlepas</span>
+      <div class="section-title" data-bm="Orang sedang cari awak — tapi tak jumpa"
+        data-en="People are searching for you — but can't find you">Orang sedang cari awak — tapi tak jumpa</div>
+    </div>
+    <div class="section-body">
+      <div class="kblock">
+        <div class="kword">aircond service cheras</div>
+        <div class="kstat" data-bm="~290 orang cari ini setiap bulan" data-en="~290 people search this every month">~290
+          orang cari ini setiap bulan</div>
+        <div class="kmiss" data-bm="Bisnes awak muncul: 0 kali" data-en="Your business appears: 0 times">Bisnes awak
+          muncul: 0 kali</div>
+      </div>
+      <div class="kblock">
+        <div class="kword">pasang aircond cheras</div>
+        <div class="kstat" data-bm="~150 orang cari ini setiap bulan" data-en="~150 people search this every month">~150
+          orang cari ini setiap bulan</div>
+        <div class="kmiss" data-bm="Bisnes awak muncul: 0 kali" data-en="Your business appears: 0 times">Bisnes awak
+          muncul: 0 kali</div>
+      </div>
+      <div class="kblock">
+        <div class="kword">renovation ringan selangor</div>
+        <div class="kstat" data-bm="~210 orang cari ini setiap bulan" data-en="~210 people search this every month">~210
+          orang cari ini setiap bulan</div>
+        <div class="kmiss" data-bm="Bisnes awak muncul: 0 kali" data-en="Your business appears: 0 times">Bisnes awak
+          muncul: 0 kali</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="stag ti" data-bm="Pesaing" data-en="Competitors">Pesaing</span>
+      <div class="section-title" data-bm="Kenapa mereka dapat lebih pelanggan" data-en="Why they get more customers">
+        Kenapa mereka dapat lebih pelanggan</div>
+    </div>
+    <div class="section-body">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th data-bm="Bisnes" data-en="Business">Bisnes</th>
+            <th data-bm="Website" data-en="Website">Website</th>
+            <th data-bm="Google" data-en="Google">Google</th>
+            <th data-bm="Rating" data-en="Rating">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cheras Aircond Pro</td>
+            <td><span class="pill pg" data-bm="Ada" data-en="Yes">Ada</span></td>
+            <td>67 ulasan</td>
+            <td>4.5★</td>
+          </tr>
+          <tr>
+            <td>AC Masters Cheras</td>
+            <td><span class="pill pg" data-bm="Ada" data-en="Yes">Ada</span></td>
+            <td>43 ulasan</td>
+            <td>4.2★</td>
+          </tr>
+          <tr class="hl">
+            <td data-bm="Razif ← awak" data-en="Razif ← you">Razif ← awak</td>
+            <td><span class="pill pr" data-bm="Tiada" data-en="None">Tiada</span></td>
+            <td>31 ulasan</td>
+            <td>4.3★ <span class="pill pg" data-bm="Terbaik!" data-en="Best!">Terbaik!</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="stag ti" data-bm="Penyelesaian" data-en="Solution">Penyelesaian</span>
+      <div class="section-title" data-bm="Kami dah buat something untuk fix ini"
+        data-en="We already built something to fix this">Kami dah buat something untuk fix ini</div>
+    </div>
+    <div class="section-body">
+      <div style="background:#fff; border-radius:12px; border:1px solid #E5E7EB; overflow:hidden;">
+        <div style="background:#0F6E56; padding:1rem 1.25rem;">
+          <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); font-weight:600; margin-bottom:4px;" data-bm="Dah siap untuk awak" data-en="Ready for you">Dah siap untuk awak</div>
+          <div style="font-size:16px; font-weight:800; color:#fff; font-family:Georgia,serif;">razifaircond.pintarweb.com</div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:3px;" data-bm="Website penuh — mobile-first, BM/EN toggle, WhatsApp CTA" data-en="Full website — mobile-first, BM/EN toggle, WhatsApp CTA">Website penuh — mobile-first, BM/EN toggle, WhatsApp CTA</div>
+        </div>
+        <img src="images/audit-screenshot.webp" alt="Razif Aircond &amp; Renovation — demo site preview" style="width:100%; display:block; max-height:220px; object-fit:cover; object-position:top;">
+        <div style="padding:1rem 1.25rem; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px;">
+            <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Pemasangan Aircond" data-en="Aircond Installation">Pemasangan Aircond</span>
+            <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Servis & Cuci" data-en="Service & Clean">Servis & Cuci</span>
+            <span style="background:#E1F5EE; color:#085041; padding:3px 10px; border-radius:20px; font-weight:600;" data-bm="Renovation" data-en="Renovation">Renovation</span>
+          </div>
+          <div style="font-size:12px; color:#5F5E5A;">
+            <span style="color:#BA7517;">★★★★</span> 4.3 · 31 <span data-bm="ulasan Google · Sejak 2015 · Cheras, Ampang, Pandan Jaya" data-en="Google reviews · Since 2015 · Cheras, Ampang, Pandan Jaya">ulasan Google · Sejak 2015 · Cheras, Ampang, Pandan Jaya</span>
+          </div>
+          <a href="https://preview.pintarweb.com/clients/test-razif/" target="_blank"
+             style="display:block; background:#0F6E56; color:#fff; text-align:center; font-size:14px; font-weight:700; padding:13px; border-radius:10px; text-decoration:none;"
+             data-bm="Tengok Demo Website Penuh →" data-en="View Full Demo Website →">Tengok Demo Website Penuh →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin: 1.25rem 1rem 0; background:#fff; border-radius:12px; border:0.5px solid #E5E7EB; overflow:hidden;">
+    <div style="background:#F1EFE8; padding:0.75rem 1.25rem; border-bottom:0.5px solid #E5E7EB;">
+      <div style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; color:#5F5E5A;" data-bm="Tentang Pintarweb" data-en="About Pintarweb">Tentang Pintarweb</div>
+    </div>
+    <div style="padding:1rem 1.25rem;">
+      <p style="font-size:13px; color:#5F5E5A; line-height:1.6; margin-bottom:12px;" data-bm="Kami team Malaysia based di Selangor. Buat website untuk bisnes trades & contractor tempatan." data-en="We are a Malaysian team based in Selangor. We build websites for local trades & contractor businesses.">Kami team Malaysia based di Selangor. Buat website untuk bisnes trades &amp; contractor tempatan.</p>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; align-items:flex-start; gap:9px; font-size:13px; color:#444441;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-bm="Bayar tahunan — tiada kontrak panjang" data-en="Annual payment — no long-term contract">Bayar tahunan — tiada kontrak panjang</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:9px; font-size:13px; color:#444441;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-bm="Domain awak sendiri — bukan subdomain kami" data-en="Your own domain — not our subdomain">Domain awak sendiri — bukan subdomain kami</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:9px; font-size:13px; color:#444441;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-bm="Boleh edit bila-bila masa — just WhatsApp kami" data-en="Edit anytime — just WhatsApp us">Boleh edit bila-bila masa — just WhatsApp kami</span>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:9px; font-size:13px; color:#444441;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-bm="Jika tak berpuas hati dalam 30 hari — kami refund" data-en="Not satisfied within 30 days — we refund">Jika tak berpuas hati dalam 30 hari — kami refund</span>
+        </div>
+      </div>
+      <div style="margin-top:12px; padding-top:12px; border-top:0.5px solid #E5E7EB; display:flex; align-items:center; gap:8px;">
+        <img src="../../resources/yus-photo.webp" alt="Yusmarin" style="width:32px; height:32px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+        <div>
+          <div style="font-size:13px; font-weight:600; color:#2C2C2A;">Yusmarin</div>
+          <div style="font-size:11px; color:#888780;" data-bm="Pengasas · pintarweb.com · +60174456243" data-en="Founder · pintarweb.com · +60174456243">Pengasas · pintarweb.com · +60174456243</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <div class="cta-price">RM 600 <span class="cta-period" data-bm="/ tahun" data-en="/ year">/ tahun</span></div>
+    <div class="cta-monthly" data-bm="Kurang dari RM 50 sebulan — lebih murah dari bil telefon"
+      data-en="Less than RM 50/month — cheaper than your phone bill">Kurang dari RM 50 sebulan — lebih murah dari bil
+      telefon</div>
+    <button class="btn-wa" id="wa-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+      </svg>
+      <span id="wa-label">Hubungi Melalui WhatsApp</span>
+    </button>
+    <div class="cta-note" data-bm="Tawaran ini terbuka untuk 7 hari sahaja"
+      data-en="This offer is open for 7 days only">Tawaran ini terbuka untuk 7 hari sahaja</div>
+  </div>
+</div>
+
+<script>
+  const WA_MSGS = {
+    bm: "Salam%20Razif%2C%20saya%20dah%20tengok%20laporan%20dan%20demo%20site.%20Boleh%20tanya%20sikit%3F",
+    en: "Hi%20Razif%2C%20I've%20seen%20the%20report%20and%20demo%20site.%20Can%20I%20ask%20a%20few%20questions%3F"
+  };
+  const WA_LABELS = { bm: "Hubungi Melalui WhatsApp", en: "Contact via WhatsApp" };
+  let lang = localStorage.getItem('pw-lang') || 'bm';
+
+  function setLang(l) {
+    lang = l;
+    localStorage.setItem('pw-lang', l);
+    document.getElementById('btn-bm').className = l === 'bm' ? 'active' : '';
+    document.getElementById('btn-en').className = l === 'en' ? 'active' : '';
+    document.querySelectorAll('[data-bm]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-' + l);
+    });
+    document.getElementById('wa-label').textContent = WA_LABELS[l];
+    document.getElementById('wa-btn').onclick = () => window.open('https://wa.me/60174456243?text=' + WA_MSGS[l]);
+  }
+
+  document.getElementById('wa-btn').onclick = () => window.open('https://wa.me/60174456243?text=' + WA_MSGS[lang]);
+  setLang(lang);
+</script>
+</body>
+</html>

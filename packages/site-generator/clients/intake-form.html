@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pintarweb — Client Intake Form</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #F8F4F0;
+  color: #1a1a1a;
+  line-height: 1.6;
+}
+
+html { scroll-padding-top: 80px; }
+
+/* Header */
+.header {
+  background: #1B4332;
+  padding: 20px 16px;
+  text-align: center;
+}
+.header h1 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.header p {
+  color: #a7c9b8;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Container */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-left: 4px solid #B45309;
+  padding: 20px 16px;
+  margin-bottom: 20px;
+}
+
+.card label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1B4332;
+  margin-bottom: 6px;
+}
+
+.card label .required {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+.card input,
+.card select,
+.card textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1.5px solid #d4d4d4;
+  background: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1a1a1a;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.card input:focus,
+.card select:focus,
+.card textarea:focus {
+  border-color: #1B4332;
+}
+
+.card textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.card input[type="file"] {
+  padding: 10px 14px;
+  min-height: 48px;
+  font-size: 14px;
+}
+
+.card select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231B4332' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.card .hint {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* Image preview area */
+.preview-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.preview-area .thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 1.5px solid #d4d4d4;
+}
+
+.preview-area .thumb-label {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  width: 80px;
+  word-break: break-word;
+}
+
+/* Submit button */
+.btn-submit {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: #F59E0B;
+  color: #1a1a1a;
+  font-size: 17px;
+  font-weight: 700;
+  border: 2px solid #1a1a1a;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 4px 4px 0px 0px #1a1a1a;
+  margin-bottom: 32px;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+
+.btn-submit:hover {
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+  transform: translate(2px, 2px);
+}
+
+.btn-submit:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
+}
+
+/* Output section */
+.output-section {
+  display: none;
+  margin-top: 8px;
+}
+
+.output-section.visible {
+  display: block;
+}
+
+.output-section h2 {
+  font-size: 16px;
+  color: #1B4332;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #B45309;
+}
+
+.output-section textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #f5f2ed;
+  border: 1.5px solid #d4d4d4;
+  color: #1a1a1a;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.output-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.output-actions button {
+  flex: 1;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid #1a1a1a;
+  cursor: pointer;
+  background: #fff;
+  color: #1a1a1a;
+  box-shadow: 3px 3px 0px 0px #1a1a1a;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+
+.output-actions button:hover {
+  box-shadow: 1px 1px 0px 0px #1a1a1a;
+  transform: translate(2px, 2px);
+}
+
+.output-actions button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+.output-actions .btn-copy { background: #1B4332; color: #fff; }
+.output-actions .btn-download { background: #B45309; color: #fff; }
+
+/* Instructions box */
+.instructions {
+  background: #fff;
+  border-left: 4px solid #1B4332;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.instructions h3 {
+  font-size: 15px;
+  color: #1B4332;
+  margin-bottom: 8px;
+}
+
+.instructions code {
+  display: block;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  background: #f5f2ed;
+  padding: 6px 10px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 13px;
+  color: #666;
+  border-top: 1px solid #d4d4d4;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Toast feedback */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1B4332;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+/* Section heading */
+.section-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1B4332;
+  margin: 28px 0 14px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #B45309;
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Pintarweb — Client Intake Form</h1>
+  <p>Isi maklumat untuk hasilkan config.json</p>
+</header>
+
+<div class="container">
+  <form id="intakeForm" novalidate>
+
+    <!-- Business Info -->
+    <div class="section-heading">Business Info</div>
+
+    <div class="card">
+      <label for="business_name">Business Name <span class="required">*</span></label>
+      <input type="text" id="business_name" name="business_name" required placeholder="e.g. TEDAX AIRCOND SERVICES & ENGINEERING">
+    </div>
+
+    <div class="card">
+      <label for="niche">Niche / Trade <span class="required">*</span></label>
+      <select id="niche" name="niche" required>
+        <option value="">— Select —</option>
+        <option value="aircond-contractor">Aircond Contractor</option>
+        <option value="plumbing">Plumbing</option>
+        <option value="electrical">Electrical</option>
+        <option value="renovation">Renovation</option>
+        <option value="general">General Services</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <label for="area">Service Area <span class="required">*</span></label>
+      <input type="text" id="area" name="area" required placeholder="e.g. Cheras, Selangor">
+      <div class="hint">Main city &amp; state served</div>
+    </div>
+
+    <div class="card">
+      <label for="tagline">Tagline / Unique Selling Point</label>
+      <textarea id="tagline" name="tagline" placeholder="e.g. Servis Aircond Puchong & Selangor — Cepat & Berpengalaman"></textarea>
+    </div>
+
+    <!-- Contact -->
+    <div class="section-heading">Contact</div>
+
+    <div class="card">
+      <label for="phone">Phone / WhatsApp Number <span class="required">*</span></label>
+      <input type="tel" id="phone" name="phone" required placeholder="e.g. 016-353 5838">
+      <div class="hint">Include area code</div>
+    </div>
+
+    <!-- Online Presence -->
+    <div class="section-heading">Online Presence</div>
+
+    <div class="card">
+      <label for="google_maps_url">Google Maps URL</label>
+      <input type="url" id="google_maps_url" name="google_maps_url" placeholder="https://maps.google.com/...">
+      <div class="hint">Used to fetch rating &amp; reviews automatically</div>
+    </div>
+
+    <div class="card">
+      <label for="instagram">Instagram Handle</label>
+      <input type="text" id="instagram" name="instagram" placeholder="e.g. tedaxaircond">
+      <div class="hint">Without @ symbol</div>
+    </div>
+
+    <div class="card">
+      <label for="existing_website">Existing Website URL</label>
+      <input type="url" id="existing_website" name="existing_website" placeholder="https://...">
+      <div class="hint">If the business already has a website</div>
+    </div>
+
+    <!-- Images -->
+    <div class="section-heading">Images</div>
+
+    <div class="card">
+      <label for="logo">Logo Upload</label>
+      <input type="file" id="logo" name="logo" accept="image/*">
+      <div class="hint">Logo image (PNG, JPG, or WebP)</div>
+      <div class="preview-area" id="logo_preview"></div>
+    </div>
+
+    <div class="card">
+      <label for="hero">Hero Image Upload</label>
+      <input type="file" id="hero" name="hero" accept="image/*">
+      <div class="hint">16:9 landscape recommended</div>
+      <div class="preview-area" id="hero_preview"></div>
+    </div>
+
+    <div class="card">
+      <label for="gallery">Gallery Images</label>
+      <input type="file" id="gallery" name="gallery" accept="image/*" multiple>
+      <div class="hint">Up to 5 images. Project photos work best.</div>
+      <div class="preview-area" id="gallery_preview"></div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn-submit">Hasilkan Config</button>
+  </form>
+
+  <!-- Output -->
+  <div class="output-section" id="outputSection">
+    <h2>Generated Config</h2>
+    <textarea id="configOutput" readonly></textarea>
+    <div class="output-actions">
+      <button class="btn-copy" id="copyBtn">Salin Config</button>
+      <button class="btn-download" id="downloadBtn">Muat Turun</button>
+    </div>
+
+    <h2 style="margin-top:28px;">Image Placement Instructions</h2>
+    <div class="instructions" id="instructionsBlock">
+      <code id="instructionsCode"></code>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Pintarweb — SME Website Factory</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  const form = document.getElementById('intakeForm');
+  const outputSection = document.getElementById('outputSection');
+  const configOutput = document.getElementById('configOutput');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const instructionsCode = document.getElementById('instructionsCode');
+  const toast = document.getElementById('toast');
+
+  let currentConfig = null;
+  let currentId = null;
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function handleFilePreview(inputId, previewId) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    input.addEventListener('change', function() {
+      preview.innerHTML = '';
+      const files = inputId === 'gallery' ? Array.from(this.files).slice(0, 5) : (this.files.length ? [this.files[0]] : []);
+      files.forEach(function(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const wrap = document.createElement('div');
+          wrap.style.textAlign = 'center';
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'thumb';
+          const label = document.createElement('div');
+          label.className = 'thumb-label';
+          label.textContent = file.name.length > 16 ? file.name.slice(0, 14) + '…' : file.name;
+          wrap.appendChild(img);
+          wrap.appendChild(label);
+          preview.appendChild(wrap);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
+  handleFilePreview('logo', 'logo_preview');
+  handleFilePreview('hero', 'hero_preview');
+  handleFilePreview('gallery', 'gallery_preview');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const businessName = document.getElementById('business_name').value.trim();
+    const niche = document.getElementById('niche').value;
+    const area = document.getElementById('area').value.trim();
+    const tagline = document.getElementById('tagline').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const googleMapsUrl = document.getElementById('google_maps_url').value.trim();
+    const instagram = document.getElementById('instagram').value.trim().replace(/^@/, '');
+    const existingWebsite = document.getElementById('existing_website').value.trim();
+    const logoInput = document.getElementById('logo');
+    const heroInput = document.getElementById('hero');
+    const galleryInput = document.getElementById('gallery');
+
+    if (!businessName) { document.getElementById('business_name').focus(); showToast('Sila isi nama perniagaan'); return; }
+    if (!niche) { document.getElementById('niche').focus(); showToast('Sila pilih niche'); return; }
+    if (!area) { document.getElementById('area').focus(); showToast('Sila isi kawasan perkhidmatan'); return; }
+    if (!phone) { document.getElementById('phone').focus(); showToast('Sila isi nombor telefon'); return; }
+
+    const id = businessName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/--+/g, '-').replace(/^-|-$/g, '');
+    currentId = id;
+
+    const logos = Array.from(logoInput.files);
+    const heroes = Array.from(heroInput.files);
+    const galleries = Array.from(galleryInput.files).slice(0, 5);
+
+    const hasWebsite = existingWebsite.length > 0;
+
+    const config = {
+      id: id,
+      business_name: businessName,
+      tagline: tagline || '',
+      phone: phone,
+      whatsapp: phone.replace(/\D/g, ''),
+      area: area,
+      niches: [niche],
+      services: [],
+      mood: 'shophouse-edge',
+      google_rating: 0,
+      google_review_count: 0,
+      testimonials: [],
+      gallery_images: [],
+      social: {
+        instagram_handle: instagram || null,
+        instagram_followers: 0,
+        instagram_active: instagram.length > 0,
+        instagram_content_type: 'project-photos',
+        instagram_link_in_bio: 'whatsapp',
+        tiktok_handle: null,
+        tiktok_followers: 0,
+        tiktok_active: false
+      },
+      audit: {
+        has_website: hasWebsite,
+        website_url: hasWebsite ? existingWebsite : null,
+        google_maps_url: googleMapsUrl || null
+      }
+    };
+
+    currentConfig = config;
+    configOutput.value = JSON.stringify(config, null, 4);
+    outputSection.classList.add('visible');
+
+    /* Build instructions */
+    let instr = 'Place images in clients/' + id + '/images/:\n';
+    instr += '  - logo.webp' + (logos.length ? ' (from logo upload)' : '') + '\n';
+    instr += '  - hero.webp' + (heroes.length ? ' (from hero upload)' : '') + '\n';
+    if (galleries.length) {
+      instr += '  - gallery/:\n';
+      galleries.forEach(function(f, i) {
+        instr += '      gallery-' + String(i + 1).padStart(3, '0') + '.webp (' + f.name + ')\n';
+      });
+    } else {
+      instr += '  - gallery/ (no gallery images selected)\n';
+    }
+    instructionsCode.textContent = instr;
+
+    outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast('Config berjaya dihasilkan!');
+  });
+
+  copyBtn.addEventListener('click', function() {
+    if (!currentConfig) return;
+    navigator.clipboard.writeText(JSON.stringify(currentConfig, null, 4)).then(function() {
+      showToast('Config disalin ke clipboard!');
+    }).catch(function() {
+      configOutput.select();
+      document.execCommand('copy');
+      showToast('Config disalin!');
+    });
+  });
+
+  downloadBtn.addEventListener('click', function() {
+    if (!currentConfig) return;
+    const blob = new Blob([JSON.stringify(currentConfig, null, 4)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'config.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Config dimuat turun!');
+  });
+})();
+</script>
+
+</body>
+</html>

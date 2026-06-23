@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-bm="Razif Aircond & Renovation — Cheras" data-en="Razif Aircond & Renovation — Cheras">
+        Razif Aircond & Renovation — Cheras
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ── Base ── */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F8F4F0;
+            color: #1C1917;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* ── Language toggle pill ── */
+        .lang-toggle {
+            display: inline-flex;
+            background: #E7E5E4;
+            border-radius: 999px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .lang-btn {
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #78716C;
+            transition: all 0.2s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .lang-btn.active {
+            background: #1B4332;
+            color: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ── WhatsApp sticky bar ── */
+        .wa-sticky {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: #25D366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 20px;
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .wa-sticky svg {
+            flex-shrink: 0;
+        }
+
+        /* ── Transition for content swap ── */
+        [data-bm],
+        [data-en] {
+            transition: opacity 0.15s ease;
+        }
+
+        /* ── Score rings (audit page) ── */
+        .score-ring {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1B4332;
+            background: conic-gradient(#52B788 calc(var(--pct) * 1%), #E7E5E4 calc(var(--pct) * 1%));
+        }
+
+        .score-ring-inner {
+            width: 52px;
+            height: 52px;
+            background: #F8F4F0;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+        }
+    </style>
+</head>
+
+<body class="pb-20">
+
+    <!-- ═══════════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════════ -->
+    <nav class="sticky top-0 z-40 bg-white border-b border-stone-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+
+            <!-- Logo / Business name -->
+            <span class="font-bold text-base text-stone-900" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                Razif Aircond
+            </span>
+
+            <!-- Nav links — desktop -->
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
+                <a href="#services" class="hover:text-stone-900 transition-colors" data-bm="Servis"
+                    data-en="Services">Servis</a>
+                <a href="#testimonials" class="hover:text-stone-900 transition-colors" data-bm="Testimoni"
+                    data-en="Testimonials">Testimoni</a>
+                <a href="#faq" class="hover:text-stone-900 transition-colors" data-bm="Soalan Lazim"
+                    data-en="FAQ">Soalan Lazim</a>
+                <a href="#contact" class="hover:text-stone-900 transition-colors" data-bm="Hubungi Kami"
+                    data-en="Contact Us">Hubungi Kami</a>
+            </div>
+
+            <!-- Language toggle -->
+            <div class="lang-toggle" role="group" aria-label="Language toggle">
+                <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm" aria-pressed="true">BM</button>
+                <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false">EN</button>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- ═══════════════════════════════════════════
+     HERO — Split variant
+═══════════════════════════════════════════ -->
+    <section class="max-w-5xl mx-auto px-4 py-12 md:py-16">
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+
+            <!-- Text -->
+            <div>
+                <!-- Trust badge -->
+                <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800
+                  text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span data-bm="Berpengalaman Sejak 2015 · Cheras & Selangor"
+                        data-en="Serving Since 2015 · Cheras & Selangor">
+                        Berpengalaman Sejak 2015 · Cheras & Selangor
+                    </span>
+                </div>
+
+                <!-- Headline -->
+                <h1 class="text-3xl md:text-4xl font-bold text-stone-900 leading-tight mb-4">
+                    <span data-bm="Pakar Aircond & Renovation Cheras"
+                        data-en="Your Trusted Aircond & Renovation Expert in Cheras">
+                        Pakar Aircond &amp; Renovation Cheras
+                    </span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="text-stone-600 text-base leading-relaxed mb-6">
+                    <span
+                        data-bm="Servis aircond, pemasangan baru, dan renovation ringan. Meliputi Cheras, Ampang, dan Pandan Jaya. Hubungi kami — kami datang hari ini."
+                        data-en="Aircond servicing, new installation, and light renovation. Covering Cheras, Ampang, and Pandan Jaya. Contact us — we come today.">
+                        Servis aircond, pemasangan baru, dan renovation ringan.
+                        Meliputi Cheras, Ampang, dan Pandan Jaya.
+                        Hubungi kami — kami datang hari ini.
+                    </span>
+                </p>
+
+                <!-- CTAs -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
+                        class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d]
+                  text-white font-semibold px-6 py-3 rounded-lg transition-colors text-sm">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            <path
+                                d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
+                        </svg>
+                        <span data-bm="Hubungi via WhatsApp" data-en="Contact via WhatsApp">
+                            Hubungi via WhatsApp
+                        </span>
+                    </a>
+
+                    <a href="tel:+60123456789" class="inline-flex items-center justify-center gap-2 border border-stone-300
+                  bg-white hover:bg-stone-50 text-stone-800 font-semibold px-6 py-3
+                  rounded-lg transition-colors text-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
+                        </svg>
+                        <span>012-345 6789</span>
+                    </a>
+                </div>
+
+                <!-- Mini trust row -->
+                <div class="flex flex-wrap gap-4 mt-6 text-xs text-stone-500 font-medium">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        4.3 ★ · 31
+                        <span data-bm="ulasan Google" data-en="Google reviews">ulasan Google</span>
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span data-bm="Balas dalam 1 jam" data-en="Reply within 1 hour">Balas dalam 1 jam</span>
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        <span data-bm="Jaminan Mutu Kerja" data-en="Workmanship Guaranteed">Jaminan Mutu Kerja</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Image placeholder -->
+            <div class="rounded-2xl overflow-hidden bg-stone-200 aspect-[4/3] flex items-center justify-center">
+                <span class="text-stone-400 text-sm" data-bm="Foto Projek" data-en="Project Photo">Foto Projek</span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+     SERVICES
+═══════════════════════════════════════════ -->
+    <section id="services" class="bg-white py-12">
+        <div class="max-w-5xl mx-auto px-4">
+
+            <h2 class="text-2xl font-bold text-stone-900 mb-2">
+                <span data-bm="Servis Kami" data-en="Our Services">Servis Kami</span>
+            </h2>
+            <p class="text-stone-500 text-sm mb-8">
+                <span data-bm="Meliputi Cheras, Ampang, Pandan Jaya dan kawasan sekitar."
+                    data-en="Covering Cheras, Ampang, Pandan Jaya and surrounding areas.">
+                    Meliputi Cheras, Ampang, Pandan Jaya dan kawasan sekitar.
+                </span>
+            </p>
+
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+
+                <!-- Service card template — repeat per service -->
+                <div class="border border-stone-200 rounded-xl p-5 hover:shadow-md transition-shadow bg-stone-50">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" stroke-width="1.8"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900 text-sm mb-1">
+                        <span data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">Pemasangan Aircond
+                            Baru</span>
+                    </h3>
+                    <p class="text-stone-500 text-xs leading-relaxed">
+                        <span data-bm="Semua jenama. Kerja kemas, pendawaian selamat."
+                            data-en="All brands. Clean work, safe wiring.">
+                            Semua jenama. Kerja kemas, pendawaian selamat.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="border border-stone-200 rounded-xl p-5 hover:shadow-md transition-shadow bg-stone-50">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" stroke-width="1.8"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900 text-sm mb-1">
+                        <span data-bm="Servis & Cuci Aircond" data-en="Aircond Service & Cleaning">Servis & Cuci
+                            Aircond</span>
+                    </h3>
+                    <p class="text-stone-500 text-xs leading-relaxed">
+                        <span data-bm="Cuci dalaman, gas top-up, check kompressor."
+                            data-en="Internal cleaning, gas top-up, compressor check.">
+                            Cuci dalaman, gas top-up, check kompressor.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="border border-stone-200 rounded-xl p-5 hover:shadow-md transition-shadow bg-stone-50">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" stroke-width="1.8"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900 text-sm mb-1">
+                        <span data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">Pembaikan Aircond Rosak</span>
+                    </h3>
+                    <p class="text-stone-500 text-xs leading-relaxed">
+                        <span data-bm="Tak sejuk? Bocor? Bunyi pelik? Kami diagnose dan baiki."
+                            data-en="Not cold? Leaking? Strange noise? We diagnose and fix.">
+                            Tak sejuk? Bocor? Bunyi pelik? Kami diagnose dan baiki.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="border border-stone-200 rounded-xl p-5 hover:shadow-md transition-shadow bg-stone-50">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" stroke-width="1.8"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-stone-900 text-sm mb-1">
+                        <span data-bm="Renovation Ringan" data-en="Light Renovation">Renovation Ringan</span>
+                    </h3>
+                    <p class="text-stone-500 text-xs leading-relaxed">
+                        <span data-bm="Ubahsuai dalaman, cat, partition, kerja am."
+                            data-en="Interior works, painting, partition, general works.">
+                            Ubahsuai dalaman, cat, partition, kerja am.
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+    <section id="testimonials" class="py-12">
+        <div class="max-w-5xl mx-auto px-4">
+
+            <h2 class="text-2xl font-bold text-stone-900 mb-8">
+                <span data-bm="Apa Kata Pelanggan Kami" data-en="What Our Customers Say">
+                    Apa Kata Pelanggan Kami
+                </span>
+            </h2>
+
+            <div class="grid sm:grid-cols-3 gap-5">
+
+                <div class="bg-white border border-stone-200 rounded-xl p-5">
+                    <div class="flex gap-0.5 mb-3">
+                        <span class="text-amber-400 text-sm">★★★★★</span>
+                    </div>
+                    <p class="text-stone-700 text-sm leading-relaxed mb-4">
+                        <span
+                            data-bm='"Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."'
+                            data-en='"Aircond broke down at night, called and they came right away. Clean work, fair price. Highly recommended."'>
+                            "Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."
+                        </span>
+                    </p>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center
+                      text-emerald-800 text-xs font-bold">PS</div>
+                        <div>
+                            <p class="text-xs font-semibold text-stone-800">Puan Siti</p>
+                            <p class="text-xs text-stone-400">Taman Connaught</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-stone-200 rounded-xl p-5">
+                    <div class="flex gap-0.5 mb-3">
+                        <span class="text-amber-400 text-sm">★★★★★</span>
+                    </div>
+                    <p class="text-stone-700 text-sm leading-relaxed mb-4">
+                        <span
+                            data-bm='"Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."'
+                            data-en='"Serviced our office aircond units. Fast, no fuss. We are now regular customers."'>
+                            "Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."
+                        </span>
+                    </p>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center
+                      text-emerald-800 text-xs font-bold">EH</div>
+                        <div>
+                            <p class="text-xs font-semibold text-stone-800">En. Hafiz</p>
+                            <p class="text-xs text-stone-400">Ampang</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-stone-200 rounded-xl p-5">
+                    <div class="flex gap-0.5 mb-3">
+                        <span class="text-amber-400 text-sm">★★★★★</span>
+                    </div>
+                    <p class="text-stone-700 text-sm leading-relaxed mb-4">
+                        <span data-bm='"Pasang aircond baru, kemas kerja dia. Explain elok pasal warranty. Puas hati."'
+                            data-en='"Installed new aircond unit. Tidy work. Explained the warranty clearly. Very satisfied."'>
+                            "Pasang aircond baru, kemas kerja dia. Explain elok pasal warranty. Puas hati."
+                        </span>
+                    </p>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center
+                      text-emerald-800 text-xs font-bold">CN</div>
+                        <div>
+                            <p class="text-xs font-semibold text-stone-800">Cik Nurul</p>
+                            <p class="text-xs text-stone-400">Cheras</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+    <section id="faq" class="bg-white py-12">
+        <div class="max-w-3xl mx-auto px-4">
+
+            <h2 class="text-2xl font-bold text-stone-900 mb-8">
+                <span data-bm="Soalan Lazim" data-en="Frequently Asked Questions">Soalan Lazim</span>
+            </h2>
+
+            <div class="space-y-3" id="faq-list">
+
+                <details class="border border-stone-200 rounded-xl overflow-hidden group">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer
+                        text-sm font-semibold text-stone-800 hover:bg-stone-50 transition-colors list-none">
+                        <span data-bm="Kawasan mana yang diliputi?" data-en="Which areas do you cover?">
+                            Kawasan mana yang diliputi?
+                        </span>
+                        <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-stone-600 leading-relaxed">
+                        <span
+                            data-bm="Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar. Hubungi kami untuk confirm kawasan anda."
+                            data-en="We cover Cheras, Ampang, Pandan Jaya, Taman Connaught and surrounding areas. Contact us to confirm your area.">
+                            Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar.
+                            Hubungi kami untuk confirm kawasan anda.
+                        </span>
+                    </p>
+                </details>
+
+                <details class="border border-stone-200 rounded-xl overflow-hidden group">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer
+                        text-sm font-semibold text-stone-800 hover:bg-stone-50 transition-colors list-none">
+                        <span data-bm="Boleh datang hari sama?" data-en="Can you come on the same day?">
+                            Boleh datang hari sama?
+                        </span>
+                        <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-stone-600 leading-relaxed">
+                        <span
+                            data-bm="Bergantung kepada availability. Kebanyakan masa boleh — terutama untuk kes aircond rosak. Hubungi kami awal untuk slot hari sama."
+                            data-en="Depends on availability. Most times yes — especially for aircond breakdown cases. Contact us early for same-day slots.">
+                            Bergantung kepada availability. Kebanyakan masa boleh —
+                            terutama untuk kes aircond rosak. Hubungi kami awal untuk slot hari sama.
+                        </span>
+                    </p>
+                </details>
+
+                <details class="border border-stone-200 rounded-xl overflow-hidden group">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer
+                        text-sm font-semibold text-stone-800 hover:bg-stone-50 transition-colors list-none">
+                        <span data-bm="Ada warranty untuk kerja?" data-en="Is there a warranty for the work?">
+                            Ada warranty untuk kerja?
+                        </span>
+                        <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-stone-600 leading-relaxed">
+                        <span
+                            data-bm="Ya. Semua kerja pemasangan dan pembaikan ada warranty workmanship. Tempoh bergantung pada jenis kerja — kami akan inform semasa kerja."
+                            data-en="Yes. All installation and repair work comes with a workmanship warranty. Duration depends on job type — we will inform you during the job.">
+                            Ya. Semua kerja pemasangan dan pembaikan ada warranty workmanship.
+                            Tempoh bergantung pada jenis kerja — kami akan inform semasa kerja.
+                        </span>
+                    </p>
+                </details>
+
+                <details class="border border-stone-200 rounded-xl overflow-hidden group">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer
+                        text-sm font-semibold text-stone-800 hover:bg-stone-50 transition-colors list-none">
+                        <span data-bm="Berapa kos servis aircond?" data-en="How much does aircond servicing cost?">
+                            Berapa kos servis aircond?
+                        </span>
+                        <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-stone-600 leading-relaxed">
+                        <span
+                            data-bm="Harga bergantung kepada jenis dan saiz unit. Hubungi kami via WhatsApp untuk sebut harga percuma — tiada komitmen diperlukan."
+                            data-en="Price depends on unit type and size. Contact us via WhatsApp for a free quote — no commitment required.">
+                            Harga bergantung kepada jenis dan saiz unit.
+                            Hubungi kami via WhatsApp untuk sebut harga percuma — tiada komitmen diperlukan.
+                        </span>
+                    </p>
+                </details>
+
+                <details class="border border-stone-200 rounded-xl overflow-hidden group">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer
+                        text-sm font-semibold text-stone-800 hover:bg-stone-50 transition-colors list-none">
+                        <span data-bm="Cara nak buat tempahan?" data-en="How do I make a booking?">
+                            Cara nak buat tempahan?
+                        </span>
+                        <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-stone-600 leading-relaxed">
+                        <span
+                            data-bm="Senang je — WhatsApp atau telefon terus. Kami reply dalam masa 1 jam semasa waktu kerja. Tiada borang, tiada proses panjang."
+                            data-en="Simple — WhatsApp or call directly. We reply within 1 hour during working hours. No forms, no long process.">
+                            Senang je — WhatsApp atau telefon terus.
+                            Kami reply dalam masa 1 jam semasa waktu kerja.
+                            Tiada borang, tiada proses panjang.
+                        </span>
+                    </p>
+                </details>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+     CONTACT SECTION
+     No form — WhatsApp only (SME preference)
+═══════════════════════════════════════════ -->
+    <section id="contact" class="py-12">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+
+            <h2 class="text-2xl font-bold text-stone-900 mb-3">
+                <span data-bm="Hubungi Kami" data-en="Get In Touch">Hubungi Kami</span>
+            </h2>
+
+            <p class="text-stone-500 text-sm mb-8 max-w-md mx-auto">
+                <span data-bm="Aircond rosak? Nak pasang baru? Tanya kami dulu — percuma, tanpa komitmen."
+                    data-en="Aircond broken? Want a new unit? Ask us first — free, no commitment.">
+                    Aircond rosak? Nak pasang baru? Tanya kami dulu — percuma, tanpa komitmen.
+                </span>
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+                <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond" class="inline-flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1ebe5d]
+                text-white font-semibold px-7 py-3.5 rounded-xl transition-colors text-sm shadow-md">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                        <path
+                            d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
+                    </svg>
+                    <span data-bm="Tanya Kami Sekarang" data-en="Ask Us Now">Tanya Kami Sekarang</span>
+                </a>
+
+                <a href="tel:+60123456789" class="inline-flex items-center gap-2 text-stone-700 font-semibold text-sm
+                hover:text-stone-900 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
+                    </svg>
+                    012-345 6789
+                </a>
+
+            </div>
+
+            <!-- Business hours -->
+            <div class="mt-8 inline-flex flex-col sm:flex-row items-center gap-3 text-xs text-stone-400">
+                <span data-bm="Isnin – Sabtu: 8am – 7pm" data-en="Monday – Saturday: 8am – 7pm">
+                    Isnin – Sabtu: 8am – 7pm
+                </span>
+                <span class="hidden sm:block">·</span>
+                <span data-bm="Ahad & Cuti Umum: Atas permintaan" data-en="Sunday & Public Holidays: On request">
+                    Ahad & Cuti Umum: Atas permintaan
+                </span>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+    <footer class="bg-[#1B4332] text-emerald-100 py-8">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+
+                <div>
+                    <p class="font-bold text-white text-base mb-1" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        Razif Aircond & Renovation
+                    </p>
+                    <p class="text-xs text-emerald-300">
+                        <span data-bm="Cheras, Ampang, Pandan Jaya & kawasan sekitar"
+                            data-en="Cheras, Ampang, Pandan Jaya & surrounding areas">
+                            Cheras, Ampang, Pandan Jaya & kawasan sekitar
+                        </span>
+                    </p>
+                </div>
+
+                <div class="flex flex-col gap-1.5 text-xs text-emerald-300">
+                    <a href="tel:+60123456789" class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
+                        </svg>
+                        012-345 6789
+                    </a>
+                    <a href="https://wa.me/60123456789"
+                        class="hover:text-white transition-colors flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                            <path
+                                d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
+                        </svg>
+                        WhatsApp
+                    </a>
+                </div>
+
+                <p class="text-xs text-emerald-400">
+                    © 2026 Razif Aircond & Renovation.
+                    <span data-bm="Hak cipta terpelihara." data-en="All rights reserved.">
+                        Hak cipta terpelihara.
+                    </span>
+                </p>
+
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ═══════════════════════════════════════════
+     WHATSAPP STICKY BAR (mobile)
+═══════════════════════════════════════════ -->
+    <div class="wa-sticky md:hidden">
+        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path
+                d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
+        </svg>
+        <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
+            class="text-white font-semibold text-sm">
+            <span data-bm="Hubungi via WhatsApp" data-en="Contact via WhatsApp">
+                Hubungi via WhatsApp
+            </span>
+        </a>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════
+     LANGUAGE TOGGLE SCRIPT
+     No libraries. Pure vanilla JS.
+     ~40 lines. Fast. No flicker.
+═══════════════════════════════════════════ -->
+    <script>
+        // ── Read saved preference or default to BM ──
+        const saved = localStorage.getItem('pw_lang') || 'bm';
+        setLang(saved, true); // silent on init — no animation
+
+        function setLang(lang, silent = false) {
+            const isBM = lang === 'bm';
+
+            // Update <html> lang attribute for accessibility
+            document.documentElement.lang = isBM ? 'ms' : 'en';
+            document.documentElement.setAttribute('data-lang', lang);
+
+            // Swap all translatable text nodes
+            document.querySelectorAll('[data-bm]').forEach(el => {
+                const target = isBM ? el.getAttribute('data-bm') : el.getAttribute('data-en');
+                if (!target) return;
+
+                // For elements that contain only text (not links/buttons with children)
+                if (el.children.length === 0) {
+                    if (!silent) el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.textContent = target;
+                        if (!silent) { el.style.opacity = '1'; }
+                    }, silent ? 0 : 80);
+                }
+            });
+
+            // Swap <title>
+            const titleEl = document.querySelector('title');
+            if (titleEl) {
+                titleEl.textContent = isBM
+                    ? titleEl.getAttribute('data-bm')
+                    : titleEl.getAttribute('data-en');
+            }
+
+            // Update WhatsApp pre-filled message language
+            const waMsg = isBM
+                ? 'Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond'
+                : 'Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20aircond%20service';
+
+            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                const base = a.href.split('?')[0];
+                a.href = base + '?text=' + waMsg;
+            });
+
+            // Toggle button active states
+            document.getElementById('btn-bm').classList.toggle('active', isBM);
+            document.getElementById('btn-en').classList.toggle('active', !isBM);
+            document.getElementById('btn-bm').setAttribute('aria-pressed', isBM);
+            document.getElementById('btn-en').setAttribute('aria-pressed', !isBM);
+
+            // Persist preference
+            localStorage.setItem('pw_lang', lang);
+        }
+    </script>
+
+</body>
+
+</html>

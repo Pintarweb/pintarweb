@@ -1,0 +1,15 @@
+{
+  "name": "@pintarweb/site-generator",
+  "version": "0.0.3",
+  "type": "module",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "description": "Static HTML site generator for Pintarweb client demos",
+  "dependencies": {
+    "@pintarweb/shared": "workspace:*",
+    "puppeteer": "^24.43.1"
+  }
+}

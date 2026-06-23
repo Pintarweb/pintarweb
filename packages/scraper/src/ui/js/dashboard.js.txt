@@ -1,0 +1,640 @@
+let allLeads = [];
+let allHunts = [];
+let currentFolder = 'active';
+let sortMode = 'date'; // Primary Vector: Newest First
+
+function switchView(view) {
+    const leadsView = document.getElementById('leads-view');
+    const huntsView = document.getElementById('hunts-view');
+    const navLeads = document.getElementById('nav-leads');
+    const navHunts = document.getElementById('nav-hunts');
+
+    if (view === 'hunts') {
+        leadsView.classList.add('hidden');
+        huntsView.classList.remove('hidden');
+        navHunts.className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
+        navLeads.className = "px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500";
+        fetchHunts();
+    } else {
+        leadsView.classList.remove('hidden');
+        huntsView.classList.add('hidden');
+        navLeads.className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
+        navHunts.className = "px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500";
+    }
+}
+
+function updateHuntCommand() {
+    const cat = document.getElementById('hunt-category').value;
+    const loc = document.getElementById('hunt-location').value;
+    const lim = document.getElementById('hunt-limit').value;
+    const sources = Array.from(document.querySelectorAll('.source-check:checked')).map(el => el.value).join(',');
+    const cmd = `npx tsx src/index.ts --category "${cat}" --location "${loc}" --limit ${lim} --sources ${sources}`;
+    document.getElementById('command-output').innerText = cmd;
+}
+
+function copyCommand(e) {
+    const cmd = document.getElementById('command-output').innerText;
+    navigator.clipboard.writeText(cmd);
+    const btn = (e && e.currentTarget) || (window.event && window.event.target) || event.target;
+    if (!btn) return;
+    const original = btn.innerText;
+    btn.innerText = "COPIED! ✅";
+    setTimeout(() => btn.innerText = original, 2000);
+}
+
+async function fetchHunts() {
+    try {
+        const res = await fetch('/api/hunts?t=' + Date.now());
+        allHunts = await res.json();
+        populateSmartLists();
+        renderHunts();
+    } catch (e) { console.error("Hunt history fetch failure", e); }
+}
+
+function populateSmartLists() {
+    const catList = document.getElementById('category-list');
+    const locList = document.getElementById('location-list');
+
+    if (!catList || !locList) return;
+
+    const cats = new Set();
+    const locs = new Set();
+
+    // Harvesting Intelligence
+    if (Array.isArray(allHunts)) {
+        allHunts.forEach(h => {
+            if (h.category) cats.add(h.category);
+            if (h.location) locs.add(h.location);
+        });
+    }
+
+    if (Array.isArray(allLeads)) {
+        allLeads.forEach(l => {
+            if (l.category) cats.add(l.category);
+        });
+    }
+
+    console.log(`[SmartList] Synced ${cats.size} sectors and ${locs.size} regions.`);
+
+    // UI Feedback: Update badges
+    const catBadge = document.getElementById('cat-sync-badge');
+    const locBadge = document.getElementById('loc-sync-badge');
+    if (catBadge) catBadge.innerText = `${cats.size} KNOWN`;
+    if (locBadge) locBadge.innerText = `${locs.size} KNOWN`;
+
+    catList.innerHTML = Array.from(cats).filter(Boolean).sort().map(c => `<option value="${c}">`).join('');
+    locList.innerHTML = Array.from(locs).filter(Boolean).sort().map(l => `<option value="${l}">`).join('');
+}
+
+function renderHunts() {
+    const container = document.getElementById('hunts-container');
+    if (!container) return;
+    if (!allHunts || allHunts.length === 0) {
+        container.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400 font-bold uppercase tracking-widest">No history recorded</td></tr>';
+        return;
+    }
+    container.innerHTML = allHunts.map(h => `
+        <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+            <td class="py-4 font-bold text-slate-400 text-xs">${new Date(h.created_at).toLocaleDateString()}</td>
+            <td class="py-4">
+                <p class="font-black text-slate-900 text-sm">${h.category}</p>
+                <p class="text-[10px] text-blue-600 font-black uppercase tracking-tighter">${h.location}</p>
+            </td>
+            <td class="py-4">
+                <div class="flex gap-1">
+                    ${(h.sources || '').split(',').map(s => `<span class="bg-slate-100 text-[9px] font-black px-1.5 py-0.5 rounded uppercase">${s}</span>`).join('')}
+                </div>
+            </td>
+            <td class="py-4 font-black text-slate-900 text-base">${h.leads_found || 0} <span class="text-[9px] text-slate-400 uppercase tracking-tighter">Leads</span></td>
+        </tr>
+    `).join('');
+}
+
+function openModal(contentHtml) {
+    const modal = document.getElementById('scorecard-modal');
+    document.getElementById('modal-content').innerHTML = contentHtml;
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.add('opacity-100');
+        modal.firstElementChild.classList.add('scale-100');
+    }, 10);
+}
+
+function closeModal() {
+    const modal = document.getElementById('scorecard-modal');
+    modal.classList.remove('opacity-100');
+    modal.firstElementChild.classList.remove('scale-100');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+function showScorecard(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+    const audit = lead.audit_results ? JSON.parse(lead.audit_results) : null;
+    const hasWeb = lead.website_url && lead.website_url !== 'null';
+    
+    // Intelligence Scoring logic
+    const reports = [];
+    
+    // 1. Connectivity & Security
+    if (hasWeb) {
+        reports.push({
+            icon: audit?.ssl_missing ? '⚠️' : '✅',
+            title: 'SSL Security Encryption',
+            status: audit?.ssl_missing ? 'VULNERABLE' : 'PROTECTED',
+            desc: audit?.ssl_missing ? 'Site is currently marked as "Not Secure" in browsers, scaring away 70% of potential customers.' : 'Valid SSL detected. Customer trust is optimized.',
+            color: audit?.ssl_missing ? 'text-red-500' : 'text-emerald-500',
+            bg: audit?.ssl_missing ? 'bg-red-50' : 'bg-emerald-50'
+        });
+        
+        const speed = audit?.response_time_ms || 0;
+        const isSlow = audit?.mobile_response_slow || speed > 3000;
+        reports.push({
+            icon: isSlow ? '⚡' : '🚀',
+            title: 'Mobile Load Velocity',
+            status: isSlow ? 'SLOW' : 'OPTIMIZED',
+            desc: isSlow ? `Loads in ${ (speed/1000).toFixed(1) }s. Mobile visitors likely bounce before seeing your services.` : `Fast response time (${speed}ms). Good for SEO and UX.`,
+            color: isSlow ? 'text-orange-500' : 'text-blue-500',
+            bg: isSlow ? 'bg-orange-50' : 'bg-blue-50'
+        });
+    } else {
+        reports.push({
+            icon: '🏢',
+            title: 'Digital Shopfront',
+            status: 'MISSING',
+            desc: 'Business has no dedicated website. Currently relying 100% on external platforms (Gmaps/FB).',
+            color: 'text-red-500',
+            bg: 'bg-red-50'
+        });
+    }
+
+    // 2. Market Perception (AI Insight)
+    const aiInsight = (lead.ai_pain_point || '').toLowerCase();
+    const hasPain = aiInsight && !aiInsight.includes('no reviews') && !aiInsight.includes('failed');
+    
+    reports.push({
+        icon: '🧠',
+        title: 'Customer Sentiment Engine',
+        status: hasPain ? 'INSIGHT FOUND' : 'NEUTRAL',
+        desc: lead.ai_pain_point || 'No specific customer pain points detected yet. Reviews look stable.',
+        color: hasPain ? 'text-purple-600' : 'text-slate-400',
+        bg: hasPain ? 'bg-purple-50' : 'bg-slate-50'
+    });
+
+    // 4. Conversion & CTA
+    reports.push({
+        icon: '🎯',
+        title: 'Conversion Hub (CTA)',
+        status: hasWeb ? 'UNOPTIMIZED' : 'LEGACY',
+        desc: hasWeb ? 'Website lacks a prominent WhatsApp/Booking CTA. Desktop-first design slowing down mobile conversions.' : 'No direct digital conversion path. Customers must manually dial the number.',
+        color: 'text-orange-600',
+        bg: 'bg-orange-50'
+    });
+
+    // 5. SEO & Visibility
+    reports.push({
+        icon: '🔍',
+        title: 'Search Visibility (SEO)',
+        status: hasWeb ? 'SCANNING' : 'NON-EXISTENT',
+        desc: hasWeb ? 'Domain presence detected. High opportunity for Keyword Dominance in your local sector.' : 'Business is invisible to users searching for specific services outside of curated lists.',
+        color: 'text-indigo-600',
+        bg: 'bg-indigo-50'
+    });
+
+    // 3. Strategic Assessment
+    let assessment = "";
+    if (!hasWeb) {
+        assessment = "CRITICAL: Build high-conversion 'PintarLanding' to capture mobile traffic directly.";
+    } else if (audit?.ssl_missing) {
+        assessment = "URGENT: Migrating to secure server while refreshing UI for modern standards.";
+    } else if (hasPain) {
+        assessment = "STRATEGIC: Use identified pain points in new copy to show better reliable service.";
+    } else {
+        assessment = "GROWTH: Current foundation is okay, but needs 'PintarAds' optimization to scale.";
+    }
+
+    const contentHtml = `
+        <div class="mb-8 border-b border-slate-100 pb-6">
+            <div class="flex justify-between items-start mb-2">
+                <h4 class="text-2xl font-black text-slate-900 tracking-tight leading-tight uppercase">${lead.business_name}</h4>
+                <div class="bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-black italic shadow-lg shadow-blue-200">INTERNAL AUDIT</div>
+            </div>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">Priority Index: <span class="text-blue-600">ID-${lead.id.substring(0, 8)}</span></p>
+        </div>
+
+        <div class="space-y-4 mb-8">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Vulnerability Scan Results</p>
+            ${reports.map(r => `
+                <div class="${r.bg} p-5 rounded-2xl border border-white shadow-sm transition-all hover:scale-[1.01]">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">${r.icon}</span>
+                            <span class="font-black text-slate-700 text-sm uppercase">${r.title}</span>
+                        </div>
+                        <span class="${r.color} text-[10px] font-black underline uppercase tracking-widest">${r.status}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed font-medium">${r.desc}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="bg-slate-900 p-6 rounded-3xl shadow-2xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <span class="text-6xl italic font-black text-white">#01</span>
+            </div>
+            <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3">Surgical Recommendation</p>
+            <h5 class="text-white text-lg font-black leading-tight italic mb-4">"${assessment}"</h5>
+            <div class="flex items-center justify-between border-t border-slate-800 pt-4">
+                <div>
+                    <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">Calculated Success Score</p>
+                    <p class="text-2xl font-black text-white italic">${lead.lead_score}/10</p>
+                </div>
+                <button onclick="openAuditReport('${lead.phone_normalized}')" class="bg-white text-slate-900 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all">Generate PDF Report</button>
+            </div>
+        </div>
+    `;
+    openModal(contentHtml);
+}
+
+function openAuditReport(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+    
+    // Create a print-friendly window
+    const printWindow = window.open('', '_blank');
+    const name = lead.business_name || 'Business';
+    const score = lead.lead_score || 0;
+    const date = new Date().toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Audit Report - ${name}</title>
+            <script src="https://cdn.tailwindcss.com"><\/script>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap" rel="stylesheet">
+            <style>
+                body { font-family: 'Outfit', sans-serif; }
+                @media print {
+                    .no-print { display: none; }
+                    body { -webkit-print-color-adjust: exact; }
+                }
+            </style>
+        </head>
+        <body class="bg-slate-50 p-10">
+            <div class="max-w-3xl mx-auto bg-white p-12 rounded-[40px] shadow-xl border border-slate-100">
+                <div class="flex justify-between items-center mb-12 border-b border-slate-100 pb-8">
+                    <div>
+                        <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter">Diamond Audit</h1>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mt-1">SME Digital Intelligence Report</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-slate-900 font-black text-lg">PintarWeb Intelligence</p>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase">Kuala Lumpur, Malaysia</p>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <p class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-2">Subject Analysis</p>
+                    <h2 class="text-3xl font-black text-slate-900 uppercase">${name}</h2>
+                    <p class="text-slate-500 text-sm mt-2">Analysis Date: ${date}</p>
+                </div>
+
+                <div class="bg-slate-900 p-8 rounded-3xl text-white mb-10 shadow-2xl">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Master Assessment</p>
+                    <div class="flex items-end justify-between">
+                        <p class="text-2xl font-black italic leading-tight">"High-Priority Digital Transformation Candidate"</p>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Score</p>
+                            <p class="text-5xl font-black italic color-white">${score}/10</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mb-12">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Critical Findings</p>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-xl">📍</span>
+                                <h3 class="font-black text-slate-900 uppercase text-sm">Online Accessibility</h3>
+                            </div>
+                            <p class="text-slate-600 text-sm">Business is currently underserved by existing digital infrastructure. High vulnerability to competitors with optimized mobile landing pages.</p>
+                        </div>
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-xl">📱</span>
+                                <h3 class="font-black text-slate-900 uppercase text-sm">Instant Connect Gap</h3>
+                            </div>
+                            <p class="text-slate-600 text-sm">Lack of direct "Tap-to-WhatsApp" conversion triggers detected. Average customer loss: 40-60% during manual dial transition.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center no-print mt-10">
+                    <button onclick="window.print()" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Save as PDF / Print Report</button>
+                    <p class="text-slate-400 text-[10px] mt-4 uppercase font-bold">Confidential Commercial Intelligence</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+    printWindow.document.write(html);
+    printWindow.document.close();
+}
+
+async function updateStatus(phone, status) {
+    try {
+        await fetch('/api/leads', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_normalized: phone, status }) });
+        fetchLeads();
+    } catch (e) { console.error(e); }
+}
+
+async function deleteLead(phone) {
+    if (!confirm('Confirm permanent deletion?')) return;
+    try {
+        await fetch('/api/leads', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_normalized: phone }) });
+        fetchLeads();
+    } catch (e) { console.error(e); }
+}
+
+function setFolder(folder) {
+    currentFolder = folder;
+    document.getElementById('folder-active').className = folder === 'active' ? 'px-5 py-2 rounded-lg text-xs font-black transition-all folder-active border border-transparent shadow-sm' : 'px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500 border border-transparent bg-slate-100';
+    document.getElementById('folder-archived').className = folder === 'archived' ? 'px-5 py-2 rounded-lg text-xs font-black transition-all folder-active border border-transparent shadow-sm' : 'px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500 border border-transparent bg-slate-100';
+    renderLeads();
+}
+
+function toggleSort() {
+    sortMode = sortMode === 'score' ? 'date' : 'score';
+    document.getElementById('sort-btn').innerText = sortMode === 'score' ? 'Highest Score ↓' : 'Newest Arrival ↓';
+    renderLeads();
+}
+
+function generatePitch(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    
+    const message = `Hi ${lead.business_name}! 🚀 GET YOUR BUSINESS ONLINE FOR FREE!
+Calling all Malaysian SMEs — If your business isn't on Google, you're losing customers. Pintarweb is here to bridge the gap.
+
+In the AI era, appearing in traditional search isn't enough. We build websites optimized for AI Search, ensuring your services are what ChatGPT, Gemini, and Perplexity recommend to local customers.
+
+🎁 The Launch Celebration:
+🏆 3 Premium Websites: RM0 (TOTALLY FREE)
+
+🎟️ 50% OFF Vouchers: Guaranteed for everyone who checks us out!
+
+⚡ Extra Bonus: The first 10 to use their voucher get the discount guaranteed.
+
+Don’t let your competitors own the digital space. Get a professional, AI-optimized presence today.
+
+🔗 Learn more & Grab your voucher: bit.ly/pintarweb-launch
+
+(Offer ends 31st May)
+
+Helping local businesses win in the AI era`;
+
+    window.open(`https://wa.me/${lead.phone_normalized}?text=${encodeURIComponent(message)}`, '_blank');
+}
+function exportToCRM() {
+    const engagedLeads = allLeads.filter(l => l.status === 'Contacted' || l.status === 'Demo Built');
+    
+    if (engagedLeads.length === 0) {
+        alert("No contacted leads available to export.");
+        return;
+    }
+
+    const headers = ["Business Name", "Phone", "Category", "Location", "Status", "Score", "Website"];
+    
+    const csvRows = [];
+    csvRows.push(headers.join(','));
+    
+    for (const lead of engagedLeads) {
+        const values = [
+            `"${(lead.business_name || '').replace(/"/g, '""')}"`,
+            `"${lead.phone_normalized || ''}"`,
+            `"${lead.category || ''}"`,
+            `"${lead.location || ''}"`,
+            `"${lead.status || ''}"`,
+            `${lead.lead_score || 0}`,
+            `"${lead.website_url || ''}"`
+        ];
+        csvRows.push(values.join(','));
+    }
+    
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = `PintarWeb_Contacted_Leads_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function applyFilters() { renderLeads(); }
+
+function renderLeads() {
+    const container = document.getElementById('leads-container');
+    const categoryEl = document.getElementById('filter-category');
+    const statusEl = document.getElementById('filter-status');
+    const websiteEl = document.getElementById('filter-website');
+    const sourceEl = document.getElementById('filter-source');
+    const arrivalEl = document.getElementById('filter-arrival');
+    const scoreEl = document.getElementById('filter-score');
+    
+    if (!container || !categoryEl || !statusEl) {
+        console.error("Critical DOM elements missing for renderLeads");
+        return;
+    }
+
+    const category = categoryEl.value;
+    const status = statusEl.value;
+    const website = websiteEl.value;
+    const source = sourceEl.value;
+    const arrival = arrivalEl.value;
+    const minScore = parseInt(scoreEl.value || 0);
+    const search = (document.getElementById('search').value || '').toLowerCase();
+    const now = new Date();
+
+    // Tactical Intelligence: Find the start time of the most recent mission
+    const latestHuntTime = (allHunts && allHunts.length > 0) ? new Date(allHunts[0].created_at + 'Z').getTime() : 0;
+
+    let filtered = allLeads.filter(l => {
+        const isArchived = l.status === 'Archived';
+        if (currentFolder === 'active' && isArchived) return false;
+        if (currentFolder === 'archived' && !isArchived) return false;
+
+        // Using updated_at for the "Arrival" filters
+        const leadDate = new Date((l.updated_at || l.created_at) + 'Z');
+        const age = now - leadDate;
+        if (arrival === 'Today' && age > 86400000) return false;
+        if (arrival === 'Week' && age > 604800000) return false;
+
+        if (category !== 'All' && l.category !== category) return false;
+        if (status === 'Engaged') {
+            if (l.status !== 'Contacted' && l.status !== 'Demo Built') return false;
+        } else if (status !== 'All' && l.status !== status) {
+            return false;
+        }
+        if (website === 'Yes' && !l.website_url) return false;
+        if (website === 'No' && l.website_url) return false;
+        if (source !== 'All' && !(l.source_origin || '').includes(source)) return false;
+        if ( (l.lead_score || 0) < minScore) return false;
+        if (!l.business_name.toLowerCase().includes(search)) return false;
+        return true;
+    });
+
+    // Primary Sort: Updated At (Interaction Time) - with safety
+    filtered.sort((a, b) => {
+        if (sortMode === 'score') return (b.lead_score || 0) - (a.lead_score || 0);
+        const dateA = new Date((a.updated_at || a.created_at) + 'Z').getTime();
+        const dateB = new Date((b.updated_at || b.created_at) + 'Z').getTime();
+        return (dateB || 0) - (dateA || 0);
+    });
+
+    // Global Census Counter
+    const activeCount = allLeads.filter(l => l.status !== 'Archived').length;
+    const totalCount = allLeads.length;
+    const countEl = document.getElementById('lead-count');
+    if (countEl) countEl.innerText = `${activeCount} ACTIVE / ${totalCount} TOTAL`;
+
+    const sortBtn = document.getElementById('sort-btn');
+    if (sortBtn) sortBtn.innerText = sortMode === 'score' ? 'Highest Score ↓' : 'Newest Arrival ↓';
+
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="text-center py-24 bg-white rounded-2xl border border-slate-200 text-slate-400 font-bold uppercase tracking-widest">No matching leads in this sector</div>';
+        return;
+    }
+
+    container.innerHTML = filtered.map(lead => {
+        const isArchived = lead.status === 'Archived';
+        const leadUpdateTime = new Date((lead.updated_at || lead.created_at) + 'Z').getTime();
+
+        // Surgical Tagging: Only pulse if update happened within 15 min of the hunt log
+        const isFreshFromMission = latestHuntTime > 0 && Math.abs(leadUpdateTime - latestHuntTime) < 900000;
+
+        const actions = !isArchived ? `
+            <button onclick="updateStatus('${lead.phone_normalized}', 'Demo Built')" class="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Mark Demo</button>
+            <button onclick="updateStatus('${lead.phone_normalized}', 'Contacted')" class="text-[10px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest transition-colors">Mark Contacted</button>
+            <button onclick="updateStatus('${lead.phone_normalized}', 'Archived')" class="text-[10px] font-black text-slate-400 hover:text-red-600 uppercase tracking-widest ml-auto transition-colors">Archive 📁</button>
+        ` : `
+            <button onclick="updateStatus('${lead.phone_normalized}', 'New')" class="text-[10px] font-black text-blue-600 uppercase tracking-widest transition-colors">Reinstate 🔄</button>
+            <button onclick="deleteLead('${lead.phone_normalized}')" class="text-[10px] font-black text-red-600 uppercase tracking-widest ml-auto transition-colors">Delete ❌</button>
+        `;
+
+        return `
+        <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative ${isFreshFromMission ? 'ring-4 ring-blue-600 ring-offset-2 shadow-2xl z-10' : ''}">
+            ${isFreshFromMission ? `
+            <div class="absolute -top-3 -right-3 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg animate-pulse uppercase tracking-widest z-10">
+                Mission Fresh 🎯
+            </div>` : ''}
+
+            <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2 flex-wrap">
+                        <h3 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">${lead.business_name}</h3>
+                        ${lead.status === 'New' ? '<span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black rounded-md uppercase tracking-wider">NEW ENTRY</span>' : ''}
+                        ${lead.status === 'Demo Built' ? '<span class="px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-black rounded-md uppercase tracking-wider">DEMO STAGE</span>' : ''}
+                        ${lead.status === 'Contacted' ? '<span class="px-2 py-0.5 bg-yellow-50 text-yellow-600 text-[10px] font-black rounded-md uppercase tracking-wider">FOLLOW-UP</span>' : ''}
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400 font-bold uppercase mb-4">
+                        <span class="flex items-center gap-1.5"><span class="opacity-50">📱</span> ${lead.phone_normalized}</span>
+                        <span class="flex items-center gap-1.5"><span class="opacity-50">📁</span> ${lead.category || 'Industry'}</span>
+                        ${lead.website_url ? `<a href="${lead.website_url}" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors p-1 bg-blue-50 rounded">🌐 WEBSITE</a>` : '<span class="text-slate-300">🚫 NO WEBSITE</span>'}
+                        <div class="flex items-center gap-2">
+                            <span class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-black">SCORE: ${lead.lead_score}</span>
+                            <button onclick="showScorecard('${lead.phone_normalized}')" class="text-blue-500 hover:underline">ANALYSIS 🔍</button>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs text-slate-500 mb-4 flex items-start gap-1"><span class="opacity-50 mt-0.5">📍</span> ${lead.address || 'Malaysia'}</p>
+                    
+                    <div class="flex items-center gap-4 border-t border-slate-50 pt-4 mt-auto">
+                        ${actions}
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 min-w-[220px]">
+                    <div class="flex flex-wrap gap-2 p-2 bg-slate-50 rounded-xl border border-slate-100">
+                        ${lead.source_links ? lead.source_links.split(',').map(link => {
+            let icon = "🌐"; let title = "Source";
+            const lv = (link || '').toLowerCase();
+            if (lv.includes('facebook.com')) { icon = "📱"; title = "Facebook"; }
+            else if (lv.includes('yellowpages.my')) { icon = "📖"; title = "Yellow Pages"; }
+            else if (lv.includes('google.com/maps') || lv.includes('/maps/place/')) { icon = "📍"; title = "Google Maps"; }
+            return `<a href="${(link || '').trim()}" target="_blank" title="${title}" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-lg hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm text-lg">${icon}</a>`;
+        }).join('') : (lead.source_origin ? lead.source_origin.split(',').map(name => {
+            let icon = "🌐"; let title = (name || '').trim();
+            if (title.includes('Facebook')) icon = "📱";
+            if (title.includes('Yellow Pages')) icon = "📖";
+            if (title.includes('Google Maps')) icon = "📍";
+            return `<span class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-lg shadow-sm text-lg" title="${title}">${icon}</span>`;
+        }).join('') : '<span class="text-[9px] text-slate-400 font-black p-2 uppercase">Missing Social Footprint</span>')}
+                    </div>
+                    
+                    <button onclick="generatePitch('${lead.phone_normalized}')" class="bg-[#25D366] hover:bg-[#1fae52] hover:scale-[1.02] transform transition-all text-white font-black py-4 px-4 rounded-2xl shadow-lg border-b-4 border-[#128C7E] flex items-center justify-center gap-2 text-sm">
+                         WhatsApp Pitch 📥
+                    </button>
+                </div>
+            </div>
+        </div>
+        `;
+    }).join('');
+}
+
+async function fetchLeads() {
+    try {
+        const res = await fetch('/api/leads?t=' + Date.now());
+        if (!res.ok) throw new Error("Failed to fetch leads: " + res.status);
+        allLeads = await res.json();
+        if (!Array.isArray(allLeads)) throw new Error("Invalid leads data received");
+
+        const catSelect = document.getElementById('filter-category');
+        if (!catSelect) return;
+        const activeLeads = allLeads.filter(l => l.status !== 'Archived');
+        const stats = activeLeads.reduce((acc, l) => {
+            if (l.category) acc[l.category] = (acc[l.category] || 0) + 1;
+            return acc;
+        }, {});
+
+        const cats = ['All', ...Object.keys(stats).filter(s => s && s !== 'null').sort()];
+        catSelect.innerHTML = cats.map(c => `<option value="${c}">${c === 'All' ? 'All Industries (' + activeLeads.length + ')' : c + ' (' + stats[c] + ')'}</option>`).join('');
+
+        if (!catSelect.value) catSelect.value = 'All';
+
+        populateSmartLists();
+        renderLeads();
+    } catch (e) { 
+        console.error("Leads fetch failure", e);
+        const container = document.getElementById('leads-container');
+        if (container) container.innerHTML = `<div class="text-center py-24 text-red-500 font-black">CRITICAL FAILURE: ${e.message}</div>`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Global Error Catcher for easier debugging on screen
+    window.onerror = function(msg, url, line, col, error) {
+        const container = document.getElementById('leads-container');
+        if (container) {
+            container.innerHTML = `<div class="p-6 bg-red-50 border-2 border-red-500 rounded-3xl text-red-600">
+                <p class="font-black uppercase mb-2">Internal Script Error</p>
+                <p class="text-xs font-mono">${msg}</p>
+                <p class="text-[10px] mt-2 opacity-50">${url}:${line}:${col}</p>
+            </div>`;
+        }
+        return false;
+    };
+
+    const searchEl = document.getElementById('search');
+    if (searchEl) {
+        searchEl.addEventListener('input', applyFilters);
+    }
+    fetchLeads();
+    fetchHunts();
+    setInterval(fetchLeads, 30000);
+    setInterval(fetchHunts, 30000);
+});

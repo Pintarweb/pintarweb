@@ -1,0 +1,68 @@
+# Pintarweb — Cloudflare Workers Configuration
+# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "pintarweb-workers"
+main = "src/worker.js"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Account ID — get from Cloudflare dashboard right sidebar
+# or run: wrangler whoami
+account_id = "6608a11fd74a74b741d55d0c10f7643e"
+
+# ============================================================
+# D1 DATABASE
+# Run: wrangler d1 create pintarweb-db
+# Copy the database_id from the output into database_id below
+# ============================================================
+[[d1_databases]]
+binding = "DB"
+database_name = "pintarweb-claude-db"
+database_id = "1ca959be-b1bc-4b03-87df-8e4610659993"
+
+# ============================================================
+# R2 STORAGE
+# Run: wrangler r2 bucket create pintarweb-assets
+# ============================================================
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "pintarweb-claude-assets"
+
+# ============================================================
+# ENVIRONMENT VARIABLES (non-secret, safe to commit)
+# Secrets go in .env and are set via:
+# wrangler secret put SECRET_NAME
+# ============================================================
+[vars]
+ENVIRONMENT = "production"
+PREVIEW_BASE_URL = "https://preview.pintarweb.com"
+APP_NAME = "Pintarweb"
+
+# ============================================================
+# LOCAL DEVELOPMENT OVERRIDES
+# These only apply when running: wrangler dev
+# ============================================================
+[dev]
+port = 8787
+local_protocol = "http"
+
+# ============================================================
+# STAGING ENVIRONMENT (optional — activate in Stage 2)
+# Deploy with: wrangler deploy --env staging
+# ============================================================
+# [env.staging]
+# name = "pintarweb-workers-staging"
+# vars = { ENVIRONMENT = "staging", PREVIEW_BASE_URL = "https://staging.pintarweb.com" }
+#
+# [[env.staging.d1_databases]]
+# binding = "DB"
+# database_name = "pintarweb-claude-db-staging"
+# database_id = "FILL_IN_STAGING_DB_ID"
+
+# ============================================================
+# CRON TRIGGERS (activate in Stage 2 for automation)
+# Requires Workers Paid plan ($5/month)
+# ============================================================
+# [triggers]
+# crons = ["0 9 * * 1"]   # Every Monday 9am — follow-up reminders
+# crons = ["0 0 1 * *"]   # First of every month — renewal checks

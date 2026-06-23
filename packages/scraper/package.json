@@ -1,0 +1,33 @@
+{
+  "name": "@pintarweb/scraper",
+  "version": "1.0.1",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "scrape": "tsx src/index.ts",
+    "test": "vitest run",
+    "lint": "eslint src/",
+    "format": "prettier --write src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Lead scraping tool for Pintarweb",
+  "dependencies": {
+    "@pintarweb/shared": "workspace:*",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^10.2.0",
+    "playwright": "^1.61.0",
+    "prettier": "^3.8.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.4",
+    "wrangler": "^4.83.0"
+  }
+}

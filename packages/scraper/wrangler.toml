@@ -1,0 +1,15 @@
+name = "pintarweb-scraper"
+main = "src/api/worker.ts"
+compatibility_date = "2024-04-17"
+
+account_id = "6608a11fd74a74b741d55d0c10f7643e"
+
+[[d1_databases]]
+binding = "pintarweb_scraper_db"
+database_name = "pintarweb-scraper-db"
+database_id = "09f9e9d6-5929-4503-9d50-35d17b671313"
+
+[[rules]]
+type = "Text"
+globs = ["src/ui/**/*.html", "src/ui/**/*.txt"]
+fallthrough = true
