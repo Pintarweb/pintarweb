@@ -240,39 +240,88 @@ After account approval:
 
 ---
 
-### Step 6: Set Up Recurring Billing
+### Step 6: Set Up Subscription Plans
 
-For automatic subscription renewals:
+For automatic subscription renewals, create 4 plans:
 
-1. **Go to Subscriptions:**
-   - Click **Subscriptions** in the left sidebar
-   - Click **Create Plan**
+#### Plan 1: Monthly
+```
+Plan Name: Pintarweb Monthly
+Amount: 149.00
+Currency: MYR
+Frequency: Every 1 month
+Trial Period: None
+```
 
-2. **Create subscription plan:**
-   ```
-   Plan Name: Pintarweb 3-Month Plan
-   
-   Amount: 447.00
-   Currency: MYR
-   
-   Frequency: Every 3 months
-   
-   Trial Period: None (or 14 days if you want to offer trial)
-   
-   Add-ons: None (for now)
-   ```
+#### Plan 2: Quarterly (Save RM 30)
+```
+Plan Name: Pintarweb Quarterly
+Amount: 417.00
+Currency: MYR
+Frequency: Every 3 months
+Trial Period: None
+```
 
-3. **Configure plan settings:**
-   - ✅ Enable auto-renewal
-   - ✅ Send renewal reminders (7 days before)
-   - ✅ Allow plan changes: Yes
-   - ✅ Allow cancellation: Yes (with 30 days notice)
+#### Plan 3: Bi-Annual (Save RM 120)
+```
+Plan Name: Pintarweb Bi-Annual
+Amount: 774.00
+Currency: MYR
+Frequency: Every 6 months
+Trial Period: None
+```
 
-4. **Save the plan**
+#### Plan 4: Annual (Save RM 480)
+```
+Plan Name: Pintarweb Annual
+Amount: 1308.00
+Currency: MYR
+Frequency: Every 12 months
+Trial Period: None
+```
 
-5. **Create subscription link:**
-   - When creating payment link, select this plan
-   - Customer will be enrolled in auto-renewal
+**Configure all plans:**
+- ✅ Enable auto-renewal
+- ✅ Send renewal reminders (7 days before)
+- ✅ Allow plan changes: Yes
+- ✅ Allow cancellation: Yes (with 30 days notice)
+
+**Time:** 30 minutes  
+**Cost:** Free
+
+### Step 7: Set Up Offers (Discounts)
+
+For promotional pricing and referral discounts:
+
+1. **Go to Offers:**
+   - Click **Offers** in the left sidebar
+   - Click **Create New Offer**
+
+2. **Create offer types:**
+
+#### Offer 1: Early Bird (First 5 Customers)
+```
+Offer Name: Early Bird Pintarweb
+Display Text: 10% discount for early adopters
+Discount Type: Percentage (10%)
+Applicable On: All subscription plans
+Validity: Until 31 Dec 2026
+Max Usage: 5
+```
+
+#### Offer 2: Referral Discount
+```
+Offer Name: Referral Discount
+Display Text: RM 50 off for referred customers
+Discount Type: Fixed Amount (RM 50)
+Applicable On: All subscription plans
+Validity: Ongoing
+Max Usage: 100
+```
+
+3. **Link offer to subscription:**
+   - When creating subscription, pass `offer_id` parameter
+   - Customer sees discount automatically at checkout
 
 **Time:** 20 minutes  
 **Cost:** Free

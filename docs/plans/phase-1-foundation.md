@@ -1,4 +1,4 @@
-# Phase 1: Foundation - Detailed Implementation Plan
+	# Phase 1: Foundation - Detailed Implementation Plan
 
 ## Overview
 
@@ -32,7 +32,7 @@ Phase 1 sets up the legal, payment, and infrastructure foundation for Pintarweb.
    - Business name: Pintarweb
    - Business category: Services / IT Services
    - Your name: Yusmarin
-   - Email: yusmarin@gmail.com
+   - Email: yusmarin@gmail.com, 
    - Phone number
    - Password
 5. Verify email address
@@ -153,243 +153,91 @@ Create a simple document (Google Doc or Notion) with:
 
 ---
 
-## 1.2 Legal Documents
+## 1.2 Legal Documents (Clickwrap — No Signatures)
 
-### Why Legal Documents?
-- Protects you from liability
-- Sets clear expectations with customers
-- Required for payment processing (some gateways)
-- PDPA compliance (Malaysia's data protection law)
+### Why Clickwrap?
+- No physical signatures needed
+- Legally valid under Malaysia's Electronic Commerce Act 2006
+- Customer accepts terms by completing payment
+- Common practice (Shopee, Grab, all use clickwrap)
+- Zero friction for customer
 
 ### Step-by-Step Setup
 
-#### Step 1: Draft Subscription Agreement
-Create a subscription agreement that covers:
+#### Step 1: Create Terms of Service Page
+
+Create `packages/site-generator/terms.html` (hosted at preview.pintarweb.com/terms).
 
 **Key Sections:**
-1. **Parties:** Pintarweb (you) and Customer (client)
-2. **Services:** What's included (website, SEO, auto-reply, GMB)
-3. **Payment Terms:**
-   - RM 149/month, 3 months advance (RM 447)
-   - Auto-renews every 3 months
-   - Cancellation policy (30 days notice)
-   - Refund policy (no refunds after 7 days)
-4. **Customer Obligations:**
-   - Provide accurate business information
-   - Provide photos/logos
-   - Respond to requests within 7 days
-5. **Pintarweb Obligations:**
-   - Build and maintain website
-   - Provide SEO optimization
-   - Respond to support requests within 48 hours
-6. **Termination:**
-   - Customer can cancel with 30 days notice
-   - Pintarweb can terminate for non-payment or breach
-7. **Limitation of Liability:**
-   - Cap liability at 3 months of fees (RM 447)
-   - No liability for lost profits or indirect damages
+1. **Services:** What's included (website, SEO, auto-reply, GMB)
+2. **Pricing Structure:**
+   - **Initial:** RM 447 (3-month advance, RM 149/month)
+   - **Monthly renewal:** RM 149/month (auto-debit)
+   - **Quarterly:** RM 417/3 months (save RM 30)
+   - **Bi-Annual:** RM 774/6 months (save RM 120)
+   - **Annual:** RM 1,308/12 months (save RM 480)
+3. **Payment Terms:** Auto-renewal, cancellation (30 days notice)
+4. **Customer Obligations:** Provide info, respond within 7 days
+5. **Pintarweb Obligations:** Build/maintain site, 48hr support response
+6. **Limitation of Liability:** Cap at 3 months fees (RM 447)
+7. **PDPA Privacy Notice:** Data collection, usage, rights
 8. **Governing Law:** Malaysia
 
-**Template:**
-```markdown
-# PINTARWEB SUBSCRIPTION AGREEMENT
+**Time:** 1-2 hours
 
-This Agreement is made on [DATE] between:
+#### Step 2: Configure Razorpay Payment Link with Clickwrap
 
-**Pintarweb** (registered business name)
-Address: [Your address]
-Email: yusmarin@gmail.com
+When creating the Razorpay payment link:
 
-AND
+1. Go to Razorpay Dashboard → Payment Links → Create New Link
+2. In the description, add:
+   ```
+   Dengan membuat pembayaran ini, anda bersetuju dengan
+   Terma Perkhidmatan Pintarweb:
+   https://preview.pintarweb.com/terms
+   ```
+3. Enable "Terms and Conditions" checkbox if available
+4. Save the link
 
-**[Customer Business Name]**
-Address: [Customer address]
-Contact: [Customer name]
-Email: [Customer email]
-Phone: [Customer phone]
+**Time:** 5 minutes
 
-## 1. Services
+#### Step 3: Send WhatsApp Confirmation After Payment
 
-Pintarweb agrees to provide the following services:
-- Custom website design and development
-- Search engine optimization (SEO)
-- WhatsApp auto-reply bot (30 messages/month)
-- Google Business Profile optimization
-- Monthly content updates (up to 2 requests)
+After payment received, send:
 
-## 2. Payment Terms
+```
+Terima kasih! Payment RM 447 dah diterima.
 
-- Monthly fee: RM 149
-- Commitment: 3 months advance payment (RM 447)
-- Payment method: Bank transfer via Razorpay
-- Auto-renewal: Agreement renews every 3 months
-- Cancellation: 30 days written notice required
-- Refunds: No refunds after 7 days from payment date
+Dengan membuat pembayaran ini, anda telah menerima
+Terma Perkhidmatan Pintarweb.
 
-## 3. Customer Obligations
+Terma penuh: https://preview.pintarweb.com/terms
 
-Customer agrees to:
-- Provide accurate business information and assets (logo, photos)
-- Respond to Pintarweb requests within 7 business days
-- Not use the website for illegal or fraudulent activities
-- Maintain ownership of domain name (if applicable)
+Ringkasan:
+- RM 149/bulan, 3 bulan advance (RM 447)
+- Selepas 3 bulan, auto-renew setiap bulan (RM 149/bulan)
+- Boleh upgrade ke Quarterly (RM 417/3mo), Bi-Annual (RM 774/6mo), atau Annual (RM 1,308/12mo) untuk jimat
+- Boleh batal dengan 30 hari notis
+- Website, SEO, WhatsApp auto-reply, GMB optimisation included
 
-## 4. Pintarweb Obligations
-
-Pintarweb agrees to:
-- Build and maintain the website according to agreed specifications
-- Provide SEO optimization to improve search visibility
-- Respond to support requests within 48 business hours
-- Deliver monthly performance reports
-
-## 5. Intellectual Property
-
-- Customer owns all content (text, images, logos) provided
-- Pintarweb owns the website design and code
-- Customer receives license to use the website during subscription
-- Upon termination, customer can export content but not design
-
-## 6. Termination
-
-- Customer may terminate with 30 days written notice
-- Pintarweb may terminate immediately for non-payment or breach
-- Upon termination, website will be taken offline after 30 days
-- Customer may request data export before termination
-
-## 7. Limitation of Liability
-
-- Pintarweb's liability is limited to 3 months of fees (RM 447)
-- Pintarweb is not liable for lost profits, lost customers, or indirect damages
-- Pintarweb is not liable for website downtime due to hosting provider issues
-- Customer acknowledges that SEO results are not guaranteed
-
-## 8. Governing Law
-
-This Agreement is governed by the laws of Malaysia. Any disputes will be resolved in the courts of Malaysia.
-
-## 9. Amendments
-
-This Agreement may only be amended in writing signed by both parties.
-
-## 10. Entire Agreement
-
-This Agreement constitutes the entire agreement between the parties and supersedes all prior negotiations, representations, or agreements.
-
----
-
-**Signatures:**
-
-_________________________
-**Pintarweb**
-Name: Yusmarin
-Date: [DATE]
-
-_________________________
-**[Customer Business Name]**
-Name: [Customer Name]
-Date: [DATE]
+Ada soalan? WhatsApp saya.
 ```
 
-**Time:** 1-2 hours  
-**Cost:** Free (or RM 200-300 for lawyer review)
-
-#### Step 2: Create Terms of Service
-Create a Terms of Service document for your website (preview.pintarweb.com):
-
-**Key Sections:**
-1. Acceptance of terms
-2. Description of services
-3. User responsibilities
-4. Intellectual property rights
-5. Privacy policy reference
-6. Limitation of liability
-7. Governing law
-
-**Time:** 30 minutes  
-**Cost:** Free
-
-#### Step 3: Create Privacy Policy (PDPA Compliance)
-Malaysia's Personal Data Protection Act 2010 (PDPA) requires you to:
-- Inform users what data you collect
-- Explain how you use the data
-- Get consent for data collection
-- Allow users to access/correct their data
-
-**Privacy Policy Template:**
-```markdown
-# Privacy Policy
-
-Last updated: [DATE]
-
-## Introduction
-
-Pintarweb ("we", "us", "our") respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your data when you use our services.
-
-## Data We Collect
-
-We collect the following data:
-- **Business information:** Business name, address, phone number, email
-- **Website data:** IP address, browser type, pages visited (via analytics)
-- **Payment data:** Processed via Razorpay (we do not store card details)
-
-## How We Use Your Data
-
-We use your data to:
-- Provide and maintain our services
-- Communicate with you about your subscription
-- Send monthly performance reports
-- Improve our services
-
-## Data Sharing
-
-We do not sell your data. We share data only with:
-- **Razorpay:** For payment processing
-- **Cloudflare:** For website hosting and analytics
-- **Google:** For Google Business Profile management (with your consent)
-
-## Data Retention
-
-We retain your data for:
-- **Active subscribers:** Duration of subscription + 12 months
-- **Cancelled subscribers:** 12 months after cancellation
-- **Analytics data:** 24 months
-
-## Your Rights
-
-Under PDPA, you have the right to:
-- Access your personal data
-- Correct inaccurate data
-- Withdraw consent for data collection
-- Request data deletion (after subscription ends)
-
-To exercise these rights, email: yusmarin@gmail.com
-
-## Contact Us
-
-If you have questions about this privacy policy, contact:
-- Email: yusmarin@gmail.com
-- Phone: [Your phone number]
-```
-
-**Time:** 30 minutes  
-**Cost:** Free
+**Time:** 5 minutes per customer
 
 #### Step 4: Store Documents
-Create a folder structure:
+
+Create folder structure:
 ```
 Pintarweb/
 ├── Legal/
-│   ├── Subscription-Agreement.md
 │   ├── Terms-of-Service.md
-│   ├── Privacy-Policy.md
-│   └── Templates/
-│       └── Payment-Link-Template.md
+│   └── Privacy-Policy.md
 ```
 
 Use Google Drive, Dropbox, or Notion for easy access.
 
-**Time:** 10 minutes  
-**Cost:** Free
+**Time:** 10 minutes
 
 ### Checklist
 - [ ] Subscription agreement drafted
@@ -606,10 +454,11 @@ Create a document with:
 - [ ] Test payment completed
 - [ ] Payment workflow documented
 
-### Legal Documents
-- [ ] Subscription agreement drafted
-- [ ] Terms of service created
+### Legal Documents (Clickwrap)
+- [ ] Terms of Service page created (preview.pintarweb.com/terms)
 - [ ] Privacy policy (PDPA compliant) created
+- [ ] Razorpay payment link configured with terms link
+- [ ] WhatsApp confirmation message template ready
 - [ ] Documents stored and organized
 
 ### Cloud Hosting
@@ -629,7 +478,7 @@ Create a document with:
 - [ ] Can create payment link for customer
 - [ ] Can deploy client site to preview.pintarweb.com
 - [ ] Can track site visits in Umami
-- [ ] Legal documents ready to send to customer
+- [ ] Terms of Service page live at preview.pintarweb.com/terms
 
 ---
 
