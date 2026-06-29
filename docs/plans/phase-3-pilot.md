@@ -1,527 +1,253 @@
-# Phase 3: Pilot - Detailed Implementation Plan
+#
+ Phase 3: Pilot — Revenue Validation
 
 ## Overview
 
-Phase 3 validates the entire pipeline with real prospects. By the end of this phase, you'll have run 2-3 free pilots, collected feedback, refined your process, and documented SOPs for scaling.
+Phase 3 validates the entire pipeline with **real paying prospects**. By the end, you'll have run 5-10 pilots, collected setup fees, and established a repeatable billing workflow for month 4+ subscriptions.
 
-**Duration:** Week 3 (8-12 hours)  
-**Cost:** RM 0 (free pilots)  
-**Success Criteria:** 2-3 pilot demos sent, at least 1 conversation started, SOP documented
+**Duration:** Weeks 1-4 (execution) + Months 1-4 (billing cycle)
+**Cost:** RM 0 (free pilots)
+**Success Criteria:** 5-10 pilots launched, 3-5 subscription conversions, SOPs documented
 
 ---
 
-## 3.1 Pilot Execution
+## Pilot Pricing
 
-### Goals
-- Validate entire pipeline with real prospects
-- Test messaging and positioning
-- Identify bottlenecks and issues
-- Build confidence before paid launch
+### Setup Fees
 
-### Step-by-Step Implementation
+| Tier | Setup Fee | Month 1 | Total Upfront | Months 2-3 | Month 4+ |
+|------|-----------|----------|---------------|-------------|----------|
+| **Pilot** (first 5-10) | RM150 (50% off) | RM149 | **RM299** | FREE | RM149/mo |
+| **Regular** | RM300 | RM149 | **RM449** | FREE | RM149/mo |
 
-#### Step 1: Select Pilot Prospects (Day 1)
+> **Pilot discount is private** — applied manually during closing to lure reluctant prospects. Not publicly advertised.
 
-**Criteria for pilot prospects:**
-- Real businesses (not friends/family)
-- No website or poor online presence
+### Payment Flow
+
+```
+Month 0: Customer pays RM299/449 → PintarWeb business account (DuitNow/bank transfer)
+Months 1-3: FREE pilot (build goodwill, collect feedback)
+Month 3 end: Automated reminder → customer chooses renewal plan
+Month 4+: Razorpay subscription auto-charges
+```
+
+### Cancellation Policy
+
+- If cancelled before month 4: **PintarWeb retains full setup fee + month 1 payment**
+- No refund of setup fee
+- Subscription can be cancelled with 14 days notice (handled by Razorpay)
+
+### Renewal Options (Month 4+)
+
+| Plan | Price | Savings |
+|------|-------|---------|
+| Monthly | RM149/mo | — |
+| Quarterly | RM417/3mo | Save RM30 |
+| Bi-annual | RM774/6mo | Save RM120 |
+| Annual | RM1,308/yr | Save RM480 |
+
+Default: Monthly if no choice made.
+
+---
+
+## Invoice Numbering
+
+Format: `PWT2026-001`, `PWT2026-002`, etc. (year embedded)
+
+---
+
+## Pilot Success Metrics
+
+| Metric | Target |
+|--------|--------|
+| Pilots launched | 5-10 |
+| Response rate | 20-30% |
+| Close rate (of responses) | 50-70% |
+| Pilots reaching month 4 | 3-5 |
+| Subscription conversions | 3-5 |
+| Re-engaged cancellations | 0.5 each (2 = 1 success) |
+
+**Success formula:**
+- 1 converted pilot = 1.0 success
+- 2 cancelled-then-reengaged = 1.0 success (0.5 + 0.5)
+- **Target: 3-5 total success clients by month 4**
+
+---
+
+## Pre-Pilot Setup (Week 1)
+
+### 1.1 D1 Schema Update
+
+Add fields to `outreach_leads`:
+
+```sql
+ALTER TABLE outreach_leads ADD COLUMN setup_paid INTEGER DEFAULT 0;
+ALTER TABLE outreach_leads ADD COLUMN setup_paid_date TEXT;
+ALTER TABLE outreach_leads ADD COLUMN setup_amount INTEGER DEFAULT 0;
+ALTER TABLE outreach_leads ADD COLUMN invoice_number TEXT;
+ALTER TABLE outreach_leads ADD COLUMN plan_type TEXT DEFAULT 'monthly';
+ALTER TABLE outreach_leads ADD COLUMN subscription_id TEXT;
+ALTER TABLE outreach_leads ADD COLUMN subscription_start TEXT;
+ALTER TABLE outreach_leads ADD COLUMN subscription_status TEXT DEFAULT 'pending';
+ALTER TABLE outreach_leads ADD COLUMN billing_reminder_sent INTEGER DEFAULT 0;
+ALTER TABLE outreach_leads ADD COLUMN billing_reminder_date TEXT;
+```
+
+Remove/deprecate fields:
+- `notes` — replaced by specific fields above
+- `google_maps_url` — no longer needed post-scoring
+
+Run: `bash scripts/init-outreach-db.sh --remote`
+
+---
+
+### 1.2 Invoice System
+
+**Invoice format:** PWT2026-001, PWT2026-002...
+
+**Invoice contents:**
+- PintarWeb logo + business details
+- Invoice number, date
+- Customer name, business name
+- Line items: "Setup Fee + Month 1" or "Pilot Setup Fee"
+- Amount paid
+- PintarWeb bank details (for DuitNow reference)
+- Terms: "14-day cancellation policy"
+
+**Delivery:**
+- PDF invoice via email (Resend API)
+- Formatted receipt via WhatsApp
+
+---
+
+### 1.3 Resend Email Setup
+
+**API Key:** `re_Bdr4pYp6_NLyTcU2939WUy6WsnMwHjFC9`
+**Domain:** `mail.pintarweb.com`
+
+Test by sending a simple email to verify delivery.
+
+---
+
+### 1.4 Razorpay Subscription Plans
+
+Create 4 plans in Razorpay Dashboard:
+
+| Plan Name | Amount (MYR) | Frequency | Plan ID |
+|-----------|--------------|-----------|---------|
+| PintarWeb Monthly | 149.00 | Every 1 month | (copy from Razorpay) |
+| PintarWeb Quarterly | 417.00 | Every 3 months | (copy from Razorpay) |
+| PintarWeb Bi-Annual | 774.00 | Every 6 months | (copy from Razorpay) |
+| PintarWeb Annual | 1308.00 | Every 12 months | (copy from Razorpay) |
+
+**Settings for all plans:**
+- Auto-charging: ON
+- Authorization amount: RM 1.00 (authorization hold)
+- Send reminder emails: ON (7 days before, 3 days before, on day)
+- Allow plan changes: YES
+
+---
+
+### 1.5 Automation Scripts to Build
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/confirm-payment.sh` | Payment received → update D1 + send WhatsApp receipt + email PDF invoice |
+| `scripts/billing-reminder.sh` | Send month 3 reminder to all active pilots |
+| `scripts/create-subscription.sh` | Create Razorpay subscription via API |
+| `scripts/check-subscription.sh` | Check subscription status, update D1 |
+
+---
+
+## Pilot Selection (Weeks 1-2)
+
+### Criteria
+- Score ≥ 60 (from `process-leads.sh`)
+- Aircond/plumbing/electrical niche
+- Selangor/KL area
+- No website or weak website (data opportunity insight)
 - Active on WhatsApp
-- Located in Selangor/KL
-- Aircond contractors (primary niche)
 
-**Where to find pilots:**
-1. **Existing leads:** Use your processed lead list from Phase 2
-2. **Google Maps:** Search "aircond service cheras" and find businesses without websites
-3. **Facebook Groups:** Join contractor groups and identify active members without websites
-4. **Personal network:** Ask friends/family if they know contractors who need help
+### Where to Find Leads
+1. **D1 database** — `view-outreach.sh` → sort by score descending
+2. **Google Maps** — Search "aircond service [area]" for businesses without websites
+3. **Facebook Groups** — Contractor groups, identify active members without websites
+4. **Personal network** — Friends/family who know contractors
 
-**Selection process:**
-1. Review processed leads (score >= 60)
-2. Filter by: aircond niche, Selangor/KL, no website
-3. Select top 5 candidates
-4. Narrow down to 2-3 based on:
-   - Business size (1-10 employees ideal)
-   - Online activity (active on social = more engaged)
-   - Accessibility (easy to contact via WhatsApp)
-
-**Time:** 1 hour
-
-#### Step 2: Build Demo Sites (Day 1-2)
-
-For each pilot prospect:
-
-1. **Gather information:**
-   - Business name
-   - Phone number
-   - Service area
-   - Services offered
-   - Google Maps URL (if exists)
-   - Instagram handle (if exists)
-   - Any photos you can find online
-
-2. **Create config.json:**
-   ```bash
-   cd packages/site-generator/clients
-   mkdir [business-id]
-   # Use intake form or manually create config.json
-   ```
-
-3. **Generate site:**
-   ```bash
-   cd packages/site-generator
-   node scripts/generate-all.js [business-id]
-   ```
-
-4. **Deploy to preview:**
-   ```bash
-   git add .
-   git commit -m "feat: add demo for [business-name]"
-   git push origin master
-   ```
-
-5. **Verify deployment:**
-   - Visit: https://preview.pintarweb.com/[business-id]/
-   - Check mobile responsiveness
-   - Verify all sections render correctly
-   - Test WhatsApp button
-
-**Time:** 2-3 hours (for 2-3 pilots)
-
-#### Step 3: Send Outreach Messages (Day 2-3)
-
-**Message timing:**
-- Send between 7:00-8:30am, 12:30-2:00pm, or 9:00-10:30pm
-- Avoid 9am-12pm and 2pm-6pm (busy work hours)
-
-**Touch 1 - First Outreach:**
-
-For each pilot, send personalized message:
-
-```
-Hi [Name], saya sempat check — every bulan roughly 290 orang 
-search aircond service kat area [Area]. Tapi [Business Name] 
-tak nampak langsung dalam result.
-
-Saya dah sediakan report + demo untuk tunjuk macam mana 
-customer boleh jumpa awak: https://preview.pintarweb.com/[business-id]/report
-
-Ada apa-apa boleh tanya sini.
-```
-
-**Personalization tips:**
-- Use their actual business name
-- Mention specific area (Cheras, Ampang, etc.)
-- If they have Instagram, mention it: "Nampak IG awak aktif..."
-- Keep it under 4 lines
-- No price mention in first message
-
-**Track outreach:**
-```bash
-cd packages/site-generator
-node scripts/track-outreach.js [business-id] first_outreach "Sent via WhatsApp"
-```
-
-**Time:** 30 minutes
-
-#### Step 4: Monitor and Follow Up (Day 3-7)
-
-**Day 3 - Touch 2 (if no reply):**
-```
-Just nak check — awak dah tengok report tu? 290 orang 
-search aircond service [area] sebulan. Bayangkan kalau 
-5% dari tu jadi customer awak — 15 customer baru sebulan.
-```
-
-**Day 7 - Touch 3 (if still no reply):**
-```
-Tadi update sikit demo website awak — dah tambah section 
-servis area. Link sama: https://preview.pintarweb.com/[business-id]/report
-
-Boleh tengok bila free.
-```
-
-**If they reply:**
-- Answer questions honestly
-- Don't push for sale immediately
-- Ask about their business challenges
-- Build rapport
-
-**Track all interactions:**
-```bash
-node scripts/track-outreach.js [business-id] follow_up "Day 3 follow-up"
-node scripts/track-outreach.js [business-id] reply "Asked about pricing"
-```
-
-**Time:** 1-2 hours (over 5 days)
-
-#### Step 5: Conduct Conversations (Day 5-10)
-
-**If prospect shows interest:**
-
-1. **Understand their needs:**
-   - How long in business?
-   - How many customers per month?
-   - Current marketing channels?
-   - Biggest challenges?
-
-2. **Explain your solution:**
-   - "We build websites for contractors like you"
-   - "Focus on getting customers from Google"
-   - "Include SEO, WhatsApp auto-reply, GMB optimization"
-
-3. **Present pricing (anchor & pivot):**
-   ```
-   Kalau nak website sahaja, RM 800 one-time.
-   
-   Atau RM 149/bulan — website FREE, auto-reply + GMB + SEO included. 
-   3 bulan advance (RM 447).
-   
-   Satu job chemical wash (RM 180-350) dah cover sebulan.
-   ```
-
-4. **Handle objections:**
-   - "Mahal" → "Satu job dah cover sebulan"
-   - "Nak fikir dulu" → "Boleh, demo still live. Saya follow-up minggu depan"
-   - "Tak sure jadi ke tak" → "Boleh try 3 bulan, kalau tak puas hati boleh batal"
-
-5. **Close:**
-   - If interested: Send Razorpay payment link
-   - If not ready: Schedule follow-up for next week
-   - If not interested: Thank them, move on
-
-**Track conversations:**
-```bash
-node scripts/track-outreach.js [business-id] demo_sent "Sent pricing info"
-node scripts/track-outreach.js [business-id] closed "Not interested"
-```
-
-**Time:** 2-3 hours (over 5 days)
-
-#### Step 6: Collect Feedback (Day 7-10)
-
-**For pilots who responded (interested or not):**
-
-Send feedback request:
-```
-Terima kasih sebab luangkan masa tengok demo tu. 
-
-Boleh saya tahu:
-1. Apa yang awak suka tentang demo website tu?
-2. Apa yang boleh kami improve?
-3. Ada apa-apa yang missing?
-
-Feedback awak sangat berharga untuk kami improve.
-```
-
-**Feedback questions to ask:**
-1. Was the demo relevant to your business?
-2. Was the pricing clear?
-3. What would make you sign up?
-4. What concerns do you have?
-5. Would you recommend this to other contractors?
-
-**Document feedback:**
-Create `docs/pilot-feedback.md`:
-```markdown
-# Pilot Feedback
-
-## Pilot 1: [Business Name]
-**Date:** 2026-06-23
-**Status:** Interested / Not Interested / No Response
-
-### What worked:
-- [Specific feedback]
-
-### What didn't work:
-- [Specific feedback]
-
-### Improvements needed:
-- [Specific feedback]
-
-### Pricing feedback:
-- [Their reaction to pricing]
-
-### Next steps:
-- [Follow-up actions]
-```
-
-**Time:** 1 hour
-
-### Checklist
-- [ ] 2-3 pilot prospects selected
-- [ ] Demo sites built for all pilots
-- [ ] First outreach sent to all pilots
-- [ ] Follow-ups sent (Day 3, Day 7)
-- [ ] Conversations conducted with interested pilots
-- [ ] Feedback collected from all pilots
-- [ ] All interactions tracked in database
+### Selection Process
+1. Pull top 10 highest-scoring leads from D1
+2. Filter by: aircond/plumbing/electrical, Selangor/KL, score ≥ 60
+3. Manually verify: active WhatsApp number, business still operating
+4. Select top 5-10 for pilot
 
 ---
 
-## 3.2 Process Documentation
+## Outreach Process
 
-### Goals
-- Document what worked and what didn't
-- Create SOPs for scaling
-- Identify bottlenecks and inefficiencies
+### Message Timing
+| Time | Why |
+|------|-----|
+| 7:00-8:30am | Before jobs start, checking phone |
+| 12:30-2:00pm | Lunch break, relaxed |
+| 9:00-10:30pm | Day done, scrolling phone |
 
-### Step-by-Step Implementation
+**Avoid:** 9am-12pm and 2pm-6pm (busy work hours)
 
-#### Step 1: Document Lead Generation SOP
+---
 
-Create `docs/sop-lead-generation.md`:
-```markdown
-# SOP: Lead Generation
+### Touch 1 — First Outreach
 
-## Overview
-Process for finding and qualifying leads for Pintarweb outreach.
+**Standard (no website, no social):**
+```
+Hi [Name], kami check online presence [Business Name] —
+ada buat report + demo website untuk awak.
+Boleh tengok: [demo_url]
 
-## Time Required
-- 1 hour to generate 20 qualified leads
-
-## Steps
-
-### 1. Run Scraper
-```bash
-cd packages/scraper
-npx tsx src/index.ts --category "Aircond" --location "Cheras" --limit 50
+Ada soalan boleh tanya sini.
 ```
 
-### 2. Process Leads
-```bash
-cd data/leads
-node ../../packages/site-generator/scripts/process-leads.js leads-cheras.json leads-processed.json
+**Social-aware (Instagram/TikTok active):**
+```
+Hi [Name], nampak [Business Name] ada Instagram yang active —
+project photos nampak bagus. Kami buat quick report pasal
+online presence awak + demo website. Boleh tengok:
+[demo_url]
 ```
 
-### 3. Review Processed Leads
-- Open `leads-processed.json`
-- Filter by score >= 60
-- Check each lead manually:
-  - Verify phone number is valid
-  - Check if business is still operating
-  - Confirm no website (or poor website)
-
-### 4. Export Outreach List
-```bash
-node ../../packages/site-generator/scripts/export-outreach-list.js leads-processed.json outreach-list.csv
-```
-
-### 5. Select Top Prospects
-- Sort by score (highest first)
-- Select 10-15 for outreach
-- Prioritize: no website, active on social, good reviews
-
-## Quality Checks
-- [ ] All phone numbers are valid Malaysian numbers
-- [ ] All businesses are in target area (Selangor/KL)
-- [ ] All businesses are in target niche (aircond first)
-- [ ] Score >= 60 for all selected leads
-
-## Common Issues
-- **Scraper returns duplicates:** Check phone_normalized field
-- **Invalid phone numbers:** Manually verify before outreach
-- **Businesses closed:** Check Google Maps for "Permanently closed"
-
-## Output
-- `outreach-list.csv` with 10-15 qualified leads
-- Ready for demo site generation
-```
-
-**Time:** 1 hour
-
-#### Step 2: Document Site Generation SOP
-
-Create `docs/sop-site-generation.md`:
-```markdown
-# SOP: Site Generation
-
-## Overview
-Process for generating demo sites, audits, and reports for prospects.
-
-## Time Required
-- 30 minutes per complete deliverable (demo + audit + report)
-
-## Steps
-
-### 1. Gather Client Information
-Required fields:
-- Business name
-- Phone number (Malaysian format: 01X-XXX XXXX)
-- Service area (e.g., "Cheras, Selangor")
-- Niche (aircond-contractor, plumbing, etc.)
-- Services offered (list 3-5 services)
-
-Optional fields:
-- Google Maps URL
-- Instagram handle
-- Google rating and review count
-- Logo and photos
-
-### 2. Create Config File
-```bash
-cd packages/site-generator/clients
-mkdir [business-id]
-```
-
-Use intake form (clients/intake-form.html) or manually create config.json:
-```json
-{
-  "id": "business-id",
-  "business_name": "Business Name",
-  "phone": "012-345 6789",
-  "area": "Cheras, Selangor",
-  "niche": "aircond-contractor",
-  "services": ["Servis Aircond", "Pemasangan Aircond", "Pembaikan Aircond"],
-  "social": {
-    "instagram_handle": "businessname",
-    "instagram_active": true
-  },
-  "audit": {
-    "has_website": false,
-    "google_maps_url": "https://maps.google.com/..."
-  }
-}
-```
-
-### 3. Add Images (Optional)
-If client has logo or photos:
-```bash
-cd clients/[business-id]/images
-# Add logo.webp, hero.webp, gallery images
-```
-
-### 4. Generate Site
-```bash
-cd packages/site-generator
-node scripts/generate-all.js [business-id]
-```
-
-This generates:
-- `index.html` - Demo website
-- `audit.html` - Audit report
-- `report.html` - Combined report (send this)
-
-### 5. Deploy to Preview
-```bash
-git add .
-git commit -m "feat: add demo for [business-name]"
-git push origin master
-```
-
-Wait 2-3 minutes for Cloudflare Pages to deploy.
-
-### 6. Verify Deployment
-Visit:
-- https://preview.pintarweb.com/[business-id]/
-- https://preview.pintarweb.com/[business-id]/audit
-- https://preview.pintarweb.com/[business-id]/report
-
-Check:
-- [ ] Mobile responsive (test on phone)
-- [ ] All sections render correctly
-- [ ] WhatsApp button works
-- [ ] Images load
-- [ ] Language toggle works
-
-## Quality Checks
-- [ ] Business name matches Google listing
-- [ ] Phone number is correct and clickable
-- [ ] Service area is accurate
-- [ ] No placeholder text
-- [ ] Looks professional on mobile
-
-## Common Issues
-- **Images not loading:** Check file paths in config.json
-- **WhatsApp button broken:** Verify phone format (60XXXXXXXXXX)
-- **Deployment failed:** Check GitHub Actions logs
-
-## Output
-- Live demo site at preview.pintarweb.com/[business-id]/
-- Report ready to send to prospect
-```
-
-**Time:** 1 hour
-
-#### Step 3: Document Outreach SOP
-
-Create `docs/sop-outreach.md`:
-```markdown
-# SOP: Outreach
-
-## Overview
-Process for contacting prospects and converting them to customers.
-
-## Time Required
-- 10 minutes per prospect (initial outreach)
-- 5 minutes per follow-up
-- 15-30 minutes per conversation
-
-## Steps
-
-### 1. Prepare Outreach List
-- Use `outreach-list.csv` from lead generation
-- Select 10-15 high-priority leads
-- Personalize message for each lead
-
-### 2. Send Touch 1 (Day 0)
-**Timing:** 7:00-8:30am, 12:30-2:00pm, or 9:00-10:30pm
-
-**Message template:**
-```
-Hi [Name], saya sempat check — every bulan roughly 290 orang 
-search aircond service kat area [Area]. Tapi [Business Name] 
-tak nampak langsung dalam result.
-
-Saya dah sediakan report + demo untuk tunjuk macam mana 
-customer boleh jumpa awak: [report URL]
-
-Ada apa-apa boleh tanya sini.
-```
-
-**Personalization:**
-- Use actual business name
-- Mention specific area
-- If they have Instagram, mention it
-- Keep under 4 lines
+**Rules:**
+- Under 4 lines total
+- Audit link in every first message — always
 - No price mention
+- No "pakej" or "promosi" language
+- End with soft open
 
-**Track:**
-```bash
-node scripts/track-outreach.js [business-id] first_outreach
-```
+---
 
-### 3. Send Touch 2 (Day 3)
+### Touch 2 — Day 3 Follow-Up
+
 Only if no reply.
-
-**Message:**
 ```
 Just nak check — awak dah tengok report tu? 290 orang 
 search aircond service [area] sebulan. Bayangkan kalau 
 5% dari tu jadi customer awak — 15 customer baru sebulan.
 ```
 
-**Track:**
-```bash
-node scripts/track-outreach.js [business-id] follow_up "Day 3"
-```
+---
 
-### 4. Send Touch 3 (Day 7)
+### Touch 3 — Day 7 Final
+
 Only if still no reply.
-
-**Message:**
 ```
 Tadi update sikit demo website awak — dah tambah section 
-servis area. Link sama: [report URL]
+servis area. Link sama: [demo_url]
 
 Boleh tengok bila free.
 ```
 
-**Track:**
-```bash
-node scripts/track-outreach.js [business-id] follow_up "Day 7"
-```
+---
 
-### 5. Handle Responses
+### Engagement (When They Reply)
+
 **If they ask about pricing:**
 ```
 Kalau berminat, ada 2 pilihan:
@@ -533,384 +259,338 @@ Satu job chemical wash (RM 180-350) dah cover sebulan.
 ```
 
 **If they're interested:**
-- Send Razorpay payment link
-- Schedule onboarding call
-- Collect business assets (logo, photos)
+1. Send DuitNow QR / bank account details
+2. Mention invoice will be sent after payment
+3. Wait for payment confirmation
 
-**If they're not interested:**
-- Thank them for their time
-- Ask for feedback
-- Move on to next prospect
+**If they're reluctant:**
+- Apply pilot discount (50% off setup) privately: "Untuk awak, sebab saya regard awak sebagai potential client — saya boleh bagi special rate. Setup RM150 je."
+- Or offer extended free months
 
-**Track all interactions:**
+---
+
+## Closing (Payment Collection)
+
+### Step 1: Send Payment Details
+
+WhatsApp:
+```
+Bagus! Untuk mula, boleh transfer ke:
+
+PintarWeb Enterprise
+Bank: [BANK NAME]
+Account: [ACCOUNT NUMBER]
+
+Amount: RM [299/449]
+
+Sila hantar bukti transfer kat sini, dan saya akan emitkan invoice.
+```
+
+### Step 2: Verify Payment
+
+Check bank statement / DuitNow notification.
+
+### Step 3: Confirm Payment + Send Invoice
+
 ```bash
-node scripts/track-outreach.js [business-id] reply "Asked about pricing"
-node scripts/track-outreach.js [business-id] demo_sent "Sent payment link"
-node scripts/track-outreach.js [business-id] closed "Not interested"
+bash scripts/confirm-payment.sh "[business-id]" "[amount]" "[payment-reference]"
 ```
 
-## Quality Checks
-- [ ] Message is personalized (not generic)
-- [ ] Report link is working
-- [ ] Timing is appropriate (not during busy hours)
-- [ ] All interactions tracked
+This script will:
+1. Update D1: `setup_paid=1`, `setup_paid_date`, `setup_amount`, `invoice_number`
+2. Generate invoice PDF
+3. Send WhatsApp receipt to customer
+4. Send email with PDF invoice attached
+5. Log `payment_received` event in D1
 
-## Common Issues
-- **No replies:** Try different times, refine message
-- **Negative responses:** Learn from feedback, adjust approach
-- **Technical issues:** Test report link before sending
+### Step 4: Send Welcome Message
 
-## Metrics to Track
-- Response rate (target: 20-30%)
-- Conversation rate (target: 10-15%)
-- Close rate (target: 5-10%)
-
-## Output
-- 10-15 outreach messages sent
-- 2-3 conversations started
-- 1 customer closed (target for Week 4)
+WhatsApp:
 ```
+Terima kasih! Payment dah terima.
 
-**Time:** 1 hour
+Invoice: [PWT2026-XXX]
+Website awak: [demo_url]
 
-#### Step 4: Document Closing SOP
+Untuk 4 bulan pertama (3 bulan free + bulan 1 yang awak bayar), 
+tiada apa-apa bayaran lagi. Saya akan contact awak kat hujung bulan 3 
+untuk renewal options.
 
-Create `docs/sop-closing.md`:
-```markdown
-# SOP: Closing & Onboarding
-
-## Overview
-Process for converting interested prospects to paying customers and onboarding them.
-
-## Time Required
-- 30 minutes for closing conversation
-- 1-2 hours for onboarding
-
-## Steps
-
-### 1. Closing Conversation
-**When prospect is ready to commit:**
-
-1. **Confirm details:**
-   - Business name
-   - Services to include
-   - Service area
-   - Contact information
-
-2. **Explain what's included:**
-   - Custom website
-   - SEO optimization
-   - WhatsApp auto-reply (30 messages/month)
-   - Google Business Profile optimization
-   - Monthly content updates (up to 2)
-
-3. **Present pricing:**
-   ```
-   RM 149/bulan, 3 bulan advance (RM 447).
-   
-   Termasuk:
-   - Website custom
-   - SEO optimization
-   - WhatsApp auto-reply
-   - GMB optimization
-   - Monthly updates
-   
-   Auto-renew setiap 3 bulan. Boleh batal bila-bila dengan 14 hari notice.
-   ```
-
-4. **Send payment link:**
-   - Create Razorpay payment link (RM 447)
-   - Send via WhatsApp
-   - Include brief instructions
-
-5. **Set expectations:**
-   - Website will be live in 5-7 days
-   - Need business assets (logo, photos)
-   - Onboarding call (20 minutes)
-
-### 2. Payment Confirmation
-**When payment received:**
-
-1. **Verify payment:**
-   - Check Razorpay dashboard
-   - Confirm amount: RM 447
-   - Note transaction ID
-
-2. **Send confirmation:**
-   ```
-   Terima kasih! Payment dah diterima.
-   
-   Sekarang saya perlukan:
-   1. Logo bisnes (format PNG atau JPG)
-   2. Photos projek (5-10 photos)
-   3. Maklumat bisnes (alamat, waktu operasi)
-   
-   Boleh hantar via WhatsApp atau email.
-   
-   Saya akan setup onboarding call dalam 1-2 hari.
-   ```
-
-3. **Track:**
-   ```bash
-   node scripts/track-outreach.js [business-id] closed "Payment received"
-   ```
-
-### 3. Collect Business Assets
-**What you need:**
-- Logo (PNG, JPG, or SVG)
-- Hero image (16:9 landscape)
-- Gallery images (5-10 project photos)
-- Business information:
-  - Full address
-  - Operating hours
-  - Services list
-  - Contact person name
-
-**How to collect:**
-- WhatsApp (easiest for photos)
-- Email (for high-res files)
-- Google Drive folder (organized storage)
-
-### 4. Generate Production Site
-**For paying customer (not demo):**
-
-1. **Create production config:**
-   - Use demo config as base
-   - Add real business assets
-   - Update with customer preferences
-
-2. **Generate site:**
-   ```bash
-   node scripts/generate-all.js [business-id]
-   ```
-
-3. **Deploy to production:**
-   - Upload to Cloudflare Pages
-   - Configure custom domain (if applicable)
-   - Test thoroughly
-
-### 5. Onboarding Call (20 minutes)
-**Agenda:**
-
-1. **Introduction (2 min):**
-   - Welcome them
-   - Explain what's included
-   - Set expectations
-
-2. **Website walkthrough (10 min):**
-   - Show them their live site
-   - Explain how to update content
-   - Show WhatsApp auto-reply
-   - Show Google Business Profile
-
-3. **Next steps (5 min):**
-   - Timeline for SEO results (1-3 months)
-   - How to request updates
-   - Support contact information
-
-4. **Q&A (3 min):**
-   - Answer any questions
-   - Address concerns
-
-### 6. Send Welcome Package
-**After onboarding call:**
-
-Send email/WhatsApp with:
-- Website URL
-- Login details (if applicable)
-- Support contact (your WhatsApp)
-- What to expect in first month
-- How to request updates
-
-**Template:**
+Ada apa-apa boleh WhatsApp saya bila-bila masa.
 ```
-Selamat datang ke Pintarweb!
-
-Website awak: https://[business-id].pintarweb.com
-Support WhatsApp: 01X-XXX XXXX
-
-Apa yang termasuk:
-- Website hosting & maintenance
-- SEO optimization (results in 1-3 months)
-- WhatsApp auto-reply (30 messages/bulan)
-- Google Business Profile optimization
-- Monthly content updates (max 2)
-
-Cara minta update:
-- WhatsApp saya dengan detail
-- Saya akan update dalam 1-2 hari kerja
-
-Ada apa-apa soalan, boleh WhatsApp saya bila-bila masa.
-```
-
-## Quality Checks
-- [ ] Payment received and verified
-- [ ] All business assets collected
-- [ ] Production site deployed and tested
-- [ ] Onboarding call completed
-- [ ] Welcome package sent
-- [ ] Customer knows how to contact support
-
-## Common Issues
-- **Customer slow to provide assets:** Send gentle reminder after 3 days
-- **Technical issues with site:** Fix within 24 hours
-- **Customer has many questions:** Be patient, document FAQ
-
-## Metrics to Track
-- Time from payment to live site (target: 5-7 days)
-- Customer satisfaction (ask after 1 month)
-- Support requests per month (target: < 5)
-
-## Output
-- Paying customer onboarded
-- Live production site
-- Happy customer who knows what to expect
-```
-
-**Time:** 1 hour
-
-### Checklist
-- [ ] Lead generation SOP documented
-- [ ] Site generation SOP documented
-- [ ] Outreach SOP documented
-- [ ] Closing & onboarding SOP documented
-- [ ] All SOPs tested and verified
-- [ ] SOPs stored in docs/ folder
 
 ---
 
-## 3.3 Quality Refinement
+## Months 1-3: Free Pilot Period
 
-### Goals
-- Improve design based on pilot feedback
-- Refine messaging and positioning
-- Calibrate audit scoring
-- Optimize report template
+### What to Monitor
+- Demo site visits (via Umami `demo_visit` event)
+- WhatsApp clicks (via Umami `whatsapp_click` event)
+- Any replies or questions
 
-### Step-by-Step Implementation
+### Check-In Messages (Light Touch)
 
-#### Step 1: Analyze Pilot Feedback
-1. Review all feedback collected in Step 3.1
-2. Identify common themes:
-   - What did pilots like?
-   - What confused them?
-   - What was missing?
-   - What objections came up?
+**Month 1 end:**
+```
+Hi [Name], dah duas kan website awak? Jangan segan untuk 
+message saya kalau ada apa-apa nak diupdate atau diubah.
+```
 
-3. Categorize feedback:
-   - **Design issues:** Layout, colors, fonts
-   - **Content issues:** Copy, testimonials, services
-   - **Technical issues:** Mobile, speed, bugs
-   - **Pricing issues:** Too expensive, unclear value
-   - **Messaging issues:** Confusing, not relevant
+**Month 2 end:**
+```
+Hi [Name],ade apa-apa soalan tentang website awak? 
+Saya boleh tolong adjust mana-mana part bila-bila masa.
+```
 
-**Time:** 30 minutes
+### Collect Feedback
 
-#### Step 2: Refine Design System
-Based on feedback, update:
-- `packages/site-generator/design-system/moods/` - Update mood files
-- `packages/site-generator/templates/` - Update templates
-- `packages/site-generator/docs/design-rules.md` - Update rules
-
-**Common refinements:**
-- Simplify navigation (fewer items)
-- Increase font sizes (better mobile readability)
-- Add more whitespace (less cluttered)
-- Improve contrast (better accessibility)
-
-**Time:** 2 hours
-
-#### Step 3: Update Copy Rules
-Based on feedback, update:
-- `packages/site-generator/docs/copy-rules.md`
-- `packages/site-generator/prompts/copy/` - Update prompts
-
-**Common refinements:**
-- Remove jargon (use simpler language)
-- Add more local references (Malaysian context)
-- Improve testimonials (make them sound real)
-- Clarify value proposition (focus on customers, not features)
-
-**Time:** 1 hour
-
-#### Step 4: Calibrate Audit Scoring
-Based on pilot feedback, adjust:
-- `packages/site-generator/scripts/generate-audit.js` - Update scoring logic
-
-**Common refinements:**
-- Adjust weight of different factors
-- Add new scoring criteria
-- Remove irrelevant criteria
-- Improve narrative generation
-
-**Time:** 1 hour
-
-#### Step 5: Improve Report Template
-Based on feedback, update:
-- `packages/site-generator/scripts/generate-report.js`
-
-**Common refinements:**
-- Simplify layout (less overwhelming)
-- Add more visuals (charts, graphs)
-- Improve call-to-action (clearer next steps)
-- Add social proof (testimonials, case studies)
-
-**Time:** 1 hour
-
-### Checklist
-- [ ] Pilot feedback analyzed
-- [ ] Design system refined
-- [ ] Copy rules updated
-- [ ] Audit scoring calibrated
-- [ ] Report template improved
-- [ ] Changes tested with new demo
+Informal feedback is fine. Track key points in D1 `notes` field:
+- What they liked
+- What was confusing
+- What they'd change
+- Pricing reaction
 
 ---
 
-## Phase 3 Completion Checklist
+## Month 3 End: Billing Reminder
 
-### Pilot Execution
-- [ ] 2-3 pilot prospects selected
+### Automated Reminder Script
+
+```bash
+bash scripts/billing-reminder.sh
+```
+
+Sends WhatsApp to all pilots with `setup_paid=1` AND `billing_reminder_sent=0`:
+
+```
+Hi [Name], ni reminder — billing PintarWeb bermula bulan depan.
+
+Pilihan renewal:
+📅 Bulanan: RM149/bulan
+📅 Suku Tahun: RM417 (jimat RM30)
+📅 6 Bulan: RM774 (jimat RM120)
+📅 Tahunan: RM1,308 (jimat RM480)
+
+Nak pilih yang mana? Boleh reply kat sini.
+
+- PintarWeb
+```
+
+Update D1: `billing_reminder_sent=1`, `billing_reminder_date=[today]`
+
+---
+
+## Month 4: Subscription Setup
+
+### If Customer Responds with Plan Choice
+
+```bash
+bash scripts/create-subscription.sh "[business-id]" "[monthly|quarterly|biannual|annual]"
+```
+
+Script will:
+1. Create Razorpay subscription for customer
+2. Send authorization request to customer (via WhatsApp with link)
+3. Once authorized → subscription is active
+4. Update D1: `subscription_id`, `plan_type`, `subscription_status='active'`
+5. Send confirmation via WhatsApp + email
+
+### If No Response (Default to Monthly)
+
+```bash
+bash scripts/create-subscription.sh "[business-id]" "monthly"
+```
+
+Send WhatsApp:
+```
+Hi [Name], sebab tak dapat reply, saya activatekan subscription 
+bulanan (RM149/bulan) untuk awak. Boleh tukar ke plan lain 
+ bila-bila masa dengan message saya.
+
+Current subscription: https://razorpay.com/subscriptions/[id]
+```
+
+---
+
+## Re-engagement SOP (Cancelled Pilots)
+
+### Trigger: Pilot cancels at month 4 (or anytime before)
+
+### Step 1: Cancel Confirmation (Day 0)
+
+WhatsApp:
+```
+Sedar. Terima kasih bagi peluang tu. Kalau berubah fikiran, 
+saya boleh bantu lagi untuk masa depan.
+```
+
+Update D1: `subscription_status='cancelled'`
+
+### Step 2: Week 2 Follow-Up
+
+WhatsApp:
+```
+Hi [Name], saya update sikit website awak dengan feedback 
+yang awak bagi dulu. Nak tengok?
+```
+
+### Step 3: Month 2 (If No Response)
+
+WhatsApp:
+```
+Hi [Name], special offer untuk awak — kalau nak activate balik, 
+setup fee saya waived. Cuma RM149/bulan je. Interested?
+```
+
+### Step 4: Month 3 (Final Check-In)
+
+WhatsApp:
+```
+Hi [Name], nak check in satu kali je lagi. Selepas ni saya 
+akan archive number awak. Kalau nak continue, saya boleh tolong. 
+Kalau tak, tak apa — semua yang terbaik!
+```
+
+### Success Counting
+
+- Cancelled pilot who returns = **0.5 pilot success**
+- 2 re-engaged = 1 full success client
+
+---
+
+## D1 Tracking Fields Summary
+
+### outreach_leads table
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `id` | TEXT | Unique ID (e.g., "ahsengplumbing-20260629") |
+| `business_name` | TEXT | Business name |
+| `contact_name` | TEXT | Contact person name |
+| `phone` | TEXT | WhatsApp number |
+| `area` | TEXT | Service area |
+| `niche` | TEXT | Trade niche |
+| `demo_url` | TEXT | Demo site URL |
+| `audit_url` | TEXT | Audit report URL |
+| `status` | TEXT | new/contacted/interested/closing/paid/pilot_active/subscription_active/cancelled |
+| `score` | INTEGER | Lead score (0-100) |
+| `setup_paid` | INTEGER | 0 or 1 |
+| `setup_paid_date` | TEXT | ISO date |
+| `setup_amount` | INTEGER | Amount received |
+| `invoice_number` | TEXT | PWT2026-XXX |
+| `plan_type` | TEXT | monthly/quarterly/biannual/annual |
+| `subscription_id` | TEXT | Razorpay subscription ID |
+| `subscription_start` | TEXT | ISO date |
+| `subscription_status` | TEXT | pending/active/cancelled |
+| `billing_reminder_sent` | INTEGER | 0 or 1 |
+| `billing_reminder_date` | TEXT | ISO date |
+| `created_at` | TEXT | ISO timestamp |
+| `updated_at` | TEXT | ISO timestamp |
+
+### outreach_events table
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `id` | INTEGER | Auto-increment |
+| `lead_id` | TEXT | FK to outreach_leads |
+| `event_type` | TEXT | outreach_sent/follow_up/reply/interested/closing/payment_received/subscription_created/cancelled/etc |
+| `metadata` | TEXT | JSON notes |
+| `created_at` | TEXT | ISO timestamp |
+
+---
+
+## Scripts Reference
+
+| Script | Usage | Purpose |
+|--------|-------|---------|
+| `add-lead.sh` | `bash scripts/add-lead.sh "Name" "60123456789" "Area" "niche" [--contact "Name"] [--score N]` | Add new lead to D1 |
+| `track-event.sh` | `bash scripts/track-event.sh "[lead-id]" "[event_type]" [--status "status"]` | Log event |
+| `view-outreach.sh` | `bash scripts/view-outreach.sh` | Dashboard view |
+| `process-leads.sh` | `bash scripts/process-leads.sh data/leads/sample-leads.csv` | Score leads |
+| `generate-demo.sh` | `bash scripts/generate-demo.sh --name "X" --phone "X" --area "X" --niche "X"` | Demo + audit + WhatsApp |
+| `generate-audit.sh` | `bash scripts/generate-audit.sh "Name" "Area" "Niche" "/tmp/audits"` | Generate P.A.S.T. audit |
+| `generate-whatsapp.sh` | `bash scripts/generate-whatsapp.sh "Name" "Phone" "lead-id" --audit "url" --demo "url"` | Generate WhatsApp link |
+| `confirm-payment.sh` | `bash scripts/confirm-payment.sh "[lead-id]" "[amount]" "[payment-ref]"` | Payment → invoice + D1 update |
+| `billing-reminder.sh` | `bash scripts/billing-reminder.sh` | Send reminders to all pilots |
+| `create-subscription.sh` | `bash scripts/create-subscription.sh "[lead-id]" "[plan]"` | Create Razorpay subscription |
+
+---
+
+## Razorpay Setup
+
+### API Keys (in .env)
+```
+RAZORPAY_KEY_ID=rzp_live_T75gpSekzuIxbX
+RAZORPAY_KEY_SECRET=MKkqwVNu6l21OpG0c15hdPCq
+```
+
+### Subscription Plans (create in Razorpay Dashboard)
+- PintarWeb Monthly: RM 149/month
+- PintarWeb Quarterly: RM 417/quarter
+- PintarWeb Bi-Annual: RM 774/6 months
+- PintarWeb Annual: RM 1,308/year
+
+---
+
+## Email (Resend)
+
+```
+RESEND_API_KEY=re_Bdr4pYp6_NLyTcU2939WUy6WsnMwHjFC9
+RESEND_FROM_EMAIL=hello@mail.pintarweb.com
+```
+
+---
+
+## Success Checklist
+
+### Pre-Pilot
+- [ ] D1 schema updated (new fields added, unused fields removed)
+- [ ] Invoice generator script built and tested
+- [ ] Payment confirmation flow tested (D1 update + WhatsApp + email)
+- [ ] Resend email integration tested
+- [ ] 4 Razorpay subscription plans created
+- [ ] Subscription creation script tested
+- [ ] Billing reminder script tested
+
+### Pilot Launch
+- [ ] 5-10 pilot prospects selected (score ≥ 60)
 - [ ] Demo sites built for all pilots
-- [ ] Outreach sent to all pilots
-- [ ] Follow-ups completed
-- [ ] Conversations conducted
-- [ ] Feedback collected
+- [ ] Audit reports generated
+- [ ] First outreach sent to all pilots
+- [ ] Follow-ups sent (Day 3, Day 7)
 
-### Process Documentation
-- [ ] Lead generation SOP documented
-- [ ] Site generation SOP documented
-- [ ] Outreach SOP documented
-- [ ] Closing & onboarding SOP documented
-- [ ] All SOPs tested
+### Closing
+- [ ] At least 3-5 pilots closed (payment received)
+- [ ] Invoices sent to all paid pilots
+- [ ] Welcome messages sent
+- [ ] D1 updated for all pilots
 
-### Quality Refinement
+### Monitoring
+- [ ] Engagement tracked (demo visits, WhatsApp clicks)
+- [ ] Check-in messages sent (Month 1, Month 2)
+- [ ] Feedback collected informally
+
+### Billing (Month 3-4)
+- [ ] Billing reminders sent to all active pilots
+- [ ] Plan choices collected
+- [ ] Razorpay subscriptions created for all pilots
+- [ ] Confirmation messages sent
+
+### Documentation
 - [ ] Pilot feedback analyzed
-- [ ] Design system refined
-- [ ] Copy rules updated
-- [ ] Audit scoring calibrated
-- [ ] Report template improved
-
-### Final Verification
-- [ ] Can generate demo site in < 30 minutes
-- [ ] Can send outreach in < 10 minutes
-- [ ] Can handle conversation confidently
-- [ ] SOPs are clear and actionable
-- [ ] Ready to scale to 10-15 prospects
+- [ ] What worked / didn't work documented
+- [ ] SOPs updated
 
 ---
 
 ## Next Steps
 
-After completing Phase 3, proceed to **Phase 4: Launch** where you'll:
-- Launch outreach to 10-15 prospects
-- Close first paying customer
-- Establish rhythm for ongoing operations
-
-**Estimated time to complete Phase 3:** 8-12 hours  
-**Estimated cost:** RM 0
+After Phase 3, proceed to **Phase 4: Scale** where you'll:
+- Launch outreach to 20-50 prospects
+- Close 5-10 paying clients
+- Establish routine operations
 
 ---
 
-**Last Updated:** 2026-06-23  
-**Status:** Ready to execute
+**Last Updated:** 2026-06-29
+**Status:** Ready to execute (automation to be built)

@@ -192,40 +192,54 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 
 ### Deliverables
 
-#### 3.1 Pilot Execution
-- [ ] Select 2-3 pilot prospects (from existing leads or personal network)
-- [ ] Generate demo sites for all pilots (using SOP from Phase 1.5.5)
-- [ ] Send outreach messages (using templates from Phase 1.5.4, include pintarweb.com links)
-- [ ] Conduct follow-up conversations
-- [ ] Collect feedback on demo quality and pitch
-- [ ] Track prospect engagement via Umami (demo visits, landing page visits)
-- [ ] Iterate on process based on feedback
+#### 3.1 Pre-Pilot Setup (Automation)
+- [ ] Update D1 schema (add: setup_paid, setup_amount, invoice_number, plan_type, subscription_id, subscription_status, billing_reminder_sent)
+- [ ] Build confirm-payment.sh (payment → D1 + WhatsApp receipt + email invoice)
+- [ ] Build send-invoice.sh (generate PDF invoice + WhatsApp + email)
+- [ ] Build billing-reminder.sh (month 3 end reminder to all active pilots)
+- [ ] Build create-subscription.sh (Razorpay API → subscription creation)
+- [ ] Create 4 Razorpay subscription plans (monthly/quarterly/bi-annual/annual)
+- [ ] Invoice numbering: PWT2026-001, PWT2026-002...
+
+**Estimated Time:** 1-2 days  
+**Cost:** RM 0
+
+#### 3.2 Pilot Execution (Weeks 1-4)
+- [ ] Select 5-10 pilot prospects (score ≥ 60, aircond/plumbing/electrical, KL/Selangor)
+- [ ] Demo sites built for all pilots (generate-demo.sh)
+- [ ] Audit reports generated
+- [ ] First outreach sent (Touch 1 — observation style, < 4 lines)
+- [ ] Follow-ups sent (Day 3, Day 7)
+- [ ] Engagement tracked (interested → closing)
+- [ ] Payment collected via DuitNow/bank transfer (RM299 pilot / RM449 regular)
+- [ ] Invoice sent via confirm-payment.sh
+- [ ] Welcome message sent
 
 **Estimated Time:** 8-12 hours  
 **Cost:** RM 0 (free pilots)
 
-#### 3.2 Process Documentation
-- [ ] SOP for lead generation (scraper → selection → outreach)
-- [ ] SOP for site generation (config → demo → report)
-- [ ] SOP for outreach (message templates, timing, follow-up)
-- [ ] SOP for closing (payment, onboarding, site handover)
-- [ ] Time tracking per pilot (target: < 2 hours per deliverable)
+#### 3.3 Pilot Monitoring (Months 1-3)
+- [ ] Track engagement (demo visits via Umami)
+- [ ] Light check-in messages (Month 1, Month 2)
+- [ ] Collect informal feedback
 
-**Estimated Time:** 4-6 hours  
-**Cost:** RM 0
+#### 3.4 Billing (Month 3 End)
+- [ ] Run billing-reminder.sh → WhatsApp to all pilots
+- [ ] Collect plan choices
+- [ ] Create subscriptions via create-subscription.sh
+- [ ] Confirmations sent via WhatsApp + email
 
-#### 3.3 Quality Refinement
-- [ ] Design system refined based on pilot feedback
-- [ ] Copy rules updated
-- [ ] Audit scoring calibrated
-- [ ] Report template improved
-- [ ] Mobile responsiveness verified
+#### 3.5 Re-engagement SOP
+- [ ] Cancelled pilots: Week 2 follow-up, Month 2 special offer, Month 3 final
+- [ ] No setup fee for re-engaged pilots (just RM149/month)
+- [ ] Success counting: 2 re-engaged = 1 success
 
 **Estimated Time:** 4-6 hours  
 **Cost:** RM 0
 
 **Total Phase 3 Time:** 16-24 hours  
-**Total Phase 3 Cost:** RM 0
+**Total Phase 3 Cost:** RM 0  
+**Revenue Target:** RM 299×5 = RM 1,495 minimum (5 pilots)
 
 ---
 
@@ -253,21 +267,21 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 - [ ] Track responses and opens (Umami + D1 tracking)
 - [ ] Send follow-ups to non-responders (Day 3, Day 7 templates)
 - [ ] Conduct conversations with interested prospects
-- [ ] Pitch subscription model (RM447 for 3+1 months, details at pintarweb.com/#harga)
+- [ ] Pitch subscription model (RM299/449 setup + 3 months free + RM149/month, details at pintarweb.com/#harga)
 - [ ] Close first customer
 
 **Estimated Time:** 8-12 hours  
 **Cost:** RM 0
 
 #### 4.3 Customer Onboarding (First Customer)
-- [ ] Send Razorpay payment link
-- [ ] Receive payment confirmation
+- [ ] Collect payment via DuitNow/bank transfer (RM299/449)
+- [ ] Send invoice via confirm-payment.sh
 - [ ] Collect client assets (logo, photos, business info)
 - [ ] Generate final production site
 - [ ] Set up domain (client's domain or subdomain)
 - [ ] Configure Google Business Profile
 - [ ] Conduct 20-minute onboarding call
-- [ ] Send welcome package (login details, support contact)
+- [ ] Send welcome package (website URL, support contact, billing schedule)
 
 **Estimated Time:** 4-6 hours  
 **Cost:** RM 0
@@ -302,15 +316,15 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 - [ ] Full pipeline tested end-to-end
 
 ### Week 3 (Pilot)
-- [ ] 2-3 pilot demos sent
-- [ ] At least 1 pilot conversation started
+- [ ] 5-10 pilot demos sent
+- [ ] At least 3 pilot conversations started
+- [ ] At least 2-3 pilots paid (RM299/449 each)
 - [ ] Feedback collected
-- [ ] SOP documented
 
 ### Week 4 (Launch)
 - [ ] 10-15 outreach messages sent
 - [ ] At least 3 conversations started
-- [ ] 1 paying customer closed (RM 447 revenue)
+- [ ] 1 paying customer closed (RM 299-449 revenue + subscription)
 - [ ] Customer onboarded and live
 
 ---

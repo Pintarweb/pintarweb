@@ -28,14 +28,23 @@ CREATE TABLE IF NOT EXISTS outreach_leads (
     id TEXT PRIMARY KEY,
     business_name TEXT NOT NULL,
     contact_name TEXT,
-    phone TEXT NOT NULL,
+    phone TEXT,
     area TEXT,
     niche TEXT,
     demo_url TEXT,
     audit_url TEXT,
-    status TEXT DEFAULT 'new' CHECK(status IN ('new', 'contacted', 'demo_viewed', 'wa_clicked', 'replied', 'paid', 'closed', 'bounced')),
+    status TEXT DEFAULT 'new',
     score INTEGER DEFAULT 0,
-    notes TEXT,
+    setup_paid INTEGER DEFAULT 0,
+    setup_paid_date TEXT,
+    setup_amount INTEGER,
+    invoice_number TEXT,
+    plan_type TEXT DEFAULT 'monthly',
+    subscription_id TEXT,
+    subscription_start TEXT,
+    subscription_status TEXT DEFAULT 'new',
+    billing_reminder_sent INTEGER DEFAULT 0,
+    billing_reminder_date TEXT,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
 );
@@ -47,7 +56,7 @@ cd "$(dirname "$0")/.." && npx wrangler d1 execute "$D1_DB_ID" --remote --yes --
 CREATE TABLE IF NOT EXISTS outreach_events (
     id TEXT PRIMARY KEY,
     lead_id TEXT NOT NULL REFERENCES outreach_leads(id) ON DELETE CASCADE,
-    event_type TEXT NOT NULL CHECK(event_type IN ('lead_created', 'demo_sent', 'audit_sent', 'wa_clicked', 'demo_viewed', 'audit_viewed', 'replied', 'payment_link_sent', 'paid', 'closed', 'bounced')),
+    event_type TEXT NOT NULL CHECK(event_type IN ('lead_created', 'demo_sent', 'audit_sent', 'wa_clicked', 'demo_viewed', 'audit_viewed', 'replied', 'payment_link_sent', 'paid', 'billing_reminder_sent', 'subscription_created', 'subscription_status_changed', 'subscription_checked', 'closed', 'cancelled', 'bounced')),
     metadata TEXT,
     created_at TEXT DEFAULT (datetime('now'))
 );

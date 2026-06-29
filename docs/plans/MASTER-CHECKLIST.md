@@ -175,30 +175,50 @@ npx wrangler pages deployment list --project-name=pintarweb-preview
 
 ## Phase 3: Pilot (Week 3) - 16-24 hours
 
-### 3.1 Pilot Execution (8-12 hours)
-- [ ] 2-3 pilot prospects selected
-- [ ] Demo sites built for all pilots
-- [ ] First outreach sent to all pilots
+**REVISED 2026-06-29: Pilot is revenue-focused, 5-10 pilots, new pricing structure**
+
+### 3.1 Pre-Pilot Setup (Week 1) — Automation
+- [ ] Update D1 schema (add: setup_paid, setup_amount, invoice_number, plan_type, subscription_id, subscription_status, billing_reminder_sent)
+- [ ] Build confirm-payment.sh (payment → D1 + WhatsApp receipt + email invoice)
+- [ ] Build send-invoice.sh (generate PDF invoice + WhatsApp + email)
+- [ ] Build billing-reminder.sh (month 3 end reminder to all active pilots)
+- [ ] Build create-subscription.sh (Razorpay API → subscription creation)
+- [ ] Build check-subscription.sh (status check + D1 update)
+- [ ] Create 4 Razorpay subscription plans (monthly/quarterly/bi-annual/annual)
+- [ ] Test Resend email integration
+- [ ] Invoice numbering system: PWT2026-001, PWT2026-002...
+
+### 3.2 Pilot Execution (Weeks 1-4)
+- [ ] Select 5-10 pilot prospects (score ≥ 60, aircond/plumbing/electrical, KL/Selangor)
+- [ ] Demo sites built for all pilots (generate-demo.sh)
+- [ ] Audit reports generated
+- [ ] First outreach sent (Touch 1)
 - [ ] Follow-ups sent (Day 3, Day 7)
-- [ ] Conversations conducted with interested pilots
-- [ ] Feedback collected from all pilots
-- [ ] All interactions tracked in database
+- [ ] Engagement tracked (interested → closing)
+- [ ] Payment collected via DuitNow/bank transfer (RM299 pilot / RM449 regular)
+- [ ] Invoice sent via confirm-payment.sh
+- [ ] Welcome message sent
 
-### 3.2 Process Documentation (4-6 hours)
-- [ ] Lead generation SOP documented
-- [ ] Site generation SOP documented
-- [ ] Outreach SOP documented
-- [ ] Closing & onboarding SOP documented
-- [ ] All SOPs tested and verified
+### 3.3 Pilot Monitoring (Months 1-3)
+- [ ] Track engagement (demo visits via Umami)
+- [ ] Light check-in messages (Month 1, Month 2)
+- [ ] Collect informal feedback
 
-### 3.3 Quality Refinement (4-6 hours)
-- [ ] Pilot feedback analyzed
-- [ ] Design system refined
-- [ ] Copy rules updated
-- [ ] Audit scoring calibrated
-- [ ] Report template improved
+### 3.4 Billing (Month 3 End)
+- [ ] Run billing-reminder.sh → WhatsApp to all pilots
+- [ ] Collect plan choices
+- [ ] Create subscriptions via create-subscription.sh
+- [ ] Confirmations sent
 
-**Phase 3 Completion:** 2-3 pilots sent, feedback collected, SOPs documented ✅
+### 3.5 Re-engagement SOP
+- [ ] Cancelled pilots: Week 2 follow-up, Month 2 offer, Month 3 final
+- [ ] No setup fee for re-engaged pilots
+- [ ] Success counting: 2 re-engaged = 1 success
+
+**Phase 3 Success Metrics:**
+- 5-10 pilots launched
+- 3-5 subscription conversions
+- Target: RM 299×5 = RM 1,495 minimum revenue
 
 ---
 
@@ -267,23 +287,22 @@ npx wrangler pages deployment list --project-name=pintarweb-preview
 
 ## Financial Summary
 
-### One-time Costs
-- Legal documents (optional lawyer review): RM 0-300
-- **Total:** RM 0-310
+**Pilot Pricing (2026-06-29):**
+- Pilot (first 5-10): RM 299 upfront (setup RM150 + month 1 RM149) → months 2-3 free → month 4+ RM149/mo
+- Regular: RM 449 upfront (setup RM300 + month 1 RM149) → months 2-3 free → month 4+ RM149/mo
+- Cancellation: Setup fee retained by PintarWeb
 
 ### Monthly Recurring Costs (after first customer)
 - Cloudflare (Pages + Workers + D1 + R2): RM 0 (free tier)
 - Umami analytics (self-hosted): RM 0
 - Google Places API: RM 0 (free tier)
-- Razorpay transaction fees: ~RM 7 per RM 447 (1.5%)
-- **Total:** RM 7/month
+- Razorpay fees: ~1.5% of subscription amount (~RM 2.23/mo per RM 149 subscription)
+- **Total:** ~RM 2-3/month per active subscription
 
-### Revenue Targets
-- **Month 1:** RM 447-894 (1-2 customers)
-- **Month 2:** RM 894-1,341 (2-3 customers)
-- **Month 3:** RM 1,341-2,235 (3-5 customers)
-- **Month 6:** RM 2,980-4,470 (10-15 customers)
-- **Month 12:** RM 5,960-8,940 (20-25 customers)
+### Revenue Targets (Pilot)
+- **Pilot fees collected:** RM 299×5 = RM 1,495 (5 pilots minimum)
+- **Month 4+ MRR:** RM 149×N subscribers
+- **Break-even:** 3 subscribers = RM 447/month
 
 ---
 
@@ -354,28 +373,29 @@ npx wrangler pages deployment list --project-name=pintarweb-preview
 # Deploy client sites to preview
 ./scripts/deploy-preview.sh
 
-# Generate lead batch
-cd data/leads
-node ../../packages/site-generator/scripts/process-leads.js leads-raw.json leads-processed.json
+# Process leads
+bash scripts/process-leads.sh data/leads/sample-leads.csv
 
-# Export outreach list
-node ../../packages/site-generator/scripts/export-outreach-list.js leads-processed.json outreach.csv
+# Generate demo + audit + WhatsApp
+bash scripts/generate-demo.sh --name "Business" --phone "60123456789" --area "KL" --niche "aircond"
 
-# Generate demo site
-cd packages/site-generator
-node scripts/generate-all.js [business-id]
+# Add lead to D1
+bash scripts/add-lead.sh "Business" "60123456789" "KL" "aircond" --score 65
 
-# Deploy via wrangler directly
-npx wrangler pages deploy packages/site-generator/clients \
-  --project-name=pintarweb-preview \
-  --branch=main \
-  --commit-dirty=true
+# Track event
+bash scripts/track-event.sh "[lead-id]" "demo_sent"
 
-# Check deployments
-npx wrangler pages deployment list --project-name=pintarweb-preview
+# View dashboard
+bash scripts/view-outreach.sh
 
-# Track outreach
-node scripts/track-outreach.js [business-id] first_outreach
+# Payment confirmation (after bank transfer received)
+bash scripts/confirm-payment.sh "[lead-id]" "299" "TRX123"
+
+# Billing reminder (month 3 end)
+bash scripts/billing-reminder.sh
+
+# Create subscription (month 4)
+bash scripts/create-subscription.sh "[lead-id]" "monthly"
 ```
 
 ### Key URLs
