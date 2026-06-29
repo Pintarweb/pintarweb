@@ -1,0 +1,26 @@
+{
+    "id": "demo-kl-electrical",
+    "business_name": "KL Electrical Services",
+    "tagline": "Pakar Elektrik & Pendawaian KL",
+    "phone": "012-987 6543",
+    "whatsapp": "60129876543",
+    "area": "Kuala Lumpur",
+    "service_areas": ["KL", "Cheras", "Setapak", "Wangsa Maju", "Gombak"],
+    "niche": "electrical",
+    "services": ["Pendawaian Rumah & Kedai", "Pembaikan Suis & Soket", "Pemasangan Lampu & Kipas", "Pemeriksaan Elektrik"],
+    "established": "2016",
+    "mood": "premium-modern",
+    "hero_variant": "split",
+    "google_rating": 4.7,
+    "google_review_count": 42,
+    "testimonials": [
+        {"name": "En. Tan", "area": "Setapak", "text": "Suis terpelantik, datang cepat. Betulkan dalam setengah jam. Professional.", "rating": 5},
+        {"name": "Puan Aisha", "area": "Wangsa Maju", "text": "Pasang kipas dan lampu rumah penuh. Kerja kemas, harga reasonable.", "rating": 5},
+        {"name": "Mr. Lim", "area": "Gombak", "text": "Pendawaian kedai baru. Semua ikut standard. Terrbaik!", "rating": 5}
+    ],
+    "social": {
+        "instagram_handle": "klelectrical",
+        "instagram_followers": 1200,
+        "instagram_active": true
+    }
+}

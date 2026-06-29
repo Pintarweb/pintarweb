@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-bm="Ah Seng Plumbing — Pakar Paip Klang | Kecemasan 24 Jam" data-en="Ah Seng Plumbing — Klang Pipe Experts | 24/7 Emergency">Ah Seng Plumbing — Pakar Paip Klang | Kecemasan 24 Jam</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Client-specific design tokens (bold-urgent / red+black) ── */
+    :root {
+      --color-primary: #DC2626;
+      --color-primary-soft: #EF4444;
+      --color-bg: #F9FAFB;
+      --color-text: #111827;
+      --color-surface: #ffffff;
+      --color-border: #111111;
+      --color-muted: #6B7280;
+      --color-lang-toggle-bg: #2A2A2A;
+      --color-lang-btn: #999999;
+      --font-heading: 'Manrope', sans-serif;
+    }
+    body { font-family:'Inter',sans-serif; background:var(--color-bg); color:var(--color-text); }
+    h1,h2,h3,h4 { font-family:var(--font-heading); font-weight:700; }
+    html { scroll-padding-top:100px; scroll-behavior:smooth; }
+
+    .lang-toggle { display:inline-flex; background:var(--color-lang-toggle-bg); padding:3px; gap:2px; border:1px solid #444; }
+    .lang-btn { padding:6px 16px; font-size:13px; font-weight:600; cursor:pointer; border:none; background:transparent; color:var(--color-lang-btn); transition:all 0.2s ease; font-family:var(--font-heading); }
+    .lang-btn.active { background:var(--color-primary); color:#fff; }
+
+    .wa-sticky { position:fixed; bottom:0; left:0; right:0; z-index:50; background:#25D366; display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 20px; box-shadow:0 -2px 12px rgba(0,0,0,0.12); }
+    .wa-sticky svg { font-size:18px; }
+
+    .form-input { width:100%; padding:12px 16px; border:2px solid var(--color-border); background:var(--color-surface); color:var(--color-text); font-size:15px; transition:all 0.2s; }
+    .form-input:focus { outline:none; border-color:var(--color-primary); box-shadow:0 0 0 3px rgba(220,38,38,0.15); }
+    .form-input::placeholder { color:var(--color-muted); }
+
+    @media (max-width:767px) {
+      .hero-img-wrap { min-height:240px; }
+      .wa-sticky a { font-size:15px; }
+    }
+  </style>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="1e8f3b8d-2b18-44c7-98bb-0bfb691e712c"></script>
+</head>
+<body class="pb-20">
+
+<!-- ════════════════════════════ NAVIGATION ════════════════════════════ -->
+<nav class="sticky top-0 z-50 bg-[#111111] border-b-2 border-[#2A2A2A]">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <span class="font-extrabold text-base text-white tracking-tight font-manrope" data-bm="Ah Seng Plumbing" data-en="Ah Seng Plumbing">Ah Seng Plumbing</span>
+    <div class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-300">
+      <a href="#services" class="hover:text-white transition-colors" data-bm="Servis" data-en="Services">Servis</a>
+      <a href="#gallery" class="hover:text-white transition-colors" data-bm="Galeri" data-en="Gallery">Galeri</a>
+      <a href="#testimonials" class="hover:text-white transition-colors" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+      <a href="#faq" class="hover:text-white transition-colors" data-bm="Soalan" data-en="FAQ">Soalan</a>
+      <a href="#contact" class="hover:text-white transition-colors" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <button type="button" id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-8 h-8 text-gray-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="lang-toggle" role="group" aria-label="Language toggle">
+        <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm" aria-pressed="true">BM</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Dropdown -->
+<div id="mobile-menu" class="hidden fixed top-[57px] left-0 right-0 z-40 bg-[#111111] border-b-2 border-[#2A2A2A] shadow-[4px_4px_0px_0px_#000000]">
+  <div class="px-4 py-2 flex flex-col">
+    <a href="#services" class="text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors py-3 border-b border-[#2A2A2A]" data-bm="Servis" data-en="Services">Servis</a>
+    <a href="#gallery" class="text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors py-3 border-b border-[#2A2A2A]" data-bm="Galeri" data-en="Gallery">Galeri</a>
+    <a href="#testimonials" class="text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors py-3 border-b border-[#2A2A2A]" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+    <a href="#faq" class="text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors py-3 border-b border-[#2A2A2A]" data-bm="Soalan" data-en="FAQ">Soalan</a>
+    <a href="#contact" class="text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-[#2A2A2A] transition-colors py-3" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+  </div>
+</div>
+
+<script>
+function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('hidden')}
+let lastScrollY2=window.scrollY;
+window.addEventListener('scroll',function(){
+  const m=document.getElementById('mobile-menu');
+  if(!m.classList.contains('hidden')&&Math.abs(window.scrollY-lastScrollY2)>10)m.classList.add('hidden');
+  lastScrollY2=window.scrollY;
+});
+document.querySelectorAll('#mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('mobile-menu').classList.add('hidden');});
+});
+</script>
+
+<!-- ════════════════════════════ HERO — Full-width with emergency banner ════════════════════════════ -->
+<section class="bg-[#F9FAFB] py-10 md:py-16 relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-48 h-48 bg-[#DC2626] opacity-10 rounded-full blur-3xl hidden md:block"></div>
+  <div class="max-w-6xl mx-auto px-4 relative z-10">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
+
+      <!-- Left text -->
+      <div class="order-2 md:order-1">
+        <div class="mb-4 inline-flex items-center gap-2 px-4 py-2 bg-[#DC2626] border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] reveal">
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span class="text-sm font-bold text-white uppercase tracking-wider" data-bm="Servis Kecemasan 24 Jam" data-en="24/7 Emergency Service">Servis Kecemasan 24 Jam</span>
+        </div>
+
+        <h1 class="text-3xl md:text-5xl font-extrabold text-[#111111] mb-3 leading-tight reveal reveal-delay-1">
+          <span data-bm="Paip Bocor?" data-en="Pipe Burst?">Paip Bocor? </span>
+          <span class="text-[#DC2626]" data-bm="Kami Siap Sedia!" data-en="We're Ready!">Kami Siap Sedia!</span>
+        </h1>
+
+        <p class="text-[#4B5563] text-base md:text-lg leading-relaxed mb-5 reveal reveal-delay-2"
+           data-bm="Paip pecah, tandas tersumbat, atau nak pasang paip baru? Technician kami sampai dalam 30 minit ke Klang, Shah Alam, Port Klang, dan Bukit Tinggi. Harga tetap — tiada sorok-sorok."
+           data-en="Burst pipe, clogged drain, or need new pipes? Our plumbers arrive within 30 minutes to Klang, Shah Alam, Port Klang, and Bukit Tinggi. Fixed pricing — no hidden charges.">
+          Paip pecah, tandas tersumbat, atau nak pasang paip baru? Technician kami sampai dalam 30 minit ke Klang, Shah Alam, Port Klang, dan Bukit Tinggi. Harga tetap — tiada sorok-sorok.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3 text-xs text-[#4B5563] mb-6 reveal reveal-delay-3">
+          <span class="inline-flex items-center gap-1 bg-white border border-[#E5E7EB] px-2.5 py-1"><svg class="w-3.5 h-3.5 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 4.5 <span data-bm="⭐" data-en="⭐">⭐</span> <span data-bm="28 ulasan" data-en="28 reviews">28 ulasan</span></span>
+          <span class="inline-flex items-center gap-1 bg-white border border-[#E5E7EB] px-2.5 py-1"><svg class="w-3.5 h-3.5 text-[#DC2626]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span data-bm="Sampai 30 Min" data-en="Arrive 30 Min">Sampai 30 Min</span></span>
+          <span class="inline-flex items-center gap-1 bg-white border border-[#E5E7EB] px-2.5 py-1"><svg class="w-3.5 h-3.5 text-[#111111]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> <span data-bm="Jaminan 90 Hari" data-en="90-Day Warranty">Jaminan 90 Hari</span></span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 reveal reveal-delay-3">
+          <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20paip"
+             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] transition-all duration-200 text-sm uppercase tracking-wider">
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+            <span data-bm="WhatsApp Kecemasan" data-en="Emergency WhatsApp">WhatsApp Kecemasan</span>
+          </a>
+          <a href="tel:+60123456789"
+             class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] transition-all duration-200 text-sm uppercase tracking-wider">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span data-bm="Panggilan Segera" data-en="Call Now">Panggilan Segera</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right hero image -->
+      <div class="order-1 md:order-2 reveal">
+        <div class="hero-img-wrap relative overflow-hidden border-2 border-[#111111] shadow-[6px_6px_0px_0px_#DC2626]">
+          <img src="images/hero.webp" alt="Ah Seng plumber fixing pipes" class="w-full h-full object-cover" loading="eager" />
+          <div class="absolute bottom-0 left-0 right-0 bg-[#DC2626] py-2 px-4">
+            <p class="text-white text-xs font-bold uppercase tracking-widest text-center" data-bm="Sedia Membantu 24/7" data-en="Ready to Help 24/7">Sedia Membantu 24/7</p>
+          </div>
+          <div class="absolute top-3 left-3 bg-white border-2 border-[#111111] px-2.5 py-1.5 shadow-[2px_2px_0px_0px_#111111]">
+            <span class="text-[10px] font-extrabold text-[#DC2626] uppercase tracking-wider" data-bm="Sejak 2018" data-en="Since 2018">Sejak 2018</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ STATS BAR ════════════════════════════ -->
+<section class="max-w-6xl mx-auto px-4 -mt-2 mb-12">
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="group bg-white border-2 border-[#111111] flex transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#111111] reveal">
+      <div class="w-14 bg-[#DC2626] flex items-center justify-center shrink-0"><svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="flex flex-col justify-center p-3 flex-1">
+        <div class="text-xl md:text-2xl font-extrabold text-[#DC2626] leading-tight">&lt;30</div>
+        <div class="uppercase font-bold tracking-wider text-[#4B5563] text-[10px]" data-bm="Minit Respons" data-en="Min Response">Minit Respons</div>
+      </div>
+    </div>
+    <div class="group bg-white border-2 border-[#111111] flex transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#111111] reveal reveal-delay-1">
+      <div class="w-14 bg-[#111111] flex items-center justify-center shrink-0"><svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="flex flex-col justify-center p-3 flex-1">
+        <div class="text-xl md:text-2xl font-extrabold text-[#DC2626] leading-tight">24/7</div>
+        <div class="uppercase font-bold tracking-wider text-[#4B5563] text-[10px]" data-bm="Servis Kecemasan" data-en="Emergency">Servis Kecemasan</div>
+      </div>
+    </div>
+    <div class="group bg-white border-2 border-[#111111] flex transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#111111] reveal reveal-delay-2">
+      <div class="w-14 bg-[#111111] flex items-center justify-center shrink-0"><svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="flex flex-col justify-center p-3 flex-1">
+        <div class="text-xl md:text-2xl font-extrabold text-[#111111] leading-tight">4</div>
+        <div class="uppercase font-bold tracking-wider text-[#4B5563] text-[10px]" data-bm="Kawasan Diliputi" data-en="Areas Covered">Kawasan Diliputi</div>
+      </div>
+    </div>
+    <div class="group bg-white border-2 border-[#111111] flex transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#111111] reveal reveal-delay-3">
+      <div class="w-14 bg-[#111111] flex items-center justify-center shrink-0"><svg class="w-7 h-7 text-white group-hover:scale-125 transition-transform duration-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="flex flex-col justify-center p-3 flex-1">
+        <div class="text-xl md:text-2xl font-extrabold text-[#111111] leading-tight">
+          <a href="https://maps.google.com" target="_blank" class="flex items-center gap-1"><svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>4.5</a>
+        </div>
+        <div class="uppercase font-bold tracking-wider text-[#4B5563] text-[10px]" data-bm="28 Ulasan" data-en="28 Reviews">28 Ulasan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ SERVICES — 2x2 with real images ════════════════════════════ -->
+<section id="services" class="bg-white py-12 md:py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-left mb-10">
+      <span class="inline-block px-3 py-1 bg-[#DC2626] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Apa Kami Buat" data-en="What We Do">Apa Kami Buat</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight reveal" data-bm="Servis Plumbing &amp; Paip" data-en="Plumbing &amp; Pipe Services">Servis Plumbing &amp; Paip</h2>
+      <p class="text-[#4B5563] text-sm mt-1 reveal reveal-delay-1" data-bm="Klang, Shah Alam, Port Klang, Bukit Tinggi &amp; sekitar" data-en="Klang, Shah Alam, Port Klang, Bukit Tinggi &amp; nearby">Klang, Shah Alam, Port Klang, Bukit Tinggi &amp; sekitar</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Service 1 -->
+      <div class="group border-2 border-[#111111] bg-white flex flex-col sm:flex-row overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_#111111] reveal">
+        <div class="w-full sm:w-2/5 overflow-hidden border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111]">
+          <img src="images/service-1.webp" alt="Pipe installation" class="w-full h-full object-cover min-h-[180px] sm:min-h-full transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        </div>
+        <div class="p-5 flex-1 flex flex-col justify-center">
+          <h3 class="text-base font-extrabold text-[#111111] mb-2" data-bm="Pemasangan Paip Baru" data-en="New Pipe Installation">Pemasangan Paip Baru</h3>
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Pasang paip baru untuk dapur, bilik air, atau seluruh rumah. Guna material jenama terjamin. Siap dalam masa sehari." data-en="Install new pipes for kitchen, bathroom, or whole house. Quality branded materials. Done in a day.">Pasang paip baru untuk dapur, bilik air, atau seluruh rumah. Guna material jenama terjamin. Siap dalam masa sehari.</p>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="group border-2 border-[#111111] bg-white flex flex-col sm:flex-row overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_#111111] reveal reveal-delay-1">
+        <div class="w-full sm:w-2/5 overflow-hidden border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111]">
+          <img src="images/service-2.webp" alt="Drain cleaning" class="w-full h-full object-cover min-h-[180px] sm:min-h-full transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        </div>
+        <div class="p-5 flex-1 flex flex-col justify-center">
+          <h3 class="text-base font-extrabold text-[#111111] mb-2" data-bm="Pembersihan Saluran Tersumbat" data-en="Drain Unclogging">Pembersihan Saluran Tersumbat</h3>
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Tandas, sinki, longkang tersumbat? Guna high-pressure jet dan industrial auger. Bersih dalam 30-60 minit." data-en="Clogged toilet, sink, or drain? We use high-pressure jetting and industrial augers. Clear in 30-60 minutes.">Tandas, sinki, longkang tersumbat? Guna high-pressure jet dan industrial auger. Bersih dalam 30-60 minit.</p>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="group border-2 border-[#111111] bg-white flex flex-col sm:flex-row overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_#111111] reveal reveal-delay-2">
+        <div class="w-full sm:w-2/5 overflow-hidden border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111]">
+          <img src="images/service-3.webp" alt="Water heater installation" class="w-full h-full object-cover min-h-[180px] sm:min-h-full transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        </div>
+        <div class="p-5 flex-1 flex flex-col justify-center">
+          <h3 class="text-base font-extrabold text-[#111111] mb-2" data-bm="Pemasangan Tangki Air" data-en="Water Tank Installation">Pemasangan Tangki Air</h3>
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Pasang tangki air baru atau tukar yang lama. Semua saiz, termasuk sistem pam automatik. Harga terus dari pembekal." data-en="Install new water tanks or replace old ones. All sizes including auto-pump systems. Direct supplier pricing.">Pasang tangki air baru atau tukar yang lama. Semua saiz, termasuk sistem pam automatik. Harga terus dari pembekal.</p>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="group border-2 border-[#111111] bg-white flex flex-col sm:flex-row overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_#111111] reveal reveal-delay-3">
+        <div class="w-full sm:w-2/5 overflow-hidden border-b-2 sm:border-b-0 sm:border-r-2 border-[#111111]">
+          <div class="min-h-[180px] sm:min-h-full bg-[#F3F4F6] flex items-center justify-center">
+            <div class="text-center p-4">
+              <svg class="w-10 h-10 text-[#111111]/40 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+              <span class="text-xs text-[#111111]/40 font-semibold" data-bm="Servis Pelbagai" data-en="Multi Service">Servis Pelbagai</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-5 flex-1 flex flex-col justify-center">
+          <h3 class="text-base font-extrabold text-[#111111] mb-2" data-bm="Pembaikan Paip Bocor" data-en="Leaky Pipe Repair">Pembaikan Paip Bocor</h3>
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Paip bocor, retak, atau pecah — baiki terus tanpa bubuh simen. Servis kecemasan 24 jam. Call ja, kami sampai." data-en="Leaking, cracked, or burst pipes — fixed on the spot. 24-hour emergency service. Just call, we'll be there.">Paip bocor, retak, atau pecah — baiki terus tanpa bubuh simen. Servis kecemasan 24 jam. Call ja, kami sampai.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ GALLERY WITH LIGHTBOX ════════════════════════════ -->
+<section id="gallery" class="py-12 md:py-16 bg-[#F9FAFB]">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-left mb-10">
+      <span class="inline-block px-3 py-1 bg-[#DC2626] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Galeri Kerja" data-en="Work Gallery">Galeri Kerja</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight reveal" data-bm="Hasil Kerja Kami" data-en="Our Work in Action">Hasil Kerja Kami</h2>
+      <p class="text-[#4B5563] text-sm mt-1 reveal reveal-delay-1" data-bm="Gambar sebenar dari projek-projek kami" data-en="Real photos from our projects">Gambar sebenar dari projek-projek kami</p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      <div class="overflow-hidden border-2 border-[#111111] cursor-pointer group reveal" onclick="openLightbox('images/gallery-1.webp')">
+        <img src="images/gallery-1.webp" alt="Bathroom piping work" class="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="bg-[#111111] py-1.5 px-3">
+          <p class="text-white text-[10px] font-bold uppercase tracking-wider text-center" data-bm="Pemasangan Paip Bilik Air" data-en="Bathroom Pipe Installation">Pemasangan Paip Bilik Air</p>
+        </div>
+      </div>
+      <div class="overflow-hidden border-2 border-[#111111] cursor-pointer group reveal reveal-delay-1" onclick="openLightbox('images/gallery-2.webp')">
+        <img src="images/gallery-2.webp" alt="Plumber toolbox" class="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="bg-[#111111] py-1.5 px-3">
+          <p class="text-white text-[10px] font-bold uppercase tracking-wider text-center" data-bm="Alatan Professional" data-en="Professional Tools">Alatan Professional</p>
+        </div>
+      </div>
+      <div class="overflow-hidden border-2 border-[#111111] cursor-pointer group reveal reveal-delay-2" onclick="openLightbox('images/gallery-3.webp')">
+        <img src="images/gallery-3.webp" alt="Pressure gauge" class="w-full h-48 md:h-64 object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+        <div class="bg-[#111111] py-1.5 px-3">
+          <p class="text-white text-[10px] font-bold uppercase tracking-wider text-center" data-bm="Teknikal &amp; Precision" data-en="Technical &amp; Precision">Teknikal &amp; Precision</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox overlay -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+  <img id="lightbox-img" src="" alt="Gallery image" />
+</div>
+
+<script>
+function openLightbox(src){
+  document.getElementById('lightbox-img').src=src;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(e){
+  if(e.target===e.currentTarget||e.key==='Escape'){
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow='';
+  }
+}
+document.addEventListener('keydown',closeLightbox);
+</script>
+
+<!-- ════════════════════════════ TESTIMONIALS ════════════════════════════ -->
+<section id="testimonials" class="py-12 md:py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+      <div class="text-left">
+        <span class="inline-block px-3 py-1 bg-[#DC2626] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Testimoni" data-en="Testimonials">Testimoni</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight reveal" data-bm="Apa Kata Pelanggan" data-en="What Customers Say">Apa Kata Pelanggan</h2>
+        <p class="text-[#4B5563] text-sm mt-1 reveal reveal-delay-1" data-bm="Ulasan tulen dari pelanggan kami" data-en="Real reviews from our customers">Ulasan tulen dari pelanggan kami</p>
+      </div>
+      <a href="https://maps.google.com" target="_blank" class="text-sm font-bold text-[#DC2626] hover:text-[#B91C1C] transition-colors flex items-center gap-1.5 reveal reveal-delay-2">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span data-bm="4.5 ★ (28 ulasan di Google)" data-en="4.5 ★ (28 reviews on Google)">4.5 ★ (28 ulasan di Google)</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <!-- Testimonial 1 -->
+      <div class="bg-white border-2 border-[#111111] p-6 flex flex-col shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] reveal">
+        <div class="flex gap-0.5 mb-3">
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="text-[#4B5563] text-sm leading-relaxed mb-5 flex-1" data-bm='"Paip bocor tengah malam, call terus datang. Cepat betul, harga berpatutan."' data-en='"Pipe burst in the middle of the night, called and they came right away. Really fast, fair price."'>"Paip bocor tengah malam, call terus datang. Cepat betul, harga berpatutan."</p>
+        <div class="flex items-center gap-3 border-t-2 border-[#E5E7EB] pt-4">
+          <div class="w-9 h-9 bg-[#111111] text-white text-xs font-extrabold flex items-center justify-center shrink-0">PL</div>
+          <div>
+            <p class="text-xs font-extrabold text-[#111111]">Puan Lim</p>
+            <p class="text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">Klang</p>
+            <a href="https://maps.google.com" target="_blank" class="text-[10px] font-bold text-[#DC2626]" data-bm="Lihat Ulasan Asal" data-en="View Original">Lihat Ulasan Asal</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="bg-white border-2 border-[#111111] p-6 flex flex-col shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] reveal reveal-delay-1">
+        <div class="flex gap-0.5 mb-3">
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="text-[#4B5563] text-sm leading-relaxed mb-5 flex-1" data-bm='"Tukar paip rumah penuh. Kerja kemas, explain detail. Recommended."' data-en='"Full house repiping. Neat workmanship, detailed explanation. Highly recommended."'>"Tukar paip rumah penuh. Kerja kemas, explain detail. Recommended."</p>
+        <div class="flex items-center gap-3 border-t-2 border-[#E5E7EB] pt-4">
+          <div class="w-9 h-9 bg-[#111111] text-white text-xs font-extrabold flex items-center justify-center shrink-0">ER</div>
+          <div>
+            <p class="text-xs font-extrabold text-[#111111]">En. Raj</p>
+            <p class="text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">Shah Alam</p>
+            <a href="https://maps.google.com" target="_blank" class="text-[10px] font-bold text-[#DC2626]" data-bm="Lihat Ulasan Asal" data-en="View Original">Lihat Ulasan Asal</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="bg-white border-2 border-[#111111] p-6 flex flex-col shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] reveal reveal-delay-2">
+        <div class="flex gap-0.5 mb-3">
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4 text-stone-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="text-[#4B5563] text-sm leading-relaxed mb-5 flex-1" data-bm='"Salur tandas tersumbat, datang dalam 1 jam. Lulus!"' data-en='"Toilet drain clogged, arrived within 1 hour. Fixed it perfectly!"'>"Salur tandas tersumbat, datang dalam 1 jam. Lulus!"</p>
+        <div class="flex items-center gap-3 border-t-2 border-[#E5E7EB] pt-4">
+          <div class="w-9 h-9 bg-[#111111] text-white text-xs font-extrabold flex items-center justify-center shrink-0">CF</div>
+          <div>
+            <p class="text-xs font-extrabold text-[#111111]">Cik Farah</p>
+            <p class="text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">Port Klang</p>
+            <a href="https://maps.google.com" target="_blank" class="text-[10px] font-bold text-[#DC2626]" data-bm="Lihat Ulasan Asal" data-en="View Original">Lihat Ulasan Asal</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ CONTACT FORM ════════════════════════════ -->
+<section id="contact" class="bg-white py-12 md:py-16">
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="text-center mb-8">
+      <span class="inline-block px-3 py-1 bg-[#DC2626] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Hubungi Kami" data-en="Contact Us">Hubungi Kami</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight reveal" data-bm="Ada Masalah Paip?" data-en="Having Pipe Trouble?">Ada Masalah Paip?</h2>
+      <p class="text-[#4B5563] text-sm mt-1 reveal reveal-delay-1" data-bm="Isi borang di bawah, kami reply terus via WhatsApp" data-en="Fill in the form below, we'll reply instantly via WhatsApp">Isi borang di bawah, kami reply terus via WhatsApp</p>
+    </div>
+
+    <form id="contact-form" class="space-y-4 reveal reveal-delay-2">
+      <div>
+        <label class="block text-sm font-bold text-[#111111] mb-1" data-bm="Nama" data-en="Name">Nama</label>
+        <input type="text" id="cf-name" required class="form-input" data-bm-ph="Nama penuh" data-en-ph="Full name" placeholder="Nama penuh" />
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-[#111111] mb-1" data-bm="No. Telefon" data-en="Phone Number">No. Telefon</label>
+        <input type="tel" id="cf-phone" required class="form-input" placeholder="012-345 6789" />
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-[#111111] mb-1" data-bm="Servis" data-en="Service">Servis</label>
+        <select id="cf-service" class="form-input">
+          <option data-bm="Pilih servis..." data-en="Select service...">Pilih servis...</option>
+          <option data-bm="Pemasangan Paip Baru" data-en="New Pipe Installation">Pemasangan Paip Baru</option>
+          <option data-bm="Pembaikan Paip Bocor" data-en="Leaky Pipe Repair">Pembaikan Paip Bocor</option>
+          <option data-bm="Pembersihan Saluran Tersumbat" data-en="Drain Unclogging">Pembersihan Saluran Tersumbat</option>
+          <option data-bm="Pemasangan Tangki Air" data-en="Water Tank Installation">Pemasangan Tangki Air</option>
+          <option data-bm="Lain-lain" data-en="Other">Lain-lain</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-[#111111] mb-1" data-bm="Mesej" data-en="Message">Mesej</label>
+        <textarea id="cf-message" rows="3" class="form-input" data-bm-ph="Terangkan masalah awak..." data-en-ph="Describe your problem..." placeholder="Terangkan masalah awak..."></textarea>
+      </div>
+      <button type="submit" class="w-full py-3.5 font-extrabold text-white text-sm uppercase tracking-wider border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#111111] transition-all duration-200" style="background:#25D366;" data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">Hantar via WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<script>
+document.getElementById('contact-form')?.addEventListener('submit',function(e){
+  e.preventDefault();
+  var name=document.getElementById('cf-name').value;
+  var phone=document.getElementById('cf-phone').value;
+  var service=document.getElementById('cf-service').value;
+  var message=document.getElementById('cf-message').value;
+  var lang=document.documentElement.getAttribute('data-lang')||'bm';
+  var text;
+  if(lang==='en'){
+    text='Hi, I\'m '+name+'.%0APhone: '+phone+'%0AService: '+service+'%0AMessage: '+message;
+  }else{
+    text='Hi, saya '+name+'.%0ATelefon: '+phone+'%0AServis: '+service+'%0AMesej: '+message;
+  }
+  window.open('https://wa.me/60123456789?text='+text,'_blank');
+
+      // Track contact form submission
+      if (typeof umami !== 'undefined') {
+        umami.track('demo_contact_submit', { client_id: 'demo-ah-seng-plumbing' });
+      }
+    });
+  </script>
+
+  <!-- Demo visit tracking -->
+  <script>
+    if (typeof umami !== 'undefined') {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('ref') === 'outreach') {
+        umami.track('demo_visit', { client_id: 'demo-ah-seng-plumbing', prospect: params.get('prospect') || '' });
+      }
+    }
+  </script>
+
+<!-- ════════════════════════════ CTA BANNER ════════════════════════════ -->
+<section class="w-full bg-[#111111] border-y-4 border-[#2A2A2A] py-12 md:py-14">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+    <div class="text-left reveal">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#DC2626] mb-4">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span class="text-xs font-bold text-white uppercase tracking-wider" data-bm="Tindakan Segera" data-en="Act Now">Tindakan Segera</span>
+      </div>
+      <h3 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2" data-bm="Paip Bermasalah? Jangan Tunggu Lagi" data-en="Pipe Trouble? Don't Wait">Paip Bermasalah? Jangan Tunggu Lagi</h3>
+      <p class="text-gray-400 text-sm" data-bm="Kami sampai dalam 30 minit. Sebut harga percuma, tiada komitmen. Hubungi sekarang — 24 jam sehari." data-en="We arrive within 30 minutes. Free quote, no obligation. Contact us now — 24 hours a day.">Kami sampai dalam 30 minit. Sebut harga percuma, tiada komitmen. Hubungi sekarang — 24 jam sehari.</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3 shrink-0 reveal reveal-delay-1">
+      <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20paip"
+         class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] text-white font-extrabold px-6 py-3.5 border-2 border-white shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-200 text-sm uppercase tracking-wider">
+        <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+        <span data-bm="WhatsApp — Respons Segera" data-en="WhatsApp — Quick Response">WhatsApp — Respons Segera</span>
+      </a>
+      <a href="tel:+60123456789"
+         class="inline-flex items-center justify-center gap-2 bg-white text-[#111111] font-extrabold px-6 py-3.5 border-2 border-[#111111] shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] transition-all duration-200 text-sm uppercase tracking-wider">
+        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span data-bm="Panggil 012-345 6789" data-en="Call 012-345 6789">Panggil 012-345 6789</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ FAQ ════════════════════════════ -->
+<section id="faq" class="py-12 md:py-16">
+  <div class="max-w-4xl mx-auto px-4">
+    <div class="text-left mb-10">
+      <span class="inline-block px-3 py-1 bg-[#DC2626] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Soalan Lazim" data-en="FAQ">Soalan Lazim</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-[#111111] tracking-tight reveal" data-bm="Ada Soalan?" data-en="Got Questions?">Ada Soalan?</h2>
+    </div>
+
+    <div class="space-y-4" id="faq-accordion">
+      <!-- Q1 -->
+      <details class="bg-white border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 group reveal">
+        <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-[#111111] bg-white hover:bg-[#F3F4F6] border-b-2 border-transparent group-open:border-[#111111] group-open:bg-[#F3F4F6] transition-all list-none min-h-[48px]">
+          <span data-bm="Kawasan mana yang diliputi?" data-en="Which areas do you cover?">Kawasan mana yang diliputi?</span>
+          <svg class="faq-chevron w-5 h-5 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 py-4 bg-white">
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Kami meliputi Klang, Shah Alam, Port Klang, Bukit Tinggi dan kawasan sekitar. Untuk kecemasan, kami sampai dalam 30 minit." data-en="We cover Klang, Shah Alam, Port Klang, Bukit Tinggi and surrounding areas. For emergencies, we arrive within 30 minutes.">Kami meliputi Klang, Shah Alam, Port Klang, Bukit Tinggi dan kawasan sekitar. Untuk kecemasan, kami sampai dalam 30 minit.</p>
+        </div>
+      </details>
+
+      <!-- Q2 -->
+      <details class="bg-white border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 group reveal reveal-delay-1">
+        <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-[#111111] bg-white hover:bg-[#F3F4F6] border-b-2 border-transparent group-open:border-[#111111] group-open:bg-[#F3F4F6] transition-all list-none min-h-[48px]">
+          <span data-bm="Boleh call emergency tengah malam?" data-en="Can I call for emergency at night?">Boleh call emergency tengah malam?</span>
+          <svg class="faq-chevron w-5 h-5 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 py-4 bg-white">
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Ya, 24 jam. Paip pecah, bocor besar, tandas tersumbat kritikal — call ja. Kami respond terus, siang atau malam." data-en="Yes, 24/7. Burst pipes, major leaks, critical drain clogs — just call. We respond immediately, day or night.">Ya, 24 jam. Paip pecah, bocor besar, tandas tersumbat kritikal — call ja. Kami respond terus, siang atau malam.</p>
+        </div>
+      </details>
+
+      <!-- Q3 -->
+      <details class="bg-white border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 group reveal reveal-delay-2">
+        <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-[#111111] bg-white hover:bg-[#F3F4F6] border-b-2 border-transparent group-open:border-[#111111] group-open:bg-[#F3F4F6] transition-all list-none min-h-[48px]">
+          <span data-bm="Ada jaminan untuk kerja plumbing?" data-en="Is there a warranty?">Ada jaminan untuk kerja plumbing?</span>
+          <svg class="faq-chevron w-5 h-5 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 py-4 bg-white">
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Ya. Semua kerja pemasangan dan pembaikan ada warranty workmanship 90 hari. Kalau ada masalah, call ja — kami datang semula free." data-en="Yes. All installation and repair work comes with a 90-day workmanship warranty. If there's an issue, just call — we'll come back for free.">Ya. Semua kerja pemasangan dan pembaikan ada warranty workmanship 90 hari. Kalau ada masalah, call ja — kami datang semula free.</p>
+        </div>
+      </details>
+
+      <!-- Q4 -->
+      <details class="bg-white border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 group reveal reveal-delay-3">
+        <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-[#111111] bg-white hover:bg-[#F3F4F6] border-b-2 border-transparent group-open:border-[#111111] group-open:bg-[#F3F4F6] transition-all list-none min-h-[48px]">
+          <span data-bm="Berapa anggaran kos?" data-en="How much does it cost?">Berapa anggaran kos?</span>
+          <svg class="faq-chevron w-5 h-5 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 py-4 bg-white">
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="Kos bergantung pada jenis dan saiz kerja. Kami bagi sebut harga percuma — hubungi via WhatsApp, hantar gambar, kami quote dalam 15 minit. Tiada komitmen." data-en="Cost depends on the type and size of the job. We provide free quotes — contact us via WhatsApp, send a photo, we'll quote within 15 minutes. No obligation.">Kos bergantung pada jenis dan saiz kerja. Kami bagi sebut harga percuma — hubungi via WhatsApp, hantar gambar, kami quote dalam 15 minit. Tiada komitmen.</p>
+        </div>
+      </details>
+
+      <!-- Q5 -->
+      <details class="bg-white border-2 border-[#111111] shadow-[4px_4px_0px_0px_#111111] transition-all duration-150 group reveal">
+        <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-[#111111] bg-white hover:bg-[#F3F4F6] border-b-2 border-transparent group-open:border-[#111111] group-open:bg-[#F3F4F6] transition-all list-none min-h-[48px]">
+          <span data-bm="Cara nak buat tempahan?" data-en="How do I book?">Cara nak buat tempahan?</span>
+          <svg class="faq-chevron w-5 h-5 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 py-4 bg-white">
+          <p class="text-[#4B5563] text-sm leading-relaxed" data-bm="WhatsApp atau telefon terus — senang je. Kami reply dalam 15 minit semasa waktu kerja. Tak perlu borang panjang." data-en="WhatsApp or call directly — it's that simple. We reply within 15 minutes during working hours. No long forms needed.">WhatsApp atau telefon terus — senang je. Kami reply dalam 15 minit semasa waktu kerja. Tak perlu borang panjang.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════ FOOTER ════════════════════════════ -->
+<footer class="bg-[#111111] text-gray-400 py-10 border-t-4 border-[#DC2626]">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-left">
+        <p class="font-extrabold text-white text-base mb-2 font-manrope" data-bm="Ah Seng Plumbing Services" data-en="Ah Seng Plumbing Services">Ah Seng Plumbing Services</p>
+        <p class="text-sm leading-relaxed" data-bm="Pakar plumbing &amp; paip Klang. Servis 24 jam, 7 hari seminggu." data-en="Klang's plumbing &amp; pipe experts. 24/7 service, 7 days a week.">Pakar plumbing &amp; paip Klang. Servis 24 jam, 7 hari seminggu.</p>
+      </div>
+      <div class="text-left">
+        <p class="font-bold text-white text-sm mb-3 uppercase tracking-wider" data-bm="Kawasan Servis" data-en="Service Area">Kawasan Servis</p>
+        <ul class="text-sm space-y-1">
+          <li data-bm="Klang" data-en="Klang">Klang</li>
+          <li data-bm="Shah Alam" data-en="Shah Alam">Shah Alam</li>
+          <li data-bm="Port Klang" data-en="Port Klang">Port Klang</li>
+          <li data-bm="Bukit Tinggi" data-en="Bukit Tinggi">Bukit Tinggi</li>
+        </ul>
+      </div>
+      <div class="text-left">
+        <p class="font-bold text-white text-sm mb-3 uppercase tracking-wider" data-bm="Hubungi" data-en="Contact">Hubungi</p>
+        <div class="flex flex-col gap-2 text-sm">
+          <a href="tel:+60123456789" class="hover:text-white transition-colors flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 012-345 6789</a>
+          <a href="https://wa.me/60123456789" class="hover:text-white transition-colors flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg> WhatsApp</a>
+          <a href="https://instagram.com/ahsengplumbing" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg> @ahsengplumbing</a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-[#2A2A2A] mt-8 pt-6 text-center text-xs text-gray-500">
+      <p>&copy; 2026 Ah Seng Plumbing Services. <span data-bm="Hak cipta terpelihara." data-en="All rights reserved.">Hak cipta terpelihara.</span></p>
+      <div class="flex items-center justify-center gap-2 mt-1">
+        <span data-bm="Sejak 2018" data-en="Since 2018">Sejak 2018</span>
+        <span>·</span>
+        <span data-bm="Klang, Selangor" data-en="Klang, Selangor">Klang, Selangor</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════ WHATSAPP STICKY BAR ════════════════════════════ -->
+<div class="wa-sticky md:hidden">
+  <svg class="w-5 h-5 text-white shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+  <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20paip" class="text-white font-bold text-sm">
+    <span data-bm="Hubungi via WhatsApp" data-en="Contact via WhatsApp">Hubungi via WhatsApp</span>
+  </a>
+</div>
+
+<!-- ════════════════════════════ SCROLL REVEAL ════════════════════════════ -->
+<script>
+(function(){var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(function(e){o.observe(e);});})();
+</script>
+
+<!-- ════════════════════════════ LANGUAGE TOGGLE ════════════════════════════ -->
+<script>
+(function(){
+  var saved=localStorage.getItem('pw_lang')||'bm';
+  setLang(saved,true);
+})();
+function setLang(lang,silent){
+  var isBM=lang==='bm';
+  document.documentElement.lang=isBM?'ms':'en';
+  document.documentElement.setAttribute('data-lang',lang);
+  document.querySelectorAll('[data-bm]').forEach(function(el){
+    var target=isBM?el.getAttribute('data-bm'):el.getAttribute('data-en');
+    if(!target)return;
+    if(el.children.length===0){
+      if(!silent)el.style.opacity='0';
+      setTimeout(function(){
+        el.textContent=target;
+        if(!silent)el.style.opacity='1';
+      },silent?0:80);
+    }
+  });
+  var titleEl=document.querySelector('title');
+  if(titleEl)titleEl.textContent=isBM?titleEl.getAttribute('data-bm'):titleEl.getAttribute('data-en');
+  var waMsg=isBM?'Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20paip':'Hi%2C%20I%20would%20like%20to%20ask%20about%20your%20plumbing%20services';
+  document.querySelectorAll('a[href*="wa.me"]').forEach(function(a){
+    var base=a.href.split('?')[0];
+    a.href=base+'?text='+waMsg;
+  });
+  document.getElementById('btn-bm').classList.toggle('active',isBM);
+  document.getElementById('btn-en').classList.toggle('active',!isBM);
+  document.getElementById('btn-bm').setAttribute('aria-pressed',isBM);
+  document.getElementById('btn-en').setAttribute('aria-pressed',!isBM);
+  localStorage.setItem('pw_lang',lang);
+}
+</script>
+
+</body>
+</html>

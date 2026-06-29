@@ -1,0 +1,66 @@
+<!-- Contact Form Component — submits to WhatsApp -->
+<!-- Replace {WHATSAPP} with client's WhatsApp number (e.g. 60123456789) -->
+<!-- The form collects name, phone, service, and message, then opens WhatsApp with pre-filled text -->
+<section id="contact" class="py-12 md:py-16">
+  <div class="max-w-2xl mx-auto px-4">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center reveal"
+        data-bm="Hubungi Kami" data-en="Contact Us">
+      Hubungi Kami
+    </h2>
+    <form id="contact-form" class="space-y-4 reveal reveal-delay-1">
+      <div>
+        <label class="block text-sm font-semibold mb-1" data-bm="Nama" data-en="Name">Nama</label>
+        <input type="text" id="cf-name" required
+          class="form-input"
+          data-bm-ph="Nama penui" data-en-ph="Full name"
+          placeholder="Nama penuh">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1" data-bm="No. Telefon" data-en="Phone Number">No. Telefon</label>
+        <input type="tel" id="cf-phone" required
+          class="form-input"
+          placeholder="012-345 6789">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1" data-bm="Servis" data-en="Service">Servis</label>
+        <select id="cf-service" class="form-input">
+          <option data-bm="Pilih servis..." data-en="Select service...">Pilih servis...</option>
+          <!-- Service options populated per client -->
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1" data-bm="Mesej" data-en="Message">Mesej</label>
+        <textarea id="cf-message" rows="3" class="form-input"
+          data-bm-ph="Terangkan masalah awak..." data-en-ph="Describe your problem..."
+          placeholder="Terangkan masalah awak..."></textarea>
+      </div>
+      <button type="submit" class="w-full py-3.5 font-bold text-white transition-all duration-200"
+        style="background:#25D366;"
+        data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">
+        Hantar via WhatsApp
+      </button>
+    </form>
+  </div>
+</section>
+
+<script>
+// Contact form → WhatsApp submission
+document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('cf-name').value;
+  const phone = document.getElementById('cf-phone').value;
+  const service = document.getElementById('cf-service').value;
+  const message = document.getElementById('cf-message').value;
+  const lang = document.documentElement.getAttribute('data-lang') || 'bm';
+
+  let text;
+  if (lang === 'en') {
+    text = `Hi, I'm ${name}.\nPhone: ${phone}\nService: ${service}\nMessage: ${message}`;
+  } else {
+    text = `Hi, saya ${name}.\nTelefon: ${phone}\nServis: ${service}\nMesej: ${message}`;
+  }
+
+  const waUrl = `https://wa.me/{WHATSAPP}?text=${encodeURIComponent(text)}`;
+  window.open(waUrl, '_blank');
+});
+</script>

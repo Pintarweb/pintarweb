@@ -138,14 +138,15 @@ Create a simple document (Google Doc or Notion) with:
 **Cost:** Free
 
 ### Checklist
-- [ ] Razorpay account created and approved
-- [ ] KYC completed
-- [ ] Bank account linked and verified
-- [ ] Payment methods configured (FPX, Cards, UPI, Wallets)
-- [ ] Payment link template created (RM 447)
+- [x] Razorpay account created and approved
+- [x] KYC completed
+- [x] Bank account linked and verified
+- [x] Payment methods configured (FPX, Cards, UPI, Wallets)
+- [x] API keys configured in .env
+- [x] Payment link creation script ready (`scripts/create-payment-link.sh`)
 - [ ] Test payment completed successfully
-- [ ] Recurring billing set up (optional)
-- [ ] Payment workflow documented
+- [ ] Recurring billing set up (optional, for later)
+- [x] Payment workflow documented
 
 ### Resources
 - Razorpay API docs: https://razorpay.comapi
@@ -176,7 +177,7 @@ Create `packages/site-generator/terms.html` (hosted at preview.pintarweb.com/ter
    - **Quarterly:** RM 417/3 months (save RM 30)
    - **Bi-Annual:** RM 774/6 months (save RM 120)
    - **Annual:** RM 1,308/12 months (save RM 480)
-3. **Payment Terms:** Auto-renewal, cancellation (30 days notice)
+3. **Payment Terms:** Auto-renewal, cancellation (14 days notice)
 4. **Customer Obligations:** Provide info, respond within 7 days
 5. **Pintarweb Obligations:** Build/maintain site, 48hr support response
 6. **Limitation of Liability:** Cap at 3 months fees (RM 447)
@@ -217,7 +218,7 @@ Ringkasan:
 - RM 149/bulan, 3 bulan advance (RM 447)
 - Selepas 3 bulan, auto-renew setiap bulan (RM 149/bulan)
 - Boleh upgrade ke Quarterly (RM 417/3mo), Bi-Annual (RM 774/6mo), atau Annual (RM 1,308/12mo) untuk jimat
-- Boleh batal dengan 30 hari notis
+- Boleh batal dengan 14 hari notis
 - Website, SEO, WhatsApp auto-reply, GMB optimisation included
 
 Ada soalan? WhatsApp saya.
@@ -345,13 +346,13 @@ Create a document with:
 **Cost:** Free
 
 ### Checklist
-- [ ] Cloudflare Pages project created
-- [ ] Custom domain configured (preview.pintarweb.com)
-- [ ] DNS records set up and propagated
-- [ ] R2 bucket created (pintarweb-assets)
-- [ ] GitHub auto-deploy configured
-- [ ] Test deployment successful
-- [ ] Deployment workflow documented
+- [x] Cloudflare Pages project created (`pintarweb-preview`)
+- [x] Custom domain configured (preview.pintarweb.com)
+- [x] DNS records set up and propagated
+- [x] R2 bucket created (pintarweb-assets)
+- [x] GitHub auto-deploy configured
+- [x] Test deployment successful
+- [x] Deployment workflow documented (see `docs/deployment-workflow.md`)
 
 ### Resources
 - Cloudflare Pages docs: https://developers.cloudflare.com/pages/
@@ -360,88 +361,40 @@ Create a document with:
 
 ---
 
-## 1.4 Analytics Setup (Umami)
+## 1.4 Landing Page ✅
 
-### Why Umami?
-- Self-hosted (no data leaves your infrastructure)
-- Privacy-friendly (no cookie banner needed)
-- Lightweight (< 1KB script)
-- Free and open-source
-- Can host on Cloudflare Workers (free tier)
+### Status: Complete (June 27, 2026)
 
-### Step-by-Step Setup
+The PintarWeb landing page has been built and deployed. It uses a dark glassmorphic design ported from the legacy pintar-landing repo.
 
-#### Step 1: Deploy Umami on Cloudflare Workers
-**Option A: Use Umami Cloud (Easiest)**
-1. Go to https://cloud.umami.is/
-2. Sign up for free trial (30 days)
-3. Get tracking script
-4. After trial, self-host or pay $9/month
+**What was built:**
+- `packages/site-generator/landing/index.html` — complete landing page
+- Dark background (#0a0a0a) with aurora gradients, glassmorphism, Manrope font
+- BM/EN/CN language toggle
+- RM800 anchor price vs RM447 subscription (3+1 months) shown side-by-side
+- Renewal options (monthly, quarterly, bi-annual, annual)
+- Problem section: "Ada Facebook Tapi Tak Ada Website?"
+- Solution section: 3 glass cards (Website, WhatsApp Bot, Local SEO)
+- How It Works: 3-step process
+- Showcase: infinite marquee with 3 tradesperson demos
+- Founder section (Yus, Selangor & KL)
+- FAQ: 6 items with 14-day cancellation notice
+- schema.org LocalBusiness structured data
+- Logo and favicon assets from legacy repo
 
-**Option B: Self-host on Cloudflare Workers (Recommended)**
-1. Clone Umami repository:
-   ```bash
-   git clone https://github.com/umami-software/umami.git
-   cd umami
-   ```
-2. Follow deployment guide: https://umami.is/docs/running-on-cloudflare
-3. Deploy to Cloudflare Workers
-4. Configure custom domain (analytics.pintarweb.com)
+**Deployed to:** `pintarweb-main` Pages project at `https://main.pintarweb-main.pages.dev`
 
-**Time:** 1-2 hours  
-**Cost:** Free (Cloudflare Workers free tier: 100k requests/day)
+**Pending:** Domain migration to `pintarweb.com` (manual step in Phase 1.5.1)
 
-#### Step 2: Create Tracking Script
-1. In Umami dashboard, go to Settings → Websites
-2. Click "Add website"
-3. Website name: Pintarweb Preview
-4. Domain: preview.pintarweb.com
-5. Copy tracking script ID
-6. Create tracking snippet:
-   ```html
-   <script defer src="https://analytics.pintarweb.com/script.js" data-website-id="YOUR_ID"></script>
-   ```
+**Note:** Analytics (Umami) has been moved to Phase 1.5.2 — see `docs/plans/phase-1.5-website-integration.md`
 
-**Time:** 10 minutes  
-**Cost:** Free
+---
 
-#### Step 3: Add Tracking to Client Sites
-1. Open your site template (e.g., `packages/site-generator/templates/aircond/index.html`)
-2. Add tracking script to `<head>`:
-   ```html
-   <head>
-     <!-- Other head content -->
-     <script defer src="https://analytics.pintarweb.com/script.js" data-website-id="YOUR_ID"></script>
-   </head>
-   ```
-3. Test by visiting a client site and checking Umami dashboard
+## 1.4 Analytics (Moved to Phase 1.5.2)
 
-**Time:** 10 minutes  
-**Cost:** Free
+Analytics setup has been moved to **Phase 1.5.2** as part of the Website Integration & Sales Funnel phase. This is because analytics needs to track both the landing page AND demo client sites, and the tracking setup depends on the domain migration (1.5.1) being complete first.
 
-#### Step 4: Configure Dashboard Access
-1. Log in to Umami dashboard: https://analytics.pintarweb.com
-2. Verify you can see:
-   - Page views
-   - Unique visitors
-   - Referrers
-   - Device types
-   - Countries
-3. Bookmark dashboard for easy access
-
-**Time:** 5 minutes  
-**Cost:** Free
-
-### Checklist
-- [ ] Umami analytics deployed (Cloud or self-hosted)
-- [ ] Tracking script created
-- [ ] Tracking added to client site template
-- [ ] Dashboard access configured
-- [ ] Test tracking verified (visit site, check dashboard)
-
-### Resources
-- Umami docs: https://umami.is/docs/
-- Cloudflare Workers: https://developers.cloudflare.com/workers/
+See: `docs/plans/phase-1.5-website-integration.md` → Section 1.5.2
 
 ---
 
@@ -468,23 +421,36 @@ Create a document with:
 - [ ] Auto-deploy from GitHub working
 - [ ] Test deployment successful
 
-### Analytics
-- [ ] Umami analytics deployed
+### Analytics (Moved to Phase 1.5.2)
+- [ ] Umami analytics deployed (see phase-1.5-website-integration.md)
 - [ ] Tracking script integrated
 - [ ] Dashboard accessible
 - [ ] Test tracking verified
 
+### Landing Page ✅
+- [x] Landing page designed and built
+- [x] Deployed to pintarweb-main Pages project
+- [x] Domain migration pending (Phase 1.5.1)
+
 ### Final Verification
 - [ ] Can create payment link for customer
-- [ ] Can deploy client site to preview.pintarweb.com
-- [ ] Can track site visits in Umami
-- [ ] Terms of Service page live at preview.pintarweb.com/terms
+- [x] Can deploy client site to preview.pintarweb.com
+- [ ] Can track site visits in Umami (Phase 1.5.2)
+- [x] Terms of Service page live
+- [x] Landing page live at main.pintarweb-main.pages.dev
 
 ---
 
 ## Next Steps
 
-After completing Phase 1, proceed to **Phase 2: Automation** where you'll:
+After completing Phase 1, proceed to **Phase 1.5: Website Integration & Sales Funnel** where you'll:
+- Migrate pintarweb.com domain to new landing page
+- Deploy Umami analytics
+- Document the sales funnel
+- Create outreach message templates
+- Document demo site build SOP
+
+Then proceed to **Phase 2: Automation** where you'll:
 - Build site generation scripts
 - Set up lead pipeline
 - Configure outreach tracking
@@ -495,5 +461,5 @@ After completing Phase 1, proceed to **Phase 2: Automation** where you'll:
 
 ---
 
-**Last Updated:** 2026-06-23  
-**Status:** Ready to execute
+**Last Updated:** 2026-06-28  
+**Status:** 1.1 ✅ Razorpay, 1.2 ✅ Legal, 1.3 ✅ Hosting, 1.4 ✅ Landing Page. Phase 1.5 ✅ Complete. Phase 1 DONE.

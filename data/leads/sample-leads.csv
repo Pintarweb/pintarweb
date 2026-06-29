@@ -1,0 +1,7 @@
+name,phone,address,area,niche,rating,reviews,has_website,has_social,google_maps_url
+Ah Seng Plumbing,60123456789,Jalan Klang Utama,Klang,plumbing,3.8,23,no,yes,https://maps.google.com/ah-seng-plumbing
+Boost Aircond Services,60198765432,Jalan Shah Alam 5,Shah Alam,aircond,4.5,67,yes,yes,https://maps.google.com/boost-aircond
+Tai Aircond,60334567890,Taman Connaught,Kuala Lumpur,aircond,0,0,no,no,https://maps.google.com/tai-aircond
+KL Electrical Works,60111222333,Jalan Pudu,Kuala Lumpur,electrical,4.2,15,yes,no,https://maps.google.com/kl-electrical
+Mr. Pipe Repair,60155566777,Bandar Sunway,Petaling Jaya,plumbing,2.9,8,no,yes,https://maps.google.com/mr-pipe-repair
+Super Aircond Centre,60177788999,Jalan Kemuning,Shah Alam,aircond,4.8,156,yes,yes,https://maps.google.com/super-aircond

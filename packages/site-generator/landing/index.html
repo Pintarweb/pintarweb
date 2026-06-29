@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-bm="PintarWeb — Website Bisnes, WhatsApp Bot & SEO Tempatan"
+        data-en="PintarWeb — Business Website, WhatsApp Bot & Local SEO"
+        data-cn="PintarWeb — 商业网站、WhatsApp 机器人和本地 SEO">
+        PintarWeb — Website Bisnes, WhatsApp Bot & SEO Tempatan
+    </title>
+    <meta name="description" content="Website + WhatsApp auto-reply bot + local SEO untuk bisnes tempatan. RM447 untuk 4 bulan (3+1 bonus)." />
+    <meta property="og:title" content="PintarWeb — Website Bisnes, WhatsApp Bot & SEO Tempatan" />
+    <meta property="og:description" content="Website + WhatsApp auto-reply bot + local SEO untuk bisnes tempatan. RM447 untuk 4 bulan (3+1 bonus)." />
+    <meta property="og:image" content="https://pintarweb.com/images/og-image.png" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/x-icon" href="my-favicon/favicon.ico" />
+    <link rel="icon" type="image/png" href="my-favicon/icon1.png" />
+    <link rel="apple-touch-icon" href="my-favicon/web-app-manifest-192x192.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "PintarWeb",
+        "description": "Website-as-a-Service for Malaysian SMEs — Website + WhatsApp Bot + Local SEO",
+        "areaServed": ["Selangor", "Kuala Lumpur"],
+        "priceRange": "RM447 - RM1308",
+        "address": { "@type": "PostalAddress", "addressRegion": "Selangor", "addressCountry": "MY" },
+        "url": "https://pintarweb.com",
+        "image": "https://pintarweb.com/images/og-image.png"
+    }
+    </script>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="1e8f3b8d-2b18-44c7-98bb-0bfb691e712c"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ededed; scroll-behavior: smooth; }
+        h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; }
+        html { scroll-padding-top: 80px; }
+        ::selection { background: rgba(45,212,191,0.3); color: #2dd4bf; }
+
+        /* Aurora background */
+        .bg-ai-aurora {
+            background: radial-gradient(circle at 0% 0%, rgba(59,130,246,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(45,212,191,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1) 0%, transparent 50%),
+                        #0a0a0a;
+            position: relative; overflow: hidden;
+        }
+        .bg-ai-aurora::before {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%,
+                rgba(59,130,246,0.1) 0deg, rgba(45,212,191,0.1) 120deg,
+                rgba(139,92,246,0.1) 240deg, rgba(59,130,246,0.1) 360deg);
+            animation: rotate-aurora 40s linear infinite; z-index: 0; pointer-events: none; filter: blur(80px);
+        }
+        @keyframes rotate-aurora { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Vibrant gradient */
+        .bg-vibrant-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #0d9488 50%, #7c3aed 100%);
+            background-size: 200% 200%; animation: gradient-shift 10s ease infinite;
+        }
+        @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+        /* Glassmorphism */
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.1); }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; }
+        .glass-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(45,212,191,0.3); transform: translateY(-2px); }
+
+        /* Glow */
+        .glow-blue { box-shadow: 0 0 40px -10px rgba(37,99,235,0.4); }
+        .glow-cyan { box-shadow: 0 0 40px -10px rgba(45,212,191,0.3); }
+        .glow-vibrant { box-shadow: 0 0 60px -10px rgba(124,58,237,0.3); }
+
+        /* Marquee */
+        .animate-marquee { animation: marquee 40s linear infinite; }
+        .pause-on-hover:hover .animate-marquee { animation-play-state: paused; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Hover shimmer */
+        .hover-shimmer { position: relative; overflow: hidden; }
+        .hover-shimmer::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%); transition: transform 0.6s ease;
+        }
+        .hover-shimmer:hover::after { transform: translateX(100%); }
+
+        /* Scroll reveal */
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+
+        /* Rotating hero word */
+        .rotate-word { display: inline-block; transition: opacity 0.4s ease, transform 0.4s ease; }
+        .rotate-word.out { opacity: 0; transform: translateY(-100%); }
+
+        /* Lang toggle dark */
+        .lang-toggle { display: inline-flex; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 3px; gap: 2px; backdrop-filter: blur(8px); }
+        .lang-btn { padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; background: transparent; color: #94a3b8; transition: all 0.2s ease; font-family: 'Manrope', sans-serif; }
+        .lang-btn.active { background: rgba(45,212,191,0.15); color: #2dd4bf; box-shadow: 0 0 12px rgba(45,212,191,0.2); }
+
+        /* FAQ */
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .faq-chevron { transform: rotate(180deg); }
+        .faq-chevron { transition: transform 0.3s ease; }
+
+        /* WA sticky */
+        .wa-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #25D366; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; box-shadow: 0 -2px 20px rgba(0,0,0,0.3); }
+
+        [data-bm], [data-en], [data-cn] { transition: opacity 0.15s ease; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(45,212,191,0.3); }
+    </style>
+</head>
+
+<body class="pb-20">
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <img src="images/only_logo.png" alt="PintarWeb" class="h-7 w-auto" />
+                <img src="images/pintarweb_word.png" alt="PintarWeb" class="h-4 w-auto hidden sm:block" />
+                <span class="hidden md:inline text-[10px] font-bold tracking-[0.2em] uppercase text-blue-400 border-l border-white/20 pl-2.5 ml-1">LOCAL WEBSITE SERVICE</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-400">
+                <a href="#showcase" class="hover:text-white transition-colors" data-bm="Pameran" data-en="Showcase" data-cn="案例">Pameran</a>
+                <a href="#harga" class="hover:text-white transition-colors" data-bm="Harga" data-en="Pricing" data-cn="价格">Harga</a>
+                <a href="#faq" class="hover:text-white transition-colors" data-bm="Soalan Lazim" data-en="FAQ" data-cn="常见问题">Soalan Lazim</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <button class="md:hidden text-slate-400 hover:text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm">BM</button>
+                    <button class="lang-btn" onclick="setLang('en')" id="btn-en">EN</button>
+                    <button class="lang-btn" onclick="setLang('cn')" id="btn-cn">CN</button>
+                </div>
+                <a href="https://wa.me/60174456243?text=Hi%2C%20saya%20berminat%20dengan%20PintarWeb" data-umami-event="whatsapp_click" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30">
+                    <span data-bm="Jom Bincang" data-en="Let's Talk" data-cn="让我们谈谈">Jom Bincang</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed top-14 left-0 right-0 z-40 bg-black/95 backdrop-blur-xl border-b border-white/10">
+        <div class="px-4 py-3 flex flex-col">
+            <a href="#showcase" class="mobile-link py-3 text-sm font-semibold text-slate-300 hover:text-cyan-400 border-b border-white/5" data-bm="Pameran" data-en="Showcase" data-cn="案例">Pameran</a>
+            <a href="#harga" class="mobile-link py-3 text-sm font-semibold text-slate-300 hover:text-cyan-400 border-b border-white/5" data-bm="Harga" data-en="Pricing" data-cn="价格">Harga</a>
+            <a href="#faq" class="mobile-link py-3 text-sm font-semibold text-slate-300 hover:text-cyan-400" data-bm="Soalan Lazim" data-en="FAQ" data-cn="常见问题">Soalan Lazim</a>
+        </div>
+    </div>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="bg-ai-aurora min-h-screen flex items-center pt-20 pb-12 relative">
+        <div class="relative z-10 max-w-6xl mx-auto px-4 w-full">
+            <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-8 lg:gap-12 items-center">
+                <div>
+                    <!-- Trust badge -->
+                    <div class="mb-6 inline-flex items-center gap-2 px-3 py-1.5 glass rounded-full reveal">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                        <span class="text-xs text-emerald-300 font-semibold" data-bm="Bayar 3 Bulan, Dapat 4 Bulan" data-en="Pay 3 Months, Get 4 Months" data-cn="付 3 个月，得 4 个月">Bayar 3 Bulan, Dapat 4 Bulan</span>
+                    </div>
+
+                    <!-- Headline with rotating word -->
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] text-white mb-6 reveal reveal-d1">
+                        <span data-bm="Ada Facebook, Tapi " data-en="Have Facebook, But " data-cn="有 Facebook，但 ">Ada Facebook, Tapi </span>
+                        <span class="block mt-2">
+                            <span class="text-slate-500" data-bm="Tak Ada " data-en="No " data-cn="没有 ">Tak Ada </span>
+                            <span id="rotating-word" class="rotate-word bg-gradient-to-r from-blue-400 via-cyan-300 to-violet-400 bg-clip-text text-transparent">Website Bisnes</span>
+                            <span class="text-cyan-400">.</span>
+                        </span>
+                    </h1>
+
+                    <p class="text-slate-400 text-base md:text-lg mb-8 max-w-xl leading-relaxed reveal reveal-d2"
+                        data-bm="Website + WhatsApp auto-reply bot + SEO tempatan. Semua dalam satu langganan. Kami uruskan teknikal, anda fokus bisnes."
+                        data-en="Website + WhatsApp auto-reply bot + local SEO. All in one subscription. We handle the tech, you focus on your business."
+                        data-cn="网站 + WhatsApp 自动回复机器人 + 本地 SEO。全部包含在订阅中。我们处理技术，您专注业务。">
+                        Website + WhatsApp auto-reply bot + SEO tempatan. Semua dalam satu langganan. Kami uruskan teknikal, anda fokus bisnes.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-3 mb-8 reveal reveal-d3">
+                        <a href="https://wa.me/60174456243?text=Hi%2C%20saya%20berminat%20dengan%20PintarWeb" data-umami-event="whatsapp_click"
+                            class="hover-shimmer inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all shadow-lg shadow-blue-500/30">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+                            <span data-bm="Langgan Sekarang" data-en="Subscribe Now" data-cn="立即订阅">Langgan Sekarang</span>
+                        </a>
+                        <a href="#harga" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 glass-card text-white font-bold rounded-full transition-all">
+                            <span data-bm="Lihat Harga" data-en="See Pricing" data-cn="查看价格">Lihat Harga</span>
+                        </a>
+                    </div>
+
+                    <div class="flex flex-wrap gap-5 text-xs text-slate-500 reveal reveal-d3">
+                        <span class="flex items-center gap-1.5"><span class="text-emerald-400">&#10003;</span> <span data-bm="Bonus 1 bulan percuma" data-en="1 month free bonus" data-cn="1 个月免费奖励">Bonus 1 bulan percuma</span></span>
+                        <span class="flex items-center gap-1.5"><span class="text-emerald-400">&#10003;</span> <span data-bm="Batal dengan 14 hari notis" data-en="Cancel with 14 days notice" data-cn="14 天通知可取消">Batal dengan 14 hari notis</span></span>
+                        <span class="flex items-center gap-1.5"><span class="text-emerald-400">&#10003;</span> <span data-bm="PDPA compliant" data-en="PDPA compliant" data-cn="PDPA 合规">PDPA compliant</span></span>
+                    </div>
+                </div>
+
+                <!-- Hero image -->
+                <div class="hidden lg:block reveal reveal-d2">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-blue-500/20 blur-3xl rounded-full"></div>
+                        <div class="relative rounded-2xl overflow-hidden glow-blue border border-white/10">
+                            <img src="images/hero-tradesperson.webp" alt="PintarWeb" class="w-full aspect-[4/3] object-cover" loading="eager">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        </div>
+                        <div class="absolute -bottom-3 -left-3 glass px-3 py-1.5 rounded-lg text-xs font-mono text-cyan-300 tracking-wider">SERVIS AIRCOND // v2.0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ PROBLEM ═══ -->
+    <section class="py-16 md:py-24 bg-black">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-8 text-center reveal">
+                <span data-bm="Ada Facebook, Tapi Tak Ada Website?" data-en="Have Facebook, But No Website?" data-cn="有 Facebook，但没有网站？">Ada Facebook, Tapi Tak Ada Website?</span>
+            </h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="glass-card rounded-2xl p-6 reveal">
+                    <div class="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-2" data-bm="Algorithm Tukar" data-en="Algorithm Changes" data-cn="算法改变">Algorithm Changes</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Reach Facebook drop 40-60%. Post anda tak nampak dekat pelanggan sendiri." data-en="Facebook reach drops 40-60%. Your posts don't reach your own customers." data-cn="Facebook 曝光量下降 40-60%。您的帖子无法触达您的客户。">Reach Facebook drop 40-60%. Post anda tak nampak dekat pelanggan sendiri.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 reveal reveal-d1">
+                    <div class="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-2" data-bm="Data Bukan Milik Anda" data-en="Data Isn't Yours" data-cn="数据不属于您">Data Bukan Milik Anda</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Pelanggan &quot;terkurung&quot; dalam Facebook. Kalau akaun ditutup, hilang semua." data-en="Customers are &quot;trapped&quot; inside Facebook. If account closed, everything lost." data-cn="客户被&quot;困在&quot; Facebook 里。如果账户被关闭，一切都会消失。">Pelanggan &quot;terkurung&quot; dalam Facebook. Kalau akaun ditutup, hilang semua.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 reveal reveal-d2">
+                    <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-sm mb-2" data-bm="Tak Ada di Google" data-en="Invisible on Google" data-cn="在 Google 上不可见">Tak Ada di Google</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Pelanggan yang Google &quot;aircond service Cheras&quot; jumpa competitor, bukan anda." data-en="Customers who Google &quot;aircond service Cheras&quot; find competitors, not you." data-cn="在 Google 搜索&quot;aircond service Cheras&quot;的客户找到的是竞争对手，不是您。">Pelanggan yang Google &quot;aircond service Cheras&quot; jumpa competitor, bukan anda.</p>
+                </div>
+            </div>
+            <p class="text-center text-white font-bold text-lg mt-8 reveal reveal-d3" data-bm="Anda perlukan website sendiri. Tempat yang anda kawal 100%." data-en="You need your own website. A place you control 100%." data-cn="您需要自己的网站。一个您 100% 控制的地方。">Anda perlukan website sendiri. Tempat yang anda kawal 100%.</p>
+        </div>
+    </section>
+
+    <!-- ═══ SOLUTION ═══ -->
+    <section class="py-16 md:py-24 bg-ai-aurora relative">
+        <div class="relative z-10 max-w-5xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2 text-center reveal">
+                <span data-bm="Bukan Sekadar Website." data-en="Not Just a Website." data-cn="不仅仅是网站。">Bukan Sekadar Website.</span>
+            </h2>
+            <p class="text-slate-400 text-center mb-12 reveal reveal-d1" data-bm="Sistem bisnes penuh — website, WhatsApp bot, dan SEO tempatan." data-en="A complete business system — website, WhatsApp bot, and local SEO." data-cn="完整的商业系统——网站、WhatsApp 机器人和本地 SEO。">Sistem bisnes penuh — website, WhatsApp bot, dan SEO tempatan.</p>
+
+            <div class="grid md:grid-cols-3 gap-5">
+                <div class="glass-card rounded-2xl p-6 reveal">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-3" data-bm="Website Profesional" data-en="Professional Website" data-cn="专业网站">Website Profesional</h3>
+                    <ul class="text-slate-400 text-xs space-y-2">
+                        <li class="flex items-start gap-2"><span class="text-cyan-400 shrink-0">&#10003;</span> <span data-bm="Mobile-first, laju, SEO-ready" data-en="Mobile-first, fast, SEO-ready" data-cn="移动优先、快速、SEO 就绪">Mobile-first, laju, SEO-ready</span></li>
+                        <li class="flex items-start gap-2"><span class="text-cyan-400 shrink-0">&#10003;</span> <span data-bm="Hosting + SSL percuma" data-en="Free hosting + SSL" data-cn="免费托管 + SSL">Hosting + SSL percuma</span></li>
+                        <li class="flex items-start gap-2"><span class="text-cyan-400 shrink-0">&#10003;</span> <span data-bm="Bukan template — dibina khas" data-en="Not a template — custom built" data-cn="非模板——定制构建">Bukan template — dibina khas</span></li>
+                        <li class="flex items-start gap-2"><span class="text-cyan-400 shrink-0">&#10003;</span> <span data-bm="Update via WhatsApp, tak perlu teknikal" data-en="Update via WhatsApp, no tech needed" data-cn="通过 WhatsApp 更新，无需技术知识">Update via WhatsApp, tak perlu teknikal</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6 reveal reveal-d1">
+                    <div class="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-3" data-bm="WhatsApp Auto-Reply Bot" data-en="WhatsApp Auto-Reply Bot" data-cn="WhatsApp 自动回复机器人">WhatsApp Auto-Reply Bot</h3>
+                    <ul class="text-slate-400 text-xs space-y-2">
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="30 auto-reply sebulan" data-en="30 auto-replies per month" data-cn="每月 30 条自动回复">30 auto-reply sebulan</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Tak terlepas lead walaupun tengah kerja" data-en="Never miss a lead while working" data-cn="工作时也不错过潜在客户">Tak terlepas lead walaupun tengah kerja</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Lebihan: RM1/reply selepas 30" data-en="Overage: RM1/reply after 30" data-cn="超额：30 条后 RM1/条">Lebihan: RM1/reply selepas 30</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Auto-reply template untuk soalan lazim" data-en="Auto-reply templates for common questions" data-cn="常见问题自动回复模板">Auto-reply template untuk soalan lazim</span></li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6 reveal reveal-d2">
+                    <div class="w-12 h-12 bg-violet-500/10 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-3" data-bm="SEO Tempatan" data-en="Local SEO" data-cn="本地 SEO">SEO Tempatan</h3>
+                    <ul class="text-slate-400 text-xs space-y-2">
+                        <li class="flex items-start gap-2"><span class="text-violet-400 shrink-0">&#10003;</span> <span data-bm="Google Maps & carian tempatan" data-en="Google Maps & local search" data-cn="Google 地图和本地搜索">Google Maps & carian tempatan</span></li>
+                        <li class="flex items-start gap-2"><span class="text-violet-400 shrink-0">&#10003;</span> <span data-bm="GMB profile setup & optimization" data-en="GMB profile setup & optimization" data-cn="GMB 资料设置和优化">GMB profile setup & optimization</span></li>
+                        <li class="flex items-start gap-2"><span class="text-violet-400 shrink-0">&#10003;</span> <span data-bm="Pelanggan cari anda, bukan competitor" data-en="Customers find you, not competitors" data-cn="客户找到您，而非竞争对手">Pelanggan cari anda, bukan competitor</span></li>
+                        <li class="flex items-start gap-2"><span class="text-violet-400 shrink-0">&#10003;</span> <span data-bm="Sedia untuk AI (Gemini, ChatGPT)" data-en="AI-ready (Gemini, ChatGPT)" data-cn="AI 就绪（Gemini、ChatGPT）">Sedia untuk AI (Gemini, ChatGPT)</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section class="py-16 md:py-24 bg-black">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-12 text-center reveal">
+                <span data-bm="Macam Mana Ia Berfungsi" data-en="How It Works" data-cn="如何运作">Macam Mana Ia Berfungsi</span>
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="text-center reveal">
+                    <div class="w-14 h-14 bg-blue-500/10 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 glow-blue">
+                        <span class="text-blue-400 text-2xl font-extrabold">1</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base mb-2" data-bm="WhatsApp Kami" data-en="WhatsApp Us" data-cn="WhatsApp 我们">WhatsApp Kami</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Beritahu kami pasal bisnes anda. Kami audit online presence percuma." data-en="Tell us about your business. We audit your online presence for free." data-cn="告诉我们您的业务。我们免费审核您的在线形象。">Beritahu kami pasal bisnes anda. Kami audit online presence percuma.</p>
+                </div>
+                <div class="text-center reveal reveal-d1">
+                    <div class="w-14 h-14 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 glow-cyan">
+                        <span class="text-cyan-400 text-2xl font-extrabold">2</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base mb-2" data-bm="Kami Bina" data-en="We Build" data-cn="我们构建">Kami Bina</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Website siap dalam 5-7 hari bekerja. Semua info bisnes anda dimasukkan." data-en="Website ready in 5-7 working days. All your business info included." data-cn="网站在 5-7 个工作日内完成。包含您所有的业务信息。">Website siap dalam 5-7 hari bekerja. Semua info bisnes anda dimasukkan.</p>
+                </div>
+                <div class="text-center reveal reveal-d2">
+                    <div class="w-14 h-14 bg-violet-500/10 border border-violet-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 glow-vibrant">
+                        <span class="text-violet-400 text-2xl font-extrabold">3</span>
+                    </div>
+                    <h3 class="font-bold text-white text-base mb-2" data-bm="Website Live" data-en="Website Live" data-cn="网站上线">Website Live</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed" data-bm="Pelanggan boleh cari anda di Google. WhatsApp bot jawab 24/7." data-en="Customers can find you on Google. WhatsApp bot replies 24/7." data-cn="客户可以在 Google 上找到您。WhatsApp 机器人 24/7 回复。">Pelanggan boleh cari anda di Google. WhatsApp bot jawab 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ SHOWCASE (Marquee) ═══ -->
+    <section id="showcase" class="py-16 md:py-24 bg-ai-aurora relative overflow-hidden">
+        <div class="relative z-10 max-w-6xl mx-auto px-4 mb-8">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-2 text-center reveal">
+                <span data-bm="Laman Web Yang Kami Bina" data-en="Websites We Build" data-cn="我们构建的网站">Laman Web Yang Kami Bina</span><span class="text-cyan-400">.</span>
+            </h2>
+            <p class="text-slate-400 text-center text-sm reveal reveal-d1" data-bm="Dibina khas untuk bisnes tempatan Malaysia." data-en="Built specifically for Malaysian local businesses." data-cn="专为马来西亚本地企业打造。">Dibina khas untuk bisnes tempatan Malaysia.</p>
+        </div>
+
+        <!-- Marquee -->
+        <div class="pause-on-hover relative z-10 overflow-hidden">
+            <div id="marquee-container" class="flex gap-4 animate-marquee w-max"></div>
+        </div>
+        <p class="text-center text-xs text-slate-500 mt-6 relative z-10" data-bm="Klik untuk preview live →" data-en="Click for live preview →" data-cn="点击查看实时预览 →">Klik untuk preview live →</p>
+    </section>
+
+    <!-- ═══ PRICING ═══ -->
+    <section id="harga" class="py-16 md:py-24 bg-black">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-12 text-center reveal">
+                <span data-bm="Dua Pilihan, Satu Keputusan" data-en="Two Options, One Decision" data-cn="两个选择，一个决定">Dua Pilihan, Satu Keputusan</span>
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-8">
+                <!-- RM800 anchor -->
+                <div class="glass-card rounded-2xl p-6 opacity-60 reveal">
+                    <p class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2" data-bm="Sekali Bayar" data-en="One-Time" data-cn="一次性">Sekali Bayar</p>
+                    <div class="flex items-baseline gap-1 mb-2"><span class="text-3xl font-extrabold text-slate-400">RM800</span></div>
+                    <p class="text-slate-500 text-sm mb-4" data-bm="Website jadi milik anda. Sekali bayar, selesai." data-en="Website becomes yours. One payment, done." data-cn="网站归您所有。一次付款，完成。">Website jadi milik anda. Sekali bayar, selesai.</p>
+                    <ul class="text-slate-600 text-xs space-y-2">
+                        <li class="flex items-start gap-2"><span class="text-red-400">&#10005;</span> <span data-bm="Tak ada SEO tempatan" data-en="No local SEO" data-cn="无本地 SEO">Tak ada SEO tempatan</span></li>
+                        <li class="flex items-start gap-2"><span class="text-red-400">&#10005;</span> <span data-bm="Tak ada WhatsApp bot" data-en="No WhatsApp bot" data-cn="无 WhatsApp 机器人">Tak ada WhatsApp bot</span></li>
+                        <li class="flex items-start gap-2"><span class="text-red-400">&#10005;</span> <span data-bm="Tak ada hosting percuma" data-en="No free hosting" data-cn="无免费托管">Tak ada hosting percuma</span></li>
+                        <li class="flex items-start gap-2"><span class="text-red-400">&#10005;</span> <span data-bm="Update sendiri, tak ada sokongan" data-en="Update yourself, no support" data-cn="自行更新，无支持">Update sendiri, tak ada sokongan</span></li>
+                    </ul>
+                </div>
+
+                <!-- Subscription -->
+                <div class="glass rounded-2xl p-6 relative reveal reveal-d1" style="border-color: rgba(45,212,191,0.3);">
+                    <div class="absolute -top-3 left-4 bg-vibrant-gradient text-white text-xs font-bold px-3 py-1 rounded-full" data-bm="PILIHAN TERBAIK" data-en="BEST CHOICE" data-cn="最佳选择">PILIHAN TERBAIK</div>
+                    <p class="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2" data-bm="Langganan" data-en="Subscription" data-cn="订阅">Langganan</p>
+                    <div class="flex items-baseline gap-2 mb-2">
+                        <span class="text-4xl font-extrabold text-white">RM447</span>
+                        <span class="text-slate-400 text-sm" data-bm="/3 bulan + 1 bonus" data-en="/3 months + 1 bonus" data-cn="/3 个月 + 1 奖励">/3 bulan + 1 bonus</span>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4" data-bm="Bayar 3 bulan, dapat 4 bulan. Penjimatan RM149." data-en="Pay 3 months, get 4 months. Save RM149." data-cn="付 3 个月，得 4 个月。节省 RM149。">Bayar 3 bulan, dapat 4 bulan. Penjimatan RM149.</p>
+                    <ul class="text-slate-300 text-xs space-y-2 mb-4">
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Website + hosting + SSL" data-en="Website + hosting + SSL" data-cn="网站 + 托管 + SSL">Website + hosting + SSL</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="WhatsApp auto-reply bot (30/bln)" data-en="WhatsApp auto-reply bot (30/mo)" data-cn="WhatsApp 自动回复机器人（30/月）">WhatsApp auto-reply bot (30/bln)</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="SEO tempatan + GMB" data-en="Local SEO + GMB" data-cn="本地 SEO + GMB">SEO tempatan + GMB</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Sokongan WhatsApp (1 jam)" data-en="WhatsApp support (1 hour)" data-cn="WhatsApp 支持（1 小时）">Sokongan WhatsApp (1 jam)</span></li>
+                        <li class="flex items-start gap-2"><span class="text-emerald-400 shrink-0">&#10003;</span> <span data-bm="Update via WhatsApp" data-en="Update via WhatsApp" data-cn="通过 WhatsApp 更新">Update via WhatsApp</span></li>
+                    </ul>
+                    <a href="https://wa.me/60174456243?text=Hi%2C%20saya%20berminat%20dengan%20PintarWeb" data-umami-event="whatsapp_click" class="hover-shimmer block w-full text-center px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all shadow-lg shadow-blue-500/30">
+                        <span data-bm="Langgan Sekarang" data-en="Subscribe Now" data-cn="立即订阅">Langgan Sekarang</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Renewal options -->
+            <div class="glass-card rounded-2xl p-5 reveal reveal-d2">
+                <p class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3" data-bm="Selepas 4 bulan — pilihan pembaharuan:" data-en="After 4 months — renewal options:" data-cn="4 个月后 — 续费选项：">Selepas 4 bulan — pilihan pembaharuan:</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                    <div><p class="font-bold text-white text-sm">RM149</p><p class="text-xs text-slate-500" data-bm="/bulan (auto)" data-en="/month (auto)" data-cn="/月（自动）">/bulan (auto)</p></div>
+                    <div><p class="font-bold text-white text-sm">RM417</p><p class="text-xs text-slate-500" data-bm="/3 bulan (jimat RM30)" data-en="/3 months (save RM30)" data-cn="/3 个月（省 RM30）">/3 bulan (jimat RM30)</p></div>
+                    <div><p class="font-bold text-white text-sm">RM774</p><p class="text-xs text-slate-500" data-bm="/6 bulan (jimat RM120)" data-en="/6 months (save RM120)" data-cn="/6 个月（省 RM120）">/6 bulan (jimat RM120)</p></div>
+                    <div><p class="font-bold text-white text-sm">RM1,308</p><p class="text-xs text-slate-500" data-bm="/tahun (jimat RM480)" data-en="/year (save RM480)" data-cn="/年（省 RM480）">/tahun (jimat RM480)</p></div>
+                </div>
+                <p class="text-xs text-slate-600 text-center mt-3" data-bm="Auto-renewal. Batal dengan 14 hari notis." data-en="Auto-renewal. Cancel with 14 days notice." data-cn="自动续费。14 天通知可取消。">Auto-renewal. Batal dengan 14 hari notis.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOUNDER ═══ -->
+    <section class="py-16 md:py-24 bg-ai-aurora relative">
+        <div class="relative z-10 max-w-3xl mx-auto px-4">
+            <div class="glass rounded-2xl p-6 md:p-8 reveal">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-14 h-14 bg-vibrant-gradient rounded-2xl flex items-center justify-center shrink-0">
+                        <span class="text-white text-xl font-extrabold">Y</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg" data-bm="Assalamualaikum, saya Yus" data-en="Hi, I'm Yus" data-cn="你好，我是 Yus">Assalamualaikum, saya Yus</h3>
+                        <p class="text-xs text-slate-500" data-bm="Pengasas PintarWeb · Selangor" data-en="Founder of PintarWeb · Selangor" data-cn="PintarWeb 创始人 · 雪兰莪">Pengasas PintarWeb &middot; Selangor</p>
+                    </div>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-3"
+                    data-bm="Saya mula PintarWeb sebab saya nampak terlalu banyak tukang dan kontraktor di Selangor & KL yang ada skill bagus, ada pelanggan, tapi tak ada website. Mereka bergantung pada Facebook dan &quot;mulut ke mulut&quot;. Bila algorithm tukar, bisnes mereka terjejas."
+                    data-en="I started PintarWeb because I saw too many tradesmen and contractors in Selangor & KL with great skills and loyal customers, but no website. They depend on Facebook and word-of-mouth. When the algorithm changes, their business suffers."
+                    data-cn="我创立 PintarWeb 是因为我看到雪兰莪和吉隆坡有太多技艺精湛、拥有忠实客户却没有网站的技工和承包商。他们依赖 Facebook 和口碑。当算法改变时，他们的业务就受到影响。">
+                    Saya mula PintarWeb sebab saya nampak terlalu banyak tukang dan kontraktor di Selangor & KL yang ada skill bagus, ada pelanggan, tapi tak ada website. Mereka bergantung pada Facebook dan &quot;mulut ke mulut&quot;. Bila algorithm tukar, bisnes mereka terjejas.
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed"
+                    data-bm="Saya buat PintarWeb supaya anda boleh fokus pada kerja anda — fix aircond, pasang paip, buat pendawaian — sementara saya uruskan website, WhatsApp bot, dan Google. Satu orang, satu WhatsApp, semua urus. Itulah cara saya buat bisnes."
+                    data-en="I built PintarWeb so you can focus on your work — fixing airconds, installing pipes, doing wiring — while I handle the website, WhatsApp bot, and Google. One person, one WhatsApp, everything sorted. That's how I do business."
+                    data-cn="我打造 PintarWeb 是为了让您可以专注于您的工作——修空调、装水管、做布线——而我来处理网站、WhatsApp 机器人和 Google。一个人，一个 WhatsApp，一切搞定。这就是我做生意的方式。">
+                    Saya buat PintarWeb supaya anda boleh fokus pada kerja anda — fix aircond, pasang paip, buat pendawaian — sementara saya uruskan website, WhatsApp bot, dan Google. Satu orang, satu WhatsApp, semua urus. Itulah cara saya buat bisnes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FAQ ═══ -->
+    <section id="faq" class="py-16 md:py-24 bg-black">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white mb-12 text-center reveal">
+                <span data-bm="Soalan Anda, Dijawab Jujur." data-en="Your Questions, Answered Honestly." data-cn="您的问题，诚实回答。">Soalan Anda, Dijawab Jujur.</span>
+            </h2>
+
+            <div class="space-y-3">
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="RM447 untuk 4 bulan... apa yang saya dapat?" data-en="RM447 for 4 months... what do I get?" data-cn="RM447 享 4 个月……我能得到什么？">RM447 untuk 4 bulan... apa yang saya dapat?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="Anda bayar untuk 3 bulan, kami bagi 1 bulan percuma. Jadi anda dapat 4 bulan penuh: website, WhatsApp bot, SEO tempatan, hosting, SSL, dan sokongan. Selepas itu, auto-renewal bulanan pada RM149/bulan." data-en="You pay for 3 months, we give 1 month free. So you get 4 full months: website, WhatsApp bot, local SEO, hosting, SSL, and support. After that, auto-renewal monthly at RM149/month." data-cn="您付 3 个月费用，我们送 1 个月免费。因此您获得 4 个月完整服务：网站、WhatsApp 机器人、本地 SEO、托管、SSL 和支持。之后，按月自动续费 RM149/月。">Anda bayar untuk 3 bulan, kami bagi 1 bulan percuma. Jadi anda dapat 4 bulan penuh: website, WhatsApp bot, SEO tempatan, hosting, SSL, dan sokongan. Selepas itu, auto-renewal bulanan pada RM149/bulan.</p>
+                </details>
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="Saya sudah ada FB/IG. Kenapa perlu website?" data-en="I already have FB/IG. Why do I need a website?" data-cn="我已经有 FB/IG。为什么还需要网站？">Saya sudah ada FB/IG. Kenapa perlu website?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="FB/IG bagus untuk marketing, tapi anda tak kawal platform tu. Algorithm Facebook tukar, reach drop 40-60%. Website adalah milik anda 100% — data pelanggan, konten, semua anda punya. Dan pelanggan yang Google cari servis anda akan jumpa website anda." data-en="FB/IG is great for marketing, but you don't control that platform. Facebook's algorithm changes, reach drops 40-60%. A website is 100% yours — customer data, content, all yours. And customers who Google for your service will find your website." data-cn="FB/IG 适合营销，但您无法控制该平台。Facebook 算法改变，曝光量下降 40-60%。网站 100% 属于您——客户数据、内容都是您的。在 Google 搜索您服务的客户会找到您的网站。">FB/IG bagus untuk marketing, tapi anda tak kawal platform tu. Algorithm Facebook tukar, reach drop 40-60%. Website adalah milik anda 100% — data pelanggan, konten, semua anda punya. Dan pelanggan yang Google cari servis anda akan jumpa website anda.</p>
+                </details>
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="Berapa lama sebelum web saya live?" data-en="How long before my website goes live?" data-cn="我的网站多久能上线？">Berapa lama sebelum web saya live?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="Biasanya 5-7 hari bekerja selepas kami dapat semua maklumat bisnes anda — logo, gambar, info servis, kawasan servis." data-en="Usually 5-7 working days after we get all your business info — logo, photos, service details, service areas." data-cn="通常在收到您所有业务信息——标志、照片、服务详情、服务区域——后 5-7 个工作日内完成。">Biasanya 5-7 hari bekerja selepas kami dapat semua maklumat bisnes anda — logo, gambar, info servis, kawasan servis.</p>
+                </details>
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="Kenapa perlu bayar 3 bulan di muka?" data-en="Why do I need to pay 3 months upfront?" data-cn="为什么需要预付 3 个月？">Kenapa perlu bayar 3 bulan di muka?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="Kami perlukan masa untuk bina website anda dengan betul. Bayaran 3 bulan memastikan kami boleh fokus pada kualiti. Sebagai bonus, kami bagi 1 bulan percuma — anda dapat 4 bulan untuk harga 3." data-en="We need time to build your website properly. The 3-month payment ensures we can focus on quality. As a bonus, we give 1 month free — you get 4 months for the price of 3." data-cn="我们需要时间来正确构建您的网站。3 个月付款确保我们可以专注于质量。作为奖励，我们送 1 个月免费——您以 3 个月的价格获得 4 个月。">Kami perlukan masa untuk bina website anda dengan betul. Bayaran 3 bulan memastikan kami boleh fokus pada kualiti. Sebagai bonus, kami bagi 1 bulan percuma — anda dapat 4 bulan untuk harga 3.</p>
+                </details>
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="Macam mana nak berhenti?" data-en="How do I cancel?" data-cn="如何取消？">Macam mana nak berhenti?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="WhatsApp kami 14 hari sebelum pembaharuan seterusnya. Tiada penalti, tiada soalan. Website akan diambil offline selepas tempoh langganan tamat." data-en="WhatsApp us 14 days before your next renewal. No penalty, no questions. Website will be taken offline after your subscription period ends." data-cn="在下次续费前 14 天 WhatsApp 我们。无罚款，无问题。网站将在您的订阅期结束后下线。">WhatsApp kami 14 hari sebelum pembaharuan seterusnya. Tiada penalti, tiada soalan. Website akan diambil offline selepas tempoh langganan tamat.</p>
+                </details>
+                <details class="glass-card rounded-2xl overflow-hidden reveal">
+                    <summary class="flex items-center justify-between px-5 py-4 text-sm font-semibold text-white">
+                        <span data-bm="Adakah data bisnes saya selamat?" data-en="Is my business data safe?" data-cn="我的业务数据安全吗？">Adakah data bisnes saya selamat?</span>
+                        <svg class="faq-chevron w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </summary>
+                    <p class="px-5 pb-4 text-sm text-slate-400 leading-relaxed" data-bm="Ya. Kami patuh PDPA 2010. Data disimpan di Cloudflare (server global, keselamatan tinggi). Kami tak jual atau kongsi data anda dengan sesiapa." data-en="Yes. We comply with PDPA 2010. Data is stored on Cloudflare (global servers, high security). We don't sell or share your data with anyone." data-cn="是的。我们遵守 PDPA 2010。数据存储在 Cloudflare（全球服务器，高安全性）。我们不会向任何人出售或共享您的数据。">Ya. Kami patuh PDPA 2010. Data disimpan di Cloudflare (server global, keselamatan tinggi). Kami tak jual atau kongsi data anda dengan sesiapa.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA BANNER ═══ -->
+    <section class="bg-vibrant-gradient py-16 md:py-20">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4 reveal">
+                <span data-bm="Mula Hari Ini." data-en="Start Today." data-cn="今天开始。">Mula Hari Ini.</span>
+            </h2>
+            <p class="text-white/80 text-sm mb-8 max-w-md mx-auto reveal reveal-d1" data-bm="Bayar 3 bulan, dapat 4 bulan. Bonus 1 bulan percuma untuk pelanggan baru." data-en="Pay 3 months, get 4 months. 1 month free bonus for new customers." data-cn="付 3 个月，得 4 个月。新客户享 1 个月免费奖励。">Bayar 3 bulan, dapat 4 bulan. Bonus 1 bulan percuma untuk pelanggan baru.</p>
+            <a href="https://wa.me/60174456243?text=Hi%2C%20saya%20berminat%20dengan%20PintarWeb" data-umami-event="whatsapp_click" class="hover-shimmer inline-flex items-center gap-2.5 px-8 py-4 bg-white text-slate-900 font-bold rounded-full transition-all shadow-2xl text-base reveal reveal-d2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+                <span data-bm="Langgan Sekarang" data-en="Subscribe Now" data-cn="立即订阅">Langgan Sekarang</span>
+            </a>
+            <p class="text-white/60 text-xs mt-4 reveal reveal-d3" data-bm="Ada soalan? WhatsApp saya terus." data-en="Got questions? WhatsApp me directly." data-cn="有问题？直接 WhatsApp 我。">Ada soalan? WhatsApp saya terus.</p>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="bg-[#0A0A0A] border-t border-white/5 py-10">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <img src="images/only_logo.png" alt="PintarWeb" class="h-6 w-auto brightness-0 invert" />
+                        <img src="images/pintarweb_word.png" alt="PintarWeb" class="h-4 w-auto brightness-0 invert" />
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-3" data-bm="Website + WhatsApp Bot + SEO untuk bisnes tempatan Selangor & KL." data-en="Website + WhatsApp Bot + SEO for Selangor & KL local businesses." data-cn="为雪兰莪和吉隆坡本地企业提供网站 + WhatsApp 机器人 + SEO。">Website + WhatsApp Bot + SEO untuk bisnes tempatan Selangor & KL.</p>
+                    <a href="https://wa.me/60174456243" class="inline-flex items-center gap-2 text-xs text-emerald-400 hover:text-emerald-300 transition-colors">
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                        <span data-bm="Sokongan WhatsApp" data-en="WhatsApp Support" data-cn="WhatsApp 支持">Sokongan WhatsApp</span>
+                    </a>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-600 mb-3" data-bm="Pautan" data-en="Links" data-cn="链接">Pautan</p>
+                    <div class="flex flex-col gap-2 text-xs">
+                        <a href="#showcase" class="text-slate-400 hover:text-cyan-400 transition-colors" data-bm="Pameran" data-en="Showcase" data-cn="案例">Pameran</a>
+                        <a href="#harga" class="text-slate-400 hover:text-cyan-400 transition-colors" data-bm="Harga" data-en="Pricing" data-cn="价格">Harga</a>
+                        <a href="#faq" class="text-slate-400 hover:text-cyan-400 transition-colors" data-bm="Soalan Lazim" data-en="FAQ" data-cn="常见问题">Soalan Lazim</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-600 mb-3" data-bm="Undang-undang" data-en="Legal" data-cn="法律">Undang-undang</p>
+                    <div class="flex flex-col gap-2 text-xs">
+                        <a href="/terms.html" class="text-slate-400 hover:text-cyan-400 transition-colors" data-bm="Terma" data-en="Terms" data-cn="条款">Terma</a>
+                        <a href="/privacy-policy.html" class="text-slate-400 hover:text-cyan-400 transition-colors" data-bm="Privasi" data-en="Privacy" data-cn="隐私">Privasi</a>
+                        <span class="text-slate-600 text-[10px]" data-bm="Crafted in Klang Valley, Malaysia" data-en="Crafted in Klang Valley, Malaysia" data-cn="制作于巴生谷，马来西亚">Crafted in Klang Valley, Malaysia</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-white/5 text-center">
+                <p class="text-xs text-slate-600">&copy; 2026 PintarWeb &middot; Reg: RA0127053-T</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp sticky bar (mobile) -->
+    <div class="wa-sticky md:hidden">
+        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/></svg>
+        <a href="https://wa.me/60174456243?text=Hi%2C%20saya%20berminat%20dengan%20PintarWeb" class="text-white font-semibold text-sm"><span data-bm="Langgan Sekarang" data-en="Subscribe Now" data-cn="立即订阅">Langgan Sekarang</span></a>
+    </div>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+        // Language toggle
+        const saved = localStorage.getItem('pw_lang') || 'bm';
+        setLang(saved, true);
+
+        function setLang(lang, silent = false) {
+            const isBM = lang === 'bm', isEN = lang === 'en', isCN = lang === 'cn';
+            document.documentElement.lang = isBM ? 'ms' : isEN ? 'en' : 'zh';
+            document.documentElement.setAttribute('data-lang', lang);
+
+            document.querySelectorAll('[data-bm]').forEach(el => {
+                let target;
+                if (isBM) target = el.getAttribute('data-bm');
+                else if (isEN) target = el.getAttribute('data-en');
+                else target = el.getAttribute('data-cn') || el.getAttribute('data-en');
+                if (!target) return;
+                if (el.children.length === 0) {
+                    if (!silent) el.style.opacity = '0';
+                    setTimeout(() => { el.textContent = target; if (!silent) el.style.opacity = '1'; }, silent ? 0 : 80);
+                }
+            });
+
+            const titleEl = document.querySelector('title');
+            if (titleEl) {
+                let t;
+                if (isBM) t = titleEl.getAttribute('data-bm');
+                else if (isEN) t = titleEl.getAttribute('data-en');
+                else t = titleEl.getAttribute('data-cn') || titleEl.getAttribute('data-en');
+                if (t) titleEl.textContent = t;
+            }
+
+            // Rotating hero words per language
+            const words = isBM ? ['Website Bisnes', 'WhatsApp Bot', 'SEO Tempatan']
+                       : isEN ? ['Business Website', 'WhatsApp Bot', 'Local SEO']
+                       : ['商业网站', 'WhatsApp 机器人', '本地 SEO'];
+            window.__rotateWords = words;
+
+            const waMsg = isBM ? 'Hi%2C%20saya%20berminat%20dengan%20PintarWeb'
+                        : isEN ? 'Hi%2C%20I%27m%20interested%20in%20PintarWeb'
+                        : 'Hi%2C%E6%88%91%E5%AF%B9%20PintarWeb%20%E6%84%9F%E5%85%B4%E8%B6%A3';
+            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                const base = a.href.split('?')[0]; a.href = base + '?text=' + waMsg;
+            });
+
+            ['bm', 'en', 'cn'].forEach(l => {
+                const btn = document.getElementById('btn-' + l);
+                if (btn) { btn.classList.toggle('active', lang === l); btn.setAttribute('aria-pressed', lang === l); }
+            });
+            localStorage.setItem('pw_lang', lang);
+        }
+
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Rotating hero word
+        let rotateIdx = 0;
+        const rotateEl = document.getElementById('rotating-word');
+        setInterval(() => {
+            if (!rotateEl || !window.__rotateWords) return;
+            rotateEl.classList.add('out');
+            setTimeout(() => {
+                rotateIdx = (rotateIdx + 1) % window.__rotateWords.length;
+                rotateEl.textContent = window.__rotateWords[rotateIdx];
+                rotateEl.classList.remove('out');
+            }, 400);
+        }, 3000);
+
+        // Mobile menu close
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+        });
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const menu = document.getElementById('mobile-menu');
+            if (!menu.classList.contains('hidden') && Math.abs(window.scrollY - lastScrollY) > 10) {
+                menu.classList.add('hidden');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // Generate marquee cards (rendered twice for seamless loop)
+        const demos = [
+            { id: 'razif', name: 'Razif Aircond', area: 'Cheras, Selangor', category: 'Aircond & Renovation', gradient: 'from-emerald-900/40 to-green-900/40', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>' },
+            { id: 'ah-seng-plumbing', name: 'Ah Seng Plumbing', area: 'Klang, Selangor', category: 'Plumbing & Pipes', gradient: 'from-red-900/40 to-gray-900/40', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.865.517L6.21 15.21a2 2 0 00-1.022.547M9 17l-1 1m4 0l-1 1m4-1l-1 1M3 12a9 9 0 1118 0 9 9 0 01-18 0z"/>' },
+            { id: 'kl-electrical', name: 'KL Electrical', area: 'Kuala Lumpur', category: 'Electrical & Wiring', gradient: 'from-slate-800/40 to-amber-900/40', icon: '<path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>' }
+        ];
+        const marqueeContainer = document.getElementById('marquee-container');
+        if (marqueeContainer) {
+            demos.forEach(demo => {
+                const card = document.createElement('a');
+                card.href = `https://preview.pintarweb.com/${demo.id}/`;
+                card.target = '_blank';
+                card.setAttribute('data-umami-event', 'showcase_click');
+                card.setAttribute('data-umami-event-demo', demo.id);
+                card.className = 'glass-card rounded-2xl overflow-hidden w-[300px] md:w-[400px] shrink-0 group';
+                card.innerHTML = `
+                    <div class="aspect-[4/3] bg-gradient-to-br ${demo.gradient} flex items-center justify-center p-8">
+                        <div class="text-center text-white">
+                            <svg class="w-12 h-12 mx-auto mb-2 opacity-60" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">${demo.icon}</svg>
+                            <p class="text-sm font-bold">${demo.name}</p>
+                            <p class="text-[10px] opacity-60">${demo.area}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-white text-sm font-bold">${demo.name}</p>
+                            <p class="text-slate-500 text-xs" data-bm="${demo.category}" data-en="${demo.category}" data-cn="">${demo.category}</p>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded">PERF: 100</span>
+                        </div>
+                    </div>`;
+                marqueeContainer.appendChild(card);
+            });
+            // Duplicate for seamless loop
+            demos.forEach(demo => {
+                const card = marqueeContainer.firstChild.cloneNode(true);
+                marqueeContainer.appendChild(card);
+            });
+        }
+
+        // Track pricing section view
+        const pricingSection = document.getElementById('harga');
+        if (pricingSection) {
+            const pricingObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        umami.track('pricing_view');
+                        pricingObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            pricingObserver.observe(pricingSection);
+        }
+
+        // Track FAQ accordion opens
+        document.querySelectorAll('details').forEach(details => {
+            details.addEventListener('toggle', () => {
+                if (details.open) {
+                    umami.track('faq_open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

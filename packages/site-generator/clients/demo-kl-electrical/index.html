@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-bm="KL Electrical Services — Pakar Elektrik KL &amp; Cheras" data-en="KL Electrical Services — Electrical Experts KL &amp; Cheras">
+    KL Electrical Services — Pakar Elektrik KL &amp; Cheras
+  </title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Client-specific design tokens (premium-modern / slate+bronze) ── */
+    :root {
+      --color-primary: #111827;
+      --color-primary-soft: #374151;
+      --color-accent: #C08457;
+      --color-accent-soft: #E5C29F;
+      --color-bg: #F5F3EF;
+      --color-text: #111827;
+      --color-surface: #ffffff;
+      --color-border: #E5E7EB;
+      --color-muted: #6B7280;
+      --color-lang-toggle-bg: #E5E7EB;
+      --color-lang-btn: #6B7280;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); }
+    h1, h2, h3, h4, h5 { font-family: var(--font-heading); }
+    html { scroll-padding-top: 100px; }
+
+    .lang-toggle { display: inline-flex; background: var(--color-lang-toggle-bg); border-radius: 999px; padding: 3px; gap: 2px; }
+    .lang-btn { padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--color-lang-btn); transition: all 0.2s ease; font-family: var(--font-heading); }
+    .lang-btn.active { background: var(--color-primary); color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+
+    .wa-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #25D366; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; box-shadow: 0 -2px 12px rgba(0,0,0,0.12); }
+    .wa-sticky svg { flex-shrink: 0; }
+
+    .form-input-bronze { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); border-radius: 0.75rem; transition: all 0.2s ease; outline: none; }
+    .form-input-bronze:focus { border-color: var(--color-accent); box-shadow: 0 0 0 2px rgba(192, 132, 87, 0.25); }
+    .form-input-bronze::placeholder { color: var(--color-muted); }
+
+    .service-accent { position: relative; }
+    .service-accent::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--color-accent); border-radius: 0.75rem 0.75rem 0 0; }
+    .service-featured .service-accent::before { background: linear-gradient(90deg, var(--color-accent), var(--color-accent-soft)); }
+  </style>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="1e8f3b8d-2b18-44c7-98bb-0bfb691e712c"></script>
+</head>
+
+<body class="pb-20">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       NAVIGATION — sticky, white, with hamburger + lang toggle
+  ══════════════════════════════════════════════════════════════ -->
+  <nav class="sticky top-0 z-50 bg-white border-b border-[#E5E7EB] shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="font-semibold text-base text-[#111827] tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <span data-bm="KL Electrical" data-en="KL Electrical">KL Electrical</span>
+      </a>
+
+      <!-- Desktop nav links -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-[#4B5563]">
+        <a href="#services" class="hover:text-[#C08457] transition-colors" data-bm="Servis" data-en="Services">Servis</a>
+        <a href="#gallery" class="hover:text-[#C08457] transition-colors" data-bm="Galeri" data-en="Gallery">Galeri</a>
+        <a href="#testimonials" class="hover:text-[#C08457] transition-colors" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+        <a href="#contact" class="hover:text-[#C08457] transition-colors" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+        <a href="#faq" class="hover:text-[#C08457] transition-colors" data-bm="FAQ" data-en="FAQ">FAQ</a>
+      </div>
+
+      <!-- Right: hamburger + lang toggle -->
+      <div class="flex items-center gap-3">
+        <button type="button" id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-8 h-8 text-[#6B7280] hover:text-[#111827]" aria-label="Toggle menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div class="lang-toggle" role="group" aria-label="Language toggle">
+          <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm" aria-pressed="true">BM</button>
+          <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile dropdown menu -->
+  <div id="mobile-menu" class="hidden fixed top-[57px] left-0 right-0 z-40 bg-white border-b border-[#E5E7EB] shadow-md">
+    <div class="px-4 py-3 flex flex-col gap-0">
+      <a href="#services" class="text-sm font-semibold text-[#4B5563] hover:text-[#C08457] hover:bg-[#F5F3EF] transition-colors py-3 border-b border-[#E5E7EB]" data-bm="Servis" data-en="Services">Servis</a>
+      <a href="#gallery" class="text-sm font-semibold text-[#4B5563] hover:text-[#C08457] hover:bg-[#F5F3EF] transition-colors py-3 border-b border-[#E5E7EB]" data-bm="Galeri" data-en="Gallery">Galeri</a>
+      <a href="#testimonials" class="text-sm font-semibold text-[#4B5563] hover:text-[#C08457] hover:bg-[#F5F3EF] transition-colors py-3 border-b border-[#E5E7EB]" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+      <a href="#contact" class="text-sm font-semibold text-[#4B5563] hover:text-[#C08457] hover:bg-[#F5F3EF] transition-colors py-3 border-b border-[#E5E7EB]" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+      <a href="#faq" class="text-sm font-semibold text-[#4B5563] hover:text-[#C08457] hover:bg-[#F5F3EF] transition-colors py-3" data-bm="FAQ" data-en="FAQ">FAQ</a>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn) {
+      menuBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        mobileMenu.classList.toggle('hidden');
+      });
+      // Close on nav link click
+      mobileMenu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { mobileMenu.classList.add('hidden'); });
+      });
+      // Close on scroll
+      let lastScrollY = window.scrollY;
+      window.addEventListener('scroll', function () {
+        if (!mobileMenu.classList.contains('hidden') && Math.abs(window.scrollY - lastScrollY) > 10) {
+          mobileMenu.classList.add('hidden');
+        }
+        lastScrollY = window.scrollY;
+      });
+    }
+  </script>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       HERO — centered layout with image overlay, inline trust stats
+  ══════════════════════════════════════════════════════════════ -->
+  <section class="relative overflow-hidden bg-[#F5F3EF] pt-14 pb-12 md:pt-20 md:pb-16">
+    <!-- Subtle decorative glow -->
+    <div class="absolute top-0 right-0 w-[30rem] h-[30rem] bg-[#E5C29F]/15 rounded-full -translate-y-1/3 translate-x-1/3 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#E5C29F]/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
+
+      <!-- Trust badge pill -->
+      <div class="inline-flex items-center gap-2 bg-white border border-[#E5C29F] text-[#C08457] text-xs font-semibold px-4 py-1.5 rounded-full mb-5 reveal">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span data-bm="Berpengalaman Sejak 2016" data-en="Established Since 2016">Berpengalaman Sejak 2016</span>
+      </div>
+
+      <!-- Main heading -->
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-[#111827] leading-tight mb-4 reveal">
+        <span data-bm="Pakar Elektrik &amp; Pendawaian" data-en="Electrical &amp; Wiring Experts">Pakar Elektrik &amp; Pendawaian</span>
+        <span class="text-[#C08457]" data-bm="KL" data-en="KL">KL</span>
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-base md:text-lg text-[#4B5563] max-w-2xl mx-auto leading-relaxed mb-8 reveal reveal-delay-1">
+        <span data-bm="Servis elektrik professional untuk rumah dan kedai. Cepat sampai, kerja kemas, harga tetap — tiada surprise. Meliputi KL, Cheras, Setapak, Wangsa Maju &amp; Gombak."
+              data-en="Professional electrical services for homes and shops. Fast arrival, tidy work, fixed pricing — no surprises. Covering KL, Cheras, Setapak, Wangsa Maju &amp; Gombak.">
+          Servis elektrik professional untuk rumah dan kedai. Cepat sampai, kerja kemas, harga tetap — tiada surprise. Meliputi KL, Cheras, Setapak, Wangsa Maju &amp; Gombak.
+        </span>
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-10 reveal reveal-delay-2">
+        <a href="https://wa.me/60129876543?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20elektrik"
+           class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg text-sm"
+           target="_blank">
+          <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+          </svg>
+          <span data-bm="WhatsApp Kami" data-en="WhatsApp Us">WhatsApp Kami</span>
+        </a>
+        <a href="tel:+60129876543"
+           class="inline-flex items-center justify-center gap-2 border border-[#E5E7EB] bg-white hover:bg-[#F5F3EF] text-[#111827] font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+          </svg>
+          <span>012-987 6543</span>
+        </a>
+      </div>
+
+      <!-- Hero image with overlay badge -->
+      <div class="relative rounded-xl overflow-hidden shadow-md mb-8 reveal reveal-delay-3 max-w-3xl mx-auto img-zoom">
+        <img src="images/hero.webp" alt="KL Electrical Services — electrician working on panel box" class="w-full aspect-[16/9] object-cover" loading="eager" />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#111827]/50 via-transparent to-transparent pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 md:p-6 flex items-center justify-between">
+          <span class="inline-flex items-center gap-2 text-white text-sm font-semibold">
+            <svg class="w-4 h-4 text-[#C08457]" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span data-bm="Bertauliah &amp; Berpengalaman" data-en="Licensed &amp; Experienced">Bertauliah &amp; Berpengalaman</span>
+          </span>
+          <span class="text-white/80 text-xs hidden sm:block">
+            <span data-bm="Perkhidmatan elektrik professional" data-en="Professional electrical services">Perkhidmatan elektrik professional</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Inline trust stats -->
+      <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm reveal">
+        <!-- Google rating -->
+        <div class="flex items-center gap-2">
+          <span class="text-2xl md:text-3xl font-bold text-[#C08457]" style="font-family:'Plus Jakarta Sans',sans-serif;">4.7</span>
+          <div class="text-left">
+            <div class="flex gap-0.5 text-amber-400">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <span class="text-[#6B7280] text-xs" data-bm="Google — 42 ulasan" data-en="Google — 42 reviews">Google — 42 ulasan</span>
+          </div>
+        </div>
+        <!-- Areas -->
+        <div class="flex items-center gap-2">
+          <span class="text-2xl md:text-3xl font-bold text-[#C08457]" style="font-family:'Plus Jakarta Sans',sans-serif;">5</span>
+          <div class="text-left">
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Kawasan" data-en="Areas">Kawasan</span>
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Diliputi" data-en="Covered">Diliputi</span>
+          </div>
+        </div>
+        <!-- Established -->
+        <div class="flex items-center gap-2">
+          <span class="text-2xl md:text-3xl font-bold text-[#C08457]" style="font-family:'Plus Jakarta Sans',sans-serif;">2016</span>
+          <div class="text-left">
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Berdiri" data-en="Established">Berdiri</span>
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Sejak" data-en="Since">Sejak</span>
+          </div>
+        </div>
+        <!-- Instagram -->
+        <div class="flex items-center gap-2">
+          <span class="text-2xl md:text-3xl font-bold text-[#C08457]" style="font-family:'Plus Jakarta Sans',sans-serif;">1.2K</span>
+          <div class="text-left">
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Pengikut" data-en="Followers">Pengikut</span>
+            <span class="block text-[#6B7280] text-xs leading-tight" data-bm="Instagram" data-en="Instagram">Instagram</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SERVICES — asymmetric grid (featured card + 3 standard)
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="services" class="py-14 md:py-20">
+    <div class="max-w-5xl mx-auto px-4">
+      <!-- Section header -->
+      <div class="text-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#111827] mb-3 reveal"
+            data-bm="Servis Kami" data-en="Our Services">
+          Servis Kami
+        </h2>
+        <p class="text-[#4B5563] text-sm max-w-lg mx-auto reveal reveal-delay-1"
+           data-bm="Dari pendawaian rumah hingga pemeriksaan elektrik penuh — kami siap sedia bantu."
+           data-en="From house wiring to full electrical inspection — we're ready to help.">
+          Dari pendawaian rumah hingga pemeriksaan elektrik penuh — kami siap sedia bantu.
+        </p>
+      </div>
+
+      <!-- Asymmetric grid: 2 cols desktop, 1 col mobile -->
+      <!-- Row 1: featured service (spans 2 cols) + regular card -->
+      <!-- Row 2: 2 regular cards -->
+      <div class="grid md:grid-cols-2 gap-5">
+        <!-- Service 1: Featured — Pendawaian Rumah & Kedai (spans 2 cols on md) -->
+        <div class="md:col-span-2 service-featured reveal">
+          <div class="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden service-accent hover-lift">
+            <div class="grid md:grid-cols-2">
+              <div class="img-zoom h-full min-h-[200px]">
+                <img src="images/service-1.webp" alt="Pendawaian Rumah & Kedai — KL Electrical" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div class="p-6 md:p-8 flex flex-col justify-center">
+                <div class="w-10 h-10 rounded-xl bg-[#E5C29F]/30 flex items-center justify-center mb-3">
+                  <svg class="w-5 h-5 text-[#C08457]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#111827] mb-2"
+                    data-bm="Pendawaian Rumah &amp; Kedai" data-en="House &amp; Shop Wiring">
+                  Pendawaian Rumah &amp; Kedai
+                </h3>
+                <p class="text-sm text-[#4B5563] leading-relaxed"
+                   data-bm="Pendawaian baru, upgrade sistem elektrik lama, dan tambah titik kuasa. Kerja mengikut piawaian Suruhanjaya Tenaga."
+                   data-en="New wiring, old electrical system upgrades, and extra power points. Work complies with Energy Commission standards.">
+                  Pendawaian baru, upgrade sistem elektrik lama, dan tambah titik kuasa. Kerja mengikut piawaian Suruhanjaya Tenaga.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Service 2: Pembaikan Suis & Soket -->
+        <div class="reveal reveal-delay-1">
+          <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 service-accent hover-lift h-full">
+            <div class="w-10 h-10 rounded-xl bg-[#E5C29F]/30 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-[#C08457]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#111827] mb-2"
+                data-bm="Pembaikan Suis &amp; Soket" data-en="Switch &amp; Socket Repair">
+              Pembaikan Suis &amp; Soket
+            </h3>
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Suis terpelantik, soket longgar, atau litar pintas? Kami baiki cepat dan selamat."
+               data-en="Tripping switch, loose socket, or short circuit? We fix it fast and safely.">
+              Suis terpelantik, soket longgar, atau litar pintas? Kami baiki cepat dan selamat.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 3: Pemasangan Lampu & Kipas -->
+        <div class="reveal reveal-delay-2">
+          <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 service-accent hover-lift h-full">
+            <div class="w-10 h-10 rounded-xl bg-[#E5C29F]/30 flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-[#C08457]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-[#111827] mb-2"
+                data-bm="Pemasangan Lampu &amp; Kipas" data-en="Light &amp; Fan Installation">
+              Pemasangan Lampu &amp; Kipas
+            </h3>
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Pasang lampu baru, kipas siling, exhaust fan — kemas dan kemas."
+               data-en="Install new lights, ceiling fans, exhaust fans — neat and tidy work.">
+              Pasang lampu baru, kipas siling, exhaust fan — kemas dan kemas.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 4: Pemeriksaan Elektrik -->
+        <div class="md:col-span-2 reveal reveal-delay-3">
+          <div class="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden service-accent hover-lift">
+            <div class="grid md:grid-cols-2 md:grid-flow-dense">
+              <div class="p-6 md:p-8 flex flex-col justify-center md:order-1">
+                <div class="w-10 h-10 rounded-xl bg-[#E5C29F]/30 flex items-center justify-center mb-3">
+                  <svg class="w-5 h-5 text-[#C08457]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#111827] mb-2"
+                    data-bm="Pemeriksaan Elektrik" data-en="Electrical Inspection">
+                  Pemeriksaan Elektrik
+                </h3>
+                <p class="text-sm text-[#4B5563] leading-relaxed"
+                   data-bm="Periksa pendawaian, wiring diagram, dan grounding. Sesuai untuk rumah baru, renovasi, atau sebelum beli properti."
+                   data-en="Check wiring, diagrams, and grounding. Suitable for new homes, renovations, or pre-purchase inspections.">
+                  Periksa pendawaian, wiring diagram, dan grounding. Sesuai untuk rumah baru, renovasi, atau sebelum beli properti.
+                </p>
+              </div>
+              <div class="img-zoom h-full min-h-[200px] md:order-2">
+                <img src="images/service-3.webp" alt="Pemeriksaan Elektrik — KL Electrical" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       GALLERY — lightbox with 3 real images
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="gallery" class="py-14 md:py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#111827] mb-3 reveal"
+            data-bm="Galeri Kerja Kami" data-en="Our Work Gallery">
+          Galeri Kerja Kami
+        </h2>
+        <p class="text-[#4B5563] text-sm max-w-lg mx-auto reveal reveal-delay-1"
+           data-bm="Lihat sendiri kualiti kerja kami — dari panel hingga pemasangan lampu."
+           data-en="See our work quality for yourself — from panels to light installations.">
+          Lihat sendiri kualiti kerja kami — dari panel hingga pemasangan lampu.
+        </p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <div class="rounded-xl overflow-hidden cursor-pointer group reveal" onclick="openLightbox('images/gallery-1.webp')">
+          <div class="img-zoom">
+            <img src="images/gallery-1.webp" alt="Panel elektrik teratur — KL Electrical" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden cursor-pointer group reveal reveal-delay-1" onclick="openLightbox('images/gallery-2.webp')">
+          <div class="img-zoom">
+            <img src="images/gallery-2.webp" alt="Toolbox elektrik — KL Electrical" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          </div>
+        </div>
+        <div class="rounded-xl overflow-hidden cursor-pointer group reveal reveal-delay-2" onclick="openLightbox('images/gallery-3.webp')">
+          <div class="img-zoom">
+            <img src="images/gallery-3.webp" alt="Pemasangan lampu LED — KL Electrical" class="w-full aspect-[4/3] object-cover" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox overlay -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <button onclick="closeLightbox(event)" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors z-10" aria-label="Close">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Gallery image enlarged" />
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       TESTIMONIALS — card style with hover lift
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="testimonials" class="py-14 md:py-20">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-[#111827] mb-2 reveal"
+              data-bm="Apa Kata Pelanggan" data-en="What Our Customers Say">
+            Apa Kata Pelanggan
+          </h2>
+          <p class="text-[#4B5563] text-sm reveal reveal-delay-1"
+             data-bm="Ulasan sebenar dari pelanggan kami di Google."
+             data-en="Real reviews from our customers on Google.">
+            Ulasan sebenar dari pelanggan kami di Google.
+          </p>
+        </div>
+        <a href="https://search.google.com/local/reviews?placeid=kl-electrical-services" target="_blank"
+           class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C08457] hover:text-[#111827] transition-colors reveal reveal-delay-2 shrink-0">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span data-bm="4.7 ★ (42 ulasan)" data-en="4.7 ★ (42 reviews)">4.7 ★ (42 ulasan)</span>
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- Review 1: En. Tan — Setapak (5★) -->
+        <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 hover-lift reveal">
+          <div class="flex gap-1 mb-3">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-[#4B5563] leading-relaxed mb-4"
+             data-bm='"Suis terpelantik, datang cepat. Betulkan dalam setengah jam. Professional."'
+             data-en='"Tripping switch, came quickly. Fixed within half an hour. Professional."'>
+            "Suis terpelantik, datang cepat. Betulkan dalam setengah jam. Professional."
+          </p>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm text-[#111827]">En. Tan</p>
+              <p class="text-xs text-[#6B7280]" data-bm="Setapak" data-en="Setapak">Setapak</p>
+            </div>
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C16.96 2 21 6.04 21 11C21 15.96 16.96 20 12 20C7.04 20 3 15.96 3 11C3 6.04 7.04 2 12 2ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6Z"/></svg>
+          </div>
+        </div>
+
+        <!-- Review 2: Puan Aisha — Wangsa Maju (5★) -->
+        <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 hover-lift reveal reveal-delay-1">
+          <div class="flex gap-1 mb-3">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-[#4B5563] leading-relaxed mb-4"
+             data-bm='"Pasang kipas dan lampu rumah penuh. Kerja kemas, harga reasonable."'
+             data-en='"Installed fans and lights for the whole house. Neat work, reasonable price."'>
+            "Pasang kipas dan lampu rumah penuh. Kerja kemas, harga reasonable."
+          </p>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm text-[#111827]">Puan Aisha</p>
+              <p class="text-xs text-[#6B7280]" data-bm="Wangsa Maju" data-en="Wangsa Maju">Wangsa Maju</p>
+            </div>
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C16.96 2 21 6.04 21 11C21 15.96 16.96 20 12 20C7.04 20 3 15.96 3 11C3 6.04 7.04 2 12 2ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6Z"/></svg>
+          </div>
+        </div>
+
+        <!-- Review 3: Mr. Lim — Gombak (5★) -->
+        <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 hover-lift reveal reveal-delay-2">
+          <div class="flex gap-1 mb-3">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-sm text-[#4B5563] leading-relaxed mb-4"
+             data-bm='"Pendawaian kedai baru. Semua ikut standard. Terrbaik!"'
+             data-en='"New shop wiring. All up to standard. Terrific!"'>
+            "Pendawaian kedai baru. Semua ikut standard. Terrbaik!"
+          </p>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-semibold text-sm text-[#111827]">Mr. Lim</p>
+              <p class="text-xs text-[#6B7280]" data-bm="Gombak" data-en="Gombak">Gombak</p>
+            </div>
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C16.96 2 21 6.04 21 11C21 15.96 16.96 20 12 20C7.04 20 3 15.96 3 11C3 6.04 7.04 2 12 2ZM12 6C9.79 6 8 7.79 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 7.79 14.21 6 12 6Z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CTA BANNER — between testimonials and contact
+  ══════════════════════════════════════════════════════════════ -->
+  <section class="py-14 md:py-20 bg-[#111827] relative overflow-hidden">
+    <!-- Decorative accent -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#C08457] via-[#E5C29F] to-[#C08457]"></div>
+    <div class="absolute bottom-0 right-0 w-80 h-80 bg-[#C08457]/10 rounded-full translate-y-1/2 translate-x-1/2 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-3xl mx-auto px-4 text-center relative z-10">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 reveal"
+          data-bm="Ada Masalah Elektrik?" data-en="Have an Electrical Issue?">
+        Ada Masalah Elektrik?
+      </h2>
+      <p class="text-[#9CA3AF] text-sm md:text-base max-w-lg mx-auto mb-8 reveal reveal-delay-1"
+         data-bm="Jangan biar masalah elektrik berlarutan. Cepat, selamat, dan harga berpatutan. WhatsApp kami sekarang."
+         data-en="Don't let electrical problems linger. Fast, safe, affordable. WhatsApp us now.">
+        Jangan biar masalah elektrik berlarutan. Cepat, selamat, dan harga berpatutan. WhatsApp kami sekarang.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center reveal reveal-delay-2">
+        <a href="https://wa.me/60129876543?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20elektrik"
+           class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg text-sm"
+           target="_blank">
+          <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+          </svg>
+          <span data-bm="Whatsapp Kami" data-en="WhatsApp Us">Whatsapp Kami</span>
+        </a>
+        <a href="tel:+60129876543"
+           class="inline-flex items-center justify-center gap-2 border border-[#374151] text-[#D1D5DB] hover:bg-[#374151] hover:text-white font-semibold px-7 py-3.5 rounded-xl transition-all duration-200 text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+          </svg>
+          <span>012-987 6543</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       CONTACT FORM — WhatsApp submission
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="contact" class="py-14 md:py-20 bg-white">
+    <div class="max-w-2xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#111827] mb-3 reveal"
+            data-bm="Hubungi Kami" data-en="Contact Us">
+          Hubungi Kami
+        </h2>
+        <p class="text-[#4B5563] text-sm max-w-md mx-auto reveal reveal-delay-1"
+           data-bm="Isi borang di bawah, kami reply terus via WhatsApp dalam masa 1 jam."
+           data-en="Fill in the form below and we'll reply via WhatsApp within 1 hour.">
+          Isi borang di bawah, kami reply terus via WhatsApp dalam masa 1 jam.
+        </p>
+      </div>
+
+      <form id="contact-form" class="space-y-5 reveal reveal-delay-2">
+        <div>
+          <label class="block text-sm font-semibold text-[#111827] mb-1.5" data-bm="Nama" data-en="Name">Nama</label>
+          <input type="text" id="cf-name" required
+            class="form-input-bronze"
+            data-bm-ph="Nama penuh" data-en-ph="Full name"
+            placeholder="Nama penuh">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#111827] mb-1.5" data-bm="No. Telefon" data-en="Phone Number">No. Telefon</label>
+          <input type="tel" id="cf-phone" required
+            class="form-input-bronze"
+            placeholder="012-345 6789">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#111827] mb-1.5" data-bm="Servis Diperlukan" data-en="Service Needed">Servis Diperlukan</label>
+          <select id="cf-service" class="form-input-bronze">
+            <option data-bm="Pilih servis..." data-en="Select service...">Pilih servis...</option>
+            <option value="Pendawaian Rumah & Kedai" data-bm="Pendawaian Rumah &amp; Kedai" data-en="House &amp; Shop Wiring">Pendawaian Rumah &amp; Kedai</option>
+            <option value="Pembaikan Suis & Soket" data-bm="Pembaikan Suis &amp; Soket" data-en="Switch &amp; Socket Repair">Pembaikan Suis &amp; Soket</option>
+            <option value="Pemasangan Lampu & Kipas" data-bm="Pemasangan Lampu &amp; Kipas" data-en="Light &amp; Fan Installation">Pemasangan Lampu &amp; Kipas</option>
+            <option value="Pemeriksaan Elektrik" data-bm="Pemeriksaan Elektrik" data-en="Electrical Inspection">Pemeriksaan Elektrik</option>
+            <option value="Lain-lain" data-bm="Lain-lain" data-en="Others">Lain-lain</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-[#111827] mb-1.5" data-bm="Mesej" data-en="Message">Mesej</label>
+          <textarea id="cf-message" rows="3" class="form-input-bronze resize-none"
+            data-bm-ph="Terangkan masalah awak secara ringkas..." data-en-ph="Briefly describe your issue..."
+            placeholder="Terangkan masalah awak secara ringkas..."></textarea>
+        </div>
+        <button type="submit"
+          class="w-full py-3.5 font-bold text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg hover:brightness-110 text-sm"
+          style="background:#25D366;"
+          data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">
+          Hantar via WhatsApp
+        </button>
+      </form>
+
+      <!-- Contact details below form -->
+      <div class="mt-8 text-center text-xs text-[#6B7280] space-y-1 reveal">
+        <p>
+          <span data-bm="Atau hubungi terus:" data-en="Or call directly:">Atau hubungi terus:</span>
+          <a href="tel:+60129876543" class="text-[#111827] font-semibold hover:text-[#C08457] transition-colors">012-987 6543</a>
+        </p>
+        <p>
+          <span data-bm="Isnin – Sabtu: 8am – 7pm" data-en="Monday – Saturday: 8am – 7pm">Isnin – Sabtu: 8am – 7pm</span>
+          <span class="hidden sm:inline"> · </span>
+          <br class="sm:hidden" />
+          <span data-bm="Ahad: Atas permintaan" data-en="Sunday: On request">Ahad: Atas permintaan</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FAQ — exclusive accordion (one open at a time)
+  ══════════════════════════════════════════════════════════════ -->
+  <section id="faq" class="py-14 md:py-20">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#111827] mb-3 reveal"
+            data-bm="Soalan Lazim" data-en="Frequently Asked Questions">
+          Soalan Lazim
+        </h2>
+        <p class="text-[#4B5563] text-sm max-w-md mx-auto reveal reveal-delay-1"
+           data-bm="Ada soalan? Mungkin jawapan ada di sini."
+           data-en="Have a question? The answer might be here.">
+          Ada soalan? Mungkin jawapan ada di sini.
+        </p>
+      </div>
+
+      <div id="faq-accordion" class="space-y-3 reveal reveal-delay-2">
+        <!-- FAQ 1 -->
+        <details class="faq-item bg-white border border-[#E5E7EB] rounded-xl overflow-hidden group">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-semibold text-[#111827] hover:bg-[#F5F3EF] transition-colors list-none">
+            <span data-bm="Kawasan mana yang diliputi?" data-en="Which areas do you cover?">Kawasan mana yang diliputi?</span>
+            <svg class="faq-chevron w-4 h-4 text-[#9CA3AF] transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4">
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Kami meliputi Kuala Lumpur, Cheras, Setapak, Wangsa Maju, Gombak dan kawasan sekitar. Hubungi kami untuk confirm kawasan anda — kami usaha cover selagi dalam radius 30km."
+               data-en="We cover Kuala Lumpur, Cheras, Setapak, Wangsa Maju, Gombak and surrounding areas. Contact us to confirm your location — we'll try to cover within a 30km radius.">
+              Kami meliputi Kuala Lumpur, Cheras, Setapak, Wangsa Maju, Gombak dan kawasan sekitar. Hubungi kami untuk confirm kawasan anda — kami usaha cover selagi dalam radius 30km.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 2 -->
+        <details class="faq-item bg-white border border-[#E5E7EB] rounded-xl overflow-hidden group">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-semibold text-[#111827] hover:bg-[#F5F3EF] transition-colors list-none">
+            <span data-bm="Berapa lama masa untuk sampai?" data-en="How long until you arrive?">Berapa lama masa untuk sampai?</span>
+            <svg class="faq-chevron w-4 h-4 text-[#9CA3AF] transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4">
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Bergantung lokasi. Biasanya dalam 30-60 minit untuk kawasan utama. Untuk kes kecemasan — call kami terus, kami akan prioritize."
+               data-en="Depends on location. Usually within 30-60 minutes for main areas. For emergencies — call us directly, we'll prioritize.">
+              Bergantung lokasi. Biasanya dalam 30-60 minit untuk kawasan utama. Untuk kes kecemasan — call kami terus, kami akan prioritize.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 3 -->
+        <details class="faq-item bg-white border border-[#E5E7EB] rounded-xl overflow-hidden group">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-semibold text-[#111827] hover:bg-[#F5F3EF] transition-colors list-none">
+            <span data-bm="Ada warranty untuk kerja elektrik?" data-en="Is there a warranty for electrical work?">Ada warranty untuk kerja elektrik?</span>
+            <svg class="faq-chevron w-4 h-4 text-[#9CA3AF] transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4">
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Ya. Semua kerja pendawaian dan pemasangan ada warranty workmanship. Tempoh bergantung pada jenis kerja — kami akan inform sebelum mula kerja."
+               data-en="Yes. All wiring and installation work comes with a workmanship warranty. Duration depends on job type — we'll inform you before starting.">
+              Ya. Semua kerja pendawaian dan pemasangan ada warranty workmanship. Tempoh bergantung pada jenis kerja — kami akan inform sebelum mula kerja.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 4 -->
+        <details class="faq-item bg-white border border-[#E5E7EB] rounded-xl overflow-hidden group">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-semibold text-[#111827] hover:bg-[#F5F3EF] transition-colors list-none">
+            <span data-bm="Berapa caj servis elektrik?" data-en="How much do electrical services cost?">Berapa caj servis elektrik?</span>
+            <svg class="faq-chevron w-4 h-4 text-[#9CA3AF] transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4">
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="Harga bergantung pada jenis dan skop kerja. Kami bagi sebut harga percuma melalui WhatsApp — tiada komitmen, tiada cas tersembunyi. Harga tetap, transparen."
+               data-en="Price depends on the type and scope of work. We provide a free quote via WhatsApp — no commitment, no hidden charges. Fixed pricing, transparent.">
+              Harga bergantung pada jenis dan skop kerja. Kami bagi sebut harga percuma melalui WhatsApp — tiada komitmen, tiada cas tersembunyi. Harga tetap, transparen.
+            </p>
+          </div>
+        </details>
+
+        <!-- FAQ 5 -->
+        <details class="faq-item bg-white border border-[#E5E7EB] rounded-xl overflow-hidden group">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-sm font-semibold text-[#111827] hover:bg-[#F5F3EF] transition-colors list-none">
+            <span data-bm="Cara nak buat tempahan?" data-en="How do I make a booking?">Cara nak buat tempahan?</span>
+            <svg class="faq-chevron w-4 h-4 text-[#9CA3AF] transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4">
+            <p class="text-sm text-[#4B5563] leading-relaxed"
+               data-bm="WhatsApp atau telefon je. Kami akan tanya lokasi, masalah, dan masa sesuai. Lepas tu kami bagi harga dan hantar technician. Senang, tak banyak proses."
+               data-en="Just WhatsApp or call. We'll ask for your location, issue, and preferred time. Then we'll give a price and send a technician. Simple, no fuss.">
+              WhatsApp atau telefon je. Kami akan tanya lokasi, masalah, dan masa sesuai. Lepas tu kami bagi harga dan hantar technician. Senang, tak banyak proses.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════════ -->
+  <footer class="bg-[#111827] text-[#9CA3AF] py-10 border-t border-[#374151]">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Brand -->
+        <div>
+          <p class="font-bold text-white text-base mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <span data-bm="KL Electrical Services" data-en="KL Electrical Services">KL Electrical Services</span>
+          </p>
+          <p class="text-xs leading-relaxed"
+             data-bm="Pakar elektrik &amp; pendawaian untuk rumah dan kedai di KL dan sekitarnya. Cepat, selamat, harga berpatutan."
+             data-en="Electrical &amp; wiring experts for homes and shops in KL and surrounding areas. Fast, safe, affordable.">
+            Pakar elektrik &amp; pendawaian untuk rumah dan kedai di KL dan sekitarnya. Cepat, selamat, harga berpatutan.
+          </p>
+          <!-- Social links -->
+          <div class="flex items-center gap-3 mt-4">
+            <a href="https://www.instagram.com/klelectrical/" target="_blank"
+              class="text-[#9CA3AF] hover:text-white transition-colors" aria-label="Instagram">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+            </a>
+            <a href="https://wa.me/60129876543" target="_blank"
+              class="text-[#9CA3AF] hover:text-white transition-colors" aria-label="WhatsApp">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Areas -->
+        <div>
+          <p class="font-semibold text-white text-sm mb-3" data-bm="Kawasan Servis" data-en="Service Areas">Kawasan Servis</p>
+          <ul class="text-xs space-y-1.5">
+            <li>Kuala Lumpur</li>
+            <li>Cheras</li>
+            <li>Setapak</li>
+            <li>Wangsa Maju</li>
+            <li>Gombak</li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <p class="font-semibold text-white text-sm mb-3" data-bm="Hubungi" data-en="Contact">Hubungi</p>
+          <div class="text-xs space-y-2">
+            <a href="tel:+60129876543" class="flex items-center gap-2 hover:text-white transition-colors">
+              <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+              </svg>
+              012-987 6543
+            </a>
+            <a href="https://wa.me/60129876543" target="_blank" class="flex items-center gap-2 hover:text-white transition-colors">
+              <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+              </svg>
+              WhatsApp
+            </a>
+            <p class="flex items-center gap-2">
+              <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span data-bm="KL, Cheras, Setapak, Wangsa Maju, Gombak" data-en="KL, Cheras, Setapak, Wangsa Maju, Gombak">KL, Cheras, Setapak, Wangsa Maju, Gombak</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="mt-8 pt-6 border-t border-[#374151] flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+        <p>
+          &copy; 2026 KL Electrical Services.
+          <span data-bm="Hak cipta terpelihara." data-en="All rights reserved.">Hak cipta terpelihara.</span>
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:text-white transition-colors" data-bm="Dasar Privasi" data-en="Privacy Policy">Dasar Privasi</a>
+          <a href="/terms.html" class="hover:text-white transition-colors" data-bm="Terma" data-en="Terms">Terma</a>
+          <span class="text-[#6B7280]" data-bm="@klelectrical" data-en="@klelectrical">@klelectrical</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       WHATSAPP STICKY BAR — mobile only
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="wa-sticky md:hidden">
+    <svg class="w-5 h-5 text-white shrink-0" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+    </svg>
+    <a href="https://wa.me/60129876543?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20elektrik"
+       class="text-white font-semibold text-sm" target="_blank">
+      <span data-bm="WhatsApp Kami" data-en="WhatsApp Us">WhatsApp Kami</span>
+    </a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       SCRIPTS
+  ══════════════════════════════════════════════════════════════ -->
+
+  <!-- Gallery Lightbox -->
+  <script>
+    function openLightbox(src) {
+      var lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (e.target === e.currentTarget || e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    document.addEventListener('keydown', closeLightbox);
+  </script>
+
+  <!-- FAQ exclusive accordion — one open at a time -->
+  <script>
+    (function () {
+      var items = document.querySelectorAll('#faq-accordion .faq-item');
+      items.forEach(function (item) {
+        item.addEventListener('toggle', function () {
+          if (item.open) {
+            items.forEach(function (other) {
+              if (other !== item) other.open = false;
+            });
+          }
+        });
+      });
+    })();
+  </script>
+
+  <!-- Contact form → WhatsApp submission -->
+  <script>
+    document.getElementById('contact-form')?.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('cf-name').value.trim();
+      var phone = document.getElementById('cf-phone').value.trim();
+      var service = document.getElementById('cf-service').value;
+      var message = document.getElementById('cf-message').value.trim();
+      var lang = document.documentElement.getAttribute('data-lang') || 'bm';
+
+      var text;
+      if (lang === 'en') {
+        text = 'Hi, I\'m ' + name + '.\nPhone: ' + phone + '\nService: ' + service + '\nMessage: ' + message;
+      } else {
+        text = 'Hi, saya ' + name + '.\nTelefon: ' + phone + '\nServis: ' + service + '\nMesej: ' + message;
+      }
+
+      var waUrl = 'https://wa.me/60129876543?text=' + encodeURIComponent(text);
+      window.open(waUrl, '_blank');
+
+      // Track contact form submission
+      if (typeof umami !== 'undefined') {
+        umami.track('demo_contact_submit', { client_id: 'demo-kl-electrical' });
+      }
+    });
+  </script>
+
+  <!-- Demo visit tracking -->
+  <script>
+    if (typeof umami !== 'undefined') {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('ref') === 'outreach') {
+        umami.track('demo_visit', { client_id: 'demo-kl-electrical', prospect: params.get('prospect') || '' });
+      }
+    }
+  </script>
+
+  <!-- Scroll Reveal IntersectionObserver -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+
+  <!-- Language toggle script -->
+  <script>
+    // ── Read saved preference or default to BM ──
+    var saved = localStorage.getItem('pw_lang') || 'bm';
+    setLang(saved, true);
+
+    function setLang(lang, silent) {
+      silent = silent || false;
+      var isBM = lang === 'bm';
+
+      document.documentElement.lang = isBM ? 'ms' : 'en';
+      document.documentElement.setAttribute('data-lang', lang);
+
+      // Swap text on elements with data-bm / data-en
+      document.querySelectorAll('[data-bm]').forEach(function (el) {
+        var target = isBM ? el.getAttribute('data-bm') : el.getAttribute('data-en');
+        if (!target) return;
+        if (el.children.length === 0 && !el.matches('select option')) {
+          if (!silent) el.style.opacity = '0';
+          setTimeout(function () {
+            el.textContent = target;
+            if (!silent) el.style.opacity = '1';
+          }, silent ? 0 : 80);
+        }
+      });
+
+      // Swap <title>
+      var titleEl = document.querySelector('title');
+      if (titleEl) {
+        titleEl.textContent = isBM
+          ? titleEl.getAttribute('data-bm')
+          : titleEl.getAttribute('data-en');
+      }
+
+      // Swap placeholder texts
+      document.querySelectorAll('[data-bm-ph]').forEach(function (el) {
+        var target = isBM ? el.getAttribute('data-bm-ph') : el.getAttribute('data-en-ph');
+        if (target) el.setAttribute('placeholder', target);
+      });
+
+      // Update WhatsApp pre-filled message
+      var waBm = 'Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20elektrik';
+      var waEn = 'Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20electrical%20services';
+      var waMsg = isBM ? waBm : waEn;
+
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+        var base = a.href.split('?')[0];
+        a.href = base + '?text=' + waMsg;
+      });
+
+      // Toggle button active states
+      var btnBm = document.getElementById('btn-bm');
+      var btnEn = document.getElementById('btn-en');
+      if (btnBm) {
+        btnBm.classList.toggle('active', isBM);
+        btnBm.setAttribute('aria-pressed', isBM);
+      }
+      if (btnEn) {
+        btnEn.classList.toggle('active', !isBM);
+        btnEn.setAttribute('aria-pressed', !isBM);
+      }
+
+      // Persist preference
+      localStorage.setItem('pw_lang', lang);
+    }
+  </script>
+
+</body>
+</html>

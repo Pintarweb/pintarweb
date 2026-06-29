@@ -120,7 +120,7 @@ NOT from luxury aesthetics.
 - Border:         #E5E7EB (gray)
 
 ## Usage Rules
-### Primary Green
+### Primary Black
 Use for:
 - Headers
 - Trust sections
@@ -133,7 +133,7 @@ Should communicate:
 - Professionalism
 - Stability
 
-### Amber Accent
+### Bold Red Accent
 Reserved ONLY for:
 - CTA buttons
 - WhatsApp actions

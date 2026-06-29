@@ -1,851 +1,919 @@
 ﻿<!DOCTYPE html>
 <html lang="ms" data-lang="bm">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-bm="Razif Aircond & Renovation â€” Cheras" data-en="Razif Aircond & Renovation â€” Cheras">
-        Razif Aircond & Renovation â€” Cheras
-    </title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500&display=swap"
-        rel="stylesheet" />
-    <style>
-        /* Base */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #F8F4F0;
-            color: #1C1917;
-            scroll-behavior: smooth;
-        }
-        h1, h2, h3, h4 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        /* Offset for sticky header on anchor links */
-        html {
-            scroll-padding-top: 100px;
-        }
-        /* Language toggle pill */
-        .lang-toggle {
-            display: inline-flex;
-            background: #E7E5E4;
-            border-radius: 999px;
-            padding: 3px;
-            gap: 2px;
-        }
-        .lang-btn {
-            padding: 6px 16px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: #78716C;
-            transition: all 0.2s ease;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .lang-btn.active {
-            background: #1B4332;
-            color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-        }
-        /* WhatsApp sticky bar */
-        .wa-sticky {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            background: #25D366;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 14px 20px;
-            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
-        }
-        .wa-sticky svg {
-            flex-shrink: 0;
-        }
-        /* Language transition */
-        [data-bm], [data-en] {
-            transition: opacity 0.15s ease;
-        }
-    </style>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-bm="Razif Aircond & Renovation — Pakar Aircond Cheras"
+         data-en="Razif Aircond & Renovation — Cheras Aircond Expert">
+    Razif Aircond & Renovation — Pakar Aircond Cheras
+  </title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Client-specific design tokens (trustworthy-local / forest green) ── */
+    :root {
+      --color-primary: #1B4332;
+      --color-primary-soft: #2D6A4F;
+      --color-bg: #F8F4F0;
+      --color-text: #1C1917;
+      --color-surface: #ffffff;
+      --color-border: #E7E5E4;
+      --color-muted: #78716C;
+      --color-lang-toggle-bg: #E7E5E4;
+      --color-lang-btn: #78716C;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); }
+    h1, h2, h3, h4 { font-family: var(--font-heading); }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 
+    .lang-toggle { display: inline-flex; background: var(--color-lang-toggle-bg); border-radius: 999px; padding: 3px; gap: 2px; }
+    .lang-btn { padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--color-lang-btn); transition: all 0.2s ease; font-family: var(--font-heading); }
+    .lang-btn.active { background: var(--color-primary); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+
+    .wa-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #25D366; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; box-shadow: 0 -2px 12px rgba(0,0,0,0.12); }
+    .wa-sticky svg { flex-shrink: 0; }
+
+    .form-input { width: 100%; padding: 12px 16px; border: 2px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-size: 15px; transition: all 0.2s ease; }
+    .form-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(27,67,50,0.15); }
+    .form-input::placeholder { color: var(--color-muted); }
+
+    .hamburger-line { background: #57534E; }
+  </style>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="1e8f3b8d-2b18-44c7-98bb-0bfb691e712c"></script>
+</head>
 <body class="pb-20">
 
-    <!-- Global Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-white border-b border-stone-200 shadow-sm">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-            <span class="font-bold text-base text-stone-900" style="font-family:'Plus Jakarta Sans',sans-serif;" data-bm="Razif Aircond" data-en="Razif Aircond">
-                Razif Aircond
-            </span>
-            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
-                <a href="#services" class="hover:text-stone-900 transition-colors" data-bm="Servis" data-en="Services">Servis</a>
-                <a href="#testimonials" class="hover:text-stone-900 transition-colors" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
-                <a href="#faq-accordion" class="hover:text-stone-900 transition-colors" data-bm="Soalan Lazim" data-en="FAQ">Soalan Lazim</a>
-            </div>
-            <div class="flex items-center gap-3">
-                <!-- Mobile Hamburger Button -->
-                <button type="button" id="mobile-menu-btn" class="md:hidden flex items-center justify-center w-8 h-8 text-stone-600 hover:text-[#1B4332]" onclick="document.getElementById('mobile-menu').classList.toggle('hidden');">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-                <!-- Language Toggle Pill -->
-                <div class="lang-toggle" role="group" aria-label="Language toggle">
-                    <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm" aria-pressed="true">BM</button>
-                    <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false">EN</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <!-- ═══════════════════════════════════════════
+       NAVBAR — Sticky, hamburger, lang toggle
+  ═══════════════════════════════════════════ -->
+  <nav class="sticky top-0 z-50 bg-white border-b-2 border-[#1B4332]">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
-    <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden fixed top-14 left-0 right-0 z-40 bg-stone-100 border-b-2 border-[#1B4332]">
-        <div class="px-4 py-3 flex flex-col gap-0">
-            <a href="#services" class="text-sm font-bold uppercase tracking-wider text-stone-600 hover:text-[#1B4332] hover:bg-stone-200 transition-colors py-3 border-b border-stone-200" data-bm="Servis" data-en="Services">Servis</a>
-            <a href="#testimonials" class="text-sm font-bold uppercase tracking-wider text-stone-600 hover:text-[#1B4332] hover:bg-stone-200 transition-colors py-3 border-b border-stone-200" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
-            <a href="#faq-accordion" class="text-sm font-bold uppercase tracking-wider text-stone-600 hover:text-[#1B4332] hover:bg-stone-200 transition-colors py-3" data-bm="Soalan Lazim" data-en="FAQ">Soalan Lazim</a>
+      <!-- Logo -->
+      <a href="#" class="font-bold text-base text-[#1B4332] tracking-tight"
+         style="font-family:'Plus Jakarta Sans',sans-serif;"
+         data-bm="Razif Aircond & Renovation"
+         data-en="Razif Aircond & Renovation">
+        Razif Aircond &amp; Renovation
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-stone-600">
+        <a href="#services" class="hover:text-[#1B4332] transition-colors"
+           data-bm="Servis" data-en="Services">Servis</a>
+        <a href="#gallery" class="hover:text-[#1B4332] transition-colors"
+           data-bm="Galeri" data-en="Gallery">Galeri</a>
+        <a href="#testimonials" class="hover:text-[#1B4332] transition-colors"
+           data-bm="Testimoni" data-en="Reviews">Testimoni</a>
+        <a href="#faq" class="hover:text-[#1B4332] transition-colors"
+           data-bm="Soalan" data-en="FAQ">Soalan</a>
+        <a href="#contact" class="hover:text-[#1B4332] transition-colors"
+           data-bm="Hubungi" data-en="Contact">Hubungi</a>
+      </div>
+
+      <!-- Right: lang toggle + hamburger -->
+      <div class="flex items-center gap-3">
+        <div class="lang-toggle" role="group" aria-label="Language toggle">
+          <button class="lang-btn active" onclick="setLang('bm')" id="btn-bm" aria-pressed="true">BM</button>
+          <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false">EN</button>
         </div>
+        <!-- Hamburger -->
+        <button id="hamburger-btn" class="md:hidden flex flex-col items-center justify-center w-9 h-9 hover:opacity-70 transition-opacity" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-        
-        // Close mobile menu when scrolling
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', function() {
-            const menu = document.getElementById('mobile-menu');
-            if (!menu.classList.contains('hidden')) {
-                // If menu is open and user scrolls, close it
-                if (Math.abs(window.scrollY - lastScrollY) > 10) {
-                    menu.classList.add('hidden');
-                }
-            }
-            lastScrollY = window.scrollY;
-        });
-    </script>
+  <!-- Mobile dropdown menu -->
+  <div id="mobile-menu" class="hidden fixed top-[57px] left-0 right-0 z-40 bg-white border-b-2 border-[#1B4332] shadow-lg">
+    <div class="px-4 py-2 flex flex-col">
+      <a href="#services" onclick="closeMobileMenu()"
+         class="text-sm font-bold text-stone-700 hover:text-[#1B4332] hover:bg-[#F8F4F0] transition-colors py-3 border-b border-stone-100"
+         data-bm="Servis" data-en="Services">Servis</a>
+      <a href="#gallery" onclick="closeMobileMenu()"
+         class="text-sm font-bold text-stone-700 hover:text-[#1B4332] hover:bg-[#F8F4F0] transition-colors py-3 border-b border-stone-100"
+         data-bm="Galeri" data-en="Gallery">Galeri</a>
+      <a href="#testimonials" onclick="closeMobileMenu()"
+         class="text-sm font-bold text-stone-700 hover:text-[#1B4332] hover:bg-[#F8F4F0] transition-colors py-3 border-b border-stone-100"
+         data-bm="Testimoni" data-en="Reviews">Testimoni</a>
+      <a href="#faq" onclick="closeMobileMenu()"
+         class="text-sm font-bold text-stone-700 hover:text-[#1B4332] hover:bg-[#F8F4F0] transition-colors py-3 border-b border-stone-100"
+         data-bm="Soalan" data-en="FAQ">Soalan</a>
+      <a href="#contact" onclick="closeMobileMenu()"
+         class="text-sm font-bold text-stone-700 hover:text-[#1B4332] hover:bg-[#F8F4F0] transition-colors py-3"
+         data-bm="Hubungi" data-en="Contact">Hubungi</a>
+    </div>
+  </div>
 
-    
 
+  <!-- ═══════════════════════════════════════════
+       HERO — Split layout
+  ═══════════════════════════════════════════ -->
+  <section class="max-w-6xl mx-auto px-4 py-12 md:py-20">
+    <div class="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
 
-    <!-- Hero Section -->
-    <section class="bg-[#F8F4F0] py-12 md:py-20">
-        <div class="max-w-5xl mx-auto px-4 md:px-6">
-            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-                <div class="order-2 md:order-1">
-                    <!-- Trust Badge Row -->
-                    <div class="mb-4 inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                        </svg>
-                        <span class="text-sm text-emerald-700" data-bm="Berpengalaman Sejak 2015" data-en="Established Since 2015">Berpengalaman Sejak 2015</span>
-                    </div>
-
-                    <!-- Headline -->
-                    <h1 class="text-3xl md:text-4xl font-bold text-[#1B4332] mb-4 leading-tight">
-                        <span data-bm="Pakar Aircond &amp; Renovation " data-en="Your Trusted Aircond &amp; Renovation ">Pakar Aircond &amp; Renovation </span><span class="text-emerald-600" data-bm="Cheras" data-en="Expert in Cheras">Cheras</span>
-                    </h1>
-
-                    <!-- Mini Trust Row -->
-                    <div class="flex flex-wrap gap-4 text-xs text-[#57534E] mb-4">
-                        <div class="inline-flex items-center gap-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                            </svg>
-                            <a href="https://maps.google.com" target="_blank"><span data-bm="4.3 bintang (31 ulasan)" data-en="4.3 stars (31 reviews)">4.3 bintang (31 ulasan)</span></a>
-                        </div>
-                        <div class="inline-flex items-center gap-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-                            </svg>
-                            <span data-bm="Balas dalam 1 jam" data-en="Reply within 1 hour">Balas dalam 1 jam</span>
-                        </div>
-                        <div class="inline-flex items-center gap-1.5">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" />
-                            </svg>
-                            <span data-bm="Jaminan Mutu Kerja" data-en="Workmanship Guaranteed">Jaminan Mutu Kerja</span>
-                        </div>
-                    </div>
-
-                    <!-- Subheadline -->
-                    <p class="text-[#57534E] text-base md:text-lg mb-6 leading-relaxed"
-                        data-bm="Aircond rumah atau kedai tak sejuk atau tetiba rosak? Kami bantu hantar technician bertauliah terus ke tempat awak di sekitar Cheras, Ampang, Pandan Jaya &amp; Taman Connaught. Servis pantas, harga telus, tiada cas tersembunyi."
-                        data-en="Aircond not cooling or suddenly broken? We'll send a certified technician straight to your location in Cheras, Ampang, Pandan Jaya &amp; Taman Connaught. Fast service, transparent pricing, no hidden fees.">
-                        Aircond rumah atau kedai tak sejuk atau tetiba rosak? Kami bantu hantar technician bertauliah terus ke tempat awak di sekitar Cheras, Ampang, Pandan Jaya &amp; Taman Connaught. Servis pantas, harga telus, tiada cas tersembunyi.
-                    </p>
-
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-3 mb-6">
-                        <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasang%20aircond"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold rounded-none transition-all duration-200 shadow-md hover:shadow-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                            </svg>
-<span data-bm="WhatsApp Kami" data-en="WhatsApp Us">WhatsApp Kami</span>
-                        </a>
-                        <a href="tel:+60123456789"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-stone-300 bg-white hover:bg-stone-50 text-[#1C1917] font-bold rounded-none transition-all duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                            </svg>
-                            <span>012-345 6789</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Image -->
-                <div class="order-1 md:order-2">
-                    <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-[#2D5A46] relative">
-                        <img src="images/hero.webp"
-                            alt="Razif Aircond &amp; Renovation - Aircond Technician at Work"
-                            class="w-full h-full object-cover" loading="eager">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#1B4332]/30 to-transparent"></div>
-                    </div>
-                </div>
-            </div>
+      <!-- Text column -->
+      <div class="reveal">
+        <!-- Trust badge -->
+        <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold px-3 py-1.5 mb-5">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span data-bm="Berpengalaman Sejak 2015 · Kawasan Cheras"
+                data-en="Serving Since 2015 · Cheras Area">
+            Berpengalaman Sejak 2015 · Kawasan Cheras
+          </span>
         </div>
-    </section>
 
+        <!-- Headline -->
+        <h1 class="text-3xl md:text-5xl font-bold text-[#1B4332] leading-tight mb-4">
+          <span data-bm="Pakar Aircond & Renovation"
+                data-en="Your Trusted Aircond & Renovation Expert">
+            Pakar Aircond &amp; Renovation
+          </span>
+          <span class="block text-[#52B788]" data-bm="Cheras & Sekitarnya" data-en="Cheras & Surrounding Areas">Cheras &amp; Sekitarnya</span>
+        </h1>
 
-    <!-- Trust Badges Section | Variant: A (Asymmetric Industrial Strip) -->
-    <section class="max-w-7xl mx-auto px-4 mb-12">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            <!-- Badge 1: Years in Business -->
-            <div class="group bg-white border-2 border-[#1B4332] rounded-none flex text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                <div class="w-14 bg-[#1B4332] flex items-center justify-center shrink-0 rounded-l-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white group-hover:rotate-12 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col justify-center p-4 flex-1">
-                    <div class="text-xl md:text-2xl font-bold text-[#1B4332] leading-tight m-0 p-0 text-left">11+</div>
-                    <div class="uppercase font-bold tracking-wider text-stone-500 text-[10px]" data-bm="Pengalaman Industri" data-en="Years of Experience">Pengalaman Industri</div>
-                </div>
-            </div>
-
-            <!-- Badge 2: Coverage Area -->
-            <div class="group bg-white border-2 border-[#1B4332] rounded-none flex text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                <div class="w-14 bg-[#1B4332] flex items-center justify-center shrink-0 rounded-l-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white group-hover:-translate-y-1 group-hover:scale-110 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col justify-center p-4 flex-1">
-                    <div class="text-xl md:text-2xl font-bold text-[#1B4332] leading-tight m-0 p-0 text-left">4+</div>
-                    <div class="uppercase font-bold tracking-wider text-stone-500 text-[10px]" data-bm="Kawasan Diliputi" data-en="Areas Covered">Kawasan Diliputi</div>
-                </div>
-            </div>
-
-            <!-- Badge 3: Response Time -->
-            <div class="group bg-white border-2 border-[#1B4332] rounded-none flex text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                <div class="w-14 bg-[#1B4332] flex items-center justify-center shrink-0 rounded-l-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white group-hover:rotate-180 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col justify-center p-4 flex-1">
-                    <div class="text-xl md:text-2xl font-bold text-[#1B4332] leading-tight m-0 p-0 text-left">&lt;1</div>
-                    <div class="uppercase font-bold tracking-wider text-stone-500 text-[10px]" data-bm="Masa Respons" data-en="Response Time">Masa Respons</div>
-                </div>
-            </div>
-
-            <!-- Badge 4: Google Rating -->
-            <div class="group bg-white border-2 border-[#1B4332] rounded-none flex text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                <div class="w-14 bg-[#1B4332] flex items-center justify-center shrink-0 rounded-l-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white group-hover:scale-125 transition-transform duration-300" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                </div>
-                <div class="flex flex-col justify-center p-4 flex-1">
-                    <div class="flex items-center gap-1 text-xl md:text-2xl font-bold text-[#1B4332] leading-tight m-0 p-0 text-left">
-                        <a href="https://maps.google.com" target="_blank" class="flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <span>4.3</span>
-                        </a>
-                    </div>
-                    <div class="uppercase font-bold tracking-wider text-stone-500 text-[10px]" data-bm="31 Ulasan Pelanggan" data-en="31 Verified Reviews">31 Ulasan Pelanggan</div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- Services Grid Section -->
-    <section id="services" class="bg-white py-12 md:py-16">
-        <div class="max-w-5xl mx-auto px-4 md:px-6">
-            <!-- Section Header -->
-            <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] tracking-tight mb-2 text-left"
-                data-bm="Servis Aircond &amp; Renovation" data-en="Aircond &amp; Renovation Services">
-                Servis Aircond &amp; Renovation
-            </h2>
-            
-            <!-- Subheadline -->
-            <p class="text-stone-500 text-sm mb-8 text-left"
-                data-bm="Meliputi Cheras, Ampang, Pandan Jaya dan kawasan sekitar"
-                data-en="Covering Cheras, Ampang, Pandan Jaya and surrounding areas">
-                Meliputi Cheras, Ampang, Pandan Jaya dan kawasan sekitar
-            </p>
-
-            <!-- Service Cards Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Card 1: Pemasangan Aircond Baru -->
-                <div class="border-2 border-[#1B4332] rounded-none bg-white flex flex-col sm:flex-row items-stretch overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                    <div class="w-full sm:w-1/3 min-h-[140px] shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332] relative">
-                        <img src="images/install.webp" alt="Aircond installation" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-center text-left">
-                        <div class="flex items-center gap-3 mb-3 text-left">
-                            <div class="w-10 h-10 border-2 border-[#1B4332] bg-[#F8F4F0] flex items-center justify-center shrink-0 rounded-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-base font-bold text-[#1B4332] text-left p-0 m-0"
-                                data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">Pemasangan Aircond Baru</h3>
-                        </div>
-                        <p class="text-stone-600 text-xs leading-relaxed text-left"
-                            data-bm="Pasang unit baharu semua jenis. Stok gas R32 & R410A sentiasa ready dalam van — tak perlu tunggu return trip."
-                            data-en="New installations for all major brands. We stock R32 & R410A gas directly in our vans — no waiting for return trips.">
-                            Pasang unit baharu semua jenis. Stok gas R32 & R410A sentiasa ready dalam van — tak perlu tunggu return trip.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card 2: Servis & Cuci Aircond -->
-                <div class="border-2 border-[#1B4332] rounded-none bg-white flex flex-col sm:flex-row items-stretch overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                    <div class="w-full sm:w-1/3 min-h-[140px] shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332] relative">
-                        <img src="images/service.webp" alt="AC service" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-center text-left">
-                        <div class="flex items-center gap-3 mb-3 text-left">
-                            <div class="w-10 h-10 border-2 border-[#1B4332] bg-[#F8F4F0] flex items-center justify-center shrink-0 rounded-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3v4m0 10v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M3 12h4m10 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-base font-bold text-[#1B4332] text-left p-0 m-0"
-                                data-bm="Servis &amp; Cuci Aircond" data-en="Aircond Service &amp; Cleaning">Servis &amp; Cuci Aircond</h3>
-                        </div>
-                        <p class="text-stone-600 text-xs leading-relaxed text-left"
-                            data-bm="Cuci menyeluruh dalam & luar, check gas, flush paip. Kami guna chemical wash sepenuhnya, bukan sekadar water wash biasa."
-                            data-en="Complete indoor & outdoor cleaning, gas check, and pipe flushing. Full deep chemical wash applied, not a basic water flush.">
-                            Cuci menyeluruh dalam & luar, check gas, flush paip. Kami guna chemical wash sepenuhnya, bukan sekadar water wash biasa.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card 3: Pembaikan Aircond Rosak -->
-                <div class="border-2 border-[#1B4332] rounded-none bg-white flex flex-col sm:flex-row items-stretch overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                    <div class="w-full sm:w-1/3 min-h-[140px] shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332] relative">
-                        <img src="images/repair.webp" alt="AC repair" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-center text-left">
-                        <div class="flex items-center gap-3 mb-3 text-left">
-                            <div class="w-10 h-10 border-2 border-[#1B4332] bg-[#F8F4F0] flex items-center justify-center shrink-0 rounded-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-base font-bold text-[#1B4332] text-left p-0 m-0"
-                                data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">Pembaikan Aircond Rosak</h3>
-                        </div>
-                        <p class="text-stone-600 text-xs leading-relaxed text-left"
-                            data-bm="Gas bocor, compressor kong, fan motor rosak. Cas diagnosis RM0 jika kami terus jalankan kerja baiki."
-                            data-en="Gas leaks, dead compressors, or broken fan motors. RM0 diagnosis fee if you proceed with our repair service."
-                            Gas bocor, compressor kong, fan motor rosak. Cas diagnosis RM0 jika kami terus jalankan kerja baiki.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Card 4: Renovation Ringan -->
-                <div class="border-2 border-[#1B4332] rounded-none bg-white flex flex-col sm:flex-row items-stretch overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_#1B4332]">
-                    <div class="w-full sm:w-1/3 min-h-[140px] shrink-0 border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332] relative">
-                        <img src="images/reno.webp" alt="Renovation" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-center text-left">
-                        <div class="flex items-center gap-3 mb-3 text-left">
-                            <div class="w-10 h-10 border-2 border-[#1B4332] bg-[#F8F4F0] flex items-center justify-center shrink-0 rounded-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#1B4332]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2z"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-base font-bold text-[#1B4332] text-left p-0 m-0"
-                                data-bm="Renovation Ringan" data-en="Light Renovation">Renovation Ringan</h3>
-                        </div>
-                        <p class="text-stone-600 text-xs leading-relaxed text-left"
-                            data-bm="Baik pulih Ruang tamu, kitchen, bilik. Bagi rumah awak rasa luas &amp; kemas."
-                            data-en="Restore living rooms, kitchens, bedrooms. Give your home a spacious, tidy look.">
-                            Baik pulih Ruang tamu, kitchen, bilik. Bagi rumah awak rasa luas &amp; kemas.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Testimonials section | count: 3 -->
-    <section id="testimonials" class="max-w-5xl mx-auto px-4 md:px-6 py-12">
-        <!-- Section Header -->
-        <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] tracking-tight mb-8 text-left"
-            data-bm="Apa Kata Pelanggan Kami" data-en="What Our Customers Say">
-            Apa Kata Pelanggan Kami
-        </h2>
-
-        <!-- Testimonials Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            
-            <!-- Testimonial 1: Puan Siti -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none p-6 flex flex-col justify-between text-left shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332]">
-                <!-- Star Rating -->
-                <div class="flex gap-0.5 mb-3 justify-start items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <!-- Quote Body -->
-                <p class="text-stone-700 text-sm leading-relaxed mb-6 text-left p-0 m-0 flex-1"
-                   data-bm="Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."
-                   data-en="Aircond broke down at night, called and they came right away. Clean work, fair price. Highly recommended.">
-                    "Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."
-                </p>
-                <!-- Reviewer Info -->
-                <div class="flex flex-row items-center gap-3 border-t-2 border-stone-100 pt-4 text-left shrink-0">
-                    <div class="w-9 h-9 border-2 border-[#1B4332] bg-[#F8F4F0] text-[#1B4332] text-xs font-extrabold flex items-center justify-center rounded-none shrink-0">PS</div>
-                    <div class="flex flex-col justify-center text-left">
-                        <div class="text-xs font-extrabold text-stone-900 leading-none text-left mb-1">Puan Siti</div>
-                        <div class="text-[10px] font-bold text-stone-400 tracking-wider uppercase leading-none text-left">Taman Connaught</div> <a href="https://maps.google.com" target="_blank" class="text-[10px] text-[#1B4332] underline ml-1" data-bm="Lihat Ulasan Asal" data-en="View Original Review">Lihat Ulasan Asal</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 2: En. Hafiz -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none p-6 flex flex-col justify-between text-left shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332]">
-                <!-- Star Rating -->
-                <div class="flex gap-0.5 mb-3 justify-start items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-stone-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <!-- Quote Body -->
-                <p class="text-stone-700 text-sm leading-relaxed mb-6 text-left p-0 m-0 flex-1"
-                   data-bm="Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."
-                   data-en="Serviced our office aircond units. Fast, no fuss. Now our regular service provider.">
-                    "Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."
-                </p>
-                <!-- Reviewer Info -->
-                <div class="flex flex-row items-center gap-3 border-t-2 border-stone-100 pt-4 text-left shrink-0">
-                    <div class="w-9 h-9 border-2 border-[#1B4332] bg-[#F8F4F0] text-[#1B4332] text-xs font-extrabold flex items-center justify-center rounded-none shrink-0">EH</div>
-                    <div class="flex flex-col justify-center text-left">
-                        <div class="text-xs font-extrabold text-stone-900 leading-none text-left mb-1">En. Hafiz</div>
-                        <div class="text-[10px] font-bold text-stone-400 tracking-wider uppercase leading-none text-left">Ampang</div> <a href="https://maps.google.com" target="_blank" class="text-[10px] text-[#1B4332] underline ml-1" data-bm="Lihat Ulasan Asal" data-en="View Original Review">Lihat Ulasan Asal</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 3: Cik Nurul -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none p-6 flex flex-col justify-between text-left shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332]">
-                <!-- Star Rating -->
-                <div class="flex gap-0.5 mb-3 justify-start items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-stone-300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <!-- Quote Body -->
-                <p class="text-stone-700 text-sm leading-relaxed mb-6 text-left p-0 m-0 flex-1"
-                   data-bm="Technician lambat 15 minit sebab traffic Cheras, tapi kerja cipantas & chemical wash bersih sampai sejuk beku balik. Okay sangat."
-                   data-en="Technician arrived 15 mins late due to Cheras traffic, but execution was fast & deep chemical wash left it freezing cold. Good job.">
-                    "Technician lambat 15 minit sebab traffic Cheras, tapi kerja cipantas & chemical wash bersih sampai sejuk beku balik. Okay sangat."
-                </p>
-                <!-- Reviewer Info -->
-                <div class="flex flex-row items-center gap-3 border-t-2 border-stone-100 pt-4 text-left shrink-0">
-                    <div class="w-9 h-9 border-2 border-[#1B4332] bg-[#F8F4F0] text-[#1B4332] text-xs font-extrabold flex items-center justify-center rounded-none shrink-0">CN</div>
-                    <div class="flex flex-col justify-center text-left">
-                        <div class="text-xs font-extrabold text-stone-900 leading-none text-left mb-1">Cik Nurul</div>
-                        <div class="text-[10px] font-bold text-stone-400 tracking-wider uppercase leading-none text-left">Cheras</div> <a href="https://maps.google.com" target="_blank" class="text-[10px] text-[#1B4332] underline ml-1" data-bm="Lihat Ulasan Asal" data-en="View Original Review">Lihat Ulasan Asal</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- CTA banner | variant: default -->
-    <section class="w-full bg-[#1B4332] border-y-4 border-stone-900 py-12 px-6 text-left my-12">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 text-left">
-            
-            <!-- Left Typography Column -->
-            <div class="flex flex-col items-start justify-center max-w-2xl text-left">
-                <h3 class="text-2xl md:text-3xl font-bold text-[#F8F4F0] tracking-tight mb-2 text-left"
-                    data-bm="Ada Soalan? Tanya Kami Dulu" data-en="Have Questions? Ask Us First">
-                    Ada Soalan? Tanya Kami Dulu
-                </h3>
-                <p class="text-[#F8F4F0]/80 text-sm mb-0 text-left"
-                    data-bm="Sebut harga percuma, tanpa komitmen. Hubungi kami sekarang." data-en="Free quote, no obligation. Contact us now.">
-                    Sebut harga percuma, tanpa komitmen. Hubungi kami sekarang.
-                </p>
-            </div>
-
-            <!-- Right Interactive Button Column -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-4 shrink-0 text-left">
-                
-                <!-- Primary CTA Button (WhatsApp) -->
-                <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
-                   class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] text-stone-900 font-extrabold px-6 py-3.5 rounded-none border-2 border-stone-900 transition-all duration-150 shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] text-sm uppercase tracking-wider">
-                    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
-                    </svg>
-                    <span data-bm="Tempah Slot Servis Hari Ini" data-en="Book Your Service Slot Today">Tempah Slot Servis Hari Ini</span>
-                </a>
-
-                <!-- Secondary CTA (Phone) -->
-                <a href="tel:+60123456789"
-                   class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 font-extrabold px-6 py-3.5 rounded-none border-2 border-stone-900 transition-all duration-150 shadow-[4px_4px_0px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000000] text-sm uppercase tracking-wider">
-                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                    <span data-bm="Hubungi: 012-345 6789" data-en="Call: 012-345 6789">Hubungi: 012-345 6789</span>
-                </a>
-
-            </div>
-        </div>
-    </section>
-
-
-    <!-- FAQ section | questions: 5 | niche: aircond-contractor -->
-    <section id="faq-accordion" class="max-w-5xl mx-auto px-4 md:px-6 py-12">
-        <!-- Section Header -->
-        <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] tracking-tight mb-8 text-left"
-            data-bm="Soalan Lazim" data-en="Frequently Asked Questions">
-            Soalan Lazim
-        </h2>
-
-        <!-- Accordion Items (Exclusive - one open at a time) -->
-        <div class="space-y-4 text-left" id="faq-accordion">
-            
-            <!-- Q1: Coverage Area -->
-            <details class="faq-item w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 group">
-                <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] border-b-2 border-transparent group-open:border-[#1B4332] group-open:bg-[#F8F4F0] transition-all list-none min-h-[48px]">
-                    <span data-bm="Kawasan mana yang diliputi?" data-en="Which areas do you cover?">Kawasan mana yang diliputi?</span>
-                    <svg class="w-5 h-5 text-[#1B4332] transform transition-transform duration-200 group-open:rotate-180 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </summary>
-                <div class="px-5 py-4 bg-white text-left border-t-0">
-                    <p class="text-stone-600 text-sm leading-relaxed m-0 p-0 text-left">
-                        <span data-bm="Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar." data-en="We cover Cheras, Ampang, Pandan Jaya, Taman Connaught and surrounding areas.">Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar.</span>
-                    </p>
-                </div>
-            </details>
-
-            <!-- Q2: Same Day Service -->
-            <details class="faq-item w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 group">
-                <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] border-b-2 border-transparent group-open:border-[#1B4332] group-open:bg-[#F8F4F0] transition-all list-none min-h-[48px]">
-                    <span data-bm="Boleh datang pada hari yang sama?" data-en="Can you come on the same day?">Boleh datang pada hari yang sama?</span>
-                    <svg class="w-5 h-5 text-[#1B4332] transform transition-transform duration-200 group-open:rotate-180 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </summary>
-                <div class="px-5 py-4 bg-white text-left border-t-0">
-                    <p class="text-stone-600 text-sm leading-relaxed m-0 p-0 text-left">
-                        <span data-bm="Boleh, bergantung kepada jadual slot kosong semasa. Hubungi kami awal pagi untuk set appointment secepat mungkin." data-en="Yes, subject to available daily booking slots. Contact us early in the morning to lock your appointment on the spot.">Boleh, bergantung kepada jadual slot kosong semasa. Hubungi kami awal pagi untuk set appointment secepat mungkin.</span>
-                    </p>
-                </div>
-            </details>
-
-            <!-- Q3: Warranty -->
-            <details class="faq-item w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 group">
-                <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] border-b-2 border-transparent group-open:border-[#1B4332] group-open:bg-[#F8F4F0] transition-all list-none min-h-[48px]">
-                    <span data-bm="Ada warranty untuk hasil kerja?" data-en="Is there a warranty for the work?">Ada warranty untuk hasil kerja?</span>
-                    <svg class="w-5 h-5 text-[#1B4332] transform transition-transform duration-200 group-open:rotate-180 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </summary>
-                <div class="px-5 py-4 bg-white text-left border-t-0">
-                    <p class="text-stone-600 text-sm leading-relaxed m-0 p-0 text-left">
-                        <span data-bm="Ya. Semua kerja pemasangan dan pembaikan datang dengan jaminan workmanship bertulis selama 90 hari. Kami jamin kerja kemas." data-en="Yes. All installation and repair work comes with a documented 90-day workmanship warranty. We guarantee clean performance.">Ya. Semua kerja pemasangan dan pembaikan datang dengan jaminan workmanship bertulis selama 90 hari. Kami jamin kerja kemas.</span>
-                    </p>
-                </div>
-            </details>
-
-            <!-- Q4: Pricing -->
-            <details class="faq-item w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 group">
-                <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] border-b-2 border-transparent group-open:border-[#1B4332] group-open:bg-[#F8F4F0] transition-all list-none min-h-[48px]">
-                    <span data-bm="Berapa kos anggaran servis?" data-en="How much does servicing cost?">Berapa kos anggaran servis?</span>
-                    <svg class="w-5 h-5 text-[#1B4332] transform transition-transform duration-200 group-open:rotate-180 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </summary>
-                <div class="px-5 py-4 bg-white text-left border-t-0">
-                    <p class="text-stone-600 text-sm leading-relaxed m-0 p-0 text-left">
-                        <span data-bm="Cuci standard bermula dari RM80 seunit. Pasang aircond baru dari RM200 termasuk paip. Hubungi via WhatsApp untuk sebut harga tepat." data-en="Standard chemical cleaning starts from RM80/unit. New installations from RM200 including piping. Contact via WhatsApp for an exact quote.">Cuci standard bermula dari RM80 seunit. Pasang aircond baru dari RM200 termasuk paip. Hubungi via WhatsApp untuk sebut harga tepat.</span>
-                    </p>
-                </div>
-            </details>
-
-            <!-- Q5: Booking Process -->
-            <details class="faq-item w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 group">
-                <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-base font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] border-b-2 border-transparent group-open:border-[#1B4332] group-open:bg-[#F8F4F0] transition-all list-none min-h-[48px]">
-                    <span data-bm="Bagaimana cara nak buat tempahan?" data-en="How do I make a booking?">Bagaimana cara nak buat tempahan?</span>
-                    <svg class="w-5 h-5 text-[#1B4332] transform transition-transform duration-200 group-open:rotate-180 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </summary>
-                <div class="px-5 py-4 bg-white text-left border-t-0">
-                    <p class="text-stone-600 text-sm leading-relaxed m-0 p-0 text-left">
-                        <span data-bm="Senang je â€” klik butang WhatsApp atau telefon kami terus untuk lock tarikh dan masa technician datang." data-en="Simple â€” click our WhatsApp trigger button or call us directly to lock the date and slot for our technician's visit.">Senang je â€” klik butang WhatsApp atau telefon kami terus untuk lock tarikh dan masa technician datang.</span>
-                    </p>
-                </div>
-            </details>
-
-        </div>
-    </section>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const faqContainer = document.getElementById('faq-accordion');
-        if (!faqContainer) return;
-        
-        const details = faqContainer.querySelectorAll('details');
-        
-        details.forEach(detail => {
-            detail.addEventListener('toggle', function() {
-                if (this.open) {
-                    details.forEach(other => {
-                        if (other !== this) {
-                            other.open = false;
-                        }
-                    });
-                }
-            });
-        });
-    });
-    </script>
-
-
-    <!-- Gallery section | images: 2 | layout: grid -->
-    <section class="max-w-5xl mx-auto px-4 md:px-6 py-12">
-        <!-- Section Header -->
-        <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] tracking-tight mb-2 text-left"
-            data-bm="Projek Kami" data-en="Our Projects">
-            Projek Kami
-        </h2>
-        <p class="text-stone-500 text-sm mb-8 text-left"
-            data-bm="Lihat hasil kerja kami di Cheras dan sekitarnya"
-            data-en="See our completed work in Cheras and surrounding areas">
-            Lihat hasil kerja kami di Cheras dan sekitarnya
+        <!-- Description -->
+        <p class="text-stone-600 text-base leading-relaxed mb-6">
+          <span data-bm="Aircond rumah atau kedai tak sejuk? Kami hantar technician bertauliah terus ke tempat awak. Servis pantas, harga tetap, tiada charge pelik-pelik. Dah 11 tahun penduduk Cheras, Ampang & Pandan Jaya percayakan kami."
+                data-en="Aircond not cold at home or your shop? We'll send a certified technician straight to you. Fast service, fixed pricing, no hidden charges. For 11 years, residents of Cheras, Ampang & Pandan Jaya have trusted us.">
+            Aircond rumah atau kedai tak sejuk? Kami hantar technician bertauliah terus ke tempat awak. Servis pantas, harga tetap, tiada charge pelik-pelik. Dah 11 tahun penduduk Cheras, Ampang &amp; Pandan Jaya percayakan kami.
+          </span>
         </p>
 
-        <!-- Gallery Grid -->
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- Card 1 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-001.webp" alt="Aircond installation project in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Pemasangan Aircond" data-en="Aircond Installation">Pemasangan Aircond</p>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-002.webp" alt="Aircond service and maintenance in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Servis &amp; Maintenance" data-en="Service &amp; Maintenance">Servis &amp; Maintenance</p>
-                </div>
-            </div>
-
-            <!-- Card 3 - Repeat image 1 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-001.webp" alt="Aircond installation project in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Pemasangan Aircond" data-en="Aircond Installation">Pemasangan Aircond</p>
-                </div>
-            </div>
-
-            <!-- Card 4 - Repeat image 2 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-002.webp" alt="Aircond service and maintenance in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Servis &amp; Maintenance" data-en="Service &amp; Maintenance">Servis &amp; Maintenance</p>
-                </div>
-            </div>
-
-            <!-- Card 5 - Repeat image 1 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-001.webp" alt="Aircond installation project in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Pemasangan Aircond" data-en="Aircond Installation">Pemasangan Aircond</p>
-                </div>
-            </div>
-
-            <!-- Card 6 - Repeat image 2 -->
-            <div class="w-full bg-white border-2 border-[#1B4332] rounded-none overflow-hidden flex flex-col items-stretch shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1B4332] group">
-                <div class="w-full aspect-[4/3] bg-stone-200 border-b-2 border-[#1B4332] overflow-hidden relative shrink-0">
-                    <img src="images/gallery/gallery-002.webp" alt="Aircond service and maintenance in Cheras" loading="lazy"
-                         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
-                </div>
-                <div class="p-3 bg-[#F8F4F0] flex-1 flex flex-col justify-center text-left">
-                    <p class="text-[#1B4332] text-[11px] font-extrabold uppercase tracking-tight leading-tight text-left m-0 p-0" 
-                       data-bm="Servis &amp; Maintenance" data-en="Service &amp; Maintenance">Servis &amp; Maintenance</p>
-                </div>
-            </div>
-
+        <!-- CTA buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+          <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
+             class="btn-brighten inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold px-7 py-3.5 transition-all duration-200 shadow-[4px_4px_0px_0px_#1B4332] hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+            </svg>
+            <span data-bm="WhatsApp Kami" data-en="WhatsApp Us">WhatsApp Kami</span>
+          </a>
+          <a href="tel:+60123456789"
+             class="inline-flex items-center justify-center gap-2 border-2 border-[#1B4332] bg-white hover:bg-[#F8F4F0] text-[#1C1917] font-bold px-7 py-3.5 transition-all duration-200 shadow-[4px_4px_0px_0px_#1B4332] hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+            </svg>
+            <span>012-345 6789</span>
+          </a>
         </div>
-    </section>
 
-
-    <!-- Global Footer -->
-    <footer class="bg-[#1B4332] text-emerald-100 py-8">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div>
-                    <p class="font-bold text-white text-base mb-1" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                        Razif Aircond & Renovation
-                    </p>
-                    <p class="text-xs text-emerald-300">
-                        <span data-bm="Cheras, Ampang, Pandan Jaya & kawasan sekitar" data-en="Cheras, Ampang, Pandan Jaya & surrounding areas">
-                            Cheras, Ampang, Pandan Jaya & kawasan sekitar
-                        </span>
-                    </p>
-                </div>
-                <div class="flex flex-col gap-1.5 text-xs text-emerald-300">
-                    <a href="tel:+60123456789" class="hover:text-white transition-colors flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z" />
-                        </svg>
-                        012-345 6789
-                    </a>
-                    <a href="https://wa.me/60123456789" class="hover:text-white transition-colors flex items-center gap-1.5">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
-                        </svg>
-                        WhatsApp
-                    </a>
-                </div>
-                <p class="text-xs text-emerald-400">
-                    Â© 2026 Razif Aircond & Renovation.
-                    <span data-bm="Hak cipta terpelihara." data-en="All rights reserved.">Hak cipta terpelihara.</span>
-                </p>
-            </div>
+        <!-- Mini trust row -->
+        <div class="flex flex-wrap gap-5 text-xs text-stone-500 font-medium">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            4.3 ★ · 31 <span data-bm="ulasan Google" data-en="Google reviews">ulasan Google</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span data-bm="Respons dalam 1 jam" data-en="Responds within 1 hour">Respons dalam 1 jam</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <span data-bm="Jaminan Mutu Kerja" data-en="Workmanship Guaranteed">Jaminan Mutu Kerja</span>
+          </span>
         </div>
-    </footer>
+      </div>
 
-
-    <!-- WhatsApp Sticky Bar (Mobile) -->
-    <div class="wa-sticky md:hidden">
-        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z" />
-        </svg>
-        <span data-bm="WhatsApp Kami" data-en="WhatsApp Us">WhatsApp Kami</span>
+      <!-- Image column -->
+      <div class="reveal reveal-delay-1">
+        <div class="img-hover border-2 border-[#1B4332] shadow-[8px_8px_0px_0px_#1B4332]">
+          <img src="images/hero.webp"
+               alt="Razif Aircond technician servicing aircond unit"
+               class="w-full h-auto object-cover" loading="eager" />
+        </div>
+      </div>
     </div>
+  </section>
 
 
-    <!-- Language Toggle Script -->
-    <script>
-        // Read saved preference or default to BM
-        const saved = localStorage.getItem('pw_lang') || 'bm';
-        setLang(saved, true); // silent on init â€” no animation
+  <!-- ═══════════════════════════════════════════
+       TRUST BADGES — Strip of 4
+  ═══════════════════════════════════════════ -->
+  <section class="max-w-6xl mx-auto px-4 mb-14 reveal">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <!-- Badge 1 -->
+      <div class="card-lift bg-white border-2 border-[#1B4332] p-5 text-center shadow-[4px_4px_0px_0px_#1B4332]">
+        <div class="text-2xl md:text-3xl font-bold text-[#1B4332]" style="font-family:'Plus Jakarta Sans',sans-serif;">11+</div>
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mt-1"
+             data-bm="Tahun Pengalaman" data-en="Years Experience">Tahun Pengalaman</div>
+      </div>
+      <!-- Badge 2 -->
+      <div class="card-lift bg-white border-2 border-[#1B4332] p-5 text-center shadow-[4px_4px_0px_0px_#1B4332]">
+        <div class="text-2xl md:text-3xl font-bold text-[#1B4332]" style="font-family:'Plus Jakarta Sans',sans-serif;">4+</div>
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mt-1"
+             data-bm="Kawasan Diliputi" data-en="Areas Covered">Kawasan Diliputi</div>
+      </div>
+      <!-- Badge 3 -->
+      <div class="card-lift bg-white border-2 border-[#1B4332] p-5 text-center shadow-[4px_4px_0px_0px_#1B4332]">
+        <div class="text-2xl md:text-3xl font-bold text-[#1B4332]" style="font-family:'Plus Jakarta Sans',sans-serif;">&lt;1j</div>
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mt-1"
+             data-bm="Masa Respons" data-en="Response Time">Masa Respons</div>
+      </div>
+      <!-- Badge 4 -->
+      <div class="card-lift bg-white border-2 border-[#1B4332] p-5 text-center shadow-[4px_4px_0px_0px_#1B4332]">
+        <div class="flex items-center justify-center gap-1 text-2xl md:text-3xl font-bold text-[#1B4332]" style="font-family:'Plus Jakarta Sans',sans-serif;">
+          <svg class="w-5 h-5 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          4.3
+        </div>
+        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider mt-1"
+             data-bm="Rating Google" data-en="Google Rating">Rating Google</div>
+      </div>
+    </div>
+  </section>
 
-        function setLang(lang, silent = false) {
-            const isBM = lang === 'bm';
 
-            // Update <html> lang attribute for accessibility
-            document.documentElement.lang = isBM ? 'ms' : 'en';
-            document.documentElement.setAttribute('data-lang', lang);
+  <!-- ═══════════════════════════════════════════
+       SERVICES — 4 cards, 2x2 grid with images
+  ═══════════════════════════════════════════ -->
+  <section id="services" class="bg-white py-14 md:py-18 border-y-2 border-stone-200">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] mb-2 reveal"
+          data-bm="Servis Aircond & Renovation" data-en="Aircond & Renovation Services">
+        Servis Aircond &amp; Renovation
+      </h2>
+      <p class="text-stone-500 text-sm mb-8 reveal reveal-delay-1"
+         data-bm="Kami cover Cheras, Ampang, Pandan Jaya, Taman Connaught dan sekitar"
+         data-en="We cover Cheras, Ampang, Pandan Jaya, Taman Connaught and surrounding areas">
+        Kami cover Cheras, Ampang, Pandan Jaya, Taman Connaught dan sekitar
+      </p>
 
-            // Swap all translatable text nodes
-            document.querySelectorAll('[data-bm]').forEach(el => {
-                const target = isBM ? el.getAttribute('data-bm') : el.getAttribute('data-en');
-                if (!target) return;
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Service 1: Pemasangan -->
+        <div class="card-lift border-2 border-[#1B4332] bg-white flex flex-col sm:flex-row overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] reveal">
+          <div class="sm:w-2/5 min-h-[160px] img-hover border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332]">
+            <img src="images/service-2.webp" alt="New aircond installation" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div class="p-5 sm:w-3/5 flex flex-col justify-center">
+            <h3 class="text-base font-bold text-[#1B4332] mb-2"
+                data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">
+              Pemasangan Aircond Baru
+            </h3>
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Semua jenama utama — Daikin, Panasonic, Midea, York. Stok gas R32 & R410A sedia dalam van, tak perlu tunggu trip ulang-alik. Pemasangan kemas, piping cantik."
+               data-en="All major brands — Daikin, Panasonic, Midea, York. R32 & R410A gas stocked in our vans, no return trips needed. Clean installation with neat piping.">
+              Semua jenama utama — Daikin, Panasonic, Midea, York. Stok gas R32 &amp; R410A sedia dalam van, tak perlu tunggu trip ulang-alik. Pemasangan kemas, piping cantik.
+            </p>
+          </div>
+        </div>
 
-                if (el.children.length === 0) {
-                    if (!silent) el.style.opacity = '0';
-                    setTimeout(() => {
-                        el.textContent = target;
-                        if (!silent) { el.style.opacity = '1'; }
-                    }, silent ? 0 : 80);
-                }
-            });
+        <!-- Service 2: Servis & Cuci -->
+        <div class="card-lift border-2 border-[#1B4332] bg-white flex flex-col sm:flex-row overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] reveal reveal-delay-1">
+          <div class="sm:w-2/5 min-h-[160px] img-hover border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332]">
+            <img src="images/service-1.webp" alt="Chemical cleaning service" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div class="p-5 sm:w-3/5 flex flex-col justify-center">
+            <h3 class="text-base font-bold text-[#1B4332] mb-2"
+                data-bm="Servis & Cuci Aircond" data-en="Aircond Service & Cleaning">
+              Servis &amp; Cuci Aircond
+            </h3>
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Cuci dalam & luar thorough, chemical wash bukan sekadar water flush. Top-up gas, flush paip, check overall condition — bagi aircond kembali sejuk seperti baru."
+               data-en="Thorough indoor & outdoor cleaning with full chemical wash, not just a water flush. Gas top-up, pipe flushing, full condition check — restore your aircond to like-new coldness.">
+              Cuci dalam &amp; luar thorough, chemical wash bukan sekadar water flush. Top-up gas, flush paip, check overall condition — bagi aircond kembali sejuk seperti baru.
+            </p>
+          </div>
+        </div>
 
-            // Swap <title>
-            const titleEl = document.querySelector('title');
-            if (titleEl) {
-                titleEl.textContent = isBM
-                    ? titleEl.getAttribute('data-bm')
-                    : titleEl.getAttribute('data-en');
+        <!-- Service 3: Pembaikan -->
+        <div class="card-lift border-2 border-[#1B4332] bg-white flex flex-col sm:flex-row overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] reveal">
+          <div class="sm:w-2/5 min-h-[160px] img-hover border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332]">
+            <img src="images/service-3.webp" alt="Compressor repair" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div class="p-5 sm:w-3/5 flex flex-col justify-center">
+            <h3 class="text-base font-bold text-[#1B4332] mb-2"
+                data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">
+              Pembaikan Aircond Rosak
+            </h3>
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Gas bocor, compressor mati, fan motor rosak, PCB terbakar — kami diagnose dulu baru baiki. Cas diagnosis RM0 kalau proceed dengan repair. Puas hati baru bayar."
+               data-en="Gas leaks, dead compressor, broken fan motor, burnt PCB — we diagnose first, then repair. RM0 diagnosis fee if you proceed. Pay only when satisfied.">
+              Gas bocor, compressor mati, fan motor rosak, PCB terbakar — kami diagnose dulu baru baiki. Cas diagnosis RM0 kalau proceed dengan repair. Puas hati baru bayar.
+            </p>
+          </div>
+        </div>
+
+        <!-- Service 4: Renovation -->
+        <div class="card-lift border-2 border-[#1B4332] bg-white flex flex-col sm:flex-row overflow-hidden shadow-[4px_4px_0px_0px_#1B4332] reveal reveal-delay-1">
+          <div class="sm:w-2/5 min-h-[160px] img-hover border-b-2 sm:border-b-0 sm:border-r-2 border-[#1B4332]">
+            <img src="images/reno.webp" alt="Light renovation work" class="w-full h-full object-cover" loading="lazy" />
+          </div>
+          <div class="p-5 sm:w-3/5 flex flex-col justify-center">
+            <h3 class="text-base font-bold text-[#1B4332] mb-2"
+                data-bm="Renovation Ringan" data-en="Light Renovation">
+              Renovation Ringan
+            </h3>
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Ubahsuai dapur, bilik air, ruang tamu — tema minimalis atau classic. Pasang partition, kabinet, rak dinding. Satu team boleh uruskan aircond + renovation sekali."
+               data-en="Kitchen, bathroom, living room renovations — minimalist or classic styles. Partition walls, cabinets, wall shelves. One team handles both aircond and renovation.">
+              Ubahsuai dapur, bilik air, ruang tamu — tema minimalis atau classic. Pasang partition, kabinet, rak dinding. Satu team boleh uruskan aircond + renovation sekali.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       GALLERY — 3 images with lightbox
+  ═══════════════════════════════════════════ -->
+  <section id="gallery" class="py-14 md:py-18">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] mb-2 reveal"
+          data-bm="Galeri Projek Kami" data-en="Our Project Gallery">
+        Galeri Projek Kami
+      </h2>
+      <p class="text-stone-500 text-sm mb-8 reveal reveal-delay-1"
+         data-bm="Lihat hasil kerja kami — dari pemasangan hingga renovation"
+         data-en="See our work — from installations to renovations">
+        Lihat hasil kerja kami — dari pemasangan hingga renovation
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <div class="reveal cursor-pointer img-hover border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]"
+             onclick="openLightbox('images/gallery-1.webp')">
+          <img src="images/gallery-1.webp" alt="Clean instalation in living room" class="w-full h-48 md:h-56 object-cover" loading="lazy" />
+        </div>
+        <div class="reveal reveal-delay-1 cursor-pointer img-hover border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]"
+             onclick="openLightbox('images/gallery-2.webp')">
+          <img src="images/gallery-2.webp" alt="Aircond units in warehouse" class="w-full h-48 md:h-56 object-cover" loading="lazy" />
+        </div>
+        <div class="reveal reveal-delay-2 cursor-pointer img-hover border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]"
+             onclick="openLightbox('images/gallery-3.webp')">
+          <img src="images/gallery-3.webp" alt="Service van ready for deployment" class="w-full h-48 md:h-56 object-cover" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox overlay -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <img id="lightbox-img" src="" alt="Gallery image enlarged" />
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       TESTIMONIALS — 3 cards with Google stars
+  ═══════════════════════════════════════════ -->
+  <section id="testimonials" class="bg-white py-14 md:py-18 border-y-2 border-stone-200">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center justify-between mb-8 reveal">
+        <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332]"
+            data-bm="Apa Kata Pelanggan" data-en="What Our Customers Say">
+          Apa Kata Pelanggan
+        </h2>
+        <a href="https://search.google.com/local/reviews?placeid=RAZIF_AIRCOND_CHERAS" target="_blank"
+           class="hidden sm:flex items-center gap-1.5 text-sm font-bold text-stone-500 hover:text-[#1B4332] transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <span data-bm="4.3 ★ (31 ulasan)" data-en="4.3 ★ (31 reviews)">4.3 ★ (31 ulasan)</span>
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Review 1: Puan Siti ★★★★★ -->
+        <div class="reveal bg-[#F8F4F0] border-2 border-[#1B4332] p-6 shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]">
+          <div class="flex gap-0.5 mb-3">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-stone-700 text-sm leading-relaxed mb-4"
+             data-bm='"Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."'
+             data-en='"Aircond broke down at night, called and they came immediately. Neat work, fair price. Highly recommended."'>
+            "Aircond rosak malam-malam, call terus datang. Kerja kemas, harga okay. Memang recommended."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 border-2 border-[#1B4332] bg-white text-[#1B4332] text-xs font-bold flex items-center justify-center">PS</div>
+            <div>
+              <p class="text-xs font-bold text-stone-800">Puan Siti</p>
+              <p class="text-[11px] text-stone-400" data-bm="Taman Connaught" data-en="Taman Connaught">Taman Connaught</p>
+            </div>
+            <a href="https://search.google.com/local/reviews?placeid=RAZIF_AIRCOND_CHERAS" target="_blank" class="ml-auto">
+              <svg class="w-4 h-4 text-stone-400 hover:text-[#1B4332] transition-colors" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Review 2: En. Hafiz ★★★★★ -->
+        <div class="reveal reveal-delay-1 bg-[#F8F4F0] border-2 border-[#1B4332] p-6 shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]">
+          <div class="flex gap-0.5 mb-3">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-stone-700 text-sm leading-relaxed mb-4"
+             data-bm='"Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."'
+             data-en='"Serviced our office aircond units. Fast, no fuss. Now our regular service provider."'>
+            "Service aircond office kami. Cepat siap, tak banyak songeh. Dah jadi langganan tetap."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 border-2 border-[#1B4332] bg-white text-[#1B4332] text-xs font-bold flex items-center justify-center">EH</div>
+            <div>
+              <p class="text-xs font-bold text-stone-800">En. Hafiz</p>
+              <p class="text-[11px] text-stone-400" data-bm="Ampang" data-en="Ampang">Ampang</p>
+            </div>
+            <a href="https://search.google.com/local/reviews?placeid=RAZIF_AIRCOND_CHERAS" target="_blank" class="ml-auto">
+              <svg class="w-4 h-4 text-stone-400 hover:text-[#1B4332] transition-colors" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Review 3: Cik Nurul ★★★★★ -->
+        <div class="reveal reveal-delay-2 bg-[#F8F4F0] border-2 border-[#1B4332] p-6 shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200 hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]">
+          <div class="flex gap-0.5 mb-3">
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-stone-700 text-sm leading-relaxed mb-4"
+             data-bm='"Pasang aircond baru, kemas kerja dia. Explain elok pasal warranty. Puas hati."'
+             data-en='"Installed a new aircond unit. Tidy workmanship. Explained the warranty clearly. Very satisfied."'>
+            "Pasang aircond baru, kemas kerja dia. Explain elok pasal warranty. Puas hati."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 border-2 border-[#1B4332] bg-white text-[#1B4332] text-xs font-bold flex items-center justify-center">CN</div>
+            <div>
+              <p class="text-xs font-bold text-stone-800">Cik Nurul</p>
+              <p class="text-[11px] text-stone-400" data-bm="Cheras" data-en="Cheras">Cheras</p>
+            </div>
+            <a href="https://search.google.com/local/reviews?placeid=RAZIF_AIRCOND_CHERAS" target="_blank" class="ml-auto">
+              <svg class="w-4 h-4 text-stone-400 hover:text-[#1B4332] transition-colors" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Google link -->
+      <div class="mt-6 text-center sm:hidden reveal">
+        <a href="https://search.google.com/local/reviews?placeid=RAZIF_AIRCOND_CHERAS" target="_blank"
+           class="inline-flex items-center gap-1.5 text-sm font-bold text-[#1B4332] underline">
+          <span data-bm="Lihat semua 31 ulasan di Google" data-en="See all 31 reviews on Google">Lihat semua 31 ulasan di Google</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CTA BANNER — Full width dark green
+  ═══════════════════════════════════════════ -->
+  <section class="bg-[#1B4332] py-14 md:py-18 px-4">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+      <div class="reveal">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-2"
+            data-bm="Ada Soalan? Tanya Kami Dulu" data-en="Got Questions? Ask Us First">
+          Ada Soalan? Tanya Kami Dulu
+        </h2>
+        <p class="text-emerald-200 text-sm max-w-xl"
+           data-bm="Sebut harga percuma, tanpa komitmen. Kami reply dalam 1 jam."
+           data-en="Free quote, no obligation. We reply within 1 hour.">
+          Sebut harga percuma, tanpa komitmen. Kami reply dalam 1 jam.
+        </p>
+      </div>
+      <div class="reveal reveal-delay-1 flex flex-col sm:flex-row gap-4 shrink-0">
+        <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
+           class="btn-brighten inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold px-7 py-3.5 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+          </svg>
+          <span data-bm="Tempah Sekarang" data-en="Book Now">Tempah Sekarang</span>
+        </a>
+        <a href="tel:+60123456789"
+           class="inline-flex items-center justify-center gap-2 bg-white text-[#1B4332] font-bold px-7 py-3.5 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+          </svg>
+          <span>012-345 6789</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FAQ — Exclusive accordion
+  ═══════════════════════════════════════════ -->
+  <section id="faq" class="py-14 md:py-18">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] mb-8 reveal"
+          data-bm="Soalan Lazim" data-en="Frequently Asked Questions">
+        Soalan Lazim
+      </h2>
+
+      <div class="space-y-4" id="faq-accordion">
+        <!-- Q1 -->
+        <details class="faq-item reveal border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] transition-colors min-h-[52px]">
+            <span class="text-sm md:text-base" data-bm="Kawasan mana yang diliputi?" data-en="Which areas do you cover?">Kawasan mana yang diliputi?</span>
+            <svg class="faq-chevron w-5 h-5 text-[#1B4332] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 bg-white">
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar. Kalau tak pasti kawasan awak, WhatsApp kami — kami confirmkan."
+               data-en="We cover Cheras, Ampang, Pandan Jaya, Taman Connaught and surrounding areas. Not sure if we serve your area? WhatsApp us and we'll confirm.">
+              Kami meliputi Cheras, Ampang, Pandan Jaya, Taman Connaught dan kawasan sekitar. Kalau tak pasti kawasan awak, WhatsApp kami — kami confirmkan.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q2 -->
+        <details class="faq-item reveal reveal-delay-1 border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] transition-colors min-h-[52px]">
+            <span class="text-sm md:text-base" data-bm="Boleh datang hari yang sama?" data-en="Can you come on the same day?">Boleh datang hari yang sama?</span>
+            <svg class="faq-chevron w-5 h-5 text-[#1B4332] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 bg-white">
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Boleh, kalau slot masih ada. Biasanya kes aircond rosak kami utamakan. Hubungi kami awal pagi untuk lock appointment hari sama."
+               data-en="Yes, if slots are available. We typically prioritise aircond breakdown cases. Contact us early in the morning to lock in a same-day appointment.">
+              Boleh, kalau slot masih ada. Biasanya kes aircond rosak kami utamakan. Hubungi kami awal pagi untuk lock appointment hari sama.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q3 -->
+        <details class="faq-item reveal reveal-delay-2 border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] transition-colors min-h-[52px]">
+            <span class="text-sm md:text-base" data-bm="Ada warranty untuk kerja?" data-en="Is there a warranty for the work?">Ada warranty untuk kerja?</span>
+            <svg class="faq-chevron w-5 h-5 text-[#1B4332] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 bg-white">
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Ya. Semua kerja pemasangan dan pembaikan datang dengan jaminan workmanship sehingga 90 hari. Kalau ada masalah dalam tempoh tu, kami datang semula — percuma."
+               data-en="Yes. All installations and repairs come with a workmanship warranty of up to 90 days. If any issue arises within that period, we'll come back — free of charge.">
+              Ya. Semua kerja pemasangan dan pembaikan datang dengan jaminan workmanship sehingga 90 hari. Kalau ada masalah dalam tempoh tu, kami datang semula — percuma.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q4 -->
+        <details class="faq-item reveal border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] transition-colors min-h-[52px]">
+            <span class="text-sm md:text-base" data-bm="Berapa anggaran kos servis?" data-en="How much does servicing cost?">Berapa anggaran kos servis?</span>
+            <svg class="faq-chevron w-5 h-5 text-[#1B4332] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 bg-white">
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Cuci chemical wash standard bermula RM80/unit. Install aircond baru dari RM200 termasuk piping. Untuk sebut harga tepat, WhatsApp kami — free je."
+               data-en="Standard chemical cleaning starts at RM80/unit. New aircond installation from RM200 including piping. For an accurate quote, WhatsApp us — it's free.">
+              Cuci chemical wash standard bermula RM80/unit. Install aircond baru dari RM200 termasuk piping. Untuk sebut harga tepat, WhatsApp kami — free je.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q5 -->
+        <details class="faq-item reveal reveal-delay-1 border-2 border-[#1B4332] shadow-[4px_4px_0px_0px_#1B4332] transition-all duration-200">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-bold text-stone-900 bg-white hover:bg-[#F8F4F0] transition-colors min-h-[52px]">
+            <span class="text-sm md:text-base" data-bm="Macam mana nak buat tempahan?" data-en="How do I make a booking?">Macam mana nak buat tempahan?</span>
+            <svg class="faq-chevron w-5 h-5 text-[#1B4332] shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 bg-white">
+            <p class="text-stone-600 text-sm leading-relaxed"
+               data-bm="Senang je — klik butang WhatsApp hijau kat atas atau isi borang bawah ni. Kami reply dalam 1 jam. Lepas tu set tarikh & masa technician sampai."
+               data-en="Easy — click the green WhatsApp button above or fill in the form below. We reply within 1 hour. Then we set the date and time for the technician to come.">
+              Senang je — klik butang WhatsApp hijau kat atas atau isi borang bawah ni. Kami reply dalam 1 jam. Lepas tu set tarikh &amp; masa technician sampai.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       CONTACT FORM — Name, Phone, Service, Message → WhatsApp
+  ═══════════════════════════════════════════ -->
+  <section id="contact" class="bg-white py-14 md:py-18 border-y-2 border-stone-200">
+    <div class="max-w-2xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#1B4332] mb-2 text-center reveal"
+          data-bm="Hubungi Kami" data-en="Contact Us">
+        Hubungi Kami
+      </h2>
+      <p class="text-stone-500 text-sm mb-8 text-center reveal reveal-delay-1"
+         data-bm="Isi borang bawah, kami reply within 1 jam — atau terus WhatsApp kami"
+         data-en="Fill in the form below, we'll reply within 1 hour — or WhatsApp us directly">
+        Isi borang bawah, kami reply within 1 jam — atau terus WhatsApp kami
+      </p>
+
+      <form id="contact-form" class="space-y-4 reveal reveal-delay-2">
+        <div>
+          <label class="block text-sm font-bold text-stone-700 mb-1" data-bm="Nama Penuh" data-en="Full Name">Nama Penuh</label>
+          <input type="text" id="cf-name" required
+                 class="form-input"
+                 data-bm-ph="cth: Ahmad bin Ali" data-en-ph="e.g. Ahmad bin Ali"
+                 placeholder="cth: Ahmad bin Ali">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-stone-700 mb-1" data-bm="No. Telefon" data-en="Phone Number">No. Telefon</label>
+          <input type="tel" id="cf-phone" required
+                 class="form-input"
+                 placeholder="012-345 6789">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-stone-700 mb-1" data-bm="Servis Diperlukan" data-en="Service Needed">Servis Diperlukan</label>
+          <select id="cf-service" class="form-input">
+            <option data-bm="Pilih servis..." data-en="Select service...">Pilih servis...</option>
+            <option data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">Pemasangan Aircond Baru</option>
+            <option data-bm="Servis & Cuci Aircond" data-en="Aircond Service & Cleaning">Servis &amp; Cuci Aircond</option>
+            <option data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">Pembaikan Aircond Rosak</option>
+            <option data-bm="Renovation Ringan" data-en="Light Renovation">Renovation Ringan</option>
+            <option data-bm="Lain-lain" data-en="Other">Lain-lain</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-stone-700 mb-1" data-bm="Mesej" data-en="Message">Mesej</label>
+          <textarea id="cf-message" rows="3" class="form-input"
+                    data-bm-ph="Terangkan masalah atau keperluan awak..."
+                    data-en-ph="Describe your problem or requirement..."
+                    placeholder="Terangkan masalah atau keperluan awak..."></textarea>
+        </div>
+        <button type="submit"
+                class="btn-brighten w-full py-3.5 font-bold text-white transition-all duration-200 shadow-[4px_4px_0px_0px_#1B4332] hover:shadow-[2px_2px_0px_0px_#1B4332] hover:translate-x-[2px] hover:translate-y-[2px]"
+                style="background:#25D366;"
+                data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">
+          Hantar via WhatsApp
+        </button>
+      </form>
+
+      <!-- Business hours -->
+      <div class="mt-8 text-center text-xs text-stone-400 reveal">
+        <span data-bm="Isnin – Sabtu: 8am – 7pm" data-en="Monday – Saturday: 8am – 7pm">Isnin – Sabtu: 8am – 7pm</span>
+        <span class="mx-2">·</span>
+        <span data-bm="Ahad: Atas permintaan" data-en="Sunday: On request">Ahad: Atas permintaan</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+  <footer class="bg-[#1B4332] text-emerald-100 py-10">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Brand -->
+        <div>
+          <p class="font-bold text-white text-base mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">Razif Aircond &amp; Renovation</p>
+          <p class="text-xs text-emerald-300 leading-relaxed"
+             data-bm="Pakar aircond & renovation sejak 2015. Meliputi Cheras, Ampang, Pandan Jaya & Taman Connaught."
+             data-en="Aircond & renovation experts since 2015. Covering Cheras, Ampang, Pandan Jaya & Taman Connaught.">
+            Pakar aircond &amp; renovation sejak 2015. Meliputi Cheras, Ampang, Pandan Jaya &amp; Taman Connaught.
+          </p>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <p class="font-bold text-white text-sm mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;"
+             data-bm="Hubungi" data-en="Contact">Hubungi</p>
+          <div class="flex flex-col gap-2 text-xs text-emerald-300">
+            <a href="tel:+60123456789" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+              </svg>
+              012-345 6789
+            </a>
+            <a href="https://wa.me/60123456789" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+              </svg>
+              WhatsApp
+            </a>
+            <a href="https://www.instagram.com/razifaircond" target="_blank" class="hover:text-white transition-colors flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              @razifaircond
+            </a>
+          </div>
+        </div>
+
+        <!-- Service areas -->
+        <div>
+          <p class="font-bold text-white text-sm mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;"
+             data-bm="Kawasan Servis" data-en="Service Areas">Kawasan Servis</p>
+          <ul class="text-xs text-emerald-300 space-y-1">
+            <li data-bm="Cheras" data-en="Cheras">Cheras</li>
+            <li data-bm="Ampang" data-en="Ampang">Ampang</li>
+            <li data-bm="Pandan Jaya" data-en="Pandan Jaya">Pandan Jaya</li>
+            <li data-bm="Taman Connaught" data-en="Taman Connaught">Taman Connaught</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-emerald-800 text-center">
+        <p class="text-xs text-emerald-400">
+          &copy; 2026 Razif Aircond &amp; Renovation.
+          <span data-bm="Hak cipta terpelihara." data-en="All rights reserved.">Hak cipta terpelihara.</span>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ═══════════════════════════════════════════
+       WHATSAPP STICKY BAR (mobile only)
+  ═══════════════════════════════════════════ -->
+  <div class="wa-sticky md:hidden">
+    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+    </svg>
+    <a href="https://wa.me/60123456789?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond"
+       class="text-white font-semibold text-sm">
+      <span data-bm="Hubungi via WhatsApp" data-en="Contact via WhatsApp">Hubungi via WhatsApp</span>
+    </a>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════ -->
+
+  <!-- Scroll reveal IntersectionObserver -->
+  <script>
+    (function() {
+      var observer = new IntersectionObserver(
+        function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
             }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+    })();
+  </script>
 
-            // Update WhatsApp pre-filled message language
-            const waMsg = isBM
-                ? 'Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond'
-                : 'Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20aircond%20service';
+  <!-- Gallery lightbox -->
+  <script>
+    function openLightbox(src) {
+      var lb = document.getElementById('lightbox');
+      document.getElementById('lightbox-img').src = src;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (e.target === e.currentTarget || e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    document.addEventListener('keydown', closeLightbox);
+  </script>
 
-            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
-                const base = a.href.split('?')[0];
-                a.href = base + '?text=' + waMsg;
+  <!-- FAQ exclusive accordion -->
+  <script>
+    (function() {
+      var items = document.querySelectorAll('.faq-item');
+      items.forEach(function(item) {
+        item.addEventListener('toggle', function() {
+          if (this.open) {
+            items.forEach(function(other) {
+              if (other !== item) other.open = false;
             });
+          }
+        });
+      });
+    })();
+  </script>
 
-            // Toggle button active states
-            document.getElementById('btn-bm').classList.toggle('active', isBM);
-            document.getElementById('btn-en').classList.toggle('active', !isBM);
-            document.getElementById('btn-bm').setAttribute('aria-pressed', isBM);
-            document.getElementById('btn-en').setAttribute('aria-pressed', !isBM);
-
-            // Persist preference
-            localStorage.setItem('pw_lang', lang);
+  <!-- Mobile menu -->
+  <script>
+    function toggleMobileMenu() {
+      var menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobile-menu').classList.add('hidden');
+    }
+    var lastScrollY = window.scrollY;
+    window.addEventListener('scroll', function() {
+      var menu = document.getElementById('mobile-menu');
+      if (!menu.classList.contains('hidden')) {
+        if (Math.abs(window.scrollY - lastScrollY) > 10) {
+          menu.classList.add('hidden');
         }
-    </script>
+      }
+      lastScrollY = window.scrollY;
+    });
+  </script>
+
+  <!-- Contact form → WhatsApp -->
+  <script>
+document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var name = document.getElementById('cf-name').value;
+      var phone = document.getElementById('cf-phone').value;
+      var service = document.getElementById('cf-service').value;
+      var message = document.getElementById('cf-message').value;
+      var lang = document.documentElement.getAttribute('data-lang') || 'bm';
+
+      var text;
+      if (lang === 'en') {
+        text = 'Hi, I\'m ' + name + '.\nPhone: ' + phone + '\nService: ' + service + '\nMessage: ' + message;
+      } else {
+        text = 'Hi, saya ' + name + '.\nTelefon: ' + phone + '\nServis: ' + service + '\nMesej: ' + message;
+      }
+
+      var waUrl = 'https://wa.me/60123456789?text=' + encodeURIComponent(text);
+      window.open(waUrl, '_blank');
+
+      // Track contact form submission
+      if (typeof umami !== 'undefined') {
+        umami.track('demo_contact_submit', { client_id: 'test-razif' });
+      }
+    });
+  </script>
+
+  <!-- Language toggle -->
+  <script>
+    var savedLang = localStorage.getItem('pw_lang') || 'bm';
+    setLang(savedLang, true);
+
+    function setLang(lang, silent) {
+      silent = silent || false;
+      var isBM = lang === 'bm';
+
+      document.documentElement.lang = isBM ? 'ms' : 'en';
+      document.documentElement.setAttribute('data-lang', lang);
+
+      document.querySelectorAll('[data-bm]').forEach(function(el) {
+        var target = isBM ? el.getAttribute('data-bm') : el.getAttribute('data-en');
+        if (!target) return;
+        if (el.children.length === 0) {
+          if (!silent) el.style.opacity = '0';
+          setTimeout(function() {
+            el.textContent = target;
+            if (!silent) el.style.opacity = '1';
+          }, silent ? 0 : 80);
+        }
+      });
+
+      var titleEl = document.querySelector('title');
+      if (titleEl) {
+        titleEl.textContent = isBM ? titleEl.getAttribute('data-bm') : titleEl.getAttribute('data-en');
+      }
+
+      var waMsg = isBM
+        ? 'Hi%2C%20saya%20nak%20tanya%20pasal%20servis%20aircond'
+        : 'Hi%2C%20I%20would%20like%20to%20enquire%20about%20your%20aircond%20service';
+
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function(a) {
+        var base = a.href.split('?')[0];
+        a.href = base + '?text=' + waMsg;
+      });
+
+      document.getElementById('btn-bm').classList.toggle('active', isBM);
+      document.getElementById('btn-en').classList.toggle('active', !isBM);
+      document.getElementById('btn-bm').setAttribute('aria-pressed', isBM);
+      document.getElementById('btn-en').setAttribute('aria-pressed', !isBM);
+
+      localStorage.setItem('pw_lang', lang);
+    }
+
+    // Track demo_visit when arriving from outreach link
+    if (typeof umami !== 'undefined') {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('ref') === 'outreach') {
+        umami.track('demo_visit', { client_id: 'test-razif', prospect: params.get('prospect') || '' });
+      }
+    }
+  </script>
 
 </body>
-
 </html>
-
-
-

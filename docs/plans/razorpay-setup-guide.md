@@ -284,7 +284,7 @@ Trial Period: None
 - ✅ Enable auto-renewal
 - ✅ Send renewal reminders (7 days before)
 - ✅ Allow plan changes: Yes
-- ✅ Allow cancellation: Yes (with 30 days notice)
+- ✅ Allow cancellation: Yes (with 14 days notice)
 
 **Time:** 30 minutes  
 **Cost:** Free

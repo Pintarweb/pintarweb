@@ -119,7 +119,7 @@ NOT from luxury aesthetics.
 - Border:         #E5E7EB (light grey — borders and dividers) 
 
 ## Usage Rules
-### Primary Green
+### Deep Slate Primary
 Use for:
 - Headers
 - Trust sections
@@ -132,7 +132,7 @@ Should communicate:
 - Professionalism
 - Stability
 
-### Amber Accent
+### Bronze Accent
 Reserved ONLY for:
 - CTA buttons
 - WhatsApp actions

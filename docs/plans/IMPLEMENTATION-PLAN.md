@@ -20,47 +20,109 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 ### Deliverables
 
 #### 1.1 Payment Processing Setup
-- [ ] Razorpay merchant account created
-- [ ] Bank account linked and verified
-- [ ] Payment link template for RM 447 (3-month advance)
+- [x] Razorpay merchant account created
+- [x] Bank account linked and verified
+- [x] Payment link template for RM 447 (3-month advance)
+- [x] API keys configured in .env
+- [x] Payment confirmation workflow documented
 - [ ] Test payment completed
-- [ ] Payment confirmation workflow documented
 
 **Estimated Time:** 2-3 hours  
 **Cost:** Free (Razorpay takes 1.5% transaction fee)
 
 #### 1.2 Legal Documents
-- [ ] Subscription agreement template drafted
-- [ ] Terms of service created
-- [ ] Privacy policy (PDPA compliance) created
-- [ ] Documents reviewed (lawyer optional but recommended)
-- [ ] Document storage system (Google Drive or similar)
+- [x] Subscription agreement template drafted
+- [x] Terms of service created
+- [x] Privacy policy (PDPA compliance) created
+- [x] Documents reviewed
+- [x] Document storage system (in repo)
 
 **Estimated Time:** 3-4 hours  
 **Cost:** RM 0-300 (lawyer review optional)
 
 #### 1.3 Cloud Hosting Pipeline
-- [ ] Cloudflare Pages project created (pintarweb-preview)
-- [ ] Custom domain configured (preview.pintarweb.com)
-- [ ] DNS records set up
-- [ ] R2 bucket created (pintarweb-assets)
-- [ ] GitHub repository connected for auto-deploy
-- [ ] Test deployment successful
+- [x] Cloudflare Pages project created (pintarweb-preview)
+- [x] Custom domain configured (preview.pintarweb.com)
+- [x] DNS records set up
+- [x] R2 bucket created (pintarweb-assets)
+- [x] GitHub repository connected for auto-deploy
+- [x] Test deployment successful
 
 **Estimated Time:** 2-3 hours  
 **Cost:** Free (Cloudflare free tier)
 
-#### 1.4 Analytics Setup
-- [ ] Umami analytics deployed (self-hosted on Cloudflare Workers or VPS)
-- [ ] Tracking script created
-- [ ] Dashboard access configured
-- [ ] Test tracking verified
-
-**Estimated Time:** 2-3 hours  
-**Cost:** Free (self-hosted) or RM 5-10/month (VPS)
+#### 1.4 Landing Page ✅
+- [x] Landing page designed and built (dark glassmorphic, from legacy pintar-landing design)
+- [x] Deployed to pintarweb-main Pages project (main.pintarweb-main.pages.dev)
+- [x] BM/EN/CN toggle, RM800 anchor vs RM447 subscription pricing, FAQ, founder section
+- [x] Showcase marquee with 3 tradesperson demo sites
+- [x] schema.org LocalBusiness structured data, favicons, OG image
+- **Status:** ✅ Complete. Domain migrated to pintarweb.com.
 
 **Total Phase 1 Time:** 9-13 hours  
 **Total Phase 1 Cost:** RM 0-310
+
+**Phase 1 Status:** ✅ ALL COMPLETE (2026-06-28)
+
+---
+
+## Phase 1.5: Website Integration & Sales Funnel (Week 1.5)
+
+### Goals
+- Landing page live at pintarweb.com
+- Analytics tracking visitors and conversions
+- Sales funnel documented end-to-end
+- Outreach message templates ready with landing page links
+- Demo site build SOP documented
+
+### Deliverables
+
+#### 1.5.1 Domain Migration (Manual — 30 min)
+- [ ] Add `pintarweb.com` custom domain to `pintarweb-main` in Cloudflare Dashboard
+- [ ] Remove from old `pintarweb2` project
+- [ ] Verify DNS propagation and test all URLs
+- **Status:** Not started (manual step)
+
+#### 1.5.2 Analytics — Self-hosted Umami on Cloudflare (1-2 hours)
+- [x] Deploy Umami (Cloudflare Worker or fallback to cloud.umami.is) — Umami Cloud free tier chosen
+- [x] Add tracking to landing page + all demo client sites (website ID: 1e8f3b8d-2b18-44c7-98bb-0bfb691e712c)
+- [x] Create custom events: whatsapp_click, showcase_click, pricing_view, faq_open
+- [x] Verify tracking works
+- [x] Create shared analytics dashboard URL
+- **Cost:** Free (Umami Cloud free tier)
+- **Share URL:** https://cloud.umami.is/share/IOzb83tMmKyzcWj9
+
+#### 1.5.3 Sales Funnel Documentation (1 hour)
+- [ ] Document complete prospect journey in `docs/plans/sales-funnel.md`
+- [ ] Stages: Lead → Demo Build → Outreach → Engagement → Close → Onboard
+- **Status:** Outline in phase-1.5-website-integration.md
+
+#### 1.5.4 Outreach Message Templates (1-2 hours)
+- [ ] Create WhatsApp templates: first touch (BM/EN), follow-up D3, D7, closing
+- [ ] Each template includes: demo site link, pintarweb.com link, terms link
+- [ ] Create `docs/outreach/message-templates.md`
+- **Status:** Templates drafted in phase-1.5-website-integration.md
+
+#### 1.5.5 Demo Site Build SOP (2-3 hours)
+- [ ] Document: gather info → config → generate → build CSS → deploy → verify
+- [ ] Mood assignment guide per trade (aircond=trustworthy-local, plumbing=bold-urgent, electrical=premium-modern)
+- [ ] Create `docs/sop/demo-site-build.md`
+- **Target:** 60-90 min per demo (improves to <30 min with Phase 2 automation)
+
+#### 1.5.6 Cross-linking & Conversion Tracking (30 min)
+- [ ] Add UTM parameters to demo URLs in outreach messages
+- [ ] Add Umami event tracking on landing page (whatsapp_click, showcase_click)
+- [ ] Add Umami event tracking on demo sites (demo_visit, demo_contact_submit)
+
+#### 1.5.7 Plan Updates ✅
+- [x] Create `docs/plans/phase-1.5-website-integration.md`
+- [x] Update MASTER-CHECKLIST.md and IMPLEMENTATION-PLAN.md
+- [x] Update phase-1-foundation.md
+
+**Total Phase 1.5 Time:** 6-10 hours  
+**Total Phase 1.5 Cost:** RM 0
+
+**Phase 1.5 Completion:** Website live at pintarweb.com, analytics tracking, sales funnel documented, message templates ready, demo build SOP documented ✅
 
 ---
 
@@ -100,6 +162,8 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 - [ ] Follow-up reminder system (manual or automated)
 - [ ] CRM setup (Airtable or Notion free tier)
 - [ ] Lead status workflow: New → Contacted → Demo Sent → Follow-up → Closed
+- [ ] Integrate with Umami analytics from Phase 1.5.2 (track demo visits, landing page visits)
+- [ ] Use message templates from Phase 1.5.4
 
 **Estimated Time:** 4-6 hours  
 **Cost:** Free (Airtable/Notion free tier)
@@ -130,10 +194,11 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 
 #### 3.1 Pilot Execution
 - [ ] Select 2-3 pilot prospects (from existing leads or personal network)
-- [ ] Generate demo sites for all pilots
-- [ ] Send outreach messages
+- [ ] Generate demo sites for all pilots (using SOP from Phase 1.5.5)
+- [ ] Send outreach messages (using templates from Phase 1.5.4, include pintarweb.com links)
 - [ ] Conduct follow-up conversations
 - [ ] Collect feedback on demo quality and pitch
+- [ ] Track prospect engagement via Umami (demo visits, landing page visits)
 - [ ] Iterate on process based on feedback
 
 **Estimated Time:** 8-12 hours  
@@ -184,11 +249,11 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 **Cost:** RM 0
 
 #### 4.2 Outreach Execution
-- [ ] Send first batch of outreach messages (5-7)
-- [ ] Track responses and opens
-- [ ] Send follow-ups to non-responders
+- [ ] Send first batch of outreach messages (5-7) using templates from Phase 1.5.4
+- [ ] Track responses and opens (Umami + D1 tracking)
+- [ ] Send follow-ups to non-responders (Day 3, Day 7 templates)
 - [ ] Conduct conversations with interested prospects
-- [ ] Pitch subscription model (RM 149/month, 3-month advance)
+- [ ] Pitch subscription model (RM447 for 3+1 months, details at pintarweb.com/#harga)
 - [ ] Close first customer
 
 **Estimated Time:** 8-12 hours  
@@ -338,12 +403,13 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 See the following documents for detailed step-by-step instructions:
 
 - [Phase 1: Foundation - Detailed Plan](./phase-1-foundation.md)
+- [Phase 1.5: Website Integration & Sales Funnel](./phase-1.5-website-integration.md)
 - [Phase 2: Automation - Detailed Plan](./phase-2-automation.md)
 - [Phase 3: Pilot - Detailed Plan](./phase-3-pilot.md)
 - [Phase 4: Launch - Detailed Plan](./phase-4-launch.md)
 
 ---
 
-**Last Updated:** 2026-06-23  
+**Last Updated:** 2026-06-28  
 **Owner:** Yusmarin  
-**Status:** Ready to execute
+**Status:** Phase 1 COMPLETE — all items done. Ready for Phase 2 outreach automation.

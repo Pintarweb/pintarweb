@@ -249,3 +249,33 @@ Track referral sources in leads.csv under `source` column.
 - Avoid formal Malay (tidak, adalah, bagi) — too stiff for WhatsApp
 - Avoid full English — feels corporate and distant
 - Emoji: one at most per message, only at the end, never in Touch 1
+
+---
+
+## Automation Scripts
+
+All scripts live in `scripts/`:
+
+| Script | Purpose |
+|--------|---------|
+| `process-leads.sh` | Score leads with data-opportunity algorithm |
+| `generate-audit.sh` | Build P.A.S.T. audit HTML with calculator |
+| `generate-whatsapp.sh` | Generate WhatsApp pre-fill URLs (BM/EN) |
+| `generate-demo.sh` | Unified workflow wrapper |
+| `init-outreach-db.sh` | Initialize D1 tables |
+| `add-lead.sh` | Add lead to D1 tracking |
+| `track-event.sh` | Track outreach events |
+| `view-outreach.sh` | Dashboard view |
+
+### Lead Scoring Algorithm
+- +50: No website + active social (data opportunity)
+- +40: No website + no social
+- +20: Has both website and social
+- +15: Google rating < 4.0
+- -10: Review count > 50
+- -5: Active social
+
+### D1 Database
+- Database ID: `1ca959be-b1bc-4b03-87df-8e4610659993`
+- Tables: `outreach_leads`, `outreach_events`
+- Use `--remote` flag with wrangler commands

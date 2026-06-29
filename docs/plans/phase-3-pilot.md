@@ -615,7 +615,7 @@ Process for converting interested prospects to paying customers and onboarding t
    - GMB optimization
    - Monthly updates
    
-   Auto-renew setiap 3 bulan. Boleh batal bila-bila dengan 30 hari notice.
+   Auto-renew setiap 3 bulan. Boleh batal bila-bila dengan 14 hari notice.
    ```
 
 4. **Send payment link:**

@@ -1,0 +1,26 @@
+{
+    "id": "demo-ah-seng-plumbing",
+    "business_name": "Ah Seng Plumbing Services",
+    "tagline": "Pakar Plumbing & Paip Klang",
+    "phone": "012-345 6789",
+    "whatsapp": "60123456789",
+    "area": "Klang, Selangor",
+    "service_areas": ["Klang", "Shah Alam", "Port Klang", "Bukit Tinggi"],
+    "niche": "plumbing",
+    "services": ["Pemasangan Paip Baru", "Pembaikan Paip Bocor", "Pembersihan Saluran Tersumbat", "Pemasangan Tangki Air"],
+    "established": "2018",
+    "mood": "bold-urgent",
+    "hero_variant": "split",
+    "google_rating": 4.5,
+    "google_review_count": 28,
+    "testimonials": [
+        {"name": "Puan Lim", "area": "Klang", "text": "Paip bocor tengah malam, call terus datang. Cepat betul, harga berpatutan.", "rating": 5},
+        {"name": "En. Raj", "area": "Shah Alam", "text": "Tukar paip rumah penuh. Kerja kemas, explain detail. Recommended.", "rating": 5},
+        {"name": "Cik Farah", "area": "Port Klang", "text": "Salur tandas tersumbat, datang dalam 1 jam. Lulus!", "rating": 4}
+    ],
+    "social": {
+        "instagram_handle": "ahsengplumbing",
+        "instagram_followers": 850,
+        "instagram_active": true
+    }
+}

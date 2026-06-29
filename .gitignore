@@ -9,3 +9,4 @@ dist/
 .DS_Store
 .turbo/
 *.tsbuildinfo
+packages/site-generator/_legacy/
