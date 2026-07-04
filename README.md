@@ -1,117 +1,155 @@
-# Pintarweb Monorepo
+# PintarWeb
 
-Malaysian SME website factory. Static HTML demos + JavaScript widgets for interactive features.
+Website-as-a-Service for Malaysian SME tradespeople. Build and deploy a professional website + WhatsApp bot + local SEO for aircond contractors, plumbers, electricians, and renovation specialists.
+
+**Live:** [pintarweb.com](https://pintarweb.com)
+
+---
+
+## What We Build
+
+A complete digital presence for tradespeople — mobile-friendly website, WhatsApp auto-reply bot, and Google Business Profile optimization. All in 4 weeks.
+
+---
+
+## Pricing (RM446 total)
+
+| | Amount | When |
+|---|---|---|
+| Setup fee | RM297 | Day 0 — to start build |
+| Activation | RM149 | Delivery day — to go live |
+| **Total** | **RM446** | Includes 1 month FREE bonus |
+| Renewal | RM149/mo | From month 5 |
+
+**Maybank:** 562021737846 (PintarWeb Enterprise)
+
+---
+
+## Products
+
+### Website
+- Mobile-first, 3-5 page static site
+- BM/EN language toggle
+- WhatsApp CTA, gallery, testimonials, contact form
+- Real images — no placeholders
+- Deployed to Cloudflare Pages
+
+### WhatsApp Bot
+- 24/7 auto-reply receptionist
+- 22-intent keyword classifier — no LLM needed for routing
+- DeepSeek v4 Flash for conversational fallback
+- Split payment closing flow (2-path: Ready vs Need to Know More)
+- Configured per-client via D1
+
+### Local SEO
+- Google Business Profile setup and optimization
+- "Near me" search optimization
+- Local keyword targeting
+
+---
 
 ## Architecture
-
-- **Static HTML + Tailwind CSS** for client demo sites (fast, cheap, AI-generated)
-- **JavaScript widgets** for interactive features (chat, booking, auto-reply)
-- **Cloudflare Workers + D1** for backend services
-- **Scraper** for lead generation (Playwright + Cloudflare Workers)
-
-## Packages
-
-| Package | Description |
-|---------|-------------|
-| `@pintarweb/site-generator` | Static HTML demo sites + audit reports |
-| `@pintarweb/widgets` | JavaScript widgets (chat, booking, auto-reply) |
-| `@pintarweb/scraper` | Lead generation (Playwright + Cloudflare Workers) |
-| `@pintarweb/shared` | Shared types, schemas, configs |
-
-## Directory Structure
 
 ```
 pintarweb/
 ├── packages/
-│   ├── site-generator/    # Static HTML demos + audit reports
-│   ├── widgets/           # JavaScript widgets (chat, booking)
-│   ├── scraper/           # Lead generation
-│   └── shared/            # Shared types, schemas
-├── marketing/             # Marketing content, campaigns
-├── data/                  # Shared data (leads JSON)
-└── scripts/               # Shared scripts
+│   ├── site-generator/     # Static HTML site builder + CSS build
+│   └── scraper/            # Lead generation (Playwright → D1)
+├── workers/
+│   └── whatsapp-bot/       # Cloudflare Worker — WhatsApp bot
+├── scripts/                # Automation scripts (D1, Resend, Razorpay)
+├── docs/
+│   ├── plans/              # Phase 1-4 implementation plans
+│   ├── outreach/           # WhatsApp message templates
+│   ├── sop/                # Demo build SOP
+│   └── deep-research/      # Niche research (aircond, trades, reno)
+└── design-system/          # Mood tokens, reference components
 ```
+
+---
+
+## Key Scripts
+
+```bash
+# Generate demo site + audit + WhatsApp link
+bash scripts/generate-demo.sh --name "Business" --phone "60123456789" --area "KL" --niche "aircond"
+
+# Add lead to D1
+bash scripts/add-lead.sh "Business" "60123456789" "KL" "aircond" --score 65
+
+# Track outreach event
+bash scripts/track-event.sh "[lead-id]" "demo_sent"
+
+# Confirm payment (split: RM297 setup / RM149 activation)
+bash scripts/confirm-payment.sh "[lead-id]" "297" "TRX123" --email "cust@email.com"
+
+# Send billing reminder to all pilots (month 3 end)
+bash scripts/billing-reminder.sh
+
+# Create Razorpay subscription (month 4)
+bash scripts/create-subscription.sh "[lead-id]" "monthly"
+```
+
+---
+
+## Deployment
+
+| Component | Platform | URL |
+|---|---|---|
+| Landing page | Cloudflare Pages | pintarweb.com |
+| WhatsApp bot | Cloudflare Workers | pintarweb-whatsapp-bot.yusmarin.workers.dev |
+| Analytics | Umami Cloud | cloud.umami.is |
+| Database | Cloudflare D1 | pintarweb-claude-db |
+
+---
+
+## WhatsApp Bot
+
+**Worker:** `workers/whatsapp-bot/src/index.ts`
+**Deployed:** `https://pintarweb-whatsapp-bot.yusmarin.workers.dev`
+**WABA ID:** 727271803683109
+
+**Intent taxonomy (22 intents):**
+- FAQ: packages, setup fee, subscribe, contract, timeline, requirements, support, ownership, update, renewal, domain, WhatsApp number, local SEO, satisfaction, see before live, PDPA, payment methods, maintenance, tech savvy, add services
+- Action: price enquiry, subscribe, closing ready
+- Meta: how it works, support, escalate, unclear
+
+**Closing flow:**
+- Path A (Ready): Maybank details sent, owner notified
+- Path B (Need to Know More): FAQ sent, owner follows up personally
+
+---
 
 ## Development
 
 ```bash
-# Install dependencies
+# Install
 pnpm install
 
-# Run all dev servers
-pnpm dev
+# Build site CSS (after generating HTML)
+bash packages/site-generator/scripts/build-client.sh {client-id}
 
-# Build all packages
-pnpm build
+# Deploy site to preview
+bash scripts/deploy-preview.sh
 
-# Deploy all Cloudflare Workers
-pnpm deploy
-
-# Run tests
-pnpm test
+# Deploy WhatsApp bot
+cd workers/whatsapp-bot && npx wrangler deploy
 ```
 
-## Individual Package Commands
+---
 
-```bash
-# Site generator
-cd packages/site-generator
-pnpm dev          # Start Cloudflare dev server
-pnpm deploy       # Deploy to Cloudflare
+## Status
 
-# Scraper
-cd packages/scraper
-pnpm dev          # Start Cloudflare dev server
-pnpm scrape       # Run scraper CLI
+- Phase 1 (Foundation): ✅ Complete
+- Phase 1.5 (Website Integration): ✅ Complete
+- Phase 2 (Automation): ✅ Complete
+- Phase 3 (WhatsApp Bot): ✅ Built & Deployed
+- Phase 4 (Launch): Ready to execute
 
-# Widgets
-cd packages/widgets
-pnpm dev          # Watch mode for development
-pnpm build        # Build for production
+See `docs/plans/MASTER-CHECKLIST.md` for full detail.
 
-# Shared
-cd packages/shared
-pnpm dev          # Watch mode for type changes
-pnpm build        # Build types
-```
-
-## Widget Usage
-
-Load widgets from CDN and initialize:
-
-```html
-<script src="https://cdn.pintarweb.com/widgets/chat.js"></script>
-<script>
-  initWhatsAppWidget({
-    phoneNumber: '60123456789',
-    message: 'Hi, I would like to inquire about your services.',
-    position: 'bottom-right',
-    size: 'medium'
-  });
-</script>
-```
-
-## Environment Variables
-
-Each package has its own `.env` file (gitignored):
-
-- `packages/site-generator/.env` — Cloudflare, API keys
-- `packages/scraper/.env` — OpenAI, Cloudflare credentials
-
-## Deployment
-
-- **Site Generator**: Cloudflare Pages + Workers
-- **Scraper**: Cloudflare Workers
-- **Widgets**: Cloudflare R2 (CDN)
-
-## Business Model
-
-Website-as-a-Service for Malaysian SME tradespeople (aircond, contractors, trades).
-
-- **Asas**: RM 149/mo — Website + SEO + WhatsApp auto-reply
-- **Bisnes**: RM 299/mo — + Booking + Reviews + Analytics
-- **Pro**: RM 499/mo — + Chatbot + Voice AI + CRM
+---
 
 ## License
 
-Proprietary. All rights reserved.
+Proprietary. All rights reserved. PintarWeb Enterprise.
