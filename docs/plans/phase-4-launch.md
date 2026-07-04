@@ -281,8 +281,9 @@ git push origin master
 ```
 Kalau berminat, ada 2 pilihan:
 1. RM 800 one-time untuk website
-2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included. 
-   3 bulan advance (RM 447)
+2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included.
+   Split payment: RM297 setup + RM149 masa launch (total RM446).
+   1 bulan FREE masa activation.
 
 Satu job chemical wash (RM 180-350) dah cover sebulan.
 ```
@@ -357,7 +358,7 @@ node scripts/track-outreach.js [business-id] demo_sent "Sent pricing info"
 
 1. **Qualify the lead:**
    - Business size (1-10 employees ideal)
-   - Budget (can they afford RM 447?)
+   - Budget (can they afford RM297 setup + RM149 activation?)
    - Timeline (ready to start now?)
    - Decision maker (talking to owner?)
 
@@ -372,7 +373,7 @@ node scripts/track-outreach.js [business-id] demo_sent "Sent pricing info"
    - Google Business Profile optimization
    - Monthly updates
    
-   Semua ni RM 149/bulan, 3 bulan advance (RM 447).
+   Semua ni RM 149/bulan. Split payment: RM297 setup + RM149 masa launch (total RM446, 1 bulan FREE).
    ```
 
 3. **Handle objections:**
@@ -404,18 +405,23 @@ node scripts/track-outreach.js [business-id] demo_sent "Sent pricing info"
    ```
    Okay, kalau awak ready, saya boleh setup sekarang.
    
-   Saya akan hantar payment link. Lepas payment, saya perlukan:
+   Untuk mula, rara ada 2 step:
+   
+   Step 1: Bayar RM297 (fi persediaan) → Maybank: 562021737846 (PintarWeb Enterprise)
+   → Selepas payment, hantar resit dan kami mula bina esok.
+   
+   Step 2: Dalam 4 minggu, bila site siap, bayar RM149 (activation) → bot dipindahkan, site go live!
+   
+   Untuk proceed, rara perlu:
    - Logo bisnes
    - Photos projek
    - Maklumat bisnes (alamat, waktu operasi)
-   
-   Website akan live dalam 5-7 hari.
    ```
 
-5. **Send payment link:**
-   - Create Razorpay link (RM 447)
-   - Send via WhatsApp
-   - Include brief instructions
+5. **Send Maybank details:**
+   - Maybank: 562021737846 (PintarWeb Enterprise)
+   - RM297 setup fee first
+   - RM149 activation at delivery (week 4)
 
 **Track:**
 ```bash
@@ -451,13 +457,13 @@ node scripts/track-outreach.js [business-id] closed "Payment sent"
 **When payment received:**
 
 1. **Verify payment:**
-   - Check Razorpay dashboard
-   - Confirm amount: RM 447
+   - Check bank statement / DuitNow notification
+   - Confirm amount: RM 297 (setup) or RM 149 (activation on delivery day)
    - Note transaction ID
 
 2. **Send confirmation:**
    ```
-   Terima kasih! Payment RM 447 dah diterima.
+   Terima kasih! Payment dah diterima.
    
    Sekarang saya perlukan:
    1. Logo bisnes (format PNG atau JPG)
@@ -627,7 +633,7 @@ Saya akan update dalam 1-2 hari kerja.
 - Monthly report dari saya
 
 **Bulan 4:**
-- Renewal discussion (RM 447 untuk 3 bulan lagi)
+- Renewal discussion (monthly: RM149, quarterly: RM417/3mo)
 - Upgrade options available
 
 === SUPPORT ===
@@ -708,10 +714,10 @@ Terima kasih sebab trust Pintarweb! 🙏
 - **Total: 13 hours**
 
 ## Financial
-- Revenue: RM 447
+- Revenue: RM 446 (RM297 setup + RM149 activation)
 - Costs: RM 0
-- Profit: RM 447
-- **CAC: RM 447 / 1 = RM 447**
+- Profit: RM 446
+- **CAC: RM 446 / 1 = RM 446**
 
 ## Quality
 - Demo quality: 8/10
@@ -858,7 +864,7 @@ Terima kasih sebab trust Pintarweb! 🙏
 **Decision:** GO ✅
 
 **Reasoning:**
-- Closed 1 customer (RM 447 revenue)
+- Closed 1 customer (RM 446 revenue)
 - 33% response rate (above 20% target)
 - Customer satisfaction: 9/10
 - Process was challenging but rewarding
@@ -913,7 +919,7 @@ Terima kasih sebab trust Pintarweb! 🙏
 ### Final Verification
 - [ ] 10-15 outreach messages sent
 - [ ] 3+ conversations started
-- [ ] 1 paying customer closed (RM 447 revenue)
+- [ ] 1 paying customer closed (RM 446 total: RM297 setup + RM149 activation)
 - [ ] Customer onboarded and live
 - [ ] Ready to scale in Month 2
 
@@ -925,14 +931,14 @@ Terima kasih sebab trust Pintarweb! 🙏
 - **Outreach:** 10-15 messages sent ✅
 - **Conversations:** 3+ started ✅
 - **Closed:** 1 customer ✅
-- **Revenue:** RM 447 ✅
+- **Revenue:** RM 446 ✅
 - **Time spent:** 10-15 hours ✅
 
 ### Month 1 Cumulative Targets
 - **Total outreach:** 25-30 messages
 - **Total conversations:** 5-8
 - **Total closed:** 1-2 customers
-- **Total revenue:** RM 447-894
+- **Total revenue:** RM 446-892
 - **Total time:** 40-60 hours
 
 ### Month 2 Targets
@@ -960,5 +966,5 @@ After completing Phase 4:
 
 ---
 
-**Last Updated:** 2026-06-23  
-**Status:** Ready to execute
+**Last Updated:** 2026-07-04  
+**Status:** Ready to execute — pricing updated to RM446 split payment (RM297 setup + RM149 activation)

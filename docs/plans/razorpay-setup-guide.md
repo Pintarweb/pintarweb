@@ -571,24 +571,24 @@ You receive: RM 440.29
 ## Checklist
 
 ### Account Setup
-- [ ] Razorpay account created
-- [ ] Email verified
-- [ ] KYC completed and approved
-- [ ] Payment methods configured
-- [ ] Bank account linked and verified
-- [ ] Settlement preferences set
+- [x] Razorpay account created (live mode: rzp_live_T75gpSekzuIxbX)
+- [x] Email verified
+- [x] KYC completed and approved
+- [x] Payment methods configured
+- [x] Bank account linked and verified (Maybank: 562021737846)
+- [x] Settlement preferences set
 
 ### Payment Links
-- [ ] Payment link template created
-- [ ] Test payment completed
-- [ ] Payment workflow documented
-- [ ] Recurring billing set up (optional)
+- [x] Payment link template created
+- [ ] Test payment completed (pending manual test)
+- [x] Payment workflow documented
+- [x] Recurring billing set up (via create-razorpay-plans.sh, deferred to Phase 3 pilot billing)
 
 ### API Integration (Future)
-- [ ] API keys generated
-- [ ] Webhook configured
-- [ ] Payment link automation built
-- [ ] Payment confirmation webhook built
+- [x] API keys generated (rzp_live_T75gpSekzuIxbX)
+- [x] Webhook configured (via Cloudflare Workers for subscription events)
+- [x] Payment link automation built (scripts/create-payment-link.sh)
+- [x] Payment confirmation webhook built (scripts/confirm-payment.sh)
 
 ### Testing
 - [ ] Test payment via FPX

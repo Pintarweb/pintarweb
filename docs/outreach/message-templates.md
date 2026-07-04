@@ -88,8 +88,6 @@ Hi {name}, terakhir kali saya follow up.
 Demo: {demo_url}
 Harga: https://pintarweb.com/#harga
 
-💰 Bonus: Bayar 3 bulan, dapat 4 bulan percuma!
-
 Tentang saya:
 → Saya bina website untuk bisnes macam {business_name} sejak 3 tahun
 → 50+ website bisnes deployed
@@ -107,8 +105,6 @@ Hi {name}, this is my final follow-up.
 Demo: {demo_url}
 Pricing: https://pintarweb.com/#harga
 
-💰 Bonus: Pay 3 months, get 4 months FREE!
-
 About me:
 → I've been building websites for businesses like {business_name} for 3 years
 → 50+ business websites deployed
@@ -121,21 +117,62 @@ If not interested, no worries! If interested, WhatsApp me.
 
 ---
 
-## Closing (Prospect Agrees)
+## Closing (Prospect Agrees — PILOT)
 
-### BM
+Use this for pilot clients (first 2-3). Private — do not share publicly.
+
+### Two-Path Closing (Bot Version)
+
+When bot detects intent = SUBSCRIBE or CLOSING_READY, bot sends:
+
 ```
-Bagus! Untuk mula, boleh buat payment di link ni:
-👉 {razorpay_link}
+Nak start dengan PintarWeb? Sedia!
 
-RM447 untuk 4 bulan (3 bulan + 1 bulan PERCUMA).
+Jawab dengan nombor:
+1️⃣ Saya nak terus mula — saya hantar details payment
+2️⃣ Saya nak tahu lagi — apa yang ragu-ragu?
+```
+
+**If Path 1 (ready to start):**
+```
+🔥 Sedia! Details payment:
+
+Bank: Maybank
+Akaun: 562021737846 (PintarWeb Enterprise)
+Jumlah: RM297 (fi persediaan)
+
+Selepas payment, hantar resit dan kami akan mula bina esok. 💪
+
+Bila site siap (4 minggu), bayar RM149 untuk activate + 1 bulan percuma unlocked!
+```
+
+**If Path 2 (need to know more):**
+→ Capture lead question → notify owner → follow up personally via +60196556243
+
+---
+
+### Human Closing (Your WhatsApp to Prospect)
+
+Use when YOU are personally closing after demo.
+
+```
+Bagus! Untuk mula, kita buat settlement macam ni:
+
+Fi persediaan (setup): RM297
+Sewa bulan pertama: RM149
+Jumlah: RM446
+
+Payment ke Maybank:
+562021737846 (PintarWeb Enterprise)
 
 Selepas payment, saya akan WhatsApp semula untuk collect:
 → Logo bisnes (file atau link FB page)
 → Gambar kerja sebenar
 → Maklumat servis dan kawasan
 
-Website akan live dalam 5-7 hari bekerja selepas saya dapat semua info tu.
+Website akan live dalam 4 minggu selepas saya dapat semua info tu.
+
+Kenapa fi persediaan? Fi ni memastikan kedua-dua pihak komitmen serius. Saya allocate masa dan resource untuk bina website anda dengan全心全意. Balance RM149 adalah untuk bulan pertama operasi. Lepas 4 bulan, Renewal RM149/bulan (RM446 untuk 4 bulan, dapat 1 bulan percuma).
 
 Terma': https://pintarweb.com/terms.html
 Privasi: https://pintarweb.com/privacy-policy.html
@@ -145,17 +182,23 @@ Terima kasih kepercayaan anda pada PintarWeb!
 
 ### EN
 ```
-Great! To get started, you can make payment here:
-👉 {razorpay_link}
+Great! Here's how we'll do this:
 
-RM447 for 4 months (3 months + 1 month FREE).
+Setup fee: RM297
+First month rental: RM149
+Total: RM446
+
+Payment to Maybank:
+562021737846 (PintarWeb Enterprise)
 
 After payment, I'll WhatsApp you to collect:
 → Business logo (file or FB page link)
 → Real photos of your work
 → Service details and areas
 
-Your website will be live within 5-7 working days after I receive all the info.
+Your website will be live within 4 weeks after I receive all the info.
+
+Why a setup fee? This fee ensures both sides are seriously committed. I allocate time and resources to build your website with full focus. The balance RM149 is for your first month of operation. After 4 months, renewal RM149/month (RM446 for 4 months, get 1 month FREE).
 
 Terms: https://pintarweb.com/terms.html
 Privacy: https://pintarweb.com/privacy-policy.html

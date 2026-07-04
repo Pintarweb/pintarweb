@@ -16,6 +16,10 @@ fi
 D1_DB_ID="${CLOUDFLARE_D1_DATABASE_ID:-}"
 RAZORPAY_KEY_ID="${RAZORPAY_KEY_ID:-}"
 RAZORPAY_KEY_SECRET="${RAZORPAY_KEY_SECRET:-}"
+RAZORPAY_PLAN_MONTHLY="${RAZORPAY_PLAN_MONTHLY:-}"
+RAZORPAY_PLAN_QUARTERLY="${RAZORPAY_PLAN_QUARTERLY:-}"
+RAZORPAY_PLAN_BIANNUAL="${RAZORPAY_PLAN_BIANNUAL:-}"
+RAZORPAY_PLAN_ANNUAL="${RAZORPAY_PLAN_ANNUAL:-}"
 
 if [ -z "$D1_DB_ID" ]; then
     echo "Error: CLOUDFLARE_D1_DATABASE_ID not found in .env"
@@ -27,6 +31,11 @@ if [ -z "$RAZORPAY_KEY_ID" ] || [ -z "$RAZORPAY_KEY_SECRET" ]; then
     exit 1
 fi
 
+if [ -z "$RAZORPAY_PLAN_MONTHLY" ]; then
+    echo "Error: RAZORPAY_PLAN_MONTHLY not found in .env. Run scripts/create-razorpay-plans.sh first."
+    exit 1
+fi
+
 LEAD_ID="${1:-}"
 PLAN_TYPE="${2:-monthly}"
 
@@ -35,7 +44,7 @@ if [ -z "$LEAD_ID" ]; then
     echo ""
     echo "Arguments:"
     echo "  1. Lead ID (e.g., ah-seng-plumbing-20260629)"
-    echo "  2. Plan type: monthly, quarterly,iannual, annual"
+    echo "  2. Plan type: monthly, quarterly, biannual, annual"
     echo ""
     echo "Default plan: monthly"
     exit 1
@@ -44,32 +53,32 @@ fi
 # Map plan type to Razorpay plan IDs and amounts
 case "$PLAN_TYPE" in
     monthly)
+        PLAN_ID="$RAZORPAY_PLAN_MONTHLY"
         PLAN_AMOUNT=14900
-        PLAN_FREQUENCY=1
         PLAN_INTERVAL="month"
         PLAN_DISPLAY="Monthly (RM149/month)"
         ;;
     quarterly)
+        PLAN_ID="$RAZORPAY_PLAN_QUARTERLY"
         PLAN_AMOUNT=41700
-        PLAN_FREQUENCY=3
         PLAN_INTERVAL="month"
         PLAN_DISPLAY="Quarterly (RM417/3 months)"
         ;;
     biannual|6month)
+        PLAN_ID="$RAZORPAY_PLAN_BIANNUAL"
         PLAN_AMOUNT=77400
-        PLAN_FREQUENCY=6
         PLAN_INTERVAL="month"
         PLAN_DISPLAY="Bi-annual (RM774/6 months)"
         ;;
     annual|yearly)
+        PLAN_ID="$RAZORPAY_PLAN_ANNUAL"
         PLAN_AMOUNT=130800
-        PLAN_FREQUENCY=1
         PLAN_INTERVAL="year"
         PLAN_DISPLAY="Annual (RM1,308/year)"
         ;;
     *)
         echo "Error: Unknown plan type: $PLAN_TYPE"
-        echo "Valid options: monthly, quarterly,iannual, annual"
+        echo "Valid options: monthly, quarterly, biannual, annual"
         exit 1
         ;;
 esac
@@ -94,20 +103,15 @@ echo "  Phone: $PHONE"
 echo "  Plan: $PLAN_DISPLAY"
 echo ""
 
-# For now, create a subscription link using Razorpay Payment Links API
-# This is simpler than full subscription API for our use case
-# The customer will authorize the recurring payment via this link
-
 # Clean phone
 PHONE_CLEAN=$(echo "$PHONE" | tr -cd '[:digit:]')
 
-# Create a subscription authorization request
-# We'll use the payment link approach for authorization
+# Create subscription using Razorpay Plans API
 SUBSCRIPTION_RESPONSE=$(curl -s -X POST "https://api.razorpay.com/v1/subscriptions" \
     -u "$RAZORPAY_KEY_ID:$RAZORPAY_KEY_SECRET" \
     -H "Content-Type: application/json" \
     -d "{
-        \"plan_id\": \"$PLAN_TYPE\",
+        \"plan_id\": \"$PLAN_ID\",
         \"customer\": {
             \"name\": \"$CONTACT_NAME\",
             \"contact\": \"$PHONE_CLEAN\",

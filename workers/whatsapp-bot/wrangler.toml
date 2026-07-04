@@ -1,0 +1,10 @@
+name = "pintarweb-whatsapp-bot"
+main = "src/index.ts"
+compatibility_date = "2024-04-17"
+
+account_id = "6608a11fd74a74b741d55d0c10f7643e"
+
+[[d1_databases]]
+binding = "pintarweb_outreach_db"
+database_name = "pintarweb-claude-db"
+database_id = "1ca959be-b1bc-4b03-87df-8e4610659993"

@@ -8,13 +8,14 @@ This phase bridges Foundation (Phase 1) and Automation (Phase 2). It covers ever
 
 ## 1.5.1 Domain Migration (Manual — 30 min)
 
-- [ ] Go to Cloudflare Dashboard → Pages → `pintarweb-main` → Custom domains
-- [ ] Add `pintarweb.com` as custom domain
-- [ ] Remove `pintarweb.com` from old `pintarweb2` project (if still linked)
-- [ ] Verify DNS propagation (may take up to 24h, usually 5-15 min)
-- [ ] Test: `curl -I https://pintarweb.com` → should return HTTP 200 from new landing
-- [ ] Test: `https://pintarweb.com/terms.html` and `/privacy-policy.html` → 200
-- [ ] Verify og:image loads: `https://pintarweb.com/images/og-image.png`
+- [x] Go to Cloudflare Dashboard → Pages → `pintarweb-main` → Custom domains
+- [x] Add `pintarweb.com` as custom domain
+- [x] Remove `pintarweb.com` from old `pintarweb2` project (if still linked)
+- [x] Verify DNS propagation (may take up to 24h, usually 5-15 min)
+- [x] Test: `curl -I https://pintarweb.com` → should return HTTP 200 from new landing
+- [x] Test: `https://pintarweb.com/terms.html` and `/privacy-policy.html` → 200
+- [x] Verify og:image loads: `https://pintarweb.com/images/og-image.png`
+- **Status:** ✅ Complete (2026-06-28)
 
 **Dependencies:** pintarweb-main Pages project exists (✅), landing page deployed (✅)
 
@@ -49,7 +50,8 @@ This phase bridges Foundation (Phase 1) and Automation (Phase 2). It covers ever
 
 ## 1.5.3 Sales Funnel Definition (1 hour)
 
-Document the complete prospect journey in `docs/plans/sales-funnel.md`:
+- [x] Document complete prospect journey in `docs/plans/sales-funnel.md`
+- **Status:** ✅ Complete (2026-06-28) — Stage 1 Lead → Stage 2 Demo → Stage 3 Outreach → Stage 4 Engagement → Stage 5 Closing → Stage 6 Onboarding
 
 ```
 STAGE 1: LEAD GENERATION
@@ -70,7 +72,7 @@ STAGE 4: PROSPECT ENGAGEMENT
   Prospect clicks WhatsApp CTA → chats with Yus (Umami tracks event)
   ↓
 STAGE 5: CLOSING
-  Yus sends Razorpay payment link (RM447)
+  Yus sends Maybank details (562021737846, PintarWeb Enterprise)
   Prospect pays → payment confirmed
   ↓
 STAGE 6: ONBOARDING
@@ -86,7 +88,8 @@ STAGE 6: ONBOARDING
 
 ## 1.5.4 Outreach Message Templates (1-2 hours)
 
-Create `docs/outreach/message-templates.md` with WhatsApp templates:
+- [x] Create `docs/outreach/message-templates.md` with WhatsApp templates (First Touch BM/EN, Day 3, Day 7, Closing)
+- **Status:** ✅ Complete (2026-06-28) — templates with 2-path closing flow, RM446 pricing, split payment model
 
 ### First Touch (BM)
 ```
@@ -139,12 +142,15 @@ Kalau tak berminat, tak apa — semua good. Kalau berminat, WhatsApp saya.
 
 ### Closing (when prospect agrees)
 ```
-Bagus! Untuk mula, bayar di link ini:
-👉 {razorpay_link}
+ Bagus! Untuk mula, bayar di link ini:
+ 👉 {razorpay_link}
 
-RM447 untuk 4 bulan (3+1 bonus). 
+ RM446 untuk 4 bulan (3+1 bonus) — atau boleh transfer Maybank: 562021737846.
 
-Selepas bayar, saya akan WhatsApp untuk collect info bisnes anda (logo, gambar, servis). Website live dalam 5-7 hari.
+ Step 1: Bayar RM297 (fi persediaan) → kami mula bina esok.
+ Step 2: Dalam 4 minggu, bila site siap, bayar RM149 (activation) → bot dipindahkan, site go live!
+
+ Selepas bayar, saya akan WhatsApp untuk collect info bisnes anda (logo, gambar, servis).
 
 Terma: https://pintarweb.com/terms.html
 Privasi: https://pintarweb.com/privacy-policy.html
@@ -154,13 +160,15 @@ Privasi: https://pintarweb.com/privacy-policy.html
 - `{name}` — prospect's name (from scraper or FB profile)
 - `{business_name}` — business name (from config.json)
 - `{demo_url}` — `https://preview.pintarweb.com/{client-id}/`
-- `{razorpay_link}` — generated Razorpay payment link (RM447)
+- `{razorpay_link}` — Razorpay payment link (for RM297 setup fee or RM149 activation) — optional, Maybank transfer preferred
 
 ---
 
 ## 1.5.5 Demo Site Build Workflow (2-3 hours)
 
-Document in `docs/sop/demo-site-build.md`:
+- [x] Document in `docs/sop/demo-site-build.md` (gather info → config → generate → build → deploy → verify)
+- [x] Mood assignment guide per trade (aircond=trustworthy-local, plumbing=bold-urgent, electrical=premium-modern)
+- **Status:** ✅ Complete (2026-06-28) — SOP covers 6-step workflow, target 60-90 min per demo
 
 ### Step 1: Gather Prospect Info (15 min)
 - Business name, tagline, phone, WhatsApp number
@@ -214,8 +222,8 @@ bash scripts/deploy-preview.sh        # Deploy to preview.pintarweb.com
 
 ## 1.5.6 Cross-linking & Conversion Tracking (30 min)
 
-- [ ] Add UTM-style parameters to demo site URLs in outreach messages: `?ref=outreach&prospect={id}`
-- [ ] Add Umami event tracking on landing page:
+- [x] Add UTM-style parameters to demo site URLs in outreach messages: `?ref=outreach&prospect={id}`
+- [x] Add Umami event tracking on landing page:
   ```js
   // Track WhatsApp CTA clicks
   document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
@@ -226,13 +234,14 @@ bash scripts/deploy-preview.sh        # Deploy to preview.pintarweb.com
     a.addEventListener('click', () => umami.track('showcase_click', { demo: a.href }));
   });
   ```
-- [ ] Add Umami event tracking on demo sites:
+- [x] Add Umami event tracking on demo sites (demo_visit, demo_contact_submit)
   ```js
   // Track when prospect visits their demo
   umami.track('demo_visit', { client_id: '{id}' });
   // Track contact form submissions
   document.getElementById('contact-form')?.addEventListener('submit', () => umami.track('demo_contact_submit'));
   ```
+- **Status:** ✅ Complete (2026-06-28)
 
 **Dependencies:** 1.5.2 Umami deployed
 
@@ -264,6 +273,6 @@ bash scripts/deploy-preview.sh        # Deploy to preview.pintarweb.com
 
 ---
 
-**Last Updated:** 2026-06-28  
+**Last Updated:** 2026-07-04  
 **Owner:** Yusmarin  
-**Status:** ✅ Phase 1.5 nearly complete — all items done except final verification
+**Status:** ✅ Phase 1.5 COMPLETE — All 7 subsections checked off, all documents created

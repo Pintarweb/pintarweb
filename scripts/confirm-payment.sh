@@ -1,10 +1,10 @@
 #!/bin/bash
 # Confirm payment received and send invoice
-# Usage: bash scripts/confirm-payment.sh "[lead-id]" "[amount]" "[payment-reference]"
+# Usage: bash scripts/confirm-payment.sh "[lead-id]" "[amount]" "[payment-reference]" [--email "cust@email.com"]
 #
 # Examples:
-#   bash scripts/confirm-payment.sh "ah-seng-plumbing-20260629" "299" "TRX123456"
-#   bash scripts/confirm-payment.sh "demo-kl-electrical-20260629" "449" "DuitNow-789"
+#   bash scripts/confirm-payment.sh "ah-seng-plumbing-20260629" "297" "TRX123456" --email "customer@email.com"  # setup payment
+#   bash scripts/confirm-payment.sh "ah-seng-plumbing-20260629" "149" "TRX789ABC" --email "customer@email.com"  # activation payment
 
 set -e
 
@@ -25,14 +25,26 @@ fi
 LEAD_ID="${1:-}"
 AMOUNT="${2:-}"
 PAYMENT_REF="${3:-}"
+CUSTOMER_EMAIL=""
+
+# Parse --email flag
+for arg in "$@"; do
+    case "$arg" in
+        --email)
+            CUSTOMER_EMAIL="${!OPTIND}"
+            ((OPTIND++)) 2>/dev/null || true
+            ;;
+    esac
+done
 
 if [ -z "$LEAD_ID" ] || [ -z "$AMOUNT" ]; then
-    echo "Usage: bash scripts/confirm-payment.sh \"[lead-id]\" \"[amount]\" \"[payment-reference]\""
+    echo "Usage: bash scripts/confirm-payment.sh \"[lead-id]\" \"[amount]\" \"[payment-reference]\" [--email \"cust@email.com\"]"
     echo ""
     echo "Arguments:"
     echo "  1. Lead ID (e.g., ah-seng-plumbing-20260629)"
-    echo "  2. Amount received (e.g., 299 or 449)"
+    echo "  2. Amount received (297 = setup, 149 = activation)"
     echo "  3. Payment reference (e.g., TRX123456)"
+    echo "  --email: Customer email address (optional)"
     exit 1
 fi
 
@@ -49,7 +61,6 @@ CONTACT_NAME=$(echo "$LEAD_DATA" | awk -F' ' '{print $2}' | tr -d '"' | tr -d '|
 PHONE=$(echo "$LEAD_DATA" | awk -F' ' '{print $3}' | tr -d '"' | tr -d '|')
 
 # Generate invoice number (PWT2026-XXX)
-# Check for existing invoice numbers to get next
 MAX_INVOICE=$(cd "$(dirname "$0")/.." && npx wrangler d1 execute "$D1_DB_ID" --remote --yes --command="SELECT invoice_number FROM outreach_leads WHERE invoice_number IS NOT NULL ORDER BY invoice_number DESC LIMIT 1;" 2>/dev/null | tail -n +2 | tr -d '"' | tr -d '|' | sed 's/PWT2026-0*//' | tr -d ' ')
 
 if [ -z "$MAX_INVOICE" ] || [ "$MAX_INVOICE" = "NULL" ]; then
@@ -63,9 +74,14 @@ TODAY=$(date +"%d %b %Y")
 PAYMENT_DATE=$(date +"%Y-%m-%d")
 
 # Determine plan type based on amount
-if [ "$AMOUNT" = "299" ]; then
-    PLAN_TYPE="Pilot (50% off)"
-    SETUP_FEE=150
+# RM297 = setup fee payment, RM149 = activation payment
+if [ "$AMOUNT" = "297" ]; then
+    PLAN_TYPE="Pilot Setup"
+    SETUP_FEE=297
+    MONTH1_FEE=0
+elif [ "$AMOUNT" = "149" ]; then
+    PLAN_TYPE="Activation + Month 1"
+    SETUP_FEE=0
     MONTH1_FEE=149
 else
     PLAN_TYPE="Regular"
@@ -78,19 +94,21 @@ echo "  Business: $BUSINESS_NAME"
 echo "  Phone: $PHONE"
 echo "  Amount: RM $AMOUNT"
 echo "  Invoice: $INVOICE_NUMBER"
+[ -n "$CUSTOMER_EMAIL" ] && echo "  Email: $CUSTOMER_EMAIL"
 echo ""
 
 # Update D1 with payment info
-cd "$(dirname "$0")/.." && npx wrangler d1 execute "$D1_DB_ID" --remote --yes --command="
-UPDATE outreach_leads SET
+UPDATE_SQL="UPDATE outreach_leads SET
     setup_paid = 1,
     setup_paid_date = '$PAYMENT_DATE',
     setup_amount = $AMOUNT,
     invoice_number = '$INVOICE_NUMBER',
-    status = 'paid',
-    updated_at = datetime('now')
-WHERE id = '$LEAD_ID';
-"
+    status = 'paid',"
+[ -n "$CUSTOMER_EMAIL" ] && UPDATE_SQL="$UPDATE_SQL customer_email = '$CUSTOMER_EMAIL',"
+UPDATE_SQL="$UPDATE_SQL updated_at = datetime('now')
+WHERE id = '$LEAD_ID';"
+
+cd "$(dirname "$0")/.." && npx wrangler d1 execute "$D1_DB_ID" --remote --yes --command="$UPDATE_SQL" 2>/dev/null
 
 echo "✅ D1 updated"
 
@@ -99,7 +117,7 @@ EVENT_ID="${LEAD_ID}-payment-$(date +%s)"
 cd "$(dirname "$0")/.." && npx wrangler d1 execute "$D1_DB_ID" --remote --yes --command="
 INSERT INTO outreach_events (id, lead_id, event_type, metadata)
 VALUES ('$EVENT_ID', '$LEAD_ID', 'paid', '{\"amount\": $AMOUNT, \"reference\": \"$PAYMENT_REF\", \"invoice\": \"$INVOICE_NUMBER\"}');
-"
+" 2>/dev/null
 
 echo "✅ Payment event logged"
 
@@ -127,8 +145,8 @@ echo "$WHATSAPP_MSG"
 echo ""
 echo "🔗 WhatsApp URL: $WHATSAPP_URL"
 
-# Send email invoice via Resend (if API key available)
-if [ -n "$RESEND_API_KEY" ]; then
+# Send email invoice via Resend
+if [ -n "$RESEND_API_KEY" ] && [ -n "$CUSTOMER_EMAIL" ]; then
     EMAIL_BODY="<!DOCTYPE html>
 <html>
 <head>
@@ -159,20 +177,20 @@ if [ -n "$RESEND_API_KEY" ]; then
         <table class='invoice-table'>
             <tr><th>Description</th><th>Amount</th></tr>
             <tr><td>Setup Fee</td><td>RM $SETUP_FEE</td></tr>
-            <tr><td>Month 1 (First Month)</td><td>RM $MONTH1_FEE</td></tr>
+            <tr><td>Activation (Month 1)</td><td>RM $MONTH1_FEE</td></tr>
             <tr><td colspan='2' style='text-align:right;'><strong>Total Paid:</strong> RM $AMOUNT</td></tr>
         </table>
 
         <p><strong>Plan:</strong> $PLAN_TYPE</p>
         <p><strong>Payment Reference:</strong> $PAYMENT_REF</p>
 
-        <h3>What's Included (Months 1-4):</h3>
+        <h3>What's Included:</h3>
         <ul>
             <li>Website + hosting + SSL</li>
             <li>WhatsApp auto-reply bot (30 messages/month)</li>
             <li>Local SEO + Google Business Profile</li>
-            <li>Months 2-3: FREE (bonus)</li>
-            <li>Month 4 onwards: RM 149/month</li>
+            <li>Month 4: FREE bonus (with activation payment)</li>
+            <li>Month 5 onwards: RM 149/month auto-renewal</li>
         </ul>
 
         <h3>Renewal Options (Month 4+):</h3>
@@ -186,8 +204,8 @@ if [ -n "$RESEND_API_KEY" ]; then
 
         <h3>Bank Details (for reference):</h3>
         <p><strong>PintarWeb Enterprise</strong><br>
-        [Bank Name]<br>
-        [Account Number]</p>
+        Bank: Maybank<br>
+        Account Number: 562021737846</p>
 
         <p style='color: #666; font-size: 0.9em; margin-top: 20px;'>
         <strong>Terms:</strong> 14-day cancellation policy. Setup fee is non-refundable.
@@ -201,22 +219,26 @@ if [ -n "$RESEND_API_KEY" ]; then
 </body>
 </html>"
 
-    # Send email via Resend API
+    ESCAPED_EMAIL_BODY=$(echo "$EMAIL_BODY" | jq -sRr @text)
+
     EMAIL_RESPONSE=$(curl -s -X POST "https://api.resend.com/emails" \
         -H "Authorization: Bearer $RESEND_API_KEY" \
         -H "Content-Type: application/json" \
         -d "{
             \"from\": \"$RESEND_FROM_EMAIL\",
-            \"to\": [\"$PHONE@whatsapp\"],
+            \"to\": [\"$CUSTOMER_EMAIL\"],
             \"subject\": \"Invoice $INVOICE_NUMBER - PintarWeb\",
-            \"html\": $EMAIL_BODY
+            \"html\": $ESCAPED_EMAIL_BODY
         }" 2>/dev/null)
 
     if echo "$EMAIL_RESPONSE" | grep -q '"id"'; then
-        echo "✅ Email invoice sent (ID: $(echo $EMAIL_RESPONSE | grep -o '"id":"[^"]*"' | cut -d'"' -f4))"
+        echo "✅ Email invoice sent to $CUSTOMER_EMAIL (ID: $(echo $EMAIL_RESPONSE | grep -o '"id":"[^"]*"' | cut -d'"' -f4))"
     else
-        echo "⚠️ Email send returned: $EMAIL_RESPONSE"
+        echo "⚠️ Email send failed: $(echo $EMAIL_RESPONSE | head -c 200)"
     fi
+elif [ -z "$CUSTOMER_EMAIL" ]; then
+    echo "⚠️ No customer email provided (--email flag), skipping invoice email"
+    echo "   Add --email to send invoice to customer"
 else
     echo "⚠️ RESEND_API_KEY not set, skipping email"
 fi

@@ -1,0 +1,17 @@
+# WhatsApp Bot Environment Variables
+# Copy this to .dev.vars and fill in real values
+
+# Kimi AI API key (for contextual reply generation)
+KIMI_API_KEY=your_kimi_api_key_here
+
+# Meta WhatsApp Cloud API credentials
+# Get these from developers.facebook.com > Your App > WhatsApp > Getting Started
+META_ACCESS_TOKEN=your_meta_access_token_here
+META_PHONE_NUMBER_ID=872026605987484
+META_WABA_ID=727271803683109
+
+# Webhook verify token — must match what you enter in Meta developer console
+META_WEBHOOK_VERIFY_TOKEN=pintarweb_webhook_2026
+
+# Your WhatsApp number (for owner notifications) — format: 60174456243
+OWNER_WHATSAPP=60174456243

@@ -13,22 +13,22 @@ Phase 3 validates the entire pipeline with **real paying prospects**. By the end
 
 ## Pilot Pricing
 
-### Setup Fees
+### Payment Breakdown
 
-| Tier | Setup Fee | Month 1 | Total Upfront | Months 2-3 | Month 4+ |
-|------|-----------|----------|---------------|-------------|----------|
-| **Pilot** (first 5-10) | RM150 (50% off) | RM149 | **RM299** | FREE | RM149/mo |
-| **Regular** | RM300 | RM149 | **RM449** | FREE | RM149/mo |
+| Tier | Setup Fee | Month 1 | Total Initial | Months 2-3 | Month 4+ |
+|------|-----------|---------|---------------|-------------|----------|
+| **Pilot** (first 5-10) | RM297 | RM149 | **RM446** | 1 month FREE | RM149/mo |
 
-> **Pilot discount is private** — applied manually during closing to lure reluctant prospects. Not publicly advertised.
+> **Setup fee = RM297敬业费** — shows client's serious commitment. Setup (RM297) paid upfront to start build. Month 1 (RM149) paid on delivery day to activate.
+> **Pilot discount is private** — told to selected clients. Not publicly advertised.
+> **Regular pricing** (after pilot): RM297 setup + RM149/month standard.
 
 ### Payment Flow
 
 ```
-Month 0: Customer pays RM299/449 → PintarWeb business account (DuitNow/bank transfer)
-Months 1-3: FREE pilot (build goodwill, collect feedback)
-Month 3 end: Automated reminder → customer chooses renewal plan
-Month 4+: Razorpay subscription auto-charges
+Month 0: Customer pays RM297 (setup fee) → Maybank transfer → build starts
+Week 4 (Delivery Day): Customer pays RM149 (activation) → bot transferred, 1 month FREE bonus unlocked
+Month 4+: Razorpay subscription auto-charges RM149/mo (consent obtained at activation)
 ```
 
 ### Cancellation Policy
@@ -78,30 +78,34 @@ Format: `PWT2026-001`, `PWT2026-002`, etc. (year embedded)
 
 ### 1.1 D1 Schema Update
 
-Add fields to `outreach_leads`:
+Run the migration script to add Phase 3 billing fields:
 
-```sql
-ALTER TABLE outreach_leads ADD COLUMN setup_paid INTEGER DEFAULT 0;
-ALTER TABLE outreach_leads ADD COLUMN setup_paid_date TEXT;
-ALTER TABLE outreach_leads ADD COLUMN setup_amount INTEGER DEFAULT 0;
-ALTER TABLE outreach_leads ADD COLUMN invoice_number TEXT;
-ALTER TABLE outreach_leads ADD COLUMN plan_type TEXT DEFAULT 'monthly';
-ALTER TABLE outreach_leads ADD COLUMN subscription_id TEXT;
-ALTER TABLE outreach_leads ADD COLUMN subscription_start TEXT;
-ALTER TABLE outreach_leads ADD COLUMN subscription_status TEXT DEFAULT 'pending';
-ALTER TABLE outreach_leads ADD COLUMN billing_reminder_sent INTEGER DEFAULT 0;
-ALTER TABLE outreach_leads ADD COLUMN billing_reminder_date TEXT;
+```bash
+bash scripts/migrate-outreach-db.sh
 ```
 
-Remove/deprecate fields:
-- `notes` — replaced by specific fields above
-- `google_maps_url` — no longer needed post-scoring
-
-Run: `bash scripts/init-outreach-db.sh --remote`
+This adds: `setup_paid`, `setup_paid_date`, `setup_amount`, `invoice_number`, `plan_type`, `subscription_id`, `subscription_start`, `subscription_status`, `billing_reminder_sent`, `billing_reminder_date`, `customer_email`.
 
 ---
 
-### 1.2 Invoice System
+### 1.2 Razorpay Subscription Plans
+
+Run the plan creation script to create 4 Razorpay plans:
+
+```bash
+bash scripts/create-razorpay-plans.sh
+```
+
+Then add the returned plan IDs to `.env`:
+
+```
+RAZORPAY_PLAN_MONTHLY=plan_xxxxxxxxxxxxx
+RAZORPAY_PLAN_QUARTERLY=plan_yyyyyyyyyyyyy
+RAZORPAY_PLAN_BIANNUAL=plan_zzzzzzzzzzzzz
+RAZORPAY_PLAN_ANNUAL=plan_wwwwwwwwwwwww
+```
+
+### 1.3 Invoice System
 
 **Invoice format:** PWT2026-001, PWT2026-002...
 
@@ -120,7 +124,7 @@ Run: `bash scripts/init-outreach-db.sh --remote`
 
 ---
 
-### 1.3 Resend Email Setup
+### 1.4 Resend Email Setup
 
 **API Key:** `re_Bdr4pYp6_NLyTcU2939WUy6WsnMwHjFC9`
 **Domain:** `mail.pintarweb.com`
@@ -129,26 +133,58 @@ Test by sending a simple email to verify delivery.
 
 ---
 
-### 1.4 Razorpay Subscription Plans
+### 1.5 WhatsApp Auto-Reply Bot
 
-Create 4 plans in Razorpay Dashboard:
+**What it does:** Acts as a 24/7 receptionist for pilot clients — instantly acknowledges incoming WhatsApp messages, answers FAQ (pricing, service areas, availability) using AI, and forwards warm leads to the owner via WhatsApp or Telegram.
 
-| Plan Name | Amount (MYR) | Frequency | Plan ID |
-|-----------|--------------|-----------|---------|
-| PintarWeb Monthly | 149.00 | Every 1 month | (copy from Razorpay) |
-| PintarWeb Quarterly | 417.00 | Every 3 months | (copy from Razorpay) |
-| PintarWeb Bi-Annual | 774.00 | Every 6 months | (copy from Razorpay) |
-| PintarWeb Annual | 1308.00 | Every 12 months | (copy from Razorpay) |
+**Core problems it solves for contractors:**
+- Lead loss: Customer messages while owner is on a job, bot replies instantly, no lost lead
+- Admin fatigue: Bot answers "How much?" and "Do you cover area X?" — owner only handles qualified leads
+- Professionalism: Responds in seconds, not hours
+- No time for admin: Bot handles first response, owner manages when free
 
-**Settings for all plans:**
-- Auto-charging: ON
-- Authorization amount: RM 1.00 (authorization hold)
-- Send reminder emails: ON (7 days before, 3 days before, on day)
-- Allow plan changes: YES
+**Architecture:**
+- Meta WhatsApp Cloud API (webhook) → Cloudflare Workers → Kimi AI (for contextual replies)
+- Per-client config stored in D1 (business name, services, pricing, areas, owner number)
+- Owner notification: WhatsApp (default) or Telegram (if client prefers)
+
+**Bot behavior:**
+1. Customer sends WhatsApp message → Meta Cloud API receives it
+2. If within 24-hour conversation window → Kimi AI generates contextual reply
+3. If outside window → Send approved utility template to re-engage
+4. Lead captured (name + phone + service) → notify owner via WhatsApp or Telegram
+
+**Meta 24-hour window constraint:** Meta allows free-form conversational replies only within 24 hours of customer's last message. Design around this: maximize lead capture during active window, use utility templates for re-engagement.
+
+**Steps:**
+1. Create Meta WhatsApp Business app at developers.facebook.com
+2. Add WhatsApp Business phone number
+3. Generate permanent access token
+4. Submit utility message template for Meta approval (1-2 days review)
+5. Build Cloudflare Worker webhook handler
+6. Integrate Kimi AI for contextual responses
+7. Add per-client D1 config (services, pricing, areas, owner number)
+8. Add owner notification (WhatsApp default, Telegram optional)
+9. Test on PintarWeb's own WhatsApp Business number first
+
+**Files to create:**
+- `workers/whatsapp-bot/index.ts` — Cloudflare Worker
+- `scripts/configure-bot.sh` — Client bot setup helper
+
+**Costs:**
+- Meta WhatsApp Cloud API: ~RM0.10/outbound message (inbound free)
+- Kimi AI: ~RM5-10/month per active client
+- Cloudflare Workers: Free tier sufficient for pilot
+
+**Client onboarding (after payment):**
+1. Collect WhatsApp Business number from client
+2. Set up bot config in D1 (business name, services, pricing, areas)
+3. Ask client: WhatsApp or Telegram for notifications
+4. Test with client, verify responses
 
 ---
 
-### 1.5 Automation Scripts to Build
+### 1.7 Automation Scripts to Build
 
 | Script | Purpose |
 |--------|---------|
@@ -166,7 +202,8 @@ Create 4 plans in Razorpay Dashboard:
 - Aircond/plumbing/electrical niche
 - Selangor/KL area
 - No website or weak website (data opportunity insight)
-- Active on WhatsApp
+- Active on WhatsApp (required for bot delivery)
+- **Deliverable:** Website + WhatsApp auto-reply bot + Local SEO
 
 ### Where to Find Leads
 1. **D1 database** — `view-outreach.sh` → sort by score descending
@@ -252,10 +289,9 @@ Boleh tengok bila free.
 ```
 Kalau berminat, ada 2 pilihan:
 1. RM 800 one-time untuk website
-2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included. 
-   3 bulan advance (RM 447)
-
-Satu job chemical wash (RM 180-350) dah cover sebulan.
+2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included.
+   Tapi kami punya split payment: RM297 setup + RM149 masa launch (jumpa kat bawah).
+   Total RM 446 — satu job chemical wash (RM 180-350) dah cover sebulan.
 ```
 
 **If they're interested:**
@@ -281,9 +317,9 @@ PintarWeb Enterprise
 Bank: [BANK NAME]
 Account: [ACCOUNT NUMBER]
 
-Amount: RM [299/449]
+Amount: RM [297/149]
 
-Sila hantar bukti transfer kat sini, dan saya akan emitkan invoice.
+Sila hantar bukti transfer kat sini, dan saya akan hantar invoice.
 ```
 
 ### Step 2: Verify Payment
@@ -524,11 +560,17 @@ RAZORPAY_KEY_ID=rzp_live_T75gpSekzuIxbX
 RAZORPAY_KEY_SECRET=MKkqwVNu6l21OpG0c15hdPCq
 ```
 
-### Subscription Plans (create in Razorpay Dashboard)
-- PintarWeb Monthly: RM 149/month
-- PintarWeb Quarterly: RM 417/quarter
-- PintarWeb Bi-Annual: RM 774/6 months
-- PintarWeb Annual: RM 1,308/year
+### Subscription Plans (create via script — run once)
+```bash
+bash scripts/create-razorpay-plans.sh
+```
+Then add the returned plan IDs to `.env`:
+```
+RAZORPAY_PLAN_MONTHLY=plan_xxxxxxxxxxxxx
+RAZORPAY_PLAN_QUARTERLY=plan_yyyyyyyyyyyyy
+RAZORPAY_PLAN_BIANNUAL=plan_zzzzzzzzzzzzz
+RAZORPAY_PLAN_ANNUAL=plan_wwwwwwwwwwwww
+```
 
 ---
 
@@ -544,18 +586,24 @@ RESEND_FROM_EMAIL=hello@mail.pintarweb.com
 ## Success Checklist
 
 ### Pre-Pilot
-- [ ] D1 schema updated (new fields added, unused fields removed)
-- [ ] Invoice generator script built and tested
-- [ ] Payment confirmation flow tested (D1 update + WhatsApp + email)
-- [ ] Resend email integration tested
-- [ ] 4 Razorpay subscription plans created
-- [ ] Subscription creation script tested
-- [ ] Billing reminder script tested
+- [x] D1 schema updated (migrate-outreach-db.sh — all billing fields added)
+- [x] confirm-payment.sh built (D1 update + WhatsApp receipt + email invoice)
+- [x] billing-reminder.sh built (month 3 reminder to all active pilots)
+- [x] create-subscription.sh built (Razorpay subscription via API)
+- [x] check-subscription.sh built (status check + D1 update)
+- [x] Razorpay plans created (monthly: plan_T7iCYvWi9YyH9u, quarterly: plan_T7iCZRGEfpUfMA)
+- [x] Meta WhatsApp Business app configured and Live (App ID: 672944922211791, WABA: 727271803683109)
+- [x] WhatsApp bot built and deployed (DeepSeek v4 Flash + 22-intent classifier, 2-path closing flow)
+- [ ] Submit utility template for Meta approval (1-2 days)
+- [ ] Test bot on PintarWeb's own WhatsApp number (+60196556243)
+- [ ] Test confirm-payment.sh end-to-end (with real bank transfer)
+- [ ] Test Resend email integration
 
 ### Pilot Launch
 - [ ] 5-10 pilot prospects selected (score ≥ 60)
 - [ ] Demo sites built for all pilots
 - [ ] Audit reports generated
+- [ ] WhatsApp bot set up for PintarWeb number (proof of concept)
 - [ ] First outreach sent to all pilots
 - [ ] Follow-ups sent (Day 3, Day 7)
 
@@ -564,6 +612,7 @@ RESEND_FROM_EMAIL=hello@mail.pintarweb.com
 - [ ] Invoices sent to all paid pilots
 - [ ] Welcome messages sent
 - [ ] D1 updated for all pilots
+- [ ] WhatsApp bot configured for all paid pilots (services, pricing, areas, owner number)
 
 ### Monitoring
 - [ ] Engagement tracked (demo visits, WhatsApp clicks)
@@ -592,5 +641,5 @@ After Phase 3, proceed to **Phase 4: Scale** where you'll:
 
 ---
 
-**Last Updated:** 2026-06-29
+**Last Updated:** 2026-07-04
 **Status:** Ready to execute (automation to be built)

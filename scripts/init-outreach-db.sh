@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS outreach_leads (
     subscription_status TEXT DEFAULT 'new',
     billing_reminder_sent INTEGER DEFAULT 0,
     billing_reminder_date TEXT,
+    customer_email TEXT,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
 );

@@ -114,11 +114,11 @@ See: `docs/outreach/message-templates.md`
 **Trigger:** Prospect replies "interested" on WhatsApp
 
 **Process:**
-1. Yus sends Razorpay payment link (RM447)
-2. Prospect pays
-3. Confirm payment received
+1. Yus sends Maybank details (562021737846, PintarWeb Enterprise)
+2. Prospect pays RM297 (setup fee) → build starts
+3. Week 4: Prospect pays RM149 (activation) → bot transferred, site goes live
 
-**Payment:** RM447 for 4 months (3 + 1 bonus)
+**Payment:** RM446 total (RM297 setup + RM149 activation), includes 1 month FREE bonus
 
 ---
 
@@ -126,7 +126,7 @@ See: `docs/outreach/message-templates.md`
 
 **Trigger:** Payment confirmed
 
-**Process (5-7 days):**
+**Process (4 weeks):**
 1. Collect real assets:
    - Logo (file or FB page)
    - Real photos of work
@@ -135,14 +135,15 @@ See: `docs/outreach/message-templates.md`
 2. Update demo → real site
 3. Deploy to `pintarweb.com/{id}/` or custom domain
 4. Set up Google Business Profile
-5. Configure WhatsApp auto-reply bot
+5. Configure WhatsApp auto-reply bot (business name, services, pricing, areas, owner WhatsApp)
 6. Send welcome message
 
 **Client deliverables:**
 - Website on their domain (or subdomain)
-- WhatsApp bot configured
+- WhatsApp auto-reply bot (Meta Cloud API + Cloudflare Workers) — instant acknowledgment, FAQ answering, lead capture
 - Google Business Profile claimed
-- SSL + hosting for 4 months
+- SSL + hosting for months 1-3 (pilot period)
+- Month 4+: RM149/mo via Razorpay subscription
 
 ---
 
@@ -153,7 +154,7 @@ See: `docs/outreach/message-templates.md`
 | Demo build time | < 60 min |
 | Response rate (first touch) | 10-20% |
 | Close rate (after WhatsApp) | 20-30% |
-| Time from demo to close | 3-14 days |
+| Time from demo to close | 4 weeks (demo to live) |
 
 ---
 
@@ -166,7 +167,10 @@ See: `docs/outreach/message-templates.md`
 | Claude/GPT | Content generation |
 | Cloudflare Pages | Hosting (preview + main) |
 | Umami Analytics | Tracking (cloud.umami.is) |
-| Razorpay | Payment collection |
+| Meta WhatsApp Cloud API | Auto-reply bot webhook |
+| Cloudflare Workers | Bot logic + AI integration |
+| DeepSeek v4 Flash | Contextual reply generation (WhatsApp bot) |
+| Razorpay | Subscription payment collection (month 4+) |
 | WhatsApp | Customer communication |
 
 ---
@@ -177,4 +181,4 @@ See: `docs/outreach/message-templates.md`
 
 ---
 
-**Last Updated:** 2026-06-28
+**Last Updated:** 2026-07-04

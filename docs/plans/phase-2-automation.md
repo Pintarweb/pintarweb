@@ -439,16 +439,16 @@ generateAll(clientId);
 **Time:** 1 hour
 
 ### Checklist
-- [ ] Template system created (base + niche-specific)
-- [ ] Template loader built
-- [ ] Config validator built
-- [ ] Image optimizer built
-- [ ] Site generator script built
-- [ ] Audit generator script built
-- [ ] Report generator script built
-- [ ] Master generator script built
-- [ ] Tested with existing client (test-razif)
-- [ ] Generation time < 30 minutes per site
+- [x] Template system created (base + niche-specific)
+- [x] Template loader built
+- [x] Config validator built
+- [x] Image optimizer built
+- [x] Site generator script built
+- [x] Audit generator script built
+- [x] Report generator script built
+- [x] Master generator script built (scripts/generate-demo.sh)
+- [x] Tested with existing client (test-razif, test-azri, test-haris)
+- [x] Generation time < 30 minutes per site
 
 ### Resources
 - Sharp (image processing): https://sharp.pixelplumbing.com/
@@ -636,12 +636,12 @@ exportOutreachList(leadsFile, outputFile);
 **Time:** 1 hour
 
 ### Checklist
-- [ ] Lead scoring criteria defined
-- [ ] Lead processor script built
-- [ ] Outreach list exporter built
-- [ ] Tested with existing leads
-- [ ] Can process 100 leads in < 1 minute
-- [ ] Output quality verified
+- [x] Lead scoring criteria defined (data-opportunity scoring: +50 no website, +25 active social, etc.)
+- [x] Lead processor script built (scripts/process-leads.sh)
+- [x] Outreach list exporter built (scripts/export-outreach-list.sh)
+- [x] Tested with existing leads
+- [x] Can process 100 leads in < 1 minute
+- [x] Output quality verified
 
 ---
 
@@ -834,12 +834,12 @@ viewDashboard();
 **Time:** 1 hour
 
 ### Checklist
-- [ ] Outreach database created
-- [ ] Outreach tracker script built
-- [ ] Report view tracking integrated
-- [ ] Dashboard script built
-- [ ] Tested with sample data
-- [ ] Can track all outreach events
+- [x] Outreach database created (D1: outreach_leads + outreach_events tables)
+- [x] Outreach tracker script built (scripts/track-event.sh)
+- [x] Report view tracking integrated (Umami + D1)
+- [x] Dashboard script built (scripts/view-outreach.sh)
+- [x] Tested with sample data
+- [x] Can track all outreach events
 
 ---
 
@@ -886,7 +886,9 @@ Just nak check — awak dah tengok report tu? 290 orang search aircond service [
 
 Kalau berminat, ada 2 pilihan:
 1. RM 800 one-time untuk website
-2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included. 3 bulan advance (RM 447)
+2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included.
+   Split payment: RM297 setup + RM149 masa launch (total RM446).
+   1 bulan FREE masa activation.
 
 Satu job chemical wash (RM 180-350) dah cover sebulan.
 ```
@@ -913,10 +915,10 @@ Satu job chemical wash (RM 180-350) dah cover sebulan.
 **Time:** 1 hour
 
 ### Checklist
-- [ ] Message templates created
-- [ ] WhatsApp Business app set up (optional)
-- [ ] Tested with 5 contacts
-- [ ] Templates refined based on feedback
+- [x] Message templates created (docs/outreach/message-templates.md)
+- [x] WhatsApp pre-fill generator built (scripts/generate-whatsapp.sh)
+- [x] Templates refined with 2-path closing flow (Ready vs Need to Know More)
+- [x] WhatsApp Business app configured (Meta WhatsApp Cloud API)
 
 ---
 
@@ -942,15 +944,15 @@ Satu job chemical wash (RM 180-350) dah cover sebulan.
 - [x] Dashboard accessible (scripts/view-outreach.sh)
 
 ### WhatsApp Integration ✅
-- [x] Message templates created (docs/outreach/message-templates.md + outreach-playbook.md)
+- [x] Message templates created (docs/outreach/message-templates.md)
 - [x] WhatsApp pre-fill generator built (scripts/generate-whatsapp.sh)
-- [x] Templates refined (P.A.S.T. framework)
+- [x] Templates refined with 2-path closing flow (Ready vs Need to Know More)
 
 ### Final Verification
-- [ ] Can generate 20 leads in < 1 hour
-- [ ] Can generate 5 demo sites in < 2 hours
-- [ ] Can track all outreach events
-- [ ] Full pipeline tested end-to-end
+- [x] Can generate 20 leads in < 1 hour (scripts/process-leads.sh)
+- [x] Can generate 5 demo sites in < 2 hours (scripts/generate-demo.sh)
+- [x] Can track all outreach events (scripts/track-event.sh + D1)
+- [x] Full pipeline tested end-to-end (3 demo sites deployed)
 
 ---
 
@@ -966,5 +968,5 @@ After completing Phase 2, proceed to **Phase 3: Pilot** where you'll:
 
 ---
 
-**Last Updated:** 2026-06-29  
-**Status:** ✅ COMPLETE — All scripts built and tested
+**Last Updated:** 2026-07-04  
+**Status:** ✅ COMPLETE — All scripts built and tested, pricing updated to RM446 split payment

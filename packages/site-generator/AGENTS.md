@@ -6,6 +6,18 @@ businesses — contractors, aircond, trades, services.
 First niche: aircond & contractor, Selangor / KL.
 Quality target: each site should look like it's worth RM800+.
 
+## CRITICAL: Language Rules
+
+**ALWAYS use Malaysian Bahasa Melayu in all customer-facing text.**
+
+- BM tone: conversational, local, natural Malay — not formal or stiff
+- NEVER use Indonesian words: "emitkan" (use "hantar"), "tersebut", "para", "diantara"
+- NEVER mix Chinese characters into Malay text
+- NEVER use "RM447" — always RM446
+- Common Malaysian vs Indonesian: "saya akan hantar" (NOT "emitkan"), "untuk" vs "bagi", "selepas" vs "setelah", "awak" vs "kamu", "sini" vs "situ", "macam mana" vs "bagaimana"
+
+This applies to all text in generated sites: headings, body copy, CTAs, FAQ answers, testimonials.
+
 ## Always read before generating
 - docs/design-rules.md
 - docs/copy-rules.md
@@ -42,6 +54,7 @@ Rules:
 - The setLang() script goes at the bottom of every index.html
 - Preference saved to localStorage key: pw_lang
 - Reference: components/language-toggle/language-toggle.html
+- IMPORTANT: Malaysian BM only — never Indonesian, never mixed languages
 
 ## CSS Build (production — no CDN)
 - Do NOT include `<script src="https://cdn.tailwindcss.com">` in generated HTML

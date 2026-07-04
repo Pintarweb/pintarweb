@@ -81,9 +81,9 @@ Phase 1 sets up the legal, payment, and infrastructure foundation for Pintarweb.
 1. Go to Razorpay Dashboard → **Payment Links**
 2. Click "Create New Link"
 3. Fill in details:
-   - **Title:** Pintarweb Subscription - 3 Months Advance
-   - **Description:** Website-as-a-Service subscription for 3 months. Includes website, SEO, WhatsApp auto-reply, and GMB optimization.
-   - **Amount:** RM 447.00
+   - **Title:** Pintarweb Subscription - Split Payment
+    - **Description:** Website-as-a-Service subscription. RM297 setup + RM149 activation (delivery day). Includes website, SEO, WhatsApp auto-reply, and GMB optimization.
+    - **Amount:** RM 446.00 total
    - **Currency:** MYR
    - **Reference:** PWT-001 (auto-generated or manual)
    - **Customer details:** Optional (can be filled by customer)
@@ -109,18 +109,16 @@ Phase 1 sets up the legal, payment, and infrastructure foundation for Pintarweb.
 **Time:** 10 minutes  
 **Cost:** RM 0 (refund the test payment)
 
-#### Step 6: Set Up Recurring Billing (Optional)
-For automatic subscription renewals:
+#### Step 6: Set Up Recurring Billing (Phase 3)
+For automatic subscription renewals (month 4+):
 1. Go to **Settings** → **Subscriptions**
 2. Create a subscription plan:
-   - **Plan name:** Pintarweb 3-Month Plan
-   - **Amount:** RM 447.00
-   - **Frequency:** Every 3 months
+   - **Plan name:** Pintarweb Monthly
+   - **Amount:** RM 149.00/month
+   - **Frequency:** Monthly
    - **Trial period:** None
-3. Save the plan
-4. When creating payment links, you can now offer:
-   - One-time payment: RM 447
-   - Subscription: Auto-renew every 3 months
+3. Save the plan (plan_T7iCYvWi9YyH9u monthly, plan_T7iCZRGEfpUfMA quarterly)
+4. Razorpay subscription used from Month 4 onwards
 
 **Time:** 20 minutes  
 **Cost:** Free
@@ -144,8 +142,8 @@ Create a simple document (Google Doc or Notion) with:
 - [x] Payment methods configured (FPX, Cards, UPI, Wallets)
 - [x] API keys configured in .env
 - [x] Payment link creation script ready (`scripts/create-payment-link.sh`)
-- [ ] Test payment completed successfully
-- [ ] Recurring billing set up (optional, for later)
+- [ ] Test payment completed successfully (manual — pending user test)
+- [ ] Recurring billing set up (optional, deferred to Phase 3)
 - [x] Payment workflow documented
 
 ### Resources
@@ -172,15 +170,15 @@ Create `packages/site-generator/terms.html` (hosted at preview.pintarweb.com/ter
 **Key Sections:**
 1. **Services:** What's included (website, SEO, auto-reply, GMB)
 2. **Pricing Structure:**
-   - **Initial:** RM 447 (3-month advance, RM 149/month)
-   - **Monthly renewal:** RM 149/month (auto-debit)
-   - **Quarterly:** RM 417/3 months (save RM 30)
-   - **Bi-Annual:** RM 774/6 months (save RM 120)
-   - **Annual:** RM 1,308/12 months (save RM 480)
+   - **Initial:** RM 297 setup + RM 149 activation (split payment, total RM 446)
+   - **Monthly renewal:** RM 149/month (from month 5, after 1 month FREE bonus)
+   - **Quarterly:** RM 417/3 months
+   - **Bi-Annual:** RM 774/6 months
+   - **Annual:** RM 1,308/12 months
 3. **Payment Terms:** Auto-renewal, cancellation (14 days notice)
 4. **Customer Obligations:** Provide info, respond within 7 days
 5. **Pintarweb Obligations:** Build/maintain site, 48hr support response
-6. **Limitation of Liability:** Cap at 3 months fees (RM 447)
+6. **Limitation of Liability:** Cap at total fees paid (RM446 for pilot: RM297 setup + RM149 activation)
 7. **PDPA Privacy Notice:** Data collection, usage, rights
 8. **Governing Law:** Malaysia
 
@@ -241,11 +239,11 @@ Use Google Drive, Dropbox, or Notion for easy access.
 **Time:** 10 minutes
 
 ### Checklist
-- [ ] Subscription agreement drafted
-- [ ] Terms of service created
-- [ ] Privacy policy (PDPA compliant) created
-- [ ] Documents reviewed (lawyer optional)
-- [ ] Documents stored in organized folder
+- [x] Subscription agreement drafted (packages/site-generator/clients/)
+- [x] Terms of service created (preview.pintarweb.com/terms)
+- [x] Privacy policy (PDPA compliant) created (preview.pintarweb.com/privacy-policy)
+- [x] Documents reviewed
+- [x] Documents stored in organized folder (packages/site-generator/clients/)
 
 ### Resources
 - PDPA Malaysia: https://www.pdpa.gov.my/
@@ -371,7 +369,7 @@ The PintarWeb landing page has been built and deployed. It uses a dark glassmorp
 - `packages/site-generator/landing/index.html` — complete landing page
 - Dark background (#0a0a0a) with aurora gradients, glassmorphism, Manrope font
 - BM/EN/CN language toggle
-- RM800 anchor price vs RM447 subscription (3+1 months) shown side-by-side
+- RM800 anchor price vs RM446 subscription (3+1 months) shown side-by-side
 - Renewal options (monthly, quarterly, bi-annual, annual)
 - Problem section: "Ada Facebook Tapi Tak Ada Website?"
 - Solution section: 3 glass cards (Website, WhatsApp Bot, Local SEO)
@@ -401,43 +399,43 @@ See: `docs/plans/phase-1.5-website-integration.md` → Section 1.5.2
 ## Phase 1 Completion Checklist
 
 ### Payment Processing
-- [ ] Razorpay account created and verified
-- [ ] Bank account linked
-- [ ] Payment link template ready (RM 447)
-- [ ] Test payment completed
-- [ ] Payment workflow documented
+- [x] Razorpay account created and verified
+- [x] Bank account linked (Maybank: 562021737846)
+- [x] Payment link template ready (RM 446 split payment)
+- [ ] Test payment completed (manual — pending)
+- [x] Payment workflow documented
 
 ### Legal Documents (Clickwrap)
-- [ ] Terms of Service page created (preview.pintarweb.com/terms)
-- [ ] Privacy policy (PDPA compliant) created
-- [ ] Razorpay payment link configured with terms link
-- [ ] WhatsApp confirmation message template ready
-- [ ] Documents stored and organized
+- [x] Terms of Service page created (preview.pintarweb.com/terms)
+- [x] Privacy policy (PDPA compliant) created (preview.pintarweb.com/privacy-policy)
+- [x] Razorpay payment link configured with terms link
+- [x] WhatsApp confirmation message template ready (in confirm-payment.sh)
+- [x] Documents stored and organized (packages/site-generator/clients/)
 
 ### Cloud Hosting
-- [ ] Cloudflare Pages project created
-- [ ] Custom domain configured (preview.pintarweb.com)
-- [ ] R2 bucket created (pintarweb-assets)
-- [ ] Auto-deploy from GitHub working
-- [ ] Test deployment successful
+- [x] Cloudflare Pages project created (pintarweb-preview)
+- [x] Custom domain configured (preview.pintarweb.com)
+- [x] R2 bucket created (pintarweb-assets)
+- [x] Auto-deploy from GitHub working
+- [x] Test deployment successful
 
 ### Analytics (Moved to Phase 1.5.2)
-- [ ] Umami analytics deployed (see phase-1.5-website-integration.md)
-- [ ] Tracking script integrated
-- [ ] Dashboard accessible
-- [ ] Test tracking verified
+- [x] Umami analytics deployed (see phase-1.5-website-integration.md) — https://cloud.umami.is/share/IOzb83tMmKyzcWj9
+- [x] Tracking script integrated
+- [x] Dashboard accessible
+- [x] Test tracking verified
 
 ### Landing Page ✅
 - [x] Landing page designed and built
 - [x] Deployed to pintarweb-main Pages project
-- [x] Domain migration pending (Phase 1.5.1)
+- [x] Domain migrated to pintarweb.com (Phase 1.5.1)
 
 ### Final Verification
-- [ ] Can create payment link for customer
+- [x] Can create payment link for customer
 - [x] Can deploy client site to preview.pintarweb.com
-- [ ] Can track site visits in Umami (Phase 1.5.2)
+- [x] Can track site visits in Umami (Phase 1.5.2)
 - [x] Terms of Service page live
-- [x] Landing page live at main.pintarweb-main.pages.dev
+- [x] Landing page live at pintarweb.com
 
 ---
 
@@ -461,5 +459,5 @@ Then proceed to **Phase 2: Automation** where you'll:
 
 ---
 
-**Last Updated:** 2026-06-28  
-**Status:** 1.1 ✅ Razorpay, 1.2 ✅ Legal, 1.3 ✅ Hosting, 1.4 ✅ Landing Page. Phase 1.5 ✅ Complete. Phase 1 DONE.
+**Last Updated:** 2026-07-04  
+**Status:** Phase 1 ✅ COMPLETE — Phase 2 ✅ COMPLETE — Phase 3 IN PROGRESS
