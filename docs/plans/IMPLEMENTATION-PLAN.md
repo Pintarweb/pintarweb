@@ -195,6 +195,18 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 
 ### Deliverables
 
+#### 3.0 Demo Stage Infrastructure (2026-07-06)
+- [x] Screenshot script: `scripts/generate-screenshot.sh` — Playwright mobile capture (390px PNG)
+- [x] Demo site banners: all 3 demo client sites (test-razif, demo-ah-seng-plumbing, demo-kl-electrical)
+- [x] Audit page banners: `templates/audit-template.html` and `clients/{id}/audit.html`
+- [x] Bot demo widget placeholder: `<!-- {{BOT_DEMO_WIDGET}} -->` in `landing/index.html` at line 413
+- [x] Bot demo component: `components/bot-demo-widget/bot-demo-widget.html` (NOT yet injected)
+- [x] WhatsApp message: `generate-whatsapp.sh` with `--business-name` + 3-link format
+- [x] Demo script: `generate-demo.sh` passes `--business-name` to WhatsApp script
+- [ ] Deploy script: needs `{{BOT_DEMO_WIDGET}}` injection logic
+- [ ] Landing page bot demo: pending pricing/review
+- **Spec:** `docs/superpowers/specs/2026-07-06-demo-stage-outputs-design.md`
+
 #### 3.1 Pre-Pilot Setup (Automation)
 - [x] Update D1 schema (add: setup_paid, setup_amount, invoice_number, plan_type, subscription_id, subscription_status, billing_reminder_sent) — via scripts/migrate-outreach-db.sh
 - [x] Build confirm-payment.sh (payment → D1 + WhatsApp receipt + email invoice via Resend)
@@ -428,6 +440,6 @@ See the following documents for detailed step-by-step instructions:
 
 ---
 
-**Last Updated:** 2026-07-04  
+**Last Updated:** 2026-07-06  
 **Owner:** Yusmarin  
 **Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed, pricing updated to RM446 (split payment), 2-path closing flow implemented.

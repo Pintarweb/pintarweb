@@ -632,6 +632,45 @@ RESEND_FROM_EMAIL=hello@mail.pintarweb.com
 
 ---
 
+## Demo Stage Outputs (2026-07-06)
+
+New automated outputs generated for each demo prospect:
+
+### Screenshot Generation
+- **Script:** `scripts/generate-screenshot.sh`
+- **What:** Playwright captures mobile screenshot (390px) of demo site
+- **Usage:** `bash scripts/generate-screenshot.sh --url "https://preview.pintarweb.com/{id}/" --output "data/screenshots/{id}.png"`
+- **Output:** PNG screenshot attached to WhatsApp message (trust builder)
+
+### Demo Site Banner
+- **Files:** `clients/{id}/index.html` for all demo clients
+- **What:** Fixed top banner — "Nak try bot WhatsApp kami dulu sebelum decide?"
+- **Dismissible:** Yes, with sessionStorage persistence
+- **Links to:** https://pintarweb.com
+
+### Audit Page Banner
+- **Files:** `templates/audit-template.html`, `clients/{id}/audit.html`
+- **What:** Same banner as demo site
+- **Links to:** https://pintarweb.com
+
+### Bot Demo Widget
+- **File:** `packages/site-generator/landing/index.html`
+- **Placeholder:** `<!-- {{BOT_DEMO_WIDGET}} -->` at line 413 (between PRICING and FOUNDER)
+- **Component:** `components/bot-demo-widget/bot-demo-widget.html` (standalone HTML+CSS+JS)
+- **Status:** Placeholder inserted — component NOT yet injected (pending landing page pricing review)
+- **Deploy script:** `deploy-main.sh` needs update to inject placeholder
+
+### WhatsApp Message (Updated)
+- **Script:** `scripts/generate-whatsapp.sh`
+- **New:** `--business-name` argument for personalized intro
+- **Format:** Screenshot + 3 links (demo site, audit report, bot demo landing)
+- **Integrated:** `generate-demo.sh` passes business name through to WhatsApp script
+
+### Spec Document
+- `docs/superpowers/specs/2026-07-06-demo-stage-outputs-design.md`
+
+---
+
 ## Next Steps
 
 After Phase 3, proceed to **Phase 4: Scale** where you'll:
@@ -641,5 +680,5 @@ After Phase 3, proceed to **Phase 4: Scale** where you'll:
 
 ---
 
-**Last Updated:** 2026-07-04
-**Status:** Ready to execute (automation to be built)
+**Last Updated:** 2026-07-06
+**Status:** Demo stage outputs built. Landing page bot demo widget pending pricing/review.

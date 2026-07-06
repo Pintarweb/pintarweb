@@ -176,6 +176,18 @@ npx wrangler pages deployment list --project-name=pintarweb-preview
 
 **REVISED 2026-07-04: WhatsApp bot deployed, pricing updated to RM446 split payment, 2-path closing flow implemented**
 
+### 3.0 Demo Stage Infrastructure (2026-07-06)
+- [x] Screenshot script: `scripts/generate-screenshot.sh` — Playwright mobile capture (390px PNG)
+- [x] Demo site banners: injected into all 3 demo client sites (test-razif, demo-ah-seng-plumbing, demo-kl-electrical)
+- [x] Audit page banners: injected into `templates/audit-template.html` and `clients/{id}/audit.html`
+- [x] Bot demo widget placeholder: `<!-- {{BOT_DEMO_WIDGET}} -->` in `landing/index.html` at line 413
+- [x] Bot demo component: `components/bot-demo-widget/bot-demo-widget.html` (standalone, NOT yet injected)
+- [x] WhatsApp message template: `generate-whatsapp.sh` updated with `--business-name` + 3-link format
+- [x] Demo script integration: `generate-demo.sh` passes `--business-name` to WhatsApp script
+- [ ] Deploy script update: `deploy-main.sh` needs injection logic for `{{BOT_DEMO_WIDGET}}`
+- [ ] Landing page bot demo: pending pricing/offer revision
+- **Spec:** `docs/superpowers/specs/2026-07-06-demo-stage-outputs-design.md`
+
 ### 3.1 Pre-Pilot Setup (Week 1) — Automation
 - [x] D1 schema updated (migrate-outreach-db.sh — 11 billing fields added)
 - [x] confirm-payment.sh built (D1 + WhatsApp receipt + email invoice)
