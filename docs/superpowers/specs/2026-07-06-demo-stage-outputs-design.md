@@ -156,10 +156,13 @@ Position: fixed at top, above existing header content.
 ```
 
 **Chat UI behavior:**
-- 5 preset question buttons (BM only, as landing page is BM-primary)
-- Clicking a button → typing indicator (500ms delay) → scripted reply appears in chat
-- Chat bubbles: green (#DCF8C6) for user messages, white for bot
-- After reply: "Nak cuba bot sebenar? WhatsApp kami →" button below chat
+- Category selector (4 categories: Aircond, Plumber, Electrical, Renovation) shown after auto-play intro
+- After selecting category: 10 preset question buttons visible (BM only, as landing page is BM-primary)
+- Clicking a button → typing indicator (1200ms delay) → scripted reply appears in chat
+- **Question buttons stay visible after each reply** — prospect can click multiple questions in same category
+- "Cuba bot sebenar" CTA appears below chat but question buttons remain accessible
+- Chat bubbles: green (#34d399) for user messages, white for bot
+- "← Tukar kategori" link to switch categories
 - No personal number shown publicly
 
 **Scripted Q&A for demo:**
