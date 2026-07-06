@@ -109,7 +109,15 @@ body { font-family: sans-serif; background: var(--bg); color: var(--color-text-p
 </head>
 <body>
 
-<div class="page">
+<!-- Bot promo banner -->
+<div id="bot-promo-banner" style="position:fixed;top:0;left:0;right:0;background:#111827;border-bottom:1px solid #2dd4bf;padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:12px;z-index:9999;font-family:Inter,sans-serif;">
+  <span style="color:#a7f3d0;font-size:13px;">Nak try bot WhatsApp kami dulu sebelum decide?</span>
+  <a href="https://pintarweb.com" target="_blank" style="background:#25D366;color:#fff;text-decoration:none;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;">Cuba Bot Kami →</a>
+  <button onclick="var p=document.getElementById('bot-promo-banner');p.style.display='none';sessionStorage.setItem('banner-dismissed','1');" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:18px;padding:0 4px;line-height:1;">×</button>
+</div>
+<script>if(sessionStorage.getItem('banner-dismissed')){var b=document.getElementById('bot-promo-banner');if(b)b.style.display='none';}</script>
+
+<div class="page" style="padding-top:50px;">
   <div class="navbar">
     <span class="nav-logo">pintarweb</span>
     <div class="toggle-pill">

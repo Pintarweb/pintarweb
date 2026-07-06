@@ -161,7 +161,8 @@ fi
 echo "📱 Generating WhatsApp outreach message..."
 WHATSAPP_OUTPUT=$(bash "$(dirname "$0")/generate-whatsapp.sh" "$CONTACT_NAME" "$PHONE" "$DEMO_ID" \
     --audit "$AUDIT_URL" \
-    --demo "$DEMO_URL" 2>&1)
+    --demo "$DEMO_URL" \
+    --business-name "$NAME" 2>&1)
 WHATSAPP_URL=$(echo "$WHATSAPP_OUTPUT" | grep "https://wa.me" | head -1 || echo "")
 
 echo ""
@@ -181,8 +182,9 @@ echo "│ WhatsApp:     $WHATSAPP_URL"
 echo "└─────────────────────────────────────────────────────┘"
 echo ""
 echo "NEXT STEPS:"
-echo "  1. Create actual demo site (if not using existing URL)"
-echo "  2. Deploy audit page to: $AUDIT_FILE"
-echo "  3. Send WhatsApp message to prospect"
-echo "  4. Track engagement: bash scripts/track-event.sh \"$DEMO_ID\" \"demo_sent\""
+echo "  1. Generate screenshot: bash scripts/generate-screenshot.sh --url \"$DEMO_URL\" --output \"data/screenshots/${DEMO_ID}.png\""
+echo "  2. Create actual demo site (if not using existing URL)"
+echo "  3. Deploy audit page to: $AUDIT_FILE"
+echo "  4. Send WhatsApp message to prospect (attach screenshot manually)"
+echo "  5. Track engagement: bash scripts/track-event.sh \"$DEMO_ID\" \"demo_sent\""
 echo ""
