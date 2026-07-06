@@ -69,18 +69,18 @@
 
 <script>
 (function() {
-  var INTRO={aircond:{q:"Helo, saya nak tanya pasal aircond",a:"Helo! Saya bot PintarWeb. Servis aircond apa yang awak cari?"},plumber:{q:"Helo, saya nak tanya pasal plumber",a:"Helo! Saya bot PintarWeb. Servis plumbing apa yang awak perlukan?"},electrical:{q:"Helo, saya nak tanya pasal electrician",a:"Helo! Saya bot PintarWeb. Servis electrical apa yang awak butuhkan?"},renovation:{q:"Helo, saya nak tanya pasal renovation",a:"Helo! Saya bot PintarWeb. Servis renovate apa yang awak plan?"}};
+  var INTRO={aircond:{q:"Helo, saya nak tanya pasal aircond",a:"Helo! Saya bot PintarWeb. Servis aircond apa yang awak cari?"},plumber:{q:"Helo, saya nak tanya pasal plumber",a:"Helo! Saya bot PintarWeb. Servis plumbing apa yang awak perlukan?"},electrical:{q:"Helo, saya nak tanya pasal electrician",a:"Helo! Saya bot PintarWeb. Servis electrical apa yang awak perlukan?"},renovation:{q:"Helo, saya nak tanya pasal renovation",a:"Helo! Saya bot PintarWeb. Servis renovation apa yang awak plan?"}};
 
   var QA={
     aircond:[
-      {q:"RM berapa?",a:"Harga aircond kami: Chemical wash dari RM99, gas refill dari RM80, repair dari RM120. Servis completa dengan parts jika perlu. Nak saya bagi quotation details?"},
+      {q:"RM berapa?",a:"Harga aircond kami: Chemical wash dari RM99, gas refill dari RM80, repair dari RM120. Servis lengkap dengan parts jika perlu. Nak saya bagi quotation details?"},
       {q:"Coverage area?",a:"Kami cover seluruh Selangor dan KL — Cheras, Bangi, Klang, Shah Alam, PJ, dan banyak lagi. Area lain pun boleh tanya!"},
-      {q:"Aircond rosak — boleh baiki?",a:"Boleh! Service aircond termasuk diagnosis problem — kami akan cek and bagi tau apa masalah dan anggaran kos dulu."},
+      {q:"Aircond rosak — boleh baiki?",a:"Boleh! Service aircond termasuk diagnosis problem — kami akan cek dan tengok apa masalah dan anggaran kos dulu."},
       {q:"Gas refill — RM berapa?",a:"Untuk gas refill: R32/R410A (biasa untuk AC baru): RM80-RM150. R22 (AC lama): RM120-RM250. Jenis gas bergantung pada model AC awak."},
       {q:"Chemical wash — include apa?",a:"Chemical wash include: Cuci unit dalam & luar, flush paip, clear drainage, check gas pressure, dan testing cooling. Biasa siap dalam 1-2 jam."},
       {q:"Servis rumah atau pejabat?",a:"Kedua-dua! Kami serve rumah, apartment, office, dan komersial."},
       {q:"Ada warranty?",a:"Ya! Semua kerja kami include warranty 30 hari. Jika masalah yang sama kembali dalam 30 hari, kami baikki percuma."},
-      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple bolot reply sendiri. Complex pun bot try yang terbaik — kalau tak sure, baru escalate kepada owner."},
+      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple boleh reply sendiri terus. Even complicated questions pun bot akan cuba yang terbaik — kalau tak sure, baru escalate kepada owner."},
       {q:"Benefits apa?",a:"(1) Owner bebas — bot handle semua soalan basic. (2) Customer lebih senang WhatsApp dari call. (3) Semua lead direkam dalam system. (4) Respond dalam seconds, bukan jam. (5) Free setup bulan pertama!"},
       {q:"Saya nak...",a:"Bagus! Boleh WhatsApp kami terus di +60174456243 — saya akan hantar details lengkap dan kita proceed dari situ. 💬"}
     ],
@@ -89,10 +89,10 @@
       {q:"Coverage area?",a:"Kami cover seluruh Selangor dan KL — Klang, Shah Alam, Petaling Jaya, Subang, dan kawasan sekitar."},
       {q:"Pipe tersumbat — boleh baiki?",a:"Boleh! Clear blockage menggunakan kombinasi manual dan mesin. Untuk sink, toilet, dan floor drain semua boleh."},
       {q:"Tangki air — boleh service?",a:"Boleh! Service termasuk flush, check anode rod, dan inspect for leakage. Water heater service juga available."},
-      {q:"Leakage — boleh cari?",a:"Ya! Leak detection termasuk thermal camera dan pressure testing untuk cari punca leak yang tak ketara. Once jumpa, kita bagi option repair atau replace."},
+      {q:"Leakage — boleh cari?",a:"Ya! Leak detection termasuk thermal camera dan pressure testing untuk cari punca leak yang tak ketara. Once jumpa, kita boleh suggest option repair atau replace."},
       {q:"Servis rumah atau pejabat?",a:"Kedua-dua! Residential dan commercial. Untuk office dan shop, kita ada regular maintenance contract."},
       {q:"Ada warranty?",a:"Semua kerja di warranty 30 hari. Jika masalah yang sama kembali, kami baikki percuma. Parts ada supplier warranty sendiri."},
-      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple bolot reply sendiri. Complex pun bot try yang terbaik — kalau tak sure, baru escalate kepada owner."},
+      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple boleh reply sendiri terus. Even complicated questions pun bot akan cuba yang terbaik — kalau tak sure, baru escalate kepada owner."},
       {q:"Benefits apa?",a:"(1) Owner bebas — bot handle semua soalan basic. (2) Customer lebih senang WhatsApp dari call. (3) Semua lead direkam dalam system. (4) Respond dalam seconds, bukan jam. (5) Free setup bulan pertama!"},
       {q:"Saya nak...",a:"Bagus! Boleh WhatsApp kami terus di +60174456243 — saya akan hantar details lengkap dan kita proceed dari situ. 💬"}
     ],
@@ -104,7 +104,7 @@
       {q:"Fan baru — boleh pasang?",a:"Tentu! Ceiling fan, wall fan, standing fan — semua boleh install. Price bergantung pada jenis fan dan tinggi ceiling."},
       {q:"Servis rumah atau pejabat?",a:"Kedua-dua! Residential dan commercial. Untuk office dan shop, kita ada preventive maintenance contract."},
       {q:"Ada warranty?",a:"Semua installation di warranty 30 hari. Jika produk rosak akibat wiring, kita akan check and repair free of charge."},
-      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple bolot reply sendiri. Complex pun bot try yang terbaik — kalau tak sure, baru escalate kepada owner."},
+      {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple boleh reply sendiri terus. Even complicated questions pun bot akan cuba yang terbaik — kalau tak sure, baru escalate kepada owner."},
       {q:"Benefits apa?",a:"(1) Owner bebas — bot handle semua soalan basic. (2) Customer lebih senang WhatsApp dari call. (3) Semua lead direkam dalam system. (4) Respond dalam seconds, bukan jam. (5) Free setup bulan pertama!"},
       {q:"Saya nak...",a:"Bagus! Boleh WhatsApp kami terus di +60174456243 — saya akan hantar details lengkap dan kita proceed dari situ. 💬"}
     ],
@@ -113,7 +113,7 @@
       {q:"Coverage area?",a:"Kami serve KL, Selangor, dan kawasan nearby. Project kecil boleh manage, project besar perlu site visit dulu untuk quotation accurate."},
       {q:"Nak renovate — boleh?",a:"Boleh! Residential renovation termasuk kitchen, bathroom, bedroom, dan living area. Untuk commercial juga boleh discuss."},
       {q:"Kanopi/patio — boleh?",a:"Boleh! Canopy, patio, carport roof, dan perimeter extension semua boleh. Materials: polycarbonate, metal roofing, atau tempered glass."},
-      {q:"Perabot customize — boleh?",a:"Boleh! Custom furniture termasuk wardrobe, TV console, kitchen cabinet, dan shelving. Materials: plywood, MDF, atau solid wood — depends on budget."},
+      {q:"Perabot customize — boleh?",a:"Boleh! Custom furniture termasuk wardrobe, TV console, kitchen cabinet, dan shelving. Materials: plywood, MDF, atau solid wood — bergantung pada budget."},
       {q:"Residential atau commercial?",a:"Residential dulu — rumah dan apartment. Untuk commercial seperti cafe, retail, dan office space boleh discuss separately."},
       {q:"Ada warranty?",a:"Semua renovation work di warranty 1 tahun. Materials ada manufacturer warranty sendiri — biasanya 1-5 tahun bergantung pada produk."},
       {q:"Bot ni macam mana?",a:"Bot akan reply customer awak 24/7 tentang budget estimation, timeline, dan servis area. Complex technical questions akan escalate kepada team kami."},
