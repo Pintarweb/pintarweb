@@ -134,14 +134,14 @@ See: `docs/outreach/message-templates.md`
    - Service area confirmation
 2. Update demo → real site
 3. Deploy to `pintarweb.com/{id}/` or custom domain
-4. Set up Google Business Profile
+4. Set up Google Business Profile (see `docs/sop/gmb-setup.md`)
 5. Configure WhatsApp auto-reply bot (business name, services, pricing, areas, owner WhatsApp)
 6. Send welcome message
 
 **Client deliverables:**
 - Website on their domain (or subdomain)
 - WhatsApp auto-reply bot (Meta Cloud API + Cloudflare Workers) — instant acknowledgment, FAQ answering, lead capture
-- Google Business Profile claimed
+- Google Business Profile claimed (see `docs/sop/gmb-setup.md`)
 - SSL + hosting for months 1-3 (pilot period)
 - Month 4+: RM149/mo via Razorpay subscription
 

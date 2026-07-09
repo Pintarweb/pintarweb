@@ -13,6 +13,18 @@ CREATE TABLE IF NOT EXISTS leads (
     audit_results TEXT,
     ai_pain_point TEXT,
     source_links TEXT,
+    -- GMB / Google Business Profile fields
+    gmb_listing_found INTEGER DEFAULT 0,
+    gmb_verification_status TEXT DEFAULT 'none',
+    gmb_listing_complete INTEGER DEFAULT 0,
+    gmb_photo_count INTEGER DEFAULT 0,
+    gmb_has_hours INTEGER DEFAULT 0,
+    gmb_has_description INTEGER DEFAULT 0,
+    gmb_review_count INTEGER DEFAULT 0,
+    gmb_rating TEXT DEFAULT '0',
+    gmb_responds_to_reviews INTEGER DEFAULT 0,
+    gmb_attributes TEXT,
+    gmb_listing_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );

@@ -295,7 +295,7 @@ This document outlines the complete implementation plan to launch Pintarweb's Wa
 - [ ] Collect client assets (logo, photos, business info)
 - [ ] Generate final production site
 - [ ] Set up domain (client's domain or subdomain)
-- [ ] Configure Google Business Profile
+- [x] Configure Google Business Profile (see `docs/sop/gmb-setup.md`)
 - [ ] Conduct 20-minute onboarding call
 - [ ] Send welcome package (website URL, support contact, billing schedule)
 
@@ -437,9 +437,10 @@ See the following documents for detailed step-by-step instructions:
 - [Phase 2: Automation - Detailed Plan](./phase-2-automation.md)
 - [Phase 3: Pilot - Detailed Plan](./phase-3-pilot.md)
 - [Phase 4: Launch - Detailed Plan](./phase-4-launch.md)
+- [GMB Setup SOP - Google Business Profile Creation & Optimization](../sop/gmb-setup.md)
 
 ---
 
-**Last Updated:** 2026-07-06  
+**Last Updated:** 2026-07-09  
 **Owner:** Yusmarin  
-**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed, pricing updated to RM446 (split payment), 2-path closing flow implemented.
+**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed, pricing updated to RM446 (split payment), 2-path closing flow implemented, GMB scraping + audit integration COMPLETE ✅

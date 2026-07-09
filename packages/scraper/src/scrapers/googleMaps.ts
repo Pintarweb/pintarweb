@@ -12,6 +12,18 @@ export interface ExpectedLead {
     category?: string | null;
     maps_url?: string | null;
     source_url?: string | null;
+    // GMB / Google Business Profile fields
+    gmb_listing_found?: number;
+    gmb_verification_status?: string;
+    gmb_listing_complete?: number;
+    gmb_photo_count?: number;
+    gmb_has_hours?: number;
+    gmb_has_description?: number;
+    gmb_review_count?: number;
+    gmb_rating?: string;
+    gmb_responds_to_reviews?: number;
+    gmb_attributes?: string;
+    gmb_listing_url?: string;
 }
 
 /**

@@ -52,11 +52,12 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
             const initialLink = lead.maps_url || lead.source_url || null;
 
             const insertQuery = `
-        INSERT INTO leads (id, phone_normalized, business_name, source_origin, website_url, whatsapp_link, lead_score, address, category, maps_url, source_links, status, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New', CURRENT_TIMESTAMP)
+        INSERT INTO leads (id, phone_normalized, business_name, source_origin, website_url, whatsapp_link, lead_score, address, category, maps_url, source_links, gmb_listing_found, gmb_verification_status, gmb_listing_complete, gmb_photo_count, gmb_has_hours, gmb_has_description, gmb_review_count, gmb_rating, gmb_responds_to_reviews, gmb_attributes, gmb_listing_url, status, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New', CURRENT_TIMESTAMP)
       `;
 
             const whatsapp_link = `https://wa.me/${lead.phone_normalized}`;
+            const gmbAttributes = lead.gmb_attributes ? lead.gmb_attributes : JSON.stringify({});
 
             await db.prepare(insertQuery)
                 .bind(
@@ -70,7 +71,18 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.address || null,
                     lead.category || null,
                     lead.maps_url || null,
-                    initialLink
+                    initialLink,
+                    lead.gmb_listing_found || 0,
+                    lead.gmb_verification_status || "none",
+                    lead.gmb_listing_complete || 0,
+                    lead.gmb_photo_count || 0,
+                    lead.gmb_has_hours || 0,
+                    lead.gmb_has_description || 0,
+                    lead.gmb_review_count || 0,
+                    lead.gmb_rating || "0",
+                    lead.gmb_responds_to_reviews || 0,
+                    gmbAttributes,
+                    lead.gmb_listing_url || lead.maps_url || null
                 )
                 .run();
 
@@ -115,9 +127,11 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
 
             const updateQuery = `
         UPDATE leads 
-        SET business_name = ?, source_origin = ?, lead_score = ?, website_url = ?, address = ?, category = ?, maps_url = ?, source_links = ?, status = 'New', updated_at = CURRENT_TIMESTAMP
+        SET business_name = ?, source_origin = ?, lead_score = ?, website_url = ?, address = ?, category = ?, maps_url = ?, source_links = ?, gmb_listing_found = ?, gmb_verification_status = ?, gmb_listing_complete = ?, gmb_photo_count = ?, gmb_has_hours = ?, gmb_has_description = ?, gmb_review_count = ?, gmb_rating = ?, gmb_responds_to_reviews = ?, gmb_attributes = ?, gmb_listing_url = ?, status = 'New', updated_at = CURRENT_TIMESTAMP
         WHERE phone_normalized = ?
       `;
+
+            const gmbAttributes = lead.gmb_attributes ? lead.gmb_attributes : JSON.stringify({});
 
             await db.prepare(updateQuery)
                 .bind(
@@ -129,6 +143,17 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.category || existingRecord.category,
                     lead.maps_url || existingRecord.maps_url,
                     updatedLinks,
+                    lead.gmb_listing_found ?? existingRecord.gmb_listing_found ?? 0,
+                    lead.gmb_verification_status ?? existingRecord.gmb_verification_status ?? "none",
+                    lead.gmb_listing_complete ?? existingRecord.gmb_listing_complete ?? 0,
+                    lead.gmb_photo_count ?? existingRecord.gmb_photo_count ?? 0,
+                    lead.gmb_has_hours ?? existingRecord.gmb_has_hours ?? 0,
+                    lead.gmb_has_description ?? existingRecord.gmb_has_description ?? 0,
+                    lead.gmb_review_count ?? existingRecord.gmb_review_count ?? 0,
+                    lead.gmb_rating ?? existingRecord.gmb_rating ?? "0",
+                    lead.gmb_responds_to_reviews ?? existingRecord.gmb_responds_to_reviews ?? 0,
+                    gmbAttributes,
+                    lead.gmb_listing_url || lead.maps_url || existingRecord.gmb_listing_url,
                     lead.phone_normalized
                 )
                 .run();

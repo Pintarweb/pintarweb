@@ -370,7 +370,7 @@ node scripts/track-outreach.js [business-id] demo_sent "Sent pricing info"
    - Website custom (mobile-friendly)
    - SEO optimization (supaya customer jumpa awak)
    - WhatsApp auto-reply (tangkap lead 24/7)
-   - Google Business Profile optimization
+   - Google Business Profile optimization (see `docs/sop/gmb-setup.md`)
    - Monthly updates
    
    Semua ni RM 149/bulan. Split payment: RM297 setup + RM149 masa launch (total RM446, 1 bulan FREE).
@@ -568,7 +568,7 @@ Boleh hantar bila free supaya saya boleh start build website awak.
    - Explain each section
    - Show how to update content (via you)
    - Demonstrate WhatsApp auto-reply
-   - Show Google Business Profile
+   - Show Google Business Profile (see `docs/sop/gmb-setup.md` for setup details)
 
 3. **Next steps (5 min):**
    - Timeline for SEO results (1-3 months)
@@ -608,7 +608,7 @@ Support WhatsApp: 01X-XXX XXXX
 ✅ Website hosting & maintenance
 ✅ SEO optimization (results dalam 1-3 bulan)
 ✅ WhatsApp auto-reply (30 messages/bulan)
-✅ Google Business Profile optimization
+✅ Google Business Profile optimization (see `docs/sop/gmb-setup.md`)
 ✅ Monthly content updates (max 2)
 
 === CARA MINTA UPDATE ===
@@ -966,5 +966,5 @@ After completing Phase 4:
 
 ---
 
-**Last Updated:** 2026-07-04  
-**Status:** Ready to execute — pricing updated to RM446 split payment (RM297 setup + RM149 activation)
+**Last Updated:** 2026-07-09  
+**Status:** Ready to execute — pricing updated to RM446 split payment (RM297 setup + RM149 activation), GMB integration complete (see `docs/sop/gmb-setup.md`)

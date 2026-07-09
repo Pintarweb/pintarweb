@@ -1,6 +1,7 @@
 import { scrapeGoogleMaps } from "./scrapers/googleMaps";
 import { scrapeFacebook } from "./scrapers/facebook";
 import { scrapeYellowPages } from "./scrapers/yellowPages";
+import { scrapeGMBDetail } from "./scrapers/gmbDetail";
 import { v4 as uuidv4 } from "uuid";
 
 const WORKER_API_URL = "http://localhost:8787/api/leads";
@@ -67,6 +68,29 @@ async function runEngine() {
         console.log(`📖 Hunting YELLOW PAGES...`);
         const leads = await scrapeYellowPages(category, location, maxPerSource);
         allCaptured.push(...leads);
+    }
+
+    // 2.5 Enrich Google Maps leads with GMB detail data
+    console.log(`\n🔍 Enriching Google Maps leads with GMB data...`);
+    for (const lead of allCaptured) {
+        if (lead.maps_url && lead.source_origin === "Google Maps") {
+            try {
+                const gmbData = await scrapeGMBDetail(lead.maps_url);
+                lead.gmb_listing_found = gmbData.listingFound ? 1 : 0;
+                lead.gmb_verification_status = gmbData.verificationStatus;
+                lead.gmb_listing_complete = gmbData.listingComplete ? 1 : 0;
+                lead.gmb_photo_count = gmbData.photoCount;
+                lead.gmb_has_hours = gmbData.hasHours ? 1 : 0;
+                lead.gmb_has_description = gmbData.hasDescription ? 1 : 0;
+                lead.gmb_review_count = gmbData.reviewCount;
+                lead.gmb_rating = gmbData.rating;
+                lead.gmb_responds_to_reviews = gmbData.respondsToReviews ? 1 : 0;
+                lead.gmb_attributes = JSON.stringify(gmbData.attributes);
+                lead.gmb_listing_url = gmbData.listingUrl;
+            } catch (e) {
+                console.warn(`[GMB] Failed to scrape GMB for ${lead.business_name}:`, e);
+            }
+        }
     }
 
     console.log(`\n✅ Sweep Complete. Found ${allCaptured.length} raw results. Piping to Intelligence Engine...`);

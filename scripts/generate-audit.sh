@@ -1,10 +1,11 @@
 #!/bin/bash
 # Generate P.A.S.T. audit HTML for a lead
-# Usage: bash scripts/generate-audit.sh "Business Name" "Area" "Niche" "output-dir" [--competitors "Name,Rating,Reviews;Name,Rating,Reviews"]
+# Usage: bash scripts/generate-audit.sh "Business Name" "Area" "Niche" "output-dir" [--competitors "Name,Rating,Reviews;Name,Rating,Reviews"] [--gmb "listing_status,verification,photo_count,has_hours,has_description,review_count,rating"]
 #
 # Examples:
 #   bash scripts/generate-audit.sh "Ah Seng Plumbing" "Klang" "plumbing" "data/audits"
 #   bash scripts/generate-audit.sh "Tai Aircond" "Kuala Lumpur" "aircond" "data/audits" --competitors "Boost Aircond,4.5,67;Super Aircond,4.8,156"
+#   bash scripts/generate-audit.sh "Razif Aircond" "Shah Alam" "aircond" "data/audits" --gmb "found,verified,12,1,1,23,4.5"
 
 set -e
 
@@ -12,7 +13,33 @@ BUSINESS_NAME="${1:-}"
 AREA="${2:-}"
 NICHE="${3:-}"
 OUTPUT_DIR="${4:-}"
-USE_COMPETITORS="${5:-}"
+USE_COMPETITORS=""
+USE_GMB=""
+
+# Parse arguments
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --competitors)
+            USE_COMPETITORS="$2"
+            shift 2
+            ;;
+        --gmb)
+            USE_GMB="$2"
+            shift 2
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}"
+BUSINESS_NAME="${1:-}"
+AREA="${2:-}"
+NICHE="${3:-}"
+OUTPUT_DIR="${4:-}"
 
 # Default values
 DEFAULT_SEARCHES=500
@@ -42,14 +69,24 @@ case "$NICHE" in
 esac
 
 if [ -z "$BUSINESS_NAME" ] || [ -z "$AREA" ] || [ -z "$NICHE" ] || [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: bash scripts/generate-audit.sh \"Business Name\" \"Area\" \"Niche\" \"output-dir\" [--competitors \"Name,Rating,Reviews;...\"]"
+    echo "Usage: bash scripts/generate-audit.sh \"Business Name\" \"Area\" \"Niche\" \"output-dir\" [--competitors \"Name,Rating,Reviews;...\"] [--gmb \"listing_status,verification,photo_count,has_hours,has_description,review_count,rating\"]"
     echo ""
     echo "Arguments:"
     echo "  1. Business name"
     echo "  2. Area (e.g., Klang, Shah Alam)"
     echo "  3. Niche (e.g., plumbing, aircond, electrical)"
     echo "  4. Output directory"
-    echo "  5. --competitors \"Name,Rating,Reviews;Name,Rating,Reviews\" (optional)"
+    echo "  --competitors \"Name,Rating,Reviews;Name,Rating,Reviews\" (optional)"
+    echo "  --gmb \"listing_status,verification,photo_count,has_hours,has_description,review_count,rating\" (optional)"
+    echo ""
+    echo "GMB --gmb values:"
+    echo "  listing_status: found | not-found"
+    echo "  verification: verified | pending | unverified | none"
+    echo "  photo_count: number"
+    echo "  has_hours: 1 | 0"
+    echo "  has_description: 1 | 0"
+    echo "  review_count: number"
+    echo "  rating: number (e.g., 4.5)"
     exit 1
 fi
 
@@ -138,6 +175,103 @@ else
     COMPETITOR_COUNT=3
 fi
 
+# GMB Data Processing
+GMB_STATUS_CLASS="not-found"
+GMB_STATUS_LABEL="TIADA GMB"
+GMB_STATS_HTML=""
+GMB_CHECKLIST_HTML=""
+GMB_OPTIONS_HTML=""
+
+if [ -n "$USE_GMB" ] && [ "$USE_GMB" != "--gmb" ]; then
+    IFS=',' read -ra GMB_FIELDS <<< "$USE_GMB"
+    GMB_LISTING_FOUND="${GMB_FIELDS[0]:-not-found}"
+    GMB_VERIFICATION="${GMB_FIELDS[1]:-none}"
+    GMB_PHOTO_COUNT="${GMB_FIELDS[2]:-0}"
+    GMB_HAS_HOURS="${GMB_FIELDS[3]:-0}"
+    GMB_HAS_DESC="${GMB_FIELDS[4]:-0}"
+    GMB_REVIEW_COUNT="${GMB_FIELDS[5]:-0}"
+    GMB_RATING="${GMB_FIELDS[6]:-0}"
+
+    if [ "$GMB_LISTING_FOUND" = "found" ]; then
+        if [ "$GMB_VERIFICATION" = "verified" ]; then
+            GMB_STATUS_CLASS="verified"
+            GMB_STATUS_LABEL="TERVERIFIKASI"
+        elif [ "$GMB_VERIFICATION" = "pending" ] || [ "$GMB_VERIFICATION" = "unverified" ]; then
+            GMB_STATUS_CLASS="unverified"
+            GMB_STATUS_LABEL="BELUM SAH"
+        else
+            GMB_STATUS_CLASS="unverified"
+            GMB_STATUS_LABEL="TIDAK LENGKAP"
+        fi
+
+        # GMB Stats
+        GMB_STATS_HTML="
+        <div class=\"gmb-stats\">
+            <div class=\"gmb-stat\">
+                <div class=\"gmb-stat-value\">${GMB_RATING}★</div>
+                <div class=\"gmb-stat-label\">Rating</div>
+            </div>
+            <div class=\"gmb-stat\">
+                <div class=\"gmb-stat-value\">${GMB_REVIEW_COUNT}</div>
+                <div class=\"gmb-stat-label\">Ulasan</div>
+            </div>
+            <div class=\"gmb-stat\">
+                <div class=\"gmb-stat-value\">${GMB_PHOTO_COUNT}</div>
+                <div class=\"gmb-stat-label\">Foto</div>
+            </div>
+        </div>"
+
+        # Checklist
+        if [ "$GMB_HAS_HOURS" = "1" ]; then
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"done\"><span class=\"icon\">✓</span> Waktu operasi ditetapkan</li>"
+        else
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"pending\"><span class=\"icon\">✗</span> Waktu operasi belum ditetapkan</li>"
+        fi
+
+        if [ "$GMB_HAS_DESC" = "1" ]; then
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"done\"><span class=\"icon\">✓</span> Deskripsi perniagaan ditulis</li>"
+        else
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"pending\"><span class=\"icon\">✗</span> Deskripsi perniagaan belum ditulis</li>"
+        fi
+
+        if [ "$GMB_PHOTO_COUNT" -ge 10 ]; then
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"done\"><span class=\"icon\">✓</span> ${GMB_PHOTO_COUNT} foto (cukup)</li>"
+        else
+            GMB_CHECKLIST_HTML="${GMB_CHECKLIST_HTML}<li class=\"pending\"><span class=\"icon\">✗</span> Hanya ${GMB_PHOTO_COUNT} foto (minimum 10)</li>"
+        fi
+
+        # Options based on status
+        if [ "$GMB_VERIFICATION" != "verified" ]; then
+            GMB_OPTIONS_HTML="
+            <div class=\"gmb-options\">
+                <p style=\"font-size: 0.875rem; color: var(--color-muted); margin-bottom: 1rem;\">Kami boleh bantu lengkapkan dan sahkan GMB anda — FREE dalam pakej.</p>
+                <a href=\"https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20saya%20nak%20lengkapkan%20dan%20sahkan%20Google%20Business%20Profile%20saya.\" class=\"gmb-cta\">
+                    📍 Lengkapkan GMB Saya
+                </a>
+            </div>"
+        else
+            GMB_OPTIONS_HTML="
+            <div class=\"gmb-options\">
+                <p style=\"font-size: 0.875rem; color: var(--color-muted); margin-bottom: 1rem;\">GMB anda dah bagus — tapi boleh lagi dioptimize untuk lebih pelanggan.</p>
+                <a href=\"https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20GMB%20saya%20dah%20lengkap.%20Saya%20nak%20optimize%20lagi%20untuk%20lebih%20pelanggan.\" class=\"gmb-cta\">
+                    🚀 Optimize GMB Saya Lagi
+                </a>
+            </div>"
+        fi
+    else
+        # No GMB found
+        GMB_STATUS_CLASS="not-found"
+        GMB_STATUS_LABEL="TIADA GMB"
+        GMB_OPTIONS_HTML="
+        <div class=\"gmb-options\">
+            <p style=\"font-size: 0.875rem; color: var(--color-muted); margin-bottom: 1rem;\">Google Business Profile membantu pelanggan jumpa anda di Google Maps — FREE!</p>
+            <a href=\"https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20saya%20nak%20buka%20Google%20Business%20Profile%20baru%20untuk%20bisnes%20saya.\" class=\"gmb-cta\">
+                ➕ Bina GMB Baru Untuk Saya
+            </a>
+        </div>"
+    fi
+fi
+
 # Audit date
 AUDIT_DATE=$(date "+%B %d, %Y")
 
@@ -172,6 +306,11 @@ replacements = {
     "{{DEMO_URL}}": "$DEMO_URL",
     "{{WHATSAPP_URL}}": """$WHATSAPP_URL""",
     "{{AUDIT_DATE}}": "$AUDIT_DATE",
+    "{{GMB_STATUS_CLASS}}": "$GMB_STATUS_CLASS",
+    "{{GMB_STATUS_LABEL}}": "$GMB_STATUS_LABEL",
+    "{{GMB_STATS_HTML}}": """$GMB_STATS_HTML""",
+    "{{GMB_CHECKLIST_HTML}}": """$GMB_CHECKLIST_HTML""",
+    "{{GMB_OPTIONS_HTML}}": """$GMB_OPTIONS_HTML""",
 }
 
 for placeholder, value in replacements.items():

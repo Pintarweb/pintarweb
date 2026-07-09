@@ -289,7 +289,7 @@ Boleh tengok bila free.
 ```
 Kalau berminat, ada 2 pilihan:
 1. RM 800 one-time untuk website
-2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included.
+2. RM 149/bulan — website FREE, auto-reply + GMB + SEO included. (GMB setup: `docs/sop/gmb-setup.md`)
    Tapi kami punya split payment: RM297 setup + RM149 masa launch (jumpa kat bawah).
    Total RM 446 — satu job chemical wash (RM 180-350) dah cover sebulan.
 ```
@@ -680,5 +680,5 @@ After Phase 3, proceed to **Phase 4: Scale** where you'll:
 
 ---
 
-**Last Updated:** 2026-07-06
-**Status:** Demo stage outputs built. Landing page bot demo widget pending pricing/review.
+**Last Updated:** 2026-07-09
+**Status:** Demo stage complete. GMB integration implemented — audit reports now show GMB status with 3 states (TIADA/BELUM SAH/TERVERIFIKASI). See `docs/sop/gmb-setup.md`.
