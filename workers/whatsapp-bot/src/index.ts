@@ -184,7 +184,7 @@ const GREETING_ANSWER =
 function classifyIntent(msg: string): Intent {
   const lower = msg.toLowerCase();
 
-  if (/^(hello|hi|hey|ola|selamat|hy|helo|hallo|apa khabar|apa punya|whassup)/i.test(lower)) return 'GREETING';
+  if (/^(hello|hi|hey|ola|selamat|hy|helo|hallo|apa khabar|apa punya|whassup|apa cakap|khabar apa|ada khabar)\b/i.test(lower)) return 'GREETING';
   if (/okay fine|okay nak|oke ?nak|saya nak subscribe|saya nak subscribe|nak proceed|proceed|saya setuju|i want to|i want this/i.test(lower)) return 'CLOSING_READY';
   if (/^(nak|saya nak|saya mau|i want to subscribe|sign up|start|mari|lets go)/i.test(lower) && /subscribe|signup|langgan/i.test(lower)) return 'CLOSING_READY';
   if (/subscribe|langgan|sign up|nak langgan|nak start|nak proceed/i.test(lower)) return 'SUBSCRIBE';
@@ -198,7 +198,7 @@ function classifyIntent(msg: string): Intent {
   if (/cancel|batal|contract|kontrak|stop|keluar|t\&c|terma/i.test(lower)) return 'FAQ_CONTRACT';
   if (/lama|how long|siap|ready|minggu|weeks|hari|when.*live|berapa masa/i.test(lower)) return 'FAQ_TIMELINE';
   if (/need from me|apa yang perlu|documents|dokumen|ssm|gambar|syarat|photo/i.test(lower)) return 'FAQ_REQUIREMENTS';
-  if (/support|bantu|tolong|help|masalah|issues|rosak|service/i.test(lower)) return 'FAQ_SUPPORT';
+  if (/support|tolong|help|masalah|issues|rosak/i.test(lower)) return 'FAQ_SUPPORT';
   if (/own|milik|hak|property|files| fail|take|transfer/i.test(lower)) return 'FAQ_OWNERSHIP';
   if (/update|tukar harga|ubah|edit|change|sendiri|manage/i.test(lower)) return 'FAQ_UPDATE';
   if (/renewal|renew|bulanan|bulan depan|monthly|RM149|month 4|selepas 4/i.test(lower)) return 'FAQ_RENEWAL';
@@ -855,73 +855,18 @@ async function handleIncomingMessage(
         customerPhone
       );
 
-      console.log(`[WA Bot] LLM check: intent=${intent} historyLen=${conversationHistory.length}`);
-
       if (conversationHistory.length > 0) {
-        let reply: string | null = null;
-        let errorMsg: string | null = null;
+        const simpleGreetings = ['apa khabar', 'khabar apa', 'ada khabar', 'selamat pagi', 'selamat malam', 'selamat petang', 'good morning', 'good night', 'good afternoon'];
+        const isSimpleGreeting = simpleGreetings.some(g => messageText.toLowerCase().includes(g)) && messageText.length < 30;
 
-        try {
-          const systemPrompt = await getBasePrompt(env.pintarweb_outreach_db, 'base') ||
-            `You are a receptionist for "${config.business_name}" in ${config.area}. You reply to WhatsApp messages from CUSTOMERS.
-
-IMPORTANT RULES — FOLLOW EXACTLY:
-1. CRITICAL: Always reply in Malaysian Bahasa Melayu. NEVER use Indonesian words like "emitkan" (use "hantar"), "tersebut", "para". NEVER mix Chinese or other language characters into your reply.
-2. Reply in the SAME language the customer used. Malay → Malay, English → English, Manglish → Manglish.
-3. Reply must be 1-2 short sentences MAXIMUM. Never write more.
-4. Answer the SPECIFIC question asked.
-5. NEVER say "terima kasih", "thank you", "you're welcome" as your main or only reply.
-6. NEVER refer to yourself as "I" or "we". You ARE the business.
-7. NEVER mention AI, bots, automated systems, or that you're a computer.
-8. NEVER make up information not provided above.
-9. If you don't know the answer, say "Saya akan tanya team dan-balik pada anda."
-10. Keep every reply SHORT and CONVERSATIONAL.`;
-
-          const recentHistory = conversationHistory.slice(-4);
-          const messages = [
-            { role: 'system', content: systemPrompt },
-            ...recentHistory,
-            { role: 'user', content: messageText },
-          ];
-
-          console.log(`[WA Bot] Calling Workers AI (${AI_MODEL})...`);
-
-          const aiPromise = env.AI.run(AI_MODEL, {
-            messages,
-            max_tokens: 500,
-            temperature: 0.3,
-          });
-
-          const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('AI call timed out after 10s')), 10000)
-          );
-
-          const result: any = await Promise.race([aiPromise, timeoutPromise]);
-          console.log(`[WA Bot] AI result keys:`, Object.keys(result || {}));
-          reply = result.response || result.content || null;
-          if (reply) {
-            console.log(`[WA Bot] Workers AI reply: ${reply.substring(0, 60)}`);
-          } else {
-            console.log(`[WA Bot] Workers AI returned empty reply, result keys:`, Object.keys(result || {}));
-          }
-        } catch (err) {
-          errorMsg = `${err instanceof Error ? err.message : String(err)}`;
-          console.error(`[WA Bot] Workers AI error:`, err);
-        }
-
-        if (!reply) {
-          if (errorMsg) {
-            reply = 'Hmm, saya akan tanya team dulu. Saya hubungi awak tidak lama lagi. 💬';
-          } else {
-            reply = 'Maaf, saya tak dapat nak jawab sekarang. Cuba lagi sikit tau.';
-          }
-        }
-
-        console.log(`[WA Bot] Sending reply: ${reply.substring(0, 60)}`);
-
-        if (reply) {
-          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
-          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+        if (isSimpleGreeting) {
+          const greetingReply = 'Hola! Saya di sini. Nak tanya apa-apa tentang PintarWeb? 😄';
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, greetingReply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', greetingReply);
+        } else {
+          const deferReply = 'Hmm, saya akan tanya team dulu. Saya hubungi awak tidak lama lagi. 💬';
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, deferReply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', deferReply);
         }
 
         await notifyOwner(
