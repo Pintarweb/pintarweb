@@ -696,7 +696,7 @@ async function updatePendingRequest(
     .run();
 }
 
-const AI_MODEL = '@cf/zai-org/glm-4.7-flash';
+const AI_MODEL = '@cf/meta/llama-3.2-3b-instruct';
 
 async function sendPendingLlmRequest(
   env: Env,
@@ -855,26 +855,84 @@ async function handleIncomingMessage(
         customerPhone
       );
 
-      if (conversationHistory.length > 2) {
-        const msgId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-        const thinkingReply = 'Sebentar, saya check... 🔍';
-        await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, thinkingReply);
-        await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', thinkingReply);
+      console.log(`[WA Bot] LLM check: intent=${intent} historyLen=${conversationHistory.length}`);
 
-        ctx.waitUntil(
-          sendPendingLlmRequest(
-            env,
-            wabaId,
-            phoneNumberId,
-            customerPhone,
-            customerName,
-            msgId,
-            intent,
-            config.business_name,
-            config.area,
-            messageText,
-            conversationHistory
-          )
+      if (conversationHistory.length > 0) {
+        let reply: string | null = null;
+        let errorMsg: string | null = null;
+
+        try {
+          const systemPrompt = await getBasePrompt(env.pintarweb_outreach_db, 'base') ||
+            `You are a receptionist for "${config.business_name}" in ${config.area}. You reply to WhatsApp messages from CUSTOMERS.
+
+IMPORTANT RULES — FOLLOW EXACTLY:
+1. CRITICAL: Always reply in Malaysian Bahasa Melayu. NEVER use Indonesian words like "emitkan" (use "hantar"), "tersebut", "para". NEVER mix Chinese or other language characters into your reply.
+2. Reply in the SAME language the customer used. Malay → Malay, English → English, Manglish → Manglish.
+3. Reply must be 1-2 short sentences MAXIMUM. Never write more.
+4. Answer the SPECIFIC question asked.
+5. NEVER say "terima kasih", "thank you", "you're welcome" as your main or only reply.
+6. NEVER refer to yourself as "I" or "we". You ARE the business.
+7. NEVER mention AI, bots, automated systems, or that you're a computer.
+8. NEVER make up information not provided above.
+9. If you don't know the answer, say "Saya akan tanya team dan-balik pada anda."
+10. Keep every reply SHORT and CONVERSATIONAL.`;
+
+          const recentHistory = conversationHistory.slice(-4);
+          const messages = [
+            { role: 'system', content: systemPrompt },
+            ...recentHistory,
+            { role: 'user', content: messageText },
+          ];
+
+          console.log(`[WA Bot] Calling Workers AI (${AI_MODEL})...`);
+
+          const aiPromise = env.AI.run(AI_MODEL, {
+            messages,
+            max_tokens: 500,
+            temperature: 0.3,
+          });
+
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('AI call timed out after 10s')), 10000)
+          );
+
+          const result: any = await Promise.race([aiPromise, timeoutPromise]);
+          console.log(`[WA Bot] AI result keys:`, Object.keys(result || {}));
+          reply = result.response || result.content || null;
+          if (reply) {
+            console.log(`[WA Bot] Workers AI reply: ${reply.substring(0, 60)}`);
+          } else {
+            console.log(`[WA Bot] Workers AI returned empty reply, result keys:`, Object.keys(result || {}));
+          }
+        } catch (err) {
+          errorMsg = `${err instanceof Error ? err.message : String(err)}`;
+          console.error(`[WA Bot] Workers AI error:`, err);
+        }
+
+        if (!reply) {
+          if (errorMsg) {
+            reply = 'Hmm, saya akan tanya team dulu. Saya hubungi awak tidak lama lagi. 💬';
+          } else {
+            reply = 'Maaf, saya tak dapat nak jawab sekarang. Cuba lagi sikit tau.';
+          }
+        }
+
+        console.log(`[WA Bot] Sending reply: ${reply.substring(0, 60)}`);
+
+        if (reply) {
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+        }
+
+        await notifyOwner(
+          env.META_ACCESS_TOKEN,
+          phoneNumberId,
+          config.owner_notification,
+          customerName,
+          customerPhone,
+          messageText,
+          intent,
+          config.business_name
         );
         return;
       }
@@ -943,9 +1001,7 @@ export default {
 
         console.log(`[WA Bot] Message from ${customerPhone}: ${messageText}`);
 
-        ctx.waitUntil(
-          handleIncomingMessage(env, ctx, phoneNumberId, wabaId, customerPhone, customerName, messageText)
-        );
+        await handleIncomingMessage(env, ctx, phoneNumberId, wabaId, customerPhone, customerName, messageText);
 
         return new Response('OK', { status: 200 });
       } catch (err) {

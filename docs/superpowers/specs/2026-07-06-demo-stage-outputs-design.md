@@ -1,7 +1,7 @@
 # Spec: Demo Stage Outputs + Bot Demo on Landing Page
 
 **Date:** 2026-07-06
-**Status:** Partially Implemented — landing page pending pricing/offer revision
+**Status:** Fully Implemented — landing page updated with new pricing (RM297 entry), FAQ, How It Works (2026-07-06 end of day)
 
 ---
 
@@ -168,11 +168,11 @@ Position: fixed at top, above existing header content.
 **Scripted Q&A for demo:**
 | User clicks | Bot reply |
 |-------------|-----------|
-| "RM berapa?" | "Harga kami RM446 untuk 4 bulan — RM297 fi persediaan + RM149 bulan pertama. Lepas tu RM149/bulan je. Ada juga option quarterly, 6 bulan, annual. Interested?" |
-| "Sini cover area?" | "Kami cover seluruh Selangor dan KL. Area lain boleh tanya — kami try yang terbaik untuk bantu!" |
-| "Macam mana bot ni?" | "Bot akan reply customer awak 24/7 — borak tentang harga, servis, area coverage. Soalan复杂 pun bot try yang terbaik.Kalau awak approve, baru we connect." |
-| "Benefits apa?" | "Benefits: (1) Owner bebas — bot handle semua soalan basic. (2) Customer lebih senang WhatsApp dari call. (3) Semua lead direkam dalam system. (4) Respond dalam seconds, bukan jam." |
-| "Saya nak..." | "Bagus! Boleh WhatsApp kami terus di +60174456243 — saya akan hantar details dan kita proceed dari situ. 💬" |
+| "RM berapa?" | "Harga aircond: Chemical wash dari RM99, gas refill dari RM80, repair dari RM120. Servis lengkap dengan parts jika perlu. Nak saya bagi quotation details?" |
+| "Sini cover area?" | "Kami cover seluruh Selangor dan KL — Cheras, Bangi, Klang, Shah Alam, PJ, dan banyak lagi. Area lain pun boleh tanya!" |
+| "Macam mana bot ni?" | "Bot akan reply customer awak 24/7 tentang harga, servis, area coverage. Soalan simple boleh reply sendiri terus. Even complicated questions pun bot akan cuba yang terbaik — kalau tak sure, baru escalate kepada owner." |
+| "Benefits apa?" | "(1) Owner bebas — bot handle semua soalan basic. (2) Customer lebih senang WhatsApp dari call. (3) Semua lead direkam dalam system. (4) Respond dalam seconds, bukan jam." |
+| "Saya nak..." | "Bagus! Boleh WhatsApp kami terus di +60174456243 — saya akan hantar details lengkap dan kita proceed dari situ. 💬" |
 
 **CSS:** Uses landing page's existing CSS variables + Inter font.
 
@@ -218,8 +218,8 @@ Nak try bot kami dulu? Klik sini: https://pintarweb.com"
 2. ✅ **Demo site banner** — added to all 3 demo template `index.html` files
 3. ✅ **Audit page banner** — added to `audit-template.html`
 4. ✅ **WhatsApp message template** — updated `generate-whatsapp.sh` + pass business name from `generate-demo.sh`
-5. 🔄 **Bot demo widget** — placeholder `<!-- {{BOT_DEMO_WIDGET}} -->` added to `landing/index.html` at line 413; component `components/bot-demo-widget/bot-demo-widget.html` exists but NOT yet injected. **Pending landing page pricing/review.**
-6. ⏳ **Deploy script injection** — `deploy-main.sh` needs to be updated to inject `{{BOT_DEMO_WIDGET}}` placeholder from `components/bot-demo-widget/bot-demo-widget.html`
+5. ✅ **Bot demo widget** — placeholder `<!-- {{BOT_DEMO_WIDGET}} -->` in `landing/index.html` at line 414; `deploy-main.sh` injects component automatically before deploy. LIVE at pintarweb.com.
+6. ✅ **Landing page overhaul (2026-07-06)** — New pricing (RM297 entry), 10 FAQ questions, How It Works 4 steps, all WhatsApp CTAs to +60174456243, meta descriptions updated
 
 ---
 
@@ -230,7 +230,12 @@ Nak try bot kami dulu? Klik sini: https://pintarweb.com"
 - [x] Audit page shows same banner
 - [x] `generate-whatsapp.sh` outputs 3-link format with business name
 - [x] `generate-demo.sh` passes business name to WhatsApp script
-- [ ] Landing page shows bot demo section with 5 clickable question buttons
-- [ ] Each button produces typing indicator → scripted reply in chat bubble
-- [ ] No personal number (+60196556243) appears anywhere on landing page
-- [ ] `{{BOT_DEMO_WIDGET}}` placeholder injected by deploy script from `components/bot-demo-widget/`
+- [x] Landing page shows bot demo section with category selection + 10 clickable question buttons per category
+- [x] Each button produces typing indicator → scripted reply in chat bubble
+- [x] Question buttons stay visible after each reply (multi-question flow)
+- [x] All WhatsApp CTAs use +60174456243 (no +60196556243 on landing page)
+- [x] Bot demo widget injected by `deploy-main.sh` from `components/bot-demo-widget/`
+- [x] Pricing section updated: RM297 fi persediaan → RM149 aktivasi, no "bayar 3 bulan"
+- [x] FAQ expanded to 10 questions from bot FAQ taxonomy
+- [x] How It Works: 4-step flow (Cuba Bot → WhatsApp → Bina → Aktif)
+- [x] Malaysian Manglish throughout bot demo (no Indonesian, no Chinese characters)
