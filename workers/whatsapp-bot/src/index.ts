@@ -85,7 +85,7 @@ const PINTARWEB_FAQ: FaqEntry[] = [
   {
     keywords: ['support', 'bantu', 'tolong', 'help', 'masalah', 'issues', 'rosak', 'service'],
     intent: 'FAQ_SUPPORT',
-    answer: 'Ya! Sokongan WhatsApp termasuk dalam langganan. Hubungi kami bila-bila masa melalui WhatsApp dan kami akan bantu. Untuk masalah teknikal, response dalam 1-2 jam waktu bekerja.',
+    answer: 'Ya! Sokongan WhatsApp termasuk dalam langganan. Hubungi kami bila-bila masa melalui WhatsApp dan kami akan tolong. Untuk masalah teknikal, response dalam 1-2 jam waktu bekerja.',
   },
   {
     keywords: ['milik', 'own', 'hak', 'property', 'files', 'fail', 'take', 'transfer'],
@@ -155,7 +155,7 @@ const PINTARWEB_FAQ: FaqEntry[] = [
 ];
 
 const PRICING_ANSWER =
-  'Harga PintarWeb: RM446 untuk 4 bulan (bayar RM297 fi persediaan + RM149 bulan pertama, dapat 1 bulan PERCUMA). Selepas itu, RM149/bulan. Rincian: Monthly RM149 | Quarterly RM417 | 6-bulan RM774 | Tahunan RM1,308. Nak tahu lebih lanjut tentang pakej?' +
+  'Harga PintarWeb: RM446 untuk 4 bulan (bayar RM297 fi persediaan + RM149 bulan pertama, dapat 1 bulan PERCUMA). Selepas itu, RM149/bulan. Butiran harga: Monthly RM149 | Quarterly RM417 | 6-bulan RM774 | Tahunan RM1,308. Nak tahu lebih lanjut tentang pakej?' +
   '\n\nJawab dengan nombor:\n1️⃣ Nak terus mula — saya hantar details payment\n2️⃣ Nak tahu lagi — tanya saya apa-apa yang ragu-ragu';
 
 const CLOSING_READY_ANSWER =
@@ -448,14 +448,16 @@ async function storeMessage(
 async function getConversationHistory(
   db: any,
   wabaId: string,
-  customerPhone: string
+  customerPhone: string,
+  limit?: number
 ): Promise<Array<{ role: string; content: string }>> {
+  const limitClause = limit ? `LIMIT ${limit}` : 'LIMIT 10';
   const result = await db
     .prepare(
       `SELECT role, message FROM whatsapp_bot_conversations
        WHERE waba_id = ? AND customer_phone = ?
        ORDER BY created_at ASC
-       LIMIT 10`
+       ${limitClause}`
     )
     .bind(wabaId, customerPhone)
     .all();
@@ -901,6 +903,29 @@ async function handleIncomingMessage(
       customerPhone
     );
 
+    if (messageText.trim() === '1' || messageText.trim() === '2') {
+      const recentHistory = await getConversationHistory(
+        env.pintarweb_outreach_db,
+        wabaId,
+        customerPhone,
+        2
+      );
+      const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string }) => m.role === 'assistant').at(-1);
+      if (lastAssistantMsg && /Jawab dengan nombor/i.test(lastAssistantMsg.content)) {
+        console.log(`[WA Bot] Detected numeric reply "${messageText}" from pricing menu`);
+        if (messageText.trim() === '1') {
+          const reply = handleIntent('CLOSING_READY', customerName, config.business_name);
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+        } else {
+          const reply = handleIntent('HOW_IT_WORKS', customerName, config.business_name);
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+        }
+        return;
+      }
+    }
+
     const intent = classifyIntent(messageText);
     console.log(`[WA Bot] intent=${intent} greeted=${alreadyGreeted} phone=${customerPhone}`);
 
@@ -933,7 +958,15 @@ async function handleIncomingMessage(
           const systemPrompt = await getBasePrompt(env.pintarweb_outreach_db, 'base') ||
             `You are a WhatsApp assistant for ${config.business_name} in ${config.area}. ${config.business_name} builds websites, WhatsApp auto-reply bots, and local SEO for small businesses. NEVER mention AC, plumbing, electrical, or any physical service. NEVER invent business names, websites, or services not listed here.
 
-Reply Malaysian Malay only, 1-2 short sentences max. Keep it conversational.`;
+STRICT LANGUAGE RULES:
+- Reply Malaysian Bahasa Melayu ONLY. Never Indonesian.
+- Use "tolong" for help, NOT "bantu" in requests like "apa boleh tolong"
+- Use "bergantung" or "terpulang" for "depends", NOT "tergantung"
+- Use "butiran" or "keterangan" for "details", NOT "rincian"
+- Use "untuk" as preposition "for", NOT as a substitute for other words
+- Use "bagi" sparingly, prefer "untuk"
+- Never use "sama" to mean "with" — use "dengan" instead (e.g., "untuk kamu dengan saya")
+- Keep replies 1-2 short sentences. Keep it conversational.`;
 
           const chatMessages = [
             { role: 'user', content: messageText },
