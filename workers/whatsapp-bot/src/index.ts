@@ -8,6 +8,7 @@ interface Env {
   OWNER_WHATSAPP: string;
   BANK_ACCOUNT_NAME: string;
   BANK_ACCOUNT_NUMBER: string;
+  ANTHROPIC_API_KEY: string;
   pintarweb_outreach_db: any;
   AI: {
     run(model: string, options: { messages: Array<{ role: string; content: string }>; max_tokens?: number; temperature?: number }): Promise<{ response?: string; content?: string }>;
@@ -696,7 +697,73 @@ async function updatePendingRequest(
     .run();
 }
 
-const AI_MODEL = '@cf/meta/llama-3.2-3b-instruct';
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
+
+async function callClaude(
+  env: Env,
+  systemPrompt: string,
+  messages: Array<{ role: string; content: string }>,
+  maxTokens: number = 80
+): Promise<string | null> {
+  try {
+    const anthropicMessages = messages.map(m => ({
+      role: m.role === 'customer' ? 'user' : m.role,
+      content: m.content,
+    }));
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: CLAUDE_MODEL,
+        max_tokens: maxTokens,
+        system: systemPrompt,
+        messages: anthropicMessages,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error(`[Claude] API error: ${response.status} - ${error.substring(0, 100)}`);
+      return null;
+    }
+
+    const data: any = await response.json();
+    const reply = data.content?.[0]?.text?.trim() || null;
+    return reply;
+  } catch (err) {
+    console.error(`[Claude] Call failed: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
+  }
+}
+
+async function callWorkersAI(
+  env: Env,
+  messages: Array<{ role: string; content: string }>,
+  maxTokens: number = 80
+): Promise<string | null> {
+  try {
+    const aiPromise = (env.AI as any).run('@cf/meta/llama-3.2-3b-instruct', {
+      messages,
+      max_tokens: maxTokens,
+      temperature: 0.3,
+    });
+
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('AI timeout')), 8000)
+    );
+
+    const result: any = await Promise.race([aiPromise, timeoutPromise]);
+    return result.response || null;
+  } catch (err) {
+    console.error(`[Workers AI] Call failed: ${err instanceof Error ? err.message : String(err)}`);
+    return null;
+  }
+}
 
 async function sendPendingLlmRequest(
   env: Env,
@@ -756,10 +823,10 @@ IMPORTANT RULES — FOLLOW EXACTLY:
   let errorMsg: string | null = null;
 
   try {
-    console.log(`[WA Bot] Calling Workers AI (${AI_MODEL}) for ${requestId}...`);
-    const result: any = await env.AI.run(AI_MODEL, {
+    console.log(`[WA Bot] Calling Workers AI (llama fallback) for ${requestId}...`);
+    const result: any = await env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
       messages,
-      max_tokens: 500,
+      max_tokens: 80,
       temperature: 0.3,
     });
     reply = result.response || result.content || null;
@@ -859,15 +926,42 @@ async function handleIncomingMessage(
         const simpleGreetings = ['apa khabar', 'khabar apa', 'ada khabar', 'selamat pagi', 'selamat malam', 'selamat petang', 'good morning', 'good night', 'good afternoon'];
         const isSimpleGreeting = simpleGreetings.some(g => messageText.toLowerCase().includes(g)) && messageText.length < 30;
 
-        if (isSimpleGreeting) {
-          const greetingReply = 'Hola! Saya di sini. Nak tanya apa-apa tentang PintarWeb? 😄';
-          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, greetingReply);
-          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', greetingReply);
+        let reply: string | null = null;
+        let errorMsg: string | null = null;
+
+        if (!isSimpleGreeting) {
+          const systemPrompt = await getBasePrompt(env.pintarweb_outreach_db, 'base') ||
+            `You are a WhatsApp assistant for ${config.business_name} in ${config.area}. ${config.business_name} builds websites, WhatsApp auto-reply bots, and local SEO for small businesses. NEVER mention AC, plumbing, electrical, or any physical service. NEVER invent business names, websites, or services not listed here.
+
+Reply Malaysian Malay only, 1-2 short sentences max. Keep it conversational.`;
+
+          const chatMessages = [
+            { role: 'user', content: messageText },
+          ];
+
+          console.log(`[WA Bot] Trying Claude Haiku...`);
+          reply = await callClaude(env, systemPrompt, chatMessages, 80);
+
+          if (!reply) {
+            console.log(`[WA Bot] Claude failed, trying Workers AI...`);
+            reply = await callWorkersAI(env, [{ role: 'system', content: systemPrompt }, ...chatMessages], 80);
+          }
+
+          if (!reply) {
+            console.log(`[WA Bot] All LLM backends failed`);
+            errorMsg = 'All LLM backends failed';
+          }
         } else {
-          const deferReply = 'Hmm, saya akan tanya team dulu. Saya hubungi awak tidak lama lagi. 💬';
-          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, deferReply);
-          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', deferReply);
+          reply = 'Hola! Saya di sini. Nak tanya apa-apa tentang PintarWeb? 😄';
         }
+
+        if (!reply) {
+          reply = 'Hmm, saya akan tanya team dulu. Saya hubungi awak tidak lama lagi. 💬';
+        }
+
+        console.log(`[WA Bot] Sending reply: ${reply.substring(0, 60)}`);
+        await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+        await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
 
         await notifyOwner(
           env.META_ACCESS_TOKEN,
