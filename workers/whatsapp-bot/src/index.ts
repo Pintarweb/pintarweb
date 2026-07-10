@@ -217,6 +217,114 @@ function getFaqAnswer(intent: Intent): string | null {
   return faq?.answer ?? null;
 }
 
+// ========================================
+// D1 Knowledge Base Functions (3-Layer KB)
+// ========================================
+
+interface SystemPrompt {
+  id: string;
+  prompt_type: string;
+  prompt_text: string;
+  version: number;
+  is_active: number;
+}
+
+interface NicheKnowledge {
+  id: string;
+  faq_json: string;
+  price_ranges_json: string;
+  objections_json: string;
+  version: number;
+  is_active: number;
+}
+
+async function getBasePrompt(db: any, promptType: string = 'base'): Promise<string | null> {
+  try {
+    const result = await db
+      .prepare(
+        `SELECT prompt_text FROM whatsapp_bot_system_prompts
+         WHERE prompt_type = ? AND is_active = 1
+         ORDER BY version DESC LIMIT 1`
+      )
+      .bind(promptType)
+      .first();
+
+    if (result?.prompt_text) {
+      return result.prompt_text;
+    }
+  } catch (err) {
+    console.error('[KB] Error reading base prompt from D1:', err);
+  }
+  return null;
+}
+
+async function getNicheKnowledge(db: any, niche: string): Promise<NicheKnowledge | null> {
+  try {
+    const result = await db
+      .prepare(
+        `SELECT * FROM whatsapp_bot_niche_knowledge
+         WHERE id = ? AND is_active = 1 LIMIT 1`
+      )
+      .bind(niche)
+      .first();
+
+    return result ?? null;
+  } catch (err) {
+    console.error('[KB] Error reading niche knowledge from D1:', err);
+    return null;
+  }
+}
+
+async function getFaqForNiche(db: any, niche: string): Promise<FaqEntry[]> {
+  try {
+    const nicheData = await getNicheKnowledge(db, niche);
+    if (nicheData?.faq_json) {
+      const faqArray = JSON.parse(nicheData.faq_json);
+      return faqArray as FaqEntry[];
+    }
+  } catch (err) {
+    console.error('[KB] Error parsing niche FAQ from D1:', err);
+  }
+  return PINTARWEB_FAQ;
+}
+
+async function getPriceRanges(db: any, niche: string): Promise<Record<string, string>> {
+  try {
+    const nicheData = await getNicheKnowledge(db, niche);
+    if (nicheData?.price_ranges_json) {
+      return JSON.parse(nicheData.price_ranges_json);
+    }
+  } catch (err) {
+    console.error('[KB] Error reading price ranges from D1:', err);
+  }
+  return {};
+}
+
+async function getObjections(db: any, niche: string): Promise<Array<{ objection: string; response: string }>> {
+  try {
+    const nicheData = await getNicheKnowledge(db, niche);
+    if (nicheData?.objections_json) {
+      return JSON.parse(nicheData.objections_json);
+    }
+  } catch (err) {
+    console.error('[KB] Error reading objections from D1:', err);
+  }
+  return [];
+}
+
+async function getClientNiche(db: any, wabaId: string): Promise<string> {
+  try {
+    const result = await db
+      .prepare(`SELECT niche FROM whatsapp_bot_config WHERE waba_id = ?`)
+      .bind(wabaId)
+      .first();
+    return result?.niche ?? 'pintarweb';
+  } catch (err) {
+    console.error('[KB] Error reading client niche from D1:', err);
+    return 'pintarweb';
+  }
+}
+
 function formatPhone(phone: string): string {
   let num = phone.replace(/\D/g, '');
   if (num.startsWith('60')) return num;
@@ -358,9 +466,14 @@ async function generateAIResponse(
   businessName: string,
   area: string,
   customerMessage: string,
-  conversationHistory: Array<{ role: string; content: string }>
+  conversationHistory: Array<{ role: string; content: string }>,
+  db: any,
+  wabaId: string
 ): Promise<string> {
-  const systemPrompt = `You are a receptionist for "${businessName}" in ${area}. You reply to WhatsApp messages from CUSTOMERS.
+  let systemPrompt = await getBasePrompt(db, 'base');
+
+  if (!systemPrompt) {
+    systemPrompt = `You are a receptionist for "${businessName}" in ${area}. You reply to WhatsApp messages from CUSTOMERS.
 
 IMPORTANT RULES — FOLLOW EXACTLY:
 1. CRITICAL: Always reply in Malaysian Bahasa Melayu. NEVER use Indonesian words like "emitkan" (use "hantar"), "tersebut", "para". NEVER mix Chinese or other language characters into your reply. NEVER use broken grammar like "saya akan told you team" or "forwarded mensaje".
@@ -374,6 +487,7 @@ IMPORTANT RULES — FOLLOW EXACTLY:
 9. If you don't know the answer, say "Saya akan tanya team dan-balik pada anda."
 10. Do NOT offer to send links, forms, or anything you can't actually send.
 11. Keep every reply SHORT and CONVERSATIONAL — like chatting with a helpful friend who happens to know the business.`;
+  }
 
   const recentHistory = conversationHistory.slice(-4);
 
@@ -600,7 +714,9 @@ async function handleIncomingMessage(
           config.business_name,
           config.area,
           messageText,
-          conversationHistory
+          conversationHistory,
+          env.pintarweb_outreach_db,
+          wabaId
         );
       }
     }

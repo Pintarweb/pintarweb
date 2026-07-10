@@ -499,9 +499,111 @@ bash scripts/create-subscription.sh "[lead-id]" "monthly"
 
 ---
 
-**Last Updated:** 2026-07-04  
-**Owner:** Yusmarin  
-**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed (DeepSeek + 22-intent classifier), Razorpay live, domain migrated, Umami tracking, sales funnel docs, message templates, demo SOP ready, outreach automation fully built with D1 tracking.
+## Future Enhancements
+
+### WhatsApp Bot — Knowledge Layers (D1 Storage) ✅ COMPLETE (2026-07-09)
+
+**Goal:** Move all knowledge layers out of hardcoded `.ts` files into D1 for easy management.
+
+#### Phase A: D1 Schema for Knowledge Layers ✅
+- [x] Create `whatsapp_bot_system_prompts` table (Layer 1 storage)
+- [x] Create `whatsapp_bot_niche_knowledge` table (Layer 2 storage)
+- [x] Extend `whatsapp_bot_config` table: renamed `pricing` → `price_display`, added `niche`, `business_hours`, `closing_flow_enabled`
+- [x] Migration script: `scripts/migrate-whatsapp-layers.sql`
+- [x] Update `generateAIResponse()` to read Layer 1 from D1 with fallback to hardcoded
+- [x] Seed initial PintarWeb Layer 2 KB from `docs/deep-research/pintarweb digital KB/layer2_pintarweb_knowledge.md`
+
+#### Phase B: Admin API Endpoints
+- [ ] `GET /admin/prompts` — list all prompts (base + niche)
+- [ ] `PUT /admin/prompts/:type` — update prompt text
+- [ ] `GET /admin/clients` — list all client configs
+- [ ] `POST /admin/clients` — create new client config
+- [ ] `PUT /admin/clients/:id` — update client config
+- [ ] `DELETE /admin/clients/:id` — deactivate client
+
+#### Phase C: CLI Management Scripts ✅
+- [x] `scripts/manage-whatsapp-prompts.sh list|get|update <type>` — manage prompts
+- [x] `scripts/manage-whatsapp-client.sh create|list|get|update|delete` — CRUD clients
+- [x] `scripts/seed-whatsapp-kb.sh` — seed Layer 1 & 2 data
+
+---
+
+### WhatsApp Bot — Layer 2 Niche Knowledge ✅ COMPLETE (2026-07-09)
+
+**Goal:** Bot can handle niche-specific questions for Aircond, Plumbing, Electrical, Reno clients.
+
+Seeded niches:
+- [x] **PintarWeb niche** — Prospect-facing bot FAQ + pricing + objections
+- [x] **Aircond niche** — Layer 2 KB from `docs/deep-research/aircond KB/`
+  - Symptom→Cause→Fix matrix, service types, sizing, pricing ranges
+- [x] **Plumbing niche** — Layer 2 KB from `docs/deep-research/plumbing KB/`
+  - Symptom→Cause→Fix matrix, DIY warnings, urgency tiers, pricing ranges
+- [ ] **Electrical niche** — Layer 2 KB (not yet created)
+- [ ] **Renovation niche** — Layer 2 KB (not yet created)
+- [x] `getFaqForNiche()` function reads from D1 with fallback to PINTARWEB_FAQ
+
+---
+
+### WhatsApp Bot — Layer 3 Full Client Config
+
+**Goal:** Wire all client-specific config fields into bot responses.
+
+- [ ] `business_hours` → out-of-office / quiet hours auto-reply
+- [x] `niche` → select Layer 2 knowledge base per client (read in generateAIResponse)
+- [ ] `price_ranges` → dynamic FAQ answers
+- [ ] `closing_flow_enabled` → toggle closing flow on/off per client
+- [ ] Per-client greeting template
+
+---
+
+### WhatsApp Bot — Feature Enhancements
+
+- [ ] **Photo handling** — accept and acknowledge photos sent by customers, forward to owner
+- [ ] **Scheduling proposal** — propose available time slots, log preference, owner confirms
+- [ ] **Quiet hours / out-of-office** — auto-reply outside business hours
+- [ ] **Bot number transfer SOP** — document Meta Developer Console steps for WABA transfer on delivery day
+- [ ] **WhatsApp template re-engagement** — handle 24-hour window limitation for outbound after customer contact
+
+---
+
+### Payments — Razorpay Automation
+
+- [ ] Wire Razorpay auto-subscription into worker (currently manual process)
+- [ ] On delivery day: create Razorpay subscription for RM149/month
+- [ ] On month 3 end: send billing reminder → create subscription offer
+- [ ] Handle Razorpay webhook for payment success/failure
+
+---
+
+### Scraper / Outreach — Enhancements
+
+- [ ] **Niche research** — Layer 2 knowledge for Aircond and Trades/Reno (see Layer 2 sections above)
+- [ ] **GMB scraper end-to-end test** — test `gmbDetail.ts` with real leads
+- [ ] **D1 GMB migration** — run migration to add GMB columns to existing DB (schema updated 2026-07-09, migration not executed)
+- [ ] **Review scraper** — collect Google reviews for lead enrichment
+
+---
+
+### Site Generator — Enhancements
+
+- [ ] **More demo clients** — expand beyond aircond/plumbing/electrical to renovation, roofing, cleaning
+- [ ] **Client portal** — allow clients to update prices/services via simple dashboard
+- [ ] **Image pipeline v2** — more image categories, better quality, video support
+
+---
+
+### General / Operations
+
+- [ ] **Pilot retrospective** — document what worked, what didn't, time per deliverable
+- [ ] **Standardize SOPs** — document onboarding, delivery, billing reminder, cancellation flows
+- [ ] **Client handover pack** — create template for delivering website + bot + credentials to client
+- [ ] **Scale playbook** — how to onboard 10+ clients without becoming bottleneck
+
+---
+
+**Last Updated:** 2026-07-09
+**Owner:** Yusmarin
+**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed (DeepSeek + 22-intent classifier), Razorpay live, domain migrated, Umami tracking, GMB integration COMPLETE ✅
 
 ---
 
