@@ -269,7 +269,7 @@ Keyword-based classification (no LLM needed for routing):
 | FAQ_CONTRACT | kontrak, contract, cancel, batal | Annual contract, 30-day notice |
 | FAQ_TIMELINE | berapa lama, how long, siap, live, minggu | 4 weeks |
 | FAQ_REQUIREMENTS | apa yang perlu, need from me, dokumen, ssm | SSM + photos |
-| FAQ_SUPPORT | support, bantu, tolong, masalah | Included in subscription |
+| FAQ_SUPPORT | support, bantu, tolong, masalah | Included in subscription (answer uses "kami akan tolong") |
 | FAQ_OWNERSHIP | milik, own, hak, property, files | 100% owned by client |
 | FAQ_UPDATE | update, tukar harga, edit, change, sendiri | Via WhatsApp or dashboard |
 | FAQ_RENEWAL | renewal, renew, bulanan, RM149/month | RM149/month from month 5 |
@@ -281,7 +281,7 @@ Keyword-based classification (no LLM needed for routing):
 | ESCALATE | marah, speak to human, geram | Immediate owner notification |
 | UNCLEAR | no keyword match | Ask clarifying question |
 
-LLM (DeepSeek) is only called for UNCLEAR or GREETING intents when conversation history exists (to avoid generic responses on first message).
+LLM (Claude Haiku 4.5) is only called for UNCLEAR or complex GREETING intents. Simple greetings ("apa khabar", "selamat pagi") use hardcoded replies. **No conversation history is fed to LLM** — this prevents hallucination of business info across conversation turns.
 
 ---
 
