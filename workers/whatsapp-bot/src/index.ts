@@ -903,7 +903,7 @@ async function handleIncomingMessage(
       customerPhone
     );
 
-    if (messageText.trim() === '1' || messageText.trim() === '2') {
+    if (['1', '2', '3'].includes(messageText.trim())) {
       const recentHistory = await getConversationHistory(
         env.pintarweb_outreach_db,
         wabaId,
@@ -911,18 +911,33 @@ async function handleIncomingMessage(
         2
       );
       const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string }) => m.role === 'assistant').at(-1);
-      if (lastAssistantMsg && /Jawab dengan nombor/i.test(lastAssistantMsg.content)) {
-        console.log(`[WA Bot] Detected numeric reply "${messageText}" from pricing menu`);
-        if (messageText.trim() === '1') {
-          const reply = handleIntent('CLOSING_READY', customerName, config.business_name);
-          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
-          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
-        } else {
-          const reply = handleIntent('HOW_IT_WORKS', customerName, config.business_name);
-          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
-          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+      if (lastAssistantMsg) {
+        if (/Jawab dengan nombor/i.test(lastAssistantMsg.content)) {
+          console.log(`[WA Bot] Detected numeric reply "${messageText}" from pricing menu`);
+          if (messageText.trim() === '1') {
+            const reply = handleIntent('CLOSING_READY', customerName, config.business_name);
+            await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+            await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+          } else {
+            const reply = handleIntent('HOW_IT_WORKS', customerName, config.business_name);
+            await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+            await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+          }
+          return;
         }
-        return;
+        if (/Saya boleh tolong dengan:/i.test(lastAssistantMsg.content)) {
+          console.log(`[WA Bot] Detected numeric reply "${messageText}" from greeting menu`);
+          const greetingIntents: Record<string, Intent> = {
+            '1': 'PRICE_ENQUIRY',
+            '2': 'SUBSCRIBE',
+            '3': 'UNCLEAR'
+          };
+          const intent = greetingIntents[messageText.trim()];
+          const reply = handleIntent(intent, customerName, config.business_name);
+          await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+          await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+          return;
+        }
       }
     }
 
