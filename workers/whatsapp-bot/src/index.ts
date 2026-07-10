@@ -696,7 +696,7 @@ async function updatePendingRequest(
     .run();
 }
 
-const AI_MODEL = '@cf/zhipu/glm-4.7-flash';
+const AI_MODEL = '@cf/zai-org/glm-4.7-flash';
 
 async function sendPendingLlmRequest(
   env: Env,
