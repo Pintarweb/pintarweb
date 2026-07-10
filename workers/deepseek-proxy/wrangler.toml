@@ -1,0 +1,5 @@
+name = "pintarweb-deepseek-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-04-17"
+
+account_id = "6608a11fd74a74b741d55d0c10f7643e"

@@ -30,6 +30,36 @@ Target audience: Malaysian business owners in Selangor/KL. All bot communication
 - WABA ID: 727271803683109 / Phone Number ID: 872026605987484
 - D1 DB: pintarweb-claude-db (1ca959be-b1bc-4b03-87df-8e4610659993)
 
+## LLM Architecture (Async + Multi-Backend)
+
+### Primary: Workers AI (GLM-4.7-Flash)
+- Model: `@cf/zhipu/glm-4.7-flash` — Cloudflare-hosted, 100+ languages, fast
+- No external API calls, no timeout issues
+- Defined as `AI_MODEL` constant at top of `sendPendingLlmRequest()`
+
+### Fallback: DeepSeek Proxy Worker
+- Worker: `workers/deepseek-proxy/src/index.ts`
+- URL: `https://pintarweb-deepseek-proxy.yusmarin.workers.dev`
+- Triggered only when Workers AI fails
+- **Note:** DeepSeek API is blocked from Cloudflare Workers network — proxy may not work
+
+### Alternative Models Available on Workers AI
+- `@cf/aisingapore/gemma-sea-lion-v4-27b-it` — Southeast Asia trained, good for Malay
+- `@cf/qwen/qwen-72b-chat` — Qwen, strong multilingual
+- To switch: change `AI_MODEL` constant at top of `sendPendingLlmRequest()`
+
+### Async LLM Flow
+```
+1. Webhook receives WhatsApp message
+2. Send "Sebentar, saya check..." immediately (ctx.waitUntil)
+3. Workers AI processes (or DeepSeek proxy fallback)
+4. Final reply sent via WhatsApp API (async, same thread)
+```
+
+### Pending Requests Tracking
+- D1 table: `whatsapp_bot_pending_llm_requests`
+- Tracks: id, waba_id, phone_number_id, customer_phone, message_id, prompt, status (pending/completed/failed), created_at
+
 ## Intent Classification (22 intents, keyword-based)
 
 GREETING, FAQ_PACKAGES, FAQ_SETUP_FEE, FAQ_SUBSCRIBE, FAQ_CONTRACT, FAQ_TIMELINE,
@@ -38,7 +68,7 @@ FAQ_WHATSAPP_NUMBER, FAQ_LOCAL_SEO, FAQ_SATISFACTION, FAQ_SEE_BEFORE_LIVE,
 FAQ_PDPA, FAQ_PAYMENT_METHODS, FAQ_MAINTENANCE, FAQ_TECH_SAVVY, FAQ_ADD_SERVICES,
 PRICE_ENQUIRY, SUBSCRIBE, CLOSING_READY, HOW_IT_WORKS, SUPPORT, ESCALATE, UNCLEAR
 
-LLM (DeepSeek v4 Flash) called ONLY for UNCLEAR or GREETING when conversation history > 2 messages.
+LLM called ONLY for UNCLEAR or GREETING when conversation history > 2 messages.
 
 ## Pricing (RM446 everywhere)
 
@@ -60,7 +90,7 @@ LLM (DeepSeek v4 Flash) called ONLY for UNCLEAR or GREETING when conversation hi
 
 ## System Prompt Rules
 
-When editing the LLM system prompt (DeepSeek fallback):
+When editing the LLM system prompt:
 1. Always Malaysian Bahasa Melayu
 2. Reply 1-2 short sentences MAX
 3. Answer the specific question only
@@ -76,3 +106,16 @@ All 20 FAQ answers are hardcoded in `src/index.ts`. When adding/editing:
 - Use Malaysian Malay only
 - No Indonesian words
 - Match the intent taxonomy
+
+## Managing LLM Requests
+
+```bash
+# Check pending LLM requests
+npx wrangler d1 execute pintarweb-claude-db --remote --command="SELECT * FROM whatsapp_bot_pending_llm_requests WHERE status='pending' ORDER BY created_at DESC LIMIT 10;"
+
+# Check failed requests
+npx wrangler d1 execute pintarweb-claude-db --remote --command="SELECT * FROM whatsapp_bot_pending_llm_requests WHERE status='failed' ORDER BY created_at DESC LIMIT 10;"
+
+# Clean up old pending requests (>1 hour)
+npx wrangler d1 execute pintarweb-claude-db --remote --command="DELETE FROM whatsapp_bot_pending_llm_requests WHERE status='pending' AND created_at < datetime('now', '-1 hour');"
+```

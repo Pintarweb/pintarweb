@@ -1,5 +1,6 @@
 interface Env {
   DEEPSEEK_API_KEY: string;
+  DEEPSEEK_PROXY_URL: string;
   META_ACCESS_TOKEN: string;
   META_PHONE_NUMBER_ID: string;
   META_WABA_ID: string;
@@ -8,6 +9,7 @@ interface Env {
   BANK_ACCOUNT_NAME: string;
   BANK_ACCOUNT_NUMBER: string;
   pintarweb_outreach_db: any;
+  AI: any;
 }
 
 type Intent =
@@ -368,13 +370,13 @@ async function getClientConfig(
 ): Promise<{
   business_name: string;
   services: string;
-  pricing: string;
+  price_display: string;
   area: string;
   owner_notification: string;
 } | null> {
   const result = await db
     .prepare(
-      `SELECT business_name, services, pricing, area, owner_notification
+      `SELECT business_name, services, price_display, area, owner_notification
        FROM whatsapp_bot_config WHERE waba_id = ?`
     )
     .bind(wabaId)
@@ -505,7 +507,7 @@ IMPORTANT RULES — FOLLOW EXACTLY:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'deepseek-reasoner',
+        model: 'deepseek-chat-v4-20250615',
         messages,
         temperature: 0.3,
         max_tokens: 120,
@@ -657,8 +659,160 @@ function handleIntent(
   }
 }
 
+async function storePendingRequest(
+  db: any,
+  id: string,
+  wabaId: string,
+  phoneNumberId: string,
+  customerPhone: string,
+  messageId: string,
+  prompt: string
+): Promise<void> {
+  await db
+    .prepare(
+      `INSERT INTO whatsapp_bot_pending_llm_requests
+       (id, waba_id, phone_number_id, customer_phone, message_id, prompt, status)
+       VALUES (?, ?, ?, ?, ?, ?, 'pending')`
+    )
+    .bind(id, wabaId, phoneNumberId, customerPhone, messageId, prompt)
+    .run();
+}
+
+async function updatePendingRequest(
+  db: any,
+  id: string,
+  status: string,
+  errorMessage?: string
+): Promise<void> {
+  await db
+    .prepare(
+      `UPDATE whatsapp_bot_pending_llm_requests
+       SET status = ?, error_message = ?, completed_at = datetime('now')
+       WHERE id = ?`
+    )
+    .bind(status, errorMessage ?? null, id)
+    .run();
+}
+
+declare const Ai: any;
+
+const AI_MODEL = '@cf/zhipu/glm-4.7-flash';
+
+async function sendPendingLlmRequest(
+  env: Env,
+  wabaId: string,
+  phoneNumberId: string,
+  customerPhone: string,
+  customerName: string,
+  messageId: string,
+  intent: string,
+  businessName: string,
+  area: string,
+  customerMessage: string,
+  conversationHistory: Array<{ role: string; content: string }>
+): Promise<void> {
+  await notifyOwner(
+    env.META_ACCESS_TOKEN,
+    phoneNumberId,
+    '60174456243',
+    customerName,
+    customerPhone,
+    customerMessage,
+    intent,
+    businessName
+  );
+  const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+  let systemPrompt = await getBasePrompt(env.pintarweb_outreach_db, 'base');
+  if (!systemPrompt) {
+    systemPrompt = `You are a receptionist for "${businessName}" in ${area}. You reply to WhatsApp messages from CUSTOMERS.
+
+IMPORTANT RULES — FOLLOW EXACTLY:
+1. CRITICAL: Always reply in Malaysian Bahasa Melayu. NEVER use Indonesian words like "emitkan" (use "hantar"), "tersebut", "para". NEVER mix Chinese or other language characters into your reply. NEVER use broken grammar like "saya akan told you team" or "forwarded mensaje".
+2. Reply in the SAME language the customer used. Malay → Malay, English → English, Manglish → Manglish.
+3. Reply must be 1-2 short sentences MAXIMUM. Never write more.
+4. Answer the SPECIFIC question asked. Do not add generic follow-ups like "nak tahu lagi apa-apa, WhatsApp je".
+5. NEVER say "terima kasih", "thank you", "you're welcome" as your main or only reply.
+6. NEVER refer to yourself as "I" or "we". You ARE the business. Say "kami" sparingly.
+7. NEVER mention AI, bots, automated systems, or that you're a computer.
+8. NEVER make up information not provided above.
+9. If you don't know the answer, say "Saya akan tanya team dan-balik pada anda."
+10. Do NOT offer to send links, forms, or anything you can't actually send.
+11. Keep every reply SHORT and CONVERSATIONAL — like chatting with a helpful friend who happens to know the business.`;
+  }
+
+  const recentHistory = conversationHistory.slice(-4);
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...recentHistory,
+    { role: 'user', content: customerMessage },
+  ];
+
+  const promptText = JSON.stringify({ model: 'deepseek-chat', messages, temperature: 0.3, max_tokens: 500 });
+
+  await storePendingRequest(env.pintarweb_outreach_db, requestId, wabaId, phoneNumberId, customerPhone, messageId, promptText);
+
+  let reply: string | null = null;
+  let errorMsg: string | null = null;
+
+  try {
+    const ai = new Ai(env.AI);
+    console.log(`[WA Bot] Calling Workers AI (${AI_MODEL}) for ${requestId}...`);
+    const result: any = await ai.run(AI_MODEL, {
+      messages,
+      max_tokens: 500,
+      temperature: 0.3,
+    });
+    reply = result.response || result.content || null;
+    if (reply) {
+      console.log(`[WA Bot] Workers AI reply for ${requestId}: ${reply.substring(0, 60)}`);
+    }
+  } catch (err) {
+    errorMsg = `[Workers AI] ${err instanceof Error ? err.message : String(err)}`;
+    console.error(`[WA Bot] Workers AI failed for ${requestId}:`, err);
+  }
+
+  if (!reply && env.DEEPSEEK_PROXY_URL) {
+    try {
+      console.log(`[WA Bot] Falling back to DeepSeek proxy for ${requestId}...`);
+      const response = await fetch(env.DEEPSEEK_PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: promptText,
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        errorMsg = `[Proxy] ${response.status}: ${error}`;
+        console.error(`[WA Bot] Proxy error for ${requestId}:`, error);
+      } else {
+        const data = await response.json();
+        reply = data.choices?.[0]?.message?.content?.trim() || null;
+        if (reply) {
+          console.log(`[WA Bot] Proxy fallback reply for ${requestId}: ${reply.substring(0, 60)}`);
+        }
+      }
+    } catch (err) {
+      errorMsg = `[Proxy] ${err instanceof Error ? err.message : String(err)}`;
+      console.error(`[WA Bot] Proxy fallback failed for ${requestId}:`, err);
+    }
+  }
+
+  if (!reply) {
+    console.error(`[WA Bot] All LLM backends failed for ${requestId}: ${errorMsg}`);
+    await updatePendingRequest(env.pintarweb_outreach_db, requestId, 'failed', errorMsg || 'Unknown error');
+    return;
+  }
+
+  await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+  await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
+  await updatePendingRequest(env.pintarweb_outreach_db, requestId, 'completed');
+  console.log(`[WA Bot] LLM reply sent for ${requestId}`);
+}
+
 async function handleIncomingMessage(
   env: Env,
+  ctx: any,
   phoneNumberId: string,
   wabaId: string,
   customerPhone: string,
@@ -681,15 +835,54 @@ async function handleIncomingMessage(
       customerPhone
     );
 
-    let reply: string;
     const intent = classifyIntent(messageText);
+    console.log(`[WA Bot] intent=${intent} greeted=${alreadyGreeted} phone=${customerPhone}`);
 
     if (!alreadyGreeted) {
-      reply = GREETING_ANSWER.replace('Selamat datang! 👋 Saya pembantu PintarWeb.', `Hi ${customerName}! Selamat datang! 👋 Saya pembantu ${config.business_name}.`);
+      const reply = GREETING_ANSWER.replace('Selamat datang! 👋 Saya pembantu PintarWeb.', `Hi ${customerName}! Selamat datang! 👋 Saya pembantu ${config.business_name}.`);
+      await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
+      await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
       await markGreetingSent(env.pintarweb_outreach_db, wabaId, customerPhone);
-    } else {
-      reply = handleIntent(intent, customerName, config.business_name);
+      console.log(`[WA Bot] Sent greeting to ${customerPhone}`);
+      return;
     }
+
+    const needsLLM = (intent === 'UNCLEAR' || intent === 'GREETING');
+
+    if (needsLLM) {
+      const conversationHistory = await getConversationHistory(
+        env.pintarweb_outreach_db,
+        wabaId,
+        customerPhone
+      );
+
+      if (conversationHistory.length > 2) {
+        const msgId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const thinkingReply = 'Sebentar, saya check... 🔍';
+        await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, thinkingReply);
+        await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', thinkingReply);
+
+        ctx.waitUntil(
+          sendPendingLlmRequest(
+            env,
+            wabaId,
+            phoneNumberId,
+            customerPhone,
+            customerName,
+            msgId,
+            intent,
+            config.business_name,
+            config.area,
+            messageText,
+            conversationHistory
+          )
+        );
+        return;
+      }
+    }
+
+    const reply = handleIntent(intent, customerName, config.business_name);
+    console.log(`[WA Bot] handleIntent gave: ${reply.substring(0, 80)}`);
 
     await notifyOwner(
       env.META_ACCESS_TOKEN,
@@ -701,25 +894,6 @@ async function handleIncomingMessage(
       intent,
       config.business_name
     );
-
-    if (intent === 'UNCLEAR' || intent === 'GREETING') {
-      const conversationHistory = await getConversationHistory(
-        env.pintarweb_outreach_db,
-        wabaId,
-        customerPhone
-      );
-      if (conversationHistory.length > 2) {
-        reply = await generateAIResponse(
-          env.DEEPSEEK_API_KEY,
-          config.business_name,
-          config.area,
-          messageText,
-          conversationHistory,
-          env.pintarweb_outreach_db,
-          wabaId
-        );
-      }
-    }
 
     await sendWhatsAppMessage(env.META_ACCESS_TOKEN, phoneNumberId, customerPhone, reply);
     await storeMessage(env.pintarweb_outreach_db, wabaId, customerPhone, 'assistant', reply);
@@ -771,7 +945,7 @@ export default {
         console.log(`[WA Bot] Message from ${customerPhone}: ${messageText}`);
 
         ctx.waitUntil(
-          handleIncomingMessage(env, phoneNumberId, wabaId, customerPhone, customerName, messageText)
+          handleIncomingMessage(env, ctx, phoneNumberId, wabaId, customerPhone, customerName, messageText)
         );
 
         return new Response('OK', { status: 200 });
