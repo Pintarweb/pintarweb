@@ -9,7 +9,9 @@ interface Env {
   BANK_ACCOUNT_NAME: string;
   BANK_ACCOUNT_NUMBER: string;
   pintarweb_outreach_db: any;
-  AI: any;
+  AI: {
+    run(model: string, options: { messages: Array<{ role: string; content: string }>; max_tokens?: number; temperature?: number }): Promise<{ response?: string; content?: string }>;
+  };
 }
 
 type Intent =
@@ -694,8 +696,6 @@ async function updatePendingRequest(
     .run();
 }
 
-declare const Ai: any;
-
 const AI_MODEL = '@cf/zhipu/glm-4.7-flash';
 
 async function sendPendingLlmRequest(
@@ -756,9 +756,8 @@ IMPORTANT RULES — FOLLOW EXACTLY:
   let errorMsg: string | null = null;
 
   try {
-    const ai = new Ai(env.AI);
     console.log(`[WA Bot] Calling Workers AI (${AI_MODEL}) for ${requestId}...`);
-    const result: any = await ai.run(AI_MODEL, {
+    const result: any = await env.AI.run(AI_MODEL, {
       messages,
       max_tokens: 500,
       temperature: 0.3,
