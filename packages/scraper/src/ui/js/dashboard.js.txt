@@ -1,7 +1,52 @@
 let allLeads = [];
 let allHunts = [];
 let currentFolder = 'active';
-let sortMode = 'date'; // Primary Vector: Newest First
+let sortMode = 'date';
+
+const STAGES = ['new', 'images_collected', 'demo_ready', 'demo_built', 'audit_ready', 'screenshot', 'outreach_sent', 'in_chat', 'qualified', 'payment', 'active'];
+
+const STAGE_LABELS = {
+    'new': 'New Lead',
+    'images_collected': 'Images',
+    'demo_ready': 'Ready',
+    'demo_built': 'Built',
+    'audit_ready': 'Audit',
+    'screenshot': 'Screenshot',
+    'outreach_sent': 'Outreach',
+    'in_chat': 'Chat',
+    'qualified': 'Qualified',
+    'payment': 'Payment',
+    'active': 'Active'
+};
+
+const STAGE_COLORS = {
+    'new': { bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500' },
+    'images_collected': { bg: 'bg-purple-50', text: 'text-purple-600', dot: 'bg-purple-500' },
+    'demo_ready': { bg: 'bg-indigo-50', text: 'text-indigo-600', dot: 'bg-indigo-500' },
+    'demo_built': { bg: 'bg-violet-50', text: 'text-violet-600', dot: 'bg-violet-500' },
+    'audit_ready': { bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500' },
+    'screenshot': { bg: 'bg-orange-50', text: 'text-orange-600', dot: 'bg-orange-500' },
+    'outreach_sent': { bg: 'bg-cyan-50', text: 'text-cyan-600', dot: 'bg-cyan-500' },
+    'in_chat': { bg: 'bg-teal-50', text: 'text-teal-600', dot: 'bg-teal-500' },
+    'qualified': { bg: 'bg-emerald-50', text: 'text-emerald-600', dot: 'bg-emerald-500' },
+    'payment': { bg: 'bg-green-50', text: 'text-green-600', dot: 'bg-green-500' },
+    'active': { bg: 'bg-yellow-50', text: 'text-yellow-700', dot: 'bg-yellow-500' }
+};
+
+const NICHE_MOOD_SUGGESTIONS = {
+    'aircond-contractor': 'premium-modern',
+    'plumbing': 'trustworthy-local',
+    'electrical': 'bold-urgent',
+    'renovation': 'premium-modern',
+    'general': 'trustworthy-local'
+};
+
+const MOODS = [
+    { id: 'trustworthy-local', name: 'Trustworthy Local', desc: 'Forest green, reliable feel', swatch: '#1B4332' },
+    { id: 'bold-urgent', name: 'Bold Urgent', desc: 'Black + red, high contrast', swatch: '#DC2626' },
+    { id: 'premium-modern', name: 'Premium Modern', desc: 'Slate + bronze, clean', swatch: '#C08457' },
+    { id: 'shophouse-edge', name: 'Shophouse Edge', desc: 'Industrial, urban edge', swatch: '#525252' }
+];
 
 function switchView(view) {
     const leadsView = document.getElementById('leads-view');
@@ -60,7 +105,6 @@ function populateSmartLists() {
     const cats = new Set();
     const locs = new Set();
 
-    // Harvesting Intelligence
     if (Array.isArray(allHunts)) {
         allHunts.forEach(h => {
             if (h.category) cats.add(h.category);
@@ -74,9 +118,6 @@ function populateSmartLists() {
         });
     }
 
-    console.log(`[SmartList] Synced ${cats.size} sectors and ${locs.size} regions.`);
-
-    // UI Feedback: Update badges
     const catBadge = document.getElementById('cat-sync-badge');
     const locBadge = document.getElementById('loc-sync-badge');
     if (catBadge) catBadge.innerText = `${cats.size} KNOWN`;
@@ -436,22 +477,435 @@ function exportToCRM() {
 
 function applyFilters() { renderLeads(); }
 
+function updatePipelineStage(phone, stage) {
+    fetch(`/api/leads/${encodeURIComponent(phone)}/stage`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pipeline_stage: stage })
+    }).then(() => fetchLeads()).catch(e => console.error(e));
+}
+
+async function saveIntake(phone) {
+    const tagline = document.getElementById('intake-tagline').value;
+    const niche = document.getElementById('intake-niche').value;
+    const services = Array.from(document.querySelectorAll('.intake-service:checked')).map(el => el.value);
+    const testimonials = (document.getElementById('intake-testimonials').value || '').split('\n').filter(Boolean);
+    const mood = document.querySelector('input[name="mood-select"]:checked')?.value;
+    const imagesCollected = document.getElementById('intake-images-collected').checked ? 1 : 0;
+
+    try {
+        await fetch(`/api/leads/${encodeURIComponent(phone)}/intake`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tagline, niche, services, testimonials })
+        });
+        if (imagesCollected) {
+            await fetch(`/api/leads/${encodeURIComponent(phone)}/stage`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pipeline_stage: 'images_collected' })
+            });
+        }
+        closeIntakePanel();
+        fetchLeads();
+    } catch (e) { console.error(e); alert('Failed to save: ' + e.message); }
+}
+
+function generateConfig(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+
+    const tagline = document.getElementById('intake-tagline')?.value || lead.tagline || '';
+    const niche = document.getElementById('intake-niche')?.value || lead.niche || lead.category || '';
+    const services = Array.from(document.querySelectorAll('.intake-service:checked')).map(el => el.value);
+    const mood = document.querySelector('input[name="mood-select"]:checked')?.value || NICHE_MOOD_SUGGESTIONS[niche] || 'trustworthy-local';
+
+    const suggestedMood = NICHE_MOOD_SUGGESTIONS[niche] || 'trustworthy-local';
+    const selectedMood = mood || suggestedMood;
+
+    const area = (lead.address || '').split(',')[0]?.trim() || (lead.address || 'Kuala Lumpur');
+
+    const config = {
+        id: lead.id,
+        business_name: lead.business_name || '',
+        tagline: tagline,
+        phone: lead.phone_normalized || '',
+        whatsapp: (lead.phone_normalized || '').replace(/\D/g, ''),
+        area: area,
+        niches: [niche],
+        services: services,
+        mood: selectedMood,
+        google_rating: 0,
+        google_review_count: 0,
+        testimonials: [],
+        gallery_images: [],
+        social: {
+            instagram_handle: (lead.instagram_url || '').replace('https://www.instagram.com/', '').replace('@', ''),
+            instagram_followers: 0,
+            instagram_active: !!lead.instagram_url,
+            instagram_content_type: 'project-photos',
+            instagram_link_in_bio: 'whatsapp',
+            tiktok_handle: (lead.tiktok_url || '').replace('https://www.tiktok.com/@', ''),
+            tiktok_followers: 0,
+            tiktok_active: !!lead.tiktok_url
+        },
+        audit: {
+            has_website: !!lead.website_url,
+            website_url: lead.website_url || null,
+            google_maps_url: lead.maps_url || null
+        }
+    };
+
+    return config;
+}
+
+function openConfigPreview(phone) {
+    const config = generateConfig(phone);
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!config || !lead) return;
+
+    const previewHtml = `
+        <div class="space-y-4">
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Business Info</p>
+                <p class="font-black text-sm">${config.business_name}</p>
+                <p class="text-xs text-slate-500">${config.area} | ${config.niches.join(', ')}</p>
+                ${config.tagline ? `<p class="text-xs italic text-slate-400 mt-1">"${config.tagline}"</p>` : ''}
+            </div>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Mood</p>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg border-2 border-slate-200" style="background:${MOODS.find(m=>m.id===config.mood)?.swatch || '#ccc'}"></div>
+                    <div>
+                        <p class="font-black text-sm">${MOODS.find(m=>m.id===config.mood)?.name || config.mood}</p>
+                        <p class="text-xs text-slate-400">${MOODS.find(m=>m.id===config.mood)?.desc || ''}</p>
+                    </div>
+                </div>
+            </div>
+            ${config.services.length > 0 ? `
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Services</p>
+                <div class="flex flex-wrap gap-1">
+                    ${config.services.map(s => `<span class="bg-white border border-slate-200 px-2 py-0.5 rounded text-xs font-medium">${s}</span>`).join('')}
+                </div>
+            </div>` : ''}
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Social Links</p>
+                <div class="flex gap-3 text-xs">
+                    ${lead.instagram_url ? `<span class="text-pink-500">📸 IG</span>` : ''}
+                    ${lead.tiktok_url ? `<span class="text-slate-700">🎵 TT</span>` : ''}
+                    ${lead.facebook_url ? `<span class="text-blue-600">📱 FB</span>` : ''}
+                    ${lead.email ? `<span class="text-slate-400">✉️ ${lead.email}</span>` : ''}
+                </div>
+            </div>
+            <details class="bg-slate-900 rounded-xl p-4">
+                <summary class="text-[10px] font-black text-slate-400 uppercase cursor-pointer">View Full config.json</summary>
+                <pre class="text-xs text-green-400 mt-2 overflow-x-auto">${JSON.stringify(config, null, 2)}</pre>
+            </details>
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeConfigPreview()" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 font-black text-xs uppercase hover:bg-slate-50 transition-all">Edit More</button>
+                <button onclick="approveAndBuild('${phone}')" class="flex-1 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase shadow-lg shadow-blue-200 transition-all">Approve & Build</button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('config-preview-body').innerHTML = previewHtml;
+    closeIntakePanel();
+    document.getElementById('config-preview-panel').classList.remove('hidden');
+}
+
+function closeConfigPreview() {
+    document.getElementById('config-preview-panel').classList.add('hidden');
+}
+
+function approveAndBuild(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+    const config = generateConfig(phone);
+    if (!config) return;
+
+    const demoDir = `packages/site-generator/demo-clients/${lead.id}`;
+    const configJson = JSON.stringify(config, null, 2);
+
+    closeConfigPreview();
+    alert(`Config saved to ${demoDir}/config.json\n\nTo build the demo, run:\n\nDISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${lead.id}\n\nOr manually copy config to:\n${demoDir}/config.json`);
+}
+
+function openIntakePanel(phone) {
+    console.log('[Intake] Opening panel for:', phone);
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) {
+        console.warn('[Intake] Lead not found for phone:', phone);
+        console.log('[Intake] Available phones:', allLeads.map(l => l.phone_normalized));
+        return;
+    }
+    console.log('[Intake] Found lead:', lead.business_name);
+
+    const stage = lead.pipeline_stage || 'new';
+    const stageColors = STAGE_COLORS[stage] || STAGE_COLORS['new'];
+    const currentStageIdx = STAGES.indexOf(stage);
+
+    const suggestedMood = NICHE_MOOD_SUGGESTIONS[lead.category] || NICHE_MOOD_SUGGESTIONS[lead.niche] || 'trustworthy-local';
+    const currentMood = lead.mood || suggestedMood;
+
+    const services = lead.services ? JSON.parse(lead.services) : [];
+    const testimonials = lead.testimonials ? JSON.parse(lead.testimonials) : [];
+
+    const nextStage = STAGES[currentStageIdx + 1] || 'demo_ready';
+    const nextStageLabel = STAGE_LABELS[nextStage] || nextStage;
+
+    const area = (lead.address || '').split(',')[0]?.trim() || '';
+    const fbHandle = (lead.facebook_url || '').replace('https://www.facebook.com/', '').replace('https://facebook.com/', '').split('?')[0].replace('/', '');
+    const igHandle = (lead.instagram_url || '').replace('https://www.instagram.com/', '').replace('https://instagram.com/', '').split('?')[0].replace('/', '');
+    const ttHandle = (lead.tiktok_url || '').replace('https://www.tiktok.com/@', '').replace('https://tiktok.com/@', '').split('?')[0].replace('/', '');
+
+    const fullFormUrl = `/clients/intake-form.html` +
+        `?id=${encodeURIComponent(lead.id)}` +
+        `&name=${encodeURIComponent(lead.business_name || '')}` +
+        `&phone=${encodeURIComponent(lead.phone_normalized || '')}` +
+        `&area=${encodeURIComponent(area)}` +
+        `&category=${encodeURIComponent(lead.category || '')}` +
+        `&niche=${encodeURIComponent(lead.niche || '')}` +
+        `&tagline=${encodeURIComponent(lead.tagline || '')}` +
+        `&website=${encodeURIComponent(lead.website_url || '')}` +
+        `&maps=${encodeURIComponent(lead.maps_url || '')}` +
+        `&fb=${encodeURIComponent(fbHandle)}` +
+        `&ig=${encodeURIComponent(igHandle)}` +
+        `&tt=${encodeURIComponent(ttHandle)}` +
+        `&email=${encodeURIComponent(lead.email || '')}`;
+
+    const panelHtml = `
+        <div class="space-y-6">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 ${stageColors.bg} ${stageColors.text} text-xs font-black rounded-full uppercase">${STAGE_LABELS[stage] || stage}</span>
+                <span class="text-lg font-black text-slate-900">${lead.business_name}</span>
+                <span class="ml-auto text-[9px] text-slate-400 font-mono">${lead.pipeline_stage || 'new'}</span>
+            </div>
+
+            <!-- Scraped Data Summary -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <div class="flex justify-between items-center mb-3">
+                    <p class="text-[10px] font-black text-slate-400 uppercase">Scraped Data</p>
+                    <span class="text-[9px] text-slate-400">Scraped ${lead.created_at ? new Date(lead.created_at + 'Z').toLocaleString('en-MY', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '?'}</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <p class="text-[9px] text-slate-400 uppercase mb-0.5">Phone</p>
+                        <p class="font-black text-slate-800">${lead.phone_normalized}</p>
+                    </div>
+                    <div>
+                        <p class="text-[9px] text-slate-400 uppercase mb-0.5">Category</p>
+                        <p class="font-black text-slate-800">${lead.category || '-'}</p>
+                    </div>
+                    <div class="col-span-2">
+                        <p class="text-[9px] text-slate-400 uppercase mb-0.5">Address</p>
+                        <p class="font-black text-slate-800 text-[11px]">${lead.address || '-'}</p>
+                    </div>
+                    ${lead.website_url ? `<div class="col-span-2">
+                        <p class="text-[9px] text-slate-400 uppercase mb-0.5">Website</p>
+                        <a href="${lead.website_url}" target="_blank" class="text-blue-600 underline text-[11px] font-black">${lead.website_url}</a>
+                    </div>` : ''}
+                </div>
+                <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-slate-200">
+                    ${lead.facebook_url ? `<a href="${lead.facebook_url}" target="_blank" class="px-2 py-1 bg-blue-50 text-blue-600 text-[10px] font-black rounded-lg border border-blue-200 hover:bg-blue-100">📱 ${fbHandle || 'Facebook'}</a>` : ''}
+                    ${lead.instagram_url ? `<a href="${lead.instagram_url}" target="_blank" class="px-2 py-1 bg-pink-50 text-pink-600 text-[10px] font-black rounded-lg border border-pink-200 hover:bg-pink-100">📸 ${igHandle || 'Instagram'}</a>` : ''}
+                    ${lead.tiktok_url ? `<a href="${lead.tiktok_url}" target="_blank" class="px-2 py-1 bg-slate-900 text-white text-[10px] font-black rounded-lg hover:bg-slate-800">🎵 ${ttHandle || 'TikTok'}</a>` : ''}
+                    ${lead.email ? `<a href="mailto:${lead.email}" class="px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-black rounded-lg border border-slate-200">✉️ ${lead.email}</a>` : ''}
+                </div>
+            </div>
+
+            <!-- Open Full Form Button -->
+            <a href="${fullFormUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full px-6 py-4 rounded-2xl bg-[#1B4332] hover:bg-[#2d5a42] text-white font-black text-sm uppercase shadow-xl shadow-green-900/20 transition-all">
+                <span>📝 Open Full Intake Form</span>
+                <span class="text-[10px] opacity-70">(Pre-filled with scraped data)</span>
+            </a>
+
+            <div class="text-center text-[10px] text-slate-400">
+                Opens in new tab. Fill the form, submit, then return here.
+            </div>
+
+            <!-- Build Action -->
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <p class="text-[10px] font-black text-blue-600 uppercase mb-2">After submitting the full form:</p>
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 bg-blue-600 text-white rounded-full text-[10px] font-black flex items-center justify-center">1</span>
+                        <span class="text-xs font-medium">Form saves config.json (auto-downloaded)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 bg-blue-600 text-white rounded-full text-[10px] font-black flex items-center justify-center">2</span>
+                        <span class="text-xs font-medium">Save config.json to <code class="bg-white px-2 py-0.5 rounded text-[10px]">demo-clients/${lead.id}/config.json</code></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-5 h-5 bg-blue-600 text-white rounded-full text-[10px] font-black flex items-center justify-center">3</span>
+                        <span class="text-xs font-medium">Click "Build Demo" below to generate site</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-col gap-2">
+                    <div class="bg-slate-900 text-green-400 px-4 py-2 rounded-xl font-mono text-[11px] overflow-x-auto">
+                        DISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${lead.id}
+                    </div>
+                    <button onclick="buildDemo('${lead.phone_normalized}')" class="w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase shadow-lg shadow-blue-200 transition-all">
+                        🚀 Build Demo Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Manual Override Fields -->
+            <div class="space-y-3">
+                <p class="text-[10px] font-black text-slate-400 uppercase">Quick Override</p>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-1">Tagline / USP</label>
+                    <input id="intake-tagline" type="text" value="${lead.tagline || ''}" placeholder="e.g. 'Kepak tangan arwah, harga tak boleh lawan'"
+                        class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase block mb-1">Niche</label>
+                    <select id="intake-niche" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                        <option value="">-- Select --</option>
+                        <option value="aircond-contractor" ${(lead.niche || lead.category) === 'aircond-contractor' ? 'selected' : ''}>Aircond Contractor</option>
+                        <option value="plumbing" ${(lead.niche || lead.category) === 'plumbing' ? 'selected' : ''}>Plumbing</option>
+                        <option value="electrical" ${(lead.niche || lead.category) === 'electrical' ? 'selected' : ''}>Electrical</option>
+                        <option value="renovation" ${(lead.niche || lead.category) === 'renovation' ? 'selected' : ''}>Renovation</option>
+                        <option value="general" ${(lead.niche || lead.category) === 'general' ? 'selected' : ''}>General Services</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stage Advancement -->
+            <div class="flex gap-3 pt-2">
+                <button onclick="advanceStage('${lead.phone_normalized}')" class="flex-1 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase shadow transition-all">
+                    Advance to ${nextStageLabel} →
+                </button>
+                <button onclick="closeIntakePanel()" class="px-4 py-3 rounded-xl border border-slate-200 font-black text-xs uppercase hover:bg-slate-50 transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('intake-title').innerText = lead.business_name;
+    document.getElementById('intake-body').innerHTML = panelHtml;
+    document.getElementById('intake-panel').classList.remove('hidden');
+}
+
+function closeIntakePanel() {
+    document.getElementById('intake-panel').classList.add('hidden');
+}
+
+function advanceStage(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+    const currentIdx = STAGES.indexOf(lead.pipeline_stage || 'new');
+    const nextStage = STAGES[currentIdx + 1] || 'active';
+    updatePipelineStage(phone, nextStage);
+}
+
+function buildDemo(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+
+    const leadId = lead.id || phone;
+    const cmd = `DISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${leadId}`;
+
+    const output = document.getElementById('intake-body');
+    if (output) {
+        output.innerHTML = `
+            <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto mb-4">
+                <pre class="whitespace-pre-wrap">${cmd}</pre>
+            </div>
+            <div class="text-center py-6">
+                <div class="inline-block animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mb-3"></div>
+                <p class="text-sm font-black text-slate-700">Generating demo...</p>
+                <p class="text-xs text-slate-400 mt-1">Run the command above in your terminal</p>
+            </div>
+        `;
+    }
+
+    /* Copy command to clipboard */
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(cmd).catch(() => {});
+    }
+}
+
+function renderPipelineBar() {
+    const container = document.getElementById('pipeline-progress');
+    const labelsContainer = document.getElementById('pipeline-labels');
+    if (!container || !labelsContainer) return;
+
+    const SHORTS = ['N','I','D','B','A','S','O','C','Q','P','★'];
+    const LABEL_NAMES = ['New','Images','Ready','Built','Audit','Shot','Outreach','Chat','Qual','Pay','Active'];
+    const counts = {};
+    STAGES.forEach(s => counts[s] = 0);
+    allLeads.forEach(l => {
+        const s = l.pipeline_stage || 'new';
+        if (counts[s] !== undefined) counts[s]++;
+    });
+
+    let dotsHtml = '';
+    let labelsHtml = '';
+    STAGES.forEach((stage, i) => {
+        const count = counts[stage] || 0;
+        const colors = STAGE_COLORS[stage] || STAGE_COLORS['new'];
+        const activeClass = count > 0 ? `${colors.dot} border-transparent text-white` : 'border-slate-200 text-slate-400';
+        dotsHtml += `
+            <div class="flex items-center" style="min-width:64px">
+                <div id="stage-${stage}" class="stage-dot w-8 h-8 rounded-full border-2 flex flex-col items-center justify-center ${activeClass} cursor-pointer transition-all hover:scale-110" onclick="filterByStage('${stage}')" title="${LABEL_NAMES[i]} (${count})">
+                    <span class="text-[10px] font-black">${SHORTS[i]}</span>
+                    ${count > 0 ? `<span class="text-[7px] font-black absolute -top-1 -right-1 ${colors.dot} text-white rounded-full w-4 h-4 flex items-center justify-center">${count}</span>` : ''}
+                </div>
+                ${i < STAGES.length - 1 ? `<div class="stage-line flex-1 h-0.5 bg-slate-200 mx-1 transition-all" style="min-width:8px"></div>` : ''}
+            </div>`;
+        labelsHtml += `<div style="min-width:64px" class="${i === 0 ? 'ml-1' : ''}">${LABEL_NAMES[i]}</div>`;
+    });
+    container.innerHTML = dotsHtml;
+    labelsContainer.innerHTML = labelsHtml;
+
+    // Update line colors
+    STAGES.forEach((stage, i) => {
+        const dot = document.getElementById(`stage-${stage}`);
+        if (!dot) return;
+        const line = dot.parentElement.querySelector('.stage-line');
+        if (line) {
+            const count = counts[stage] || 0;
+            const colors = STAGE_COLORS[stage] || STAGE_COLORS['new'];
+            const nextStage = STAGES[i + 1];
+            const nextCount = counts[nextStage] || 0;
+            if (count > 0 && nextCount > 0) {
+                line.style.backgroundColor = '#3b82f6';
+            } else if (count > 0) {
+                line.style.backgroundColor = '#93c5fd';
+            } else {
+                line.style.backgroundColor = '#e5e7eb';
+            }
+        }
+    });
+}
+
+function filterByStage(stage) {
+    const stageEl = document.getElementById('filter-stage');
+    if (stageEl) {
+        stageEl.value = stage;
+        applyFilters();
+    }
+}
+
 function renderLeads() {
     const container = document.getElementById('leads-container');
     const categoryEl = document.getElementById('filter-category');
-    const statusEl = document.getElementById('filter-status');
+    const stageEl = document.getElementById('filter-stage');
     const websiteEl = document.getElementById('filter-website');
     const sourceEl = document.getElementById('filter-source');
     const arrivalEl = document.getElementById('filter-arrival');
     const scoreEl = document.getElementById('filter-score');
-    
-    if (!container || !categoryEl || !statusEl) {
+
+    if (!container || !categoryEl || !stageEl) {
         console.error("Critical DOM elements missing for renderLeads");
         return;
     }
 
     const category = categoryEl.value;
-    const status = statusEl.value;
+    const stageFilter = stageEl.value;
     const website = websiteEl.value;
     const source = sourceEl.value;
     const arrival = arrivalEl.value;
@@ -459,7 +913,6 @@ function renderLeads() {
     const search = (document.getElementById('search').value || '').toLowerCase();
     const now = new Date();
 
-    // Tactical Intelligence: Find the start time of the most recent mission
     const latestHuntTime = (allHunts && allHunts.length > 0) ? new Date(allHunts[0].created_at + 'Z').getTime() : 0;
 
     let filtered = allLeads.filter(l => {
@@ -467,27 +920,21 @@ function renderLeads() {
         if (currentFolder === 'active' && isArchived) return false;
         if (currentFolder === 'archived' && !isArchived) return false;
 
-        // Using updated_at for the "Arrival" filters
         const leadDate = new Date((l.updated_at || l.created_at) + 'Z');
         const age = now - leadDate;
         if (arrival === 'Today' && age > 86400000) return false;
         if (arrival === 'Week' && age > 604800000) return false;
 
         if (category !== 'All' && l.category !== category) return false;
-        if (status === 'Engaged') {
-            if (l.status !== 'Contacted' && l.status !== 'Demo Built') return false;
-        } else if (status !== 'All' && l.status !== status) {
-            return false;
-        }
+        if (stageFilter !== 'All' && (l.pipeline_stage || 'new') !== stageFilter) return false;
         if (website === 'Yes' && !l.website_url) return false;
         if (website === 'No' && l.website_url) return false;
         if (source !== 'All' && !(l.source_origin || '').includes(source)) return false;
-        if ( (l.lead_score || 0) < minScore) return false;
+        if ((l.lead_score || 0) < minScore) return false;
         if (!l.business_name.toLowerCase().includes(search)) return false;
         return true;
     });
 
-    // Primary Sort: Updated At (Interaction Time) - with safety
     filtered.sort((a, b) => {
         if (sortMode === 'score') return (b.lead_score || 0) - (a.lead_score || 0);
         const dateA = new Date((a.updated_at || a.created_at) + 'Z').getTime();
@@ -495,14 +942,12 @@ function renderLeads() {
         return (dateB || 0) - (dateA || 0);
     });
 
-    // Global Census Counter
     const activeCount = allLeads.filter(l => l.status !== 'Archived').length;
     const totalCount = allLeads.length;
     const countEl = document.getElementById('lead-count');
     if (countEl) countEl.innerText = `${activeCount} ACTIVE / ${totalCount} TOTAL`;
 
-    const sortBtn = document.getElementById('sort-btn');
-    if (sortBtn) sortBtn.innerText = sortMode === 'score' ? 'Highest Score ↓' : 'Newest Arrival ↓';
+    renderPipelineBar();
 
     if (filtered.length === 0) {
         container.innerHTML = '<div class="text-center py-24 bg-white rounded-2xl border border-slate-200 text-slate-400 font-bold uppercase tracking-widest">No matching leads in this sector</div>';
@@ -512,72 +957,81 @@ function renderLeads() {
     container.innerHTML = filtered.map(lead => {
         const isArchived = lead.status === 'Archived';
         const leadUpdateTime = new Date((lead.updated_at || lead.created_at) + 'Z').getTime();
-
-        // Surgical Tagging: Only pulse if update happened within 15 min of the hunt log
         const isFreshFromMission = latestHuntTime > 0 && Math.abs(leadUpdateTime - latestHuntTime) < 900000;
+        const stage = lead.pipeline_stage || 'new';
+        const stageColors = STAGE_COLORS[stage] || STAGE_COLORS['new'];
+        const stageLabel = STAGE_LABELS[stage] || stage;
 
         const actions = !isArchived ? `
-            <button onclick="updateStatus('${lead.phone_normalized}', 'Demo Built')" class="text-[10px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest transition-colors">Mark Demo</button>
-            <button onclick="updateStatus('${lead.phone_normalized}', 'Contacted')" class="text-[10px] font-black text-slate-400 hover:text-orange-600 uppercase tracking-widest transition-colors">Mark Contacted</button>
-            <button onclick="updateStatus('${lead.phone_normalized}', 'Archived')" class="text-[10px] font-black text-slate-400 hover:text-red-600 uppercase tracking-widest ml-auto transition-colors">Archive 📁</button>
+            <button onclick="updateStatus('${lead.phone_normalized}', 'Archived')" class="text-[10px] font-black text-slate-400 hover:text-red-600 uppercase tracking-widest transition-colors">Archive Lead</button>
         ` : `
-            <button onclick="updateStatus('${lead.phone_normalized}', 'New')" class="text-[10px] font-black text-blue-600 uppercase tracking-widest transition-colors">Reinstate 🔄</button>
-            <button onclick="deleteLead('${lead.phone_normalized}')" class="text-[10px] font-black text-red-600 uppercase tracking-widest ml-auto transition-colors">Delete ❌</button>
+            <button onclick="updateStatus('${lead.phone_normalized}', 'New')" class="text-[10px] font-black text-blue-600 uppercase tracking-widest transition-colors">Reinstate</button>
+            <button onclick="deleteLead('${lead.phone_normalized}')" class="text-[10px] font-black text-red-600 uppercase tracking-widest ml-auto transition-colors">Delete</button>
         `;
 
         return `
         <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative ${isFreshFromMission ? 'ring-4 ring-blue-600 ring-offset-2 shadow-2xl z-10' : ''}">
             ${isFreshFromMission ? `
-            <div class="absolute -top-3 -right-3 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg animate-pulse uppercase tracking-widest z-10">
-                Mission Fresh 🎯
-            </div>` : ''}
+            <div class="absolute -top-3 -right-3 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg animate-pulse uppercase tracking-widest z-10">Fresh Lead</div>` : ''}
 
             <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2 flex-wrap">
                         <h3 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">${lead.business_name}</h3>
-                        ${lead.status === 'New' ? '<span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-black rounded-md uppercase tracking-wider">NEW ENTRY</span>' : ''}
-                        ${lead.status === 'Demo Built' ? '<span class="px-2 py-0.5 bg-purple-50 text-purple-600 text-[10px] font-black rounded-md uppercase tracking-wider">DEMO STAGE</span>' : ''}
-                        ${lead.status === 'Contacted' ? '<span class="px-2 py-0.5 bg-yellow-50 text-yellow-600 text-[10px] font-black rounded-md uppercase tracking-wider">FOLLOW-UP</span>' : ''}
+                        <span class="px-2 py-0.5 ${stageColors.bg} ${stageColors.text} text-[10px] font-black rounded-md uppercase tracking-wider">${stageLabel}</span>
+                        ${lead.demo_url ? `<a href="${lead.demo_url}" target="_blank" class="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[10px] font-black rounded-md uppercase tracking-wider hover:bg-emerald-100">🌐 Demo Live</a>` : ''}
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400 font-bold uppercase mb-4">
+                    <div class="flex flex-wrap items-center gap-4 text-[11px] text-slate-400 font-bold uppercase mb-3">
                         <span class="flex items-center gap-1.5"><span class="opacity-50">📱</span> ${lead.phone_normalized}</span>
                         <span class="flex items-center gap-1.5"><span class="opacity-50">📁</span> ${lead.category || 'Industry'}</span>
-                        ${lead.website_url ? `<a href="${lead.website_url}" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors p-1 bg-blue-50 rounded">🌐 WEBSITE</a>` : '<span class="text-slate-300">🚫 NO WEBSITE</span>'}
+                        ${lead.niche ? `<span class="px-1.5 py-0.5 bg-slate-100 text-slate-500 text-[10px] rounded">${lead.niche}</span>` : ''}
+                        ${lead.website_url ? `<a href="${lead.website_url}" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors p-1 bg-blue-50 rounded text-[10px]">🌐 Website</a>` : '<span class="text-slate-300 text-[10px]">🚫 No site</span>'}
                         <div class="flex items-center gap-2">
                             <span class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-black">SCORE: ${lead.lead_score}</span>
-                            <button onclick="showScorecard('${lead.phone_normalized}')" class="text-blue-500 hover:underline">ANALYSIS 🔍</button>
+                            <button onclick="showScorecard('${lead.phone_normalized}')" class="text-blue-500 hover:underline text-[10px]">ANALYSIS</button>
                         </div>
                     </div>
-                    
-                    <p class="text-xs text-slate-500 mb-4 flex items-start gap-1"><span class="opacity-50 mt-0.5">📍</span> ${lead.address || 'Malaysia'}</p>
-                    
-                    <div class="flex items-center gap-4 border-t border-slate-50 pt-4 mt-auto">
+
+                    <p class="text-xs text-slate-500 mb-3 flex items-start gap-1"><span class="opacity-50 mt-0.5">📍</span> ${lead.address || 'Malaysia'}</p>
+
+                    <!-- Source links with indicators -->
+                    <div class="flex flex-wrap items-center gap-2 mb-3 text-[10px]">
+                        <span class="text-slate-300 font-bold uppercase mr-1">Sources:</span>
+                        ${(lead.maps_url ? `<a href="${lead.maps_url}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-black uppercase transition-all text-red-500 bg-red-50 border-red-200 hover:border-red-400">📍 Google Maps</a>` : '')}
+                        ${(lead.source_origin || '').split(',').filter(Boolean).map(s => {
+                            const src = s.trim();
+                            let icon = '🌐', label = src, cls = 'text-slate-500 bg-slate-50 border-slate-200 hover:border-slate-400';
+                            if (src.includes('Facebook')) { icon = '📱'; label = 'Facebook'; cls = 'text-blue-600 bg-blue-50 border-blue-200 hover:border-blue-400'; }
+                            else if (src.includes('Yellow Pages')) { icon = '📖'; label = 'YellowPages'; cls = 'text-yellow-600 bg-yellow-50 border-yellow-200 hover:border-yellow-400'; }
+                            return `<span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-[10px] font-black uppercase ${cls}">${icon} ${label}</span>`;
+                        }).join('')}
+                        ${!lead.maps_url && !lead.source_origin ? '<span class="text-slate-300 italic">None recorded</span>' : ''}
+                    </div>
+
+                    <!-- Social links + scraped time row -->
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <div class="flex flex-wrap gap-2">
+                            ${lead.facebook_url ? `<a href="${lead.facebook_url}" target="_blank" title="Facebook" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border border-blue-200 bg-blue-50 text-blue-600 text-[10px] font-black hover:bg-blue-100 transition-all">📱 FB</a>` : ''}
+                            ${lead.instagram_url ? `<a href="${lead.instagram_url}" target="_blank" title="Instagram" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border border-pink-200 bg-pink-50 text-pink-600 text-[10px] font-black hover:bg-pink-100 transition-all">📸 IG</a>` : ''}
+                            ${lead.tiktok_url ? `<a href="${lead.tiktok_url}" target="_blank" title="TikTok" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border border-gray-200 bg-gray-900 text-white text-[10px] font-black hover:bg-gray-800 transition-all">🎵 TT</a>` : ''}
+                            ${lead.email ? `<a href="mailto:${lead.email}" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 text-[10px] font-black hover:bg-slate-100 transition-all">✉️ Email</a>` : ''}
+                        </div>
+                        <div class="text-[9px] text-slate-300 font-bold uppercase whitespace-nowrap">
+                            Scraped ${lead.created_at ? new Date(lead.created_at + 'Z').toLocaleString('en-MY', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '?'}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 border-t border-slate-50 pt-3 mt-auto">
                         ${actions}
                     </div>
                 </div>
 
-                <div class="flex flex-col gap-3 min-w-[220px]">
-                    <div class="flex flex-wrap gap-2 p-2 bg-slate-50 rounded-xl border border-slate-100">
-                        ${lead.source_links ? lead.source_links.split(',').map(link => {
-            let icon = "🌐"; let title = "Source";
-            const lv = (link || '').toLowerCase();
-            if (lv.includes('facebook.com')) { icon = "📱"; title = "Facebook"; }
-            else if (lv.includes('yellowpages.my')) { icon = "📖"; title = "Yellow Pages"; }
-            else if (lv.includes('google.com/maps') || lv.includes('/maps/place/')) { icon = "📍"; title = "Google Maps"; }
-            return `<a href="${(link || '').trim()}" target="_blank" title="${title}" class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-lg hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm text-lg">${icon}</a>`;
-        }).join('') : (lead.source_origin ? lead.source_origin.split(',').map(name => {
-            let icon = "🌐"; let title = (name || '').trim();
-            if (title.includes('Facebook')) icon = "📱";
-            if (title.includes('Yellow Pages')) icon = "📖";
-            if (title.includes('Google Maps')) icon = "📍";
-            return `<span class="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 rounded-lg shadow-sm text-lg" title="${title}">${icon}</span>`;
-        }).join('') : '<span class="text-[9px] text-slate-400 font-black p-2 uppercase">Missing Social Footprint</span>')}
-                    </div>
-                    
-                    <button onclick="generatePitch('${lead.phone_normalized}')" class="bg-[#25D366] hover:bg-[#1fae52] hover:scale-[1.02] transform transition-all text-white font-black py-4 px-4 rounded-2xl shadow-lg border-b-4 border-[#128C7E] flex items-center justify-center gap-2 text-sm">
-                         WhatsApp Pitch 📥
+                <div class="flex flex-col gap-3 min-w-[180px]">
+                    ${lead.tagline ? `<p class="text-xs italic text-slate-400 border-l-2 border-slate-200 pl-2">"${lead.tagline}"</p>` : ''}
+                    ${lead.tagline ? '<div class="h-3"></div>' : ''}
+                    <button type="button" id="btn-intake-${lead.phone_normalized}" onclick="openIntakePanel('${lead.phone_normalized}')" class="w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase shadow-lg shadow-blue-200 transition-all cursor-pointer">
+                        Open Intake →
                     </button>
                 </div>
             </div>
@@ -607,6 +1061,7 @@ async function fetchLeads() {
         if (!catSelect.value) catSelect.value = 'All';
 
         populateSmartLists();
+        renderPipelineBar();
         renderLeads();
     } catch (e) { 
         console.error("Leads fetch failure", e);

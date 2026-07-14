@@ -1,5 +1,5 @@
 import { chromium } from "playwright";
-import { normalizePhone, isMobilePhone } from "../utils/normalizePhone";
+import { normalizePhone, isMobilePhone } from "../utils/normalizePhone.js";
 
 export interface ExpectedLead {
     business_name: string;
@@ -12,6 +12,11 @@ export interface ExpectedLead {
     category?: string | null;
     maps_url?: string | null;
     source_url?: string | null;
+    facebook_url?: string | null;
+    instagram_url?: string | null;
+    tiktok_url?: string | null;
+    email?: string | null;
+    business_hours?: string | null;
     // GMB / Google Business Profile fields
     gmb_listing_found?: number;
     gmb_verification_status?: string;
@@ -101,18 +106,70 @@ export async function scrapeGoogleMaps(
                     continue; // Skip noise
                 }
 
-                // 2. Use specific attribute selectors for Website, Phone, Category, and Address
+                // 2. Use specific attribute selectors for Website, Phone, Category, Address, and Social
                 const details = await page.evaluate(() => {
                     const webEl = document.querySelector('a[data-item-id="authority"]');
                     const phoneEl = document.querySelector('button[data-item-id^="phone:tel:"]');
                     const categoryEl = document.querySelector('button[jsaction*="category"]');
                     const addressEl = document.querySelector('button[data-item-id="address"]');
+                    const fbEl = document.querySelector('a[data-item-id^="social"]');
+                    const emailEl = document.querySelector('a[data-item-id^="email"]');
+
+                    // Extract social links from page content
+                    let facebookUrl = null;
+                    let email = null;
+
+                    // Find Facebook URL: prefer dedicated social link, then search page links
+                    if (fbEl) {
+                        const href = fbEl.getAttribute('href') || '';
+                        facebookUrl = href.startsWith('http') ? href.split('?')[0] : null;
+                    }
+                    if (!facebookUrl) {
+                        const allLinks = Array.from(document.querySelectorAll('a[href]'));
+                        for (const link of allLinks) {
+                            const href = link.getAttribute('href') || '';
+                            // Skip Google redirect/tracking links and Maps own Facebook links
+                            if (!href.includes('facebook.com')) continue;
+                            if (href.includes('facebook.com/l/')) continue;          // Facebook login/tracking redirect
+                            if (href.includes('facebook.com/pages/')) continue;     // Facebook internal pages
+                            if (href.includes('facebook.com/ctx/')) continue;       // Facebook redirector
+                            if (href.includes('l.facebook.com/')) continue;          // Facebook external redirect
+                            if (href.includes('lm.facebook.com/')) continue;        // Facebook lite redirect
+                            // Accept only URLs with a real page path (e.g. /BusinessName/)
+                            // Reject bare /share/facebook, /plugins, /dialog paths
+                            const cleanUrl = href.split('?')[0];
+                            const path = cleanUrl.replace('https://www.facebook.com', '').replace('https://facebook.com', '');
+                            if (path.length <= 1) continue;                        // root path = Maps' own FB link
+                            if (['/share', '/plugins', '/dialog', '/sharer', '/common'].some(p => path.startsWith(p))) continue;
+                            facebookUrl = cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`;
+                            break;
+                        }
+                    }
+
+                    // Find email
+                    if (emailEl) {
+                        const href = emailEl.getAttribute('href') || '';
+                        if (href.startsWith('mailto:')) {
+                            email = href.replace('mailto:', '');
+                        }
+                    }
+
+                    // Fallback: search page text for email pattern
+                    if (!email) {
+                        const pageText = document.body.innerText;
+                        const emailMatch = pageText.match(/[\w.-]+@[\w.-]+\.\w+/);
+                        if (emailMatch) {
+                            email = emailMatch[0].toLowerCase();
+                        }
+                    }
 
                     return {
                         website: webEl ? webEl.getAttribute('href') : null,
                         phone: phoneEl ? (phoneEl as HTMLElement).innerText : null,
                         category: categoryEl ? (categoryEl as HTMLElement).innerText : null,
-                        address: addressEl ? (addressEl as HTMLElement).innerText : null
+                        address: addressEl ? (addressEl as HTMLElement).innerText : null,
+                        facebookUrl,
+                        email
                     };
                 });
 
@@ -131,10 +188,12 @@ export async function scrapeGoogleMaps(
                         website_url: details.website,
                         category: details.category,
                         address: details.address,
-                        maps_url: url
+                        maps_url: url,
+                        facebook_url: details.facebookUrl || null,
+                        email: details.email || null
                     };
                     leads.push(lead);
-                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'}`);
+                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'} | FB: ${details.facebookUrl || 'None'} | Email: ${details.email || 'None'}`);
                 }
 
             } catch (err) {
@@ -154,7 +213,8 @@ export async function scrapeGoogleMaps(
 }
 
 // Optional Execution Block for testing when run directly
-if (require.main === module) {
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
     (async () => {
         const data = await scrapeGoogleMaps("Plumber in Klang Valley", 5);
         console.log("Scraping Complete:", data);

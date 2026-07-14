@@ -1,4 +1,4 @@
-import { ExpectedLead } from "../scrapers/googleMaps";
+import { ExpectedLead } from "../scrapers/googleMaps.js";
 import { v4 as uuidv4 } from "uuid";
 
 // A mock interface for D1Database or better-sqlite3 matching functions.
@@ -52,14 +52,14 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
             const initialLink = lead.maps_url || lead.source_url || null;
 
             const insertQuery = `
-        INSERT INTO leads (id, phone_normalized, business_name, source_origin, website_url, whatsapp_link, lead_score, address, category, maps_url, source_links, gmb_listing_found, gmb_verification_status, gmb_listing_complete, gmb_photo_count, gmb_has_hours, gmb_has_description, gmb_review_count, gmb_rating, gmb_responds_to_reviews, gmb_attributes, gmb_listing_url, status, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New', CURRENT_TIMESTAMP)
+        INSERT INTO leads (id, phone_normalized, business_name, source_origin, website_url, whatsapp_link, lead_score, address, category, maps_url, source_links, facebook_url, instagram_url, tiktok_url, email, business_hours, gmb_listing_found, gmb_verification_status, gmb_listing_complete, gmb_photo_count, gmb_has_hours, gmb_has_description, gmb_review_count, gmb_rating, gmb_responds_to_reviews, gmb_attributes, gmb_listing_url, status, pipeline_stage, tagline, niche, services, testimonials, images_collected, demo_built_at, demo_url, audit_url, screenshot_path, outreach_sent_at, client_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
             const whatsapp_link = `https://wa.me/${lead.phone_normalized}`;
             const gmbAttributes = lead.gmb_attributes ? lead.gmb_attributes : JSON.stringify({});
 
-            await db.prepare(insertQuery)
+                await db.prepare(insertQuery)
                 .bind(
                     uuidv4(),
                     lead.phone_normalized,
@@ -72,6 +72,11 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.category || null,
                     lead.maps_url || null,
                     initialLink,
+                    lead.facebook_url || null,
+                    lead.instagram_url || null,
+                    lead.tiktok_url || null,
+                    lead.email || null,
+                    lead.business_hours || null,
                     lead.gmb_listing_found || 0,
                     lead.gmb_verification_status || "none",
                     lead.gmb_listing_complete || 0,
@@ -82,7 +87,20 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.gmb_rating || "0",
                     lead.gmb_responds_to_reviews || 0,
                     gmbAttributes,
-                    lead.gmb_listing_url || lead.maps_url || null
+                    lead.gmb_listing_url || lead.maps_url || null,
+                    'New',
+                    'new',
+                    null,
+                    null,
+                    null,
+                    null,
+                    0,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
                 )
                 .run();
 
@@ -127,7 +145,7 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
 
             const updateQuery = `
         UPDATE leads 
-        SET business_name = ?, source_origin = ?, lead_score = ?, website_url = ?, address = ?, category = ?, maps_url = ?, source_links = ?, gmb_listing_found = ?, gmb_verification_status = ?, gmb_listing_complete = ?, gmb_photo_count = ?, gmb_has_hours = ?, gmb_has_description = ?, gmb_review_count = ?, gmb_rating = ?, gmb_responds_to_reviews = ?, gmb_attributes = ?, gmb_listing_url = ?, status = 'New', updated_at = CURRENT_TIMESTAMP
+        SET business_name = ?, source_origin = ?, lead_score = ?, website_url = ?, address = ?, category = ?, maps_url = ?, source_links = ?, facebook_url = ?, instagram_url = ?, tiktok_url = ?, email = ?, business_hours = ?, gmb_listing_found = ?, gmb_verification_status = ?, gmb_listing_complete = ?, gmb_photo_count = ?, gmb_has_hours = ?, gmb_has_description = ?, gmb_review_count = ?, gmb_rating = ?, gmb_responds_to_reviews = ?, gmb_attributes = ?, gmb_listing_url = ?, status = 'New', updated_at = CURRENT_TIMESTAMP
         WHERE phone_normalized = ?
       `;
 
@@ -143,6 +161,11 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.category || existingRecord.category,
                     lead.maps_url || existingRecord.maps_url,
                     updatedLinks,
+                    lead.facebook_url || existingRecord.facebook_url,
+                    lead.instagram_url || existingRecord.instagram_url,
+                    lead.tiktok_url || existingRecord.tiktok_url,
+                    lead.email || existingRecord.email,
+                    lead.business_hours || existingRecord.business_hours,
                     lead.gmb_listing_found ?? existingRecord.gmb_listing_found ?? 0,
                     lead.gmb_verification_status ?? existingRecord.gmb_verification_status ?? "none",
                     lead.gmb_listing_complete ?? existingRecord.gmb_listing_complete ?? 0,
@@ -158,7 +181,9 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                 )
                 .run();
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error(`[DB Error] Failed to upsert lead: ${lead.business_name}`, error);
+        const msg = error?.message?.includes("D1_ERROR") ? "Database insert failed — column mismatch" : (error?.message || "Unknown error");
+        throw new Error(msg);
     }
 }

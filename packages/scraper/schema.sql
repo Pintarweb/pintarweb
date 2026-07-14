@@ -5,14 +5,36 @@ CREATE TABLE IF NOT EXISTS leads (
     category TEXT,
     address TEXT,
     maps_url TEXT,
-    source TEXT,
+    source_origin TEXT,
     website_url TEXT,
     whatsapp_link TEXT,
     status TEXT DEFAULT 'New',
+    pipeline_stage TEXT DEFAULT 'new',
     lead_score INTEGER DEFAULT 0,
+    -- Demo pipeline fields
+    tagline TEXT,
+    niche TEXT,
+    services TEXT,
+    testimonials TEXT,
+    images_collected INTEGER DEFAULT 0,
+    demo_built_at DATETIME,
+    demo_url TEXT,
+    audit_url TEXT,
+    screenshot_path TEXT,
+    outreach_sent_at DATETIME,
+    -- Link to production client (after subscription)
+    client_id TEXT,
+    -- AI enrichment
     audit_results TEXT,
     ai_pain_point TEXT,
     source_links TEXT,
+    -- Social media links
+    facebook_url TEXT,
+    instagram_url TEXT,
+    tiktok_url TEXT,
+    email TEXT,
+    -- Business hours (JSON format)
+    business_hours TEXT,
     -- GMB / Google Business Profile fields
     gmb_listing_found INTEGER DEFAULT 0,
     gmb_verification_status TEXT DEFAULT 'none',

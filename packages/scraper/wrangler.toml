@@ -9,6 +9,10 @@ binding = "pintarweb_scraper_db"
 database_name = "pintarweb-scraper-db"
 database_id = "09f9e9d6-5929-4503-9d50-35d17b671313"
 
+[[r2_buckets]]
+binding = "CLIENT_IMAGES"
+bucket_name = "pintarweb-client-images"
+
 [[rules]]
 type = "Text"
 globs = ["src/ui/**/*.html", "src/ui/**/*.txt"]

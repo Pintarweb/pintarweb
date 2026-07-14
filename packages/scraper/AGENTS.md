@@ -49,9 +49,29 @@ The scraper sends leads to `http://localhost:8787/api/leads`. Worker must be run
 | `src/workers/` | Background intelligence (technicalAudit, aiQualification) |
 | `src/db/upsertLead.ts` | D1 dedup + upsert logic with scoring rules |
 | `src/ui/` | Dashboard HTML + Tailwind CSS components (loaded as static text) |
+| `src/ui/intake-form.html` | Standalone intake form served at `/clients/intake-form.html` |
 | `src/utils/normalizePhone.ts` | Malaysian phone number normalizer |
 | `schema.sql` | D1 schema reference (leads + hunt_logs tables) |
 | `query_live_db.js` | Legacy utility with hardcoded Windows path to local SQLite |
+
+## API Endpoints
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | `/api/leads` | Receive scraped leads |
+| GET | `/api/leads` | List all leads |
+| PATCH | `/api/leads` | Update lead status (archive) |
+| DELETE | `/api/leads` | Delete a lead |
+| PATCH | `/api/leads/:phone/stage` | Update pipeline stage |
+| PATCH | `/api/leads/:phone/intake` | Save intake data (tagline, niche, services, testimonials) |
+| PATCH | `/api/leads/:phone/demo` | Save demo URL |
+| PATCH | `/api/leads/:phone/outreach` | Mark outreach sent |
+| POST | `/api/generate-tagline` | Generate tagline from niche + area (template-based, instant) |
+| POST | `/api/upload/:leadId` | Upload images to R2 (logo, hero, gallery) |
+| GET | `/api/hunts` | List hunt history |
+| POST | `/api/hunts` | Record a new hunt |
+| GET | `/dashboard` | Serve dashboard UI |
+| GET | `/clients/intake-form.html` | Serve intake form |
 
 ## Scoring logic (from `src/db/upsertLead.ts`)
 
@@ -59,6 +79,20 @@ The scraper sends leads to `http://localhost:8787/api/leads`. Worker must be run
 - Duplicate from new source: +2
 - SSL missing: +3. Slow mobile response: +2 (from `src/workers/technicalAudit.ts`)
 - AI pain point detected: +2 (from `src/workers/aiQualification.ts`)
+
+## Intake Form (src/ui/intake-form.html)
+
+Standalone form served at `/clients/intake-form.html`. Opened from dashboard modal via "Open Full Intake Form" button.
+
+**URL params pre-fill** (from dashboard): `id`, `name`, `phone`, `area`, `category`, `niche`, `tagline`, `website`, `maps`, `fb`, `ig`, `tt`, `email`
+
+**Features:**
+- Service Area: multi-select checkbox grid (18 Malaysian areas)
+- Tagline: client-side generation via `✨ Generate` button (template-based, no API call)
+- Images: uploads to R2 bucket `pintarweb-client-images` on submit
+- On submit: generates `config.json` with `logo_image`, `hero_image`, `gallery_images` pointing to R2 URLs
+
+**R2 bucket**: `pintarweb-client-images` — public URL: `https://pub-{ACCOUNT_ID}.r2.dev/pintarweb-client-images`
 
 ## Testing
 
