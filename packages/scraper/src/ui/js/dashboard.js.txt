@@ -399,6 +399,17 @@ async function deleteLead(phone) {
     } catch (e) { console.error(e); }
 }
 
+async function toggleSelect(phone, btn) {
+    try {
+        const res = await fetch('/api/leads/' + phone + '/select', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ selected: !btn.classList.contains('bg-amber-400') })
+        });
+        fetchLeads();
+    } catch (e) { console.error(e); }
+}
+
 function setFolder(folder) {
     currentFolder = folder;
     document.getElementById('folder-active').className = folder === 'active' ? 'px-5 py-2 rounded-lg text-xs font-black transition-all folder-active border border-transparent shadow-sm' : 'px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500 border border-transparent bg-slate-100';
@@ -628,7 +639,7 @@ function approveAndBuild(phone) {
     const configJson = JSON.stringify(config, null, 2);
 
     closeConfigPreview();
-    alert(`Config saved to ${demoDir}/config.json\n\nTo build the demo, run:\n\nDISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${lead.id}\n\nOr manually copy config to:\n${demoDir}/config.json`);
+    alert(`Config saved to ${demoDir}/config.json\n\nTo build the demo, run:\n\nbash scripts/build-client.sh ${lead.id}\n\nOr manually copy config to:\n${demoDir}/config.json`);
 }
 
 function openIntakePanel(phone) {
@@ -743,7 +754,7 @@ function openIntakePanel(phone) {
                 </div>
                 <div class="mt-4 flex flex-col gap-2">
                     <div class="bg-slate-900 text-green-400 px-4 py-2 rounded-xl font-mono text-[11px] overflow-x-auto">
-                        DISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${lead.id}
+                        DISABLE_LLM=1 bash scripts/build-client.sh ${lead.id}
                     </div>
                     <button onclick="buildDemo('${lead.phone_normalized}')" class="w-full px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase shadow-lg shadow-blue-200 transition-all">
                         🚀 Build Demo Now
@@ -806,25 +817,47 @@ function buildDemo(phone) {
     if (!lead) return;
 
     const leadId = lead.id || phone;
-    const cmd = `DISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh ${leadId}`;
+    const tagline = document.getElementById('intake-tagline')?.value || lead.tagline;
+    const niche = document.getElementById('intake-niche')?.value || lead.niche || lead.category;
+    const services = lead.services ? JSON.parse(lead.services) : [];
+    const testimonials = lead.testimonials ? JSON.parse(lead.testimonials) : [];
+
+    /* Save intake overrides to D1 first */
+    fetch('/api/leads/' + phone + '/intake', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagline, niche, services, testimonials })
+    }).catch(e => console.warn('Failed to save intake:', e));
+
+    const buildCmd = `bash scripts/build-client.sh ${leadId}`;
+    const deployCmd = `bash scripts/deploy-preview.sh`;
+    const fullCmd = `cd ~/projects/pintarweb && ${buildCmd} && ${deployCmd}`;
 
     const output = document.getElementById('intake-body');
     if (output) {
         output.innerHTML = `
-            <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto mb-4">
-                <pre class="whitespace-pre-wrap">${cmd}</pre>
-            </div>
-            <div class="text-center py-6">
-                <div class="inline-block animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mb-3"></div>
-                <p class="text-sm font-black text-slate-700">Generating demo...</p>
-                <p class="text-xs text-slate-400 mt-1">Run the command above in your terminal</p>
+            <div class="space-y-4">
+                <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 1: Build CSS</div>
+                    <pre class="whitespace-pre-wrap">${buildCmd}</pre>
+                </div>
+                <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 2: Deploy</div>
+                    <pre class="whitespace-pre-wrap">${deployCmd}</pre>
+                </div>
+                <div class="text-center pt-2">
+                    <button onclick="navigator.clipboard.writeText('${fullCmd}')" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase transition-all">
+                        Copy Full Command
+                    </button>
+                    <p class="text-xs text-slate-400 mt-2">Copied to clipboard!</p>
+                </div>
             </div>
         `;
     }
 
-    /* Copy command to clipboard */
+    /* Copy full command to clipboard */
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(cmd).catch(() => {});
+        navigator.clipboard.writeText(fullCmd).catch(() => {});
     }
 }
 
@@ -926,7 +959,8 @@ function renderLeads() {
         if (arrival === 'Week' && age > 604800000) return false;
 
         if (category !== 'All' && l.category !== category) return false;
-        if (stageFilter !== 'All' && (l.pipeline_stage || 'new') !== stageFilter) return false;
+        if (stageFilter === 'selected' && !l.selected_for_pipeline) return false;
+        if (stageFilter !== 'All' && stageFilter !== 'selected' && (l.pipeline_stage || 'new') !== stageFilter) return false;
         if (website === 'Yes' && !l.website_url) return false;
         if (website === 'No' && l.website_url) return false;
         if (source !== 'All' && !(l.source_origin || '').includes(source)) return false;
@@ -949,6 +983,21 @@ function renderLeads() {
 
     renderPipelineBar();
 
+    // Update Today's New badge
+    const todaysBadge = document.getElementById('todays-new-count');
+    if (todaysBadge) {
+        const freshCount = allLeads.filter(l => {
+            const leadTime = new Date((l.updated_at || l.created_at) + 'Z').getTime();
+            return (l.pipeline_stage || 'new') === 'new' && Math.abs(leadTime - latestHuntTime) < 900000;
+        }).length;
+        if (freshCount > 0) {
+            todaysBadge.innerText = `${freshCount} NEW TODAY`;
+            todaysBadge.classList.remove('hidden');
+        } else {
+            todaysBadge.classList.add('hidden');
+        }
+    }
+
     if (filtered.length === 0) {
         container.innerHTML = '<div class="text-center py-24 bg-white rounded-2xl border border-slate-200 text-slate-400 font-bold uppercase tracking-widest">No matching leads in this sector</div>';
         return;
@@ -969,10 +1018,17 @@ function renderLeads() {
             <button onclick="deleteLead('${lead.phone_normalized}')" class="text-[10px] font-black text-red-600 uppercase tracking-widest ml-auto transition-colors">Delete</button>
         `;
 
+        const isSelected = lead.selected_for_pipeline === 1;
+
         return `
-        <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative ${isFreshFromMission ? 'ring-4 ring-blue-600 ring-offset-2 shadow-2xl z-10' : ''}">
+        <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all duration-300 relative ${isFreshFromMission ? 'ring-4 ring-blue-600 ring-offset-2 shadow-2xl z-10' : ''} ${isSelected ? 'ring-2 ring-amber-400 bg-amber-50/30' : ''}">
+            <div class="absolute top-3 right-3 z-10">
+                <button onclick="toggleSelect('${lead.phone_normalized}', this)" class="w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'bg-amber-400 border-amber-400 text-white' : 'border-slate-300 hover:border-amber-400 bg-white'}" title="${isSelected ? 'Selected for pipeline' : 'Select for pipeline'}">
+                    ${isSelected ? '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>' : '<svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>'}
+                </button>
+            </div>
             ${isFreshFromMission ? `
-            <div class="absolute -top-3 -right-3 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg animate-pulse uppercase tracking-widest z-10">Fresh Lead</div>` : ''}
+            <div class="absolute -top-3 left-3 bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg animate-pulse uppercase tracking-widest z-10">Fresh Lead</div>` : ''}
 
             <div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
                 <div class="flex-1">

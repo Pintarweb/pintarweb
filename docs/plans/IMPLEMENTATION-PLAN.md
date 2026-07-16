@@ -441,6 +441,17 @@ See the following documents for detailed step-by-step instructions:
 
 ---
 
-**Last Updated:** 2026-07-09  
+**Last Updated:** 2026-07-16  
 **Owner:** Yusmarin  
-**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed, pricing updated to RM446 (split payment), 2-path closing flow implemented, GMB scraping + audit integration COMPLETE ✅
+**Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed, pricing updated to RM446, GMB + auto-hunt + lead selection COMPLETE ✅
+
+### Auto-Hunt System (2026-07-16)
+- `packages/scraper/hunt-profiles.json` — saved search configs (category, location, limit, sources)
+- `packages/scraper/scripts/auto-hunt.sh` — interactive menu, `--all`, `--silent`, `--install-cron`, `--list`, `--edit`
+- `--remote` flag: posts directly to `https://pintarweb-scraper.yusmarin.workers.dev/api/leads` — no dev server needed
+- Cron: `bash scripts/auto-hunt.sh --install-cron` → weekdays 6am auto-scrape
+
+### Lead Selection System (2026-07-16)
+- `selected_for_pipeline` column (INTEGER DEFAULT 0)
+- Dashboard ⭐ toggle + "⭐ Selected" filter
+- Workflow: scrape big batch → review → star leads → process daily from selected pool

@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
-import { normalizePhone, isMobilePhone } from "../utils/normalizePhone";
-import { ExpectedLead } from "./googleMaps";
+import { normalizePhone, isMobilePhone } from "../utils/normalizePhone.js";
+import { ExpectedLead } from "./googleMaps.js";
 
 /**
  * Searches Yellow Pages MY for business categories (e.g., "Construction" or "Home Services")
@@ -122,7 +122,8 @@ export async function scrapeYellowPages(
 }
 
 // Optional Execution Block for testing when run directly
-if (require.main === module) {
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
     (async () => {
         const data = await scrapeYellowPages("Construction", "Klang Valley", 5);
         console.log("YellowPages Scraping Complete:", data);

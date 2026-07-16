@@ -1,4 +1,4 @@
-import { scrapeGoogleMaps } from "./scrapers/googleMaps";
+import { scrapeGoogleMaps } from "./scrapers/googleMaps.js";
 
 const WORKER_API_URL = "http://127.0.0.1:8787/api/leads";
 

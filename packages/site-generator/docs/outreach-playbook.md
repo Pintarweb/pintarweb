@@ -151,8 +151,8 @@ This is your green light. Move fast.
 Senang je — saya connect domain awak terus ke website ni.
 Awak ada domain sendiri ke, atau nak kami register sekali?
 
-Lepas confirm, website live dalam masa 5 hari bekerja.
-RM 149/bulan — 3 bulan advance (RM 447). Termasuk semua.
+Lepas confirm, website live dalam 4 minggu.
+RM149 activation + bulan pertama (RM149). Renewal RM149/bulan bermula bulan ke-3. Tiada kontrak.
 ```
 
 ### "Tak berminat"
@@ -194,12 +194,13 @@ Kami handle semua — awak focus bisnes je.
 
 **Step 5 — State price simply**
 ```
-RM 149/bulan — 3 bulan advance (RM 447).
-Termasuk website, SEO, auto-reply WhatsApp, hosting, maintenance.
-Kurang dari satu job chemical wash sebulan.
+RM297 setup + RM149 activation = RM446 total.
+Renewal RM149/bulan bermula bulan ke-3.
+Tiada kontrak — boleh berhenti bila-bila.
+Kurang dari satu job service sebulan.
 ```
 
-Monthly framing: "RM 149/bulan — kurang dari satu job chemical wash" lands harder than annual math for this audience.
+Monthly framing: "Satu job RM 150-300 dah cover sebulan" lands harder than annual math for this audience.
 
 **Step 6 — Remove payment friction**
 - Accept DuitNow, bank transfer, cash
@@ -233,11 +234,12 @@ Every closed client is your best referral source.
 ```
 Terima kasih [Name]! Website dah live.
 Kalau ada kenalan yang nak website jugak, boleh refer
-ke kami — ada referral fee RM [50–100] untuk awak
-kalau jadi client. 🙏
+ke kami. Details saya kongsikan later.
 ```
 
 Track referral sources in leads.csv under `source` column.
+
+**[FUTURE] Referral incentive TBD** — pending decision on referral reward structure.
 
 ---
 

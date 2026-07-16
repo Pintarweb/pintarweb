@@ -1,9 +1,12 @@
 import { chromium } from "playwright";
-import { normalizePhone, isMobilePhone } from "../utils/normalizePhone";
-import { ExpectedLead } from "./googleMaps";
+import { normalizePhone, isMobilePhone } from "../utils/normalizePhone.js";
+import { ExpectedLead } from "./googleMaps.js";
 
 export interface FacebookLead extends ExpectedLead {
     wa_flagged?: boolean; // If website is empty or wa.me
+    instagram_url?: string | null;
+    tiktok_url?: string | null;
+    email?: string | null;
 }
 
 /**
@@ -128,6 +131,29 @@ export async function scrapeFacebook(
                     }
                 }
 
+                // Extract Instagram URL
+                let instagram_url: string | null = null;
+                const instagramMatch = pageContent.match(/(?:instagram\.com\/|@)(\w{2,30})/i);
+                if (instagramMatch) {
+                    const handle = instagramMatch[1];
+                    instagram_url = `https://instagram.com/${handle.replace('@', '')}`;
+                }
+
+                // Extract TikTok URL
+                let tiktok_url: string | null = null;
+                const tiktokMatch = pageContent.match(/(?:tiktok\.com\/@|@)(\w{2,30})/i);
+                if (tiktokMatch) {
+                    const handle = tiktokMatch[1];
+                    tiktok_url = `https://tiktok.com/@${handle.replace('@', '')}`;
+                }
+
+                // Extract email
+                let email: string | null = null;
+                const emailMatch = pageContent.match(/[\w.-]+@[\w.-]+\.\w+/i);
+                if (emailMatch) {
+                    email = emailMatch[0].toLowerCase();
+                }
+
                 if (!phone_normalized) {
                     console.warn(`[!] Skipping ${url}: No valid mobile number found for WhatsApp.`);
                     continue;
@@ -143,10 +169,14 @@ export async function scrapeFacebook(
                         phone_normalized,
                         website_url,
                         wa_flagged,
-                        source_url: url
+                        source_url: url,
+                        facebook_url: url,
+                        instagram_url,
+                        tiktok_url,
+                        email
                     };
                     leads.push(lead);
-                    console.log(`[+] Found FB Lead: ${business_name} | Phone: ${phone_normalized}`);
+                    console.log(`[+] Found FB Lead: ${business_name} | Phone: ${phone_normalized} | IG: ${instagram_url || 'None'} | TT: ${tiktok_url || 'None'} | Email: ${email || 'None'}`);
                 }
 
             } catch (err: any) {
@@ -165,7 +195,8 @@ export async function scrapeFacebook(
 }
 
 // Optional Execution Block for testing when run directly
-if (require.main === module) {
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
     (async () => {
         const data = await scrapeFacebook("Aircond Klang Valley", 3);
         console.log("FB Scraping Complete:", data);

@@ -83,4 +83,4 @@ Words that are DIFFERENT in Malaysian vs Indonesian:
 2. "Open Full Intake Form" button opens `/clients/intake-form.html?id={leadId}&...` (pre-filled from scraped data)
 3. Form: multi-select service areas, tagline auto-generate (✨ button), image uploads to R2
 4. Submit → config.json generated with `logo_image`, `hero_image`, `gallery_images` pointing to R2 URLs
-5. Dashboard → "Build Demo" runs `DISABLE_LLM=1 bash packages/site-generator/scripts/build-client.sh {leadId}`
+5. Dashboard → "Build Demo" runs `DISABLE_LLM=1 bash scripts/build-client.sh {leadId}` (from project root)

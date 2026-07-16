@@ -206,16 +206,18 @@ Test by sending a simple email to verify delivery.
 - **Deliverable:** Website + WhatsApp auto-reply bot + Local SEO
 
 ### Where to Find Leads
-1. **D1 database** — `view-outreach.sh` → sort by score descending
-2. **Google Maps** — Search "aircond service [area]" for businesses without websites
-3. **Facebook Groups** — Contractor groups, identify active members without websites
-4. **Personal network** — Friends/family who know contractors
+1. **Auto-hunt to D1** — `bash packages/scraper/scripts/auto-hunt.sh --all`
+2. **Dashboard UI** — `https://pintarweb-scraper.yusmarin.workers.dev/dashboard`
+3. **Google Maps** — Search "aircond service [area]" for businesses without websites
+4. **Facebook Groups** — Contractor groups, identify active members without websites
+5. **Personal network** — Friends/family who know contractors
 
 ### Selection Process
-1. Pull top 10 highest-scoring leads from D1
-2. Filter by: aircond/plumbing/electrical, Selangor/KL, score ≥ 60
-3. Manually verify: active WhatsApp number, business still operating
-4. Select top 5-10 for pilot
+1. Run auto-hunt: `bash packages/scraper/scripts/auto-hunt.sh --all` (or set cron)
+2. Open dashboard → filter by niche/area → ⭐ star promising leads
+3. Filter "⭐ Selected" for final review
+4. Manually verify: active WhatsApp number, business still operating
+5. Select top 5-10 for pilot
 
 ---
 
@@ -680,5 +682,5 @@ After Phase 3, proceed to **Phase 4: Scale** where you'll:
 
 ---
 
-**Last Updated:** 2026-07-09
-**Status:** Demo stage complete. GMB integration implemented — audit reports now show GMB status with 3 states (TIADA/BELUM SAH/TERVERIFIKASI). See `docs/sop/gmb-setup.md`.
+**Last Updated:** 2026-07-16
+**Status:** Demo stage complete. GMB integration implemented — audit reports now show GMB status with 3 states (TIADA/BELUM SAH/TERVERIFIKASI). Auto-hunt system (+ lead selection) added — see `packages/scraper/scripts/auto-hunt.sh` and `packages/scraper/hunt-profiles.json`.

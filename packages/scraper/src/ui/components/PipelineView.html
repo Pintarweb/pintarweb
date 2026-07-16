@@ -2,22 +2,27 @@
     <div class="flex justify-between items-center mb-4">
         <div class="flex gap-4">
             <button id="folder-active" onclick="setFolder('active')"
-                class="px-5 py-2 rounded-lg text-xs font-black transition-all folder-active border border-transparent shadow-sm">ACTIVE
-                PIPELINE</button>
+                class="px-5 py-2 rounded-lg text-xs font-black transition-all folder-active border border-transparent shadow-sm">ACTIVE PIPELINE</button>
             <button id="folder-archived" onclick="setFolder('archived')"
-                class="px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500 border border-transparent bg-slate-100">ARCHIVE
-                VAULT</button>
+                class="px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500 border border-transparent bg-slate-100">ARCHIVE VAULT</button>
         </div>
         <button onclick="exportToCRM()" class="px-5 py-2 rounded-lg text-xs font-black transition-all bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm uppercase tracking-widest flex items-center gap-2">
             Export to CRM (CSV) 📥
         </button>
     </div>
 
+    <!-- Pipeline Progress Bar (rendered by JS) -->
+    <div id="pipeline-progress" class="flex items-center gap-0 mb-2 bg-white p-3 rounded-2xl border border-slate-100 shadow-sm overflow-x-auto"></div>
+    <div id="pipeline-labels" class="flex gap-0 mb-6 text-[9px] text-slate-400 font-black uppercase px-3 overflow-x-auto" style="max-width:900px"></div>
+
     <!-- Stats & Controls -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Pipeline</p>
-            <h3 id="lead-count" class="text-3xl font-black text-slate-900">0 LEADS</h3>
+            <div class="flex items-baseline gap-4">
+                <h3 id="lead-count" class="text-3xl font-black text-slate-900">0 LEADS</h3>
+                <span id="todays-new-count" class="text-sm font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full hidden">0 NEW TODAY</span>
+            </div>
         </div>
         <div class="md:col-span-2 relative">
             <input type="text" id="search" placeholder="Search business name..."
@@ -40,14 +45,23 @@
             </select>
         </div>
         <div class="space-y-1">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Pipeline State</label>
-            <select id="filter-status" onchange="applyFilters()"
-                class="w-full bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs font-black outline-none h-10">
-                <option value="All">All Statuses</option>
-                <option value="New">New Lead</option>
-                <option value="Engaged">Engaged (Demo/Contacted)</option>
-                <option value="Contacted">Contacted Only</option>
-                <option value="Demo Built">Demo Built Only</option>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Pipeline Stage</label>
+                <div class="flex gap-1">
+                <select id="filter-stage" onchange="applyFilters()"
+                    class="flex-1 bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs font-black outline-none h-10">
+                    <option value="new" selected>New Lead</option>
+                    <option value="selected">⭐ Selected</option>
+                    <option value="All">All Stages</option>
+                <option value="images_collected">Images Collected</option>
+                <option value="demo_ready">Demo Ready</option>
+                <option value="demo_built">Demo Built</option>
+                <option value="audit_ready">Audit Ready</option>
+                <option value="screenshot">Screenshot</option>
+                <option value="outreach_sent">Outreach Sent</option>
+                <option value="in_chat">In Chat</option>
+                <option value="qualified">Qualified</option>
+                <option value="payment">Payment</option>
+                <option value="active">Active Client</option>
             </select>
         </div>
         <div class="space-y-1">
@@ -86,6 +100,36 @@
                 <option value="5">Good (5+)</option>
                 <option value="10">High Target (10+)</option>
             </select>
+        </div>
+    </div>
+
+    <!-- Intake Panel Modal -->
+    <div id="intake-panel" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="intake-title" class="text-xl font-black text-slate-900 uppercase tracking-tight">Lead Intake</h3>
+                    <button onclick="closeIntakePanel()" class="text-slate-400 hover:text-slate-600 text-2xl font-black">×</button>
+                </div>
+                <div id="intake-body">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Config Preview Modal -->
+    <div id="config-preview-panel" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight">Config Preview</h3>
+                    <button onclick="closeConfigPreview()" class="text-slate-400 hover:text-slate-600 text-2xl font-black">×</button>
+                </div>
+                <div id="config-preview-body">
+                    <!-- Filled dynamically -->
+                </div>
+            </div>
         </div>
     </div>
 

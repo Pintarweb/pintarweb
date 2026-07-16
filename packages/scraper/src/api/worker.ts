@@ -28,7 +28,7 @@ export default {
                 const lead = await request.json() as any;
 
                 // 1. Perform Upsert logic in D1
-                await upsertLead(env.pintarweb_scraper_db, lead);
+                const { action } = await upsertLead(env.pintarweb_scraper_db, lead);
 
                 // 2. Fetch the newly saved structure to check its current score
                 const savedRecord = await env.pintarweb_scraper_db.prepare(
@@ -74,6 +74,7 @@ export default {
 
                 return new Response(JSON.stringify({
                     success: true,
+                    action,
                     score: currentRecord ? currentRecord.lead_score : 1,
                     total: stats ? stats.total : '?',
                     updated: currentRecord ? currentRecord.updated_at : 'Now'
@@ -165,6 +166,23 @@ export default {
                 });
             } catch (e: any) {
                 return new Response(JSON.stringify({ error: "Failed to mark outreach sent" }), { status: 500 });
+            }
+        }
+
+        // PATCH /api/leads/:phone/select - toggle selected_for_pipeline
+        if (url.pathname.match(/^\/api\/leads\/[^\/]+\/select$/) && request.method === "PATCH") {
+            try {
+                const phone = url.pathname.split("/")[3];
+                const { selected } = await request.json() as any;
+                const val = selected ? 1 : 0;
+                await env.pintarweb_scraper_db.prepare(
+                    `UPDATE leads SET selected_for_pipeline = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
+                ).bind(val, phone).run();
+                return new Response(JSON.stringify({ success: true, selected: val }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: "Failed to toggle selection" }), { status: 500 });
             }
         }
 

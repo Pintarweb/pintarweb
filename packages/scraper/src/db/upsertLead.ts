@@ -29,10 +29,10 @@ export interface dbResult {
  * @param db D1Database binding instance
  * @param lead The scraped lead data
  */
-export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
+export async function upsertLead(db: any, lead: ExpectedLead): Promise<{action: 'created' | 'updated'}> {
     if (!lead.phone_normalized) {
         console.log(`[Skip] Lead "${lead.business_name}" has no phone number.`);
-        return;
+        return { action: 'updated' as const };
     }
 
     try {
@@ -104,6 +104,8 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                 )
                 .run();
 
+            console.log(`[Upsert] Created NEW lead: ${lead.business_name} (score: ${newScore})`);
+            return { action: 'created' };
         } else {
             // IF EXISTS: Update and Reinstate
             const existingRecord: any = existingResult;
@@ -180,6 +182,8 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<void> {
                     lead.phone_normalized
                 )
                 .run();
+            console.log(`[Upsert] Updated EXISTING lead: ${existingRecord.business_name} (score: ${newScore})`);
+            return { action: 'updated' };
         }
     } catch (error: any) {
         console.error(`[DB Error] Failed to upsert lead: ${lead.business_name}`, error);

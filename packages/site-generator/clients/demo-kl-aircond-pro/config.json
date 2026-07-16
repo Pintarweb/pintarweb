@@ -1,0 +1,45 @@
+{
+    "id": "demo-kl-aircond-pro",
+    "business_name": "KL Aircond Pro",
+    "tagline": "Pakar Servis Aircond Kuala Lumpur",
+    "phone": "018-765 4321",
+    "whatsapp": "60187654321",
+    "area": "Kuala Lumpur",
+    "service_areas": ["Kuala Lumpur", "Cheras", "Setapak", "Wangsa Maju"],
+    "niche": "aircond-contractor",
+    "services": ["Servis & Cuci Aircond", "Pemasangan Aircond Baru", "Pembaikan Aircond Rosak", "Top Up Gas Aircond"],
+    "established": "2019",
+    "mood": "trustworthy-local",
+    "hero_variant": "split",
+    "google_rating": 4.6,
+    "google_review_count": 52,
+    "testimonials": [
+        {"name": "En. Ahmad", "area": "Cheras", "text": "Aircond rumah tak sejuk, servis terus jadi okay. Harga berpatutan, kerja kemas.", "rating": 5},
+        {"name": "Puan Sarah", "area": "Setapak", "text": "Pasang aircond baru, professional betul. Explain pasal warranty dengan jelas. Puas hati.", "rating": 5},
+        {"name": "Mr. Tan", "area": "Wangsa Maju", "text": "Aircond pejabat rosak, datang terus periksa. Siap cepat. Recommended.", "rating": 4}
+    ],
+    "social": {
+        "instagram_handle": "klaircondpro",
+        "instagram_followers": 1200,
+        "instagram_active": true,
+        "instagram_content_type": "project-photos",
+        "instagram_link_in_bio": "whatsapp",
+        "tiktok_handle": null,
+        "tiktok_followers": 0,
+        "tiktok_active": false
+    },
+    "audit": {
+        "has_website": false,
+        "website_url": null,
+        "visibility_score": 45,
+        "trust_score": 65,
+        "first_impression_score": null,
+        "competitor_gap": -30,
+        "monthly_search_volume": 350,
+        "search_keyword": "servis aircond kuala lumpur",
+        "competitors": [
+            {"name": "KL Aircond Master", "has_website": true, "rating": 4.4, "reviews": 78},
+            {"name": "Cheras Cooling Services", "has_website": true, "rating": 4.2, "reviews": 55}
+        ]
+    }
+}

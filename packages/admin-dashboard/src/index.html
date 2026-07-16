@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PintarWeb Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div id="app"></div>
+
+  <!-- JS modules loaded in dependency order -->
+  <script src="api.js"></script>
+  <script src="layout.js"></script>
+  <script src="modals.js"></script>
+  <script src="dashboard.js"></script>
+  <script src="client-detail.js"></script>
+  <script src="kb.js"></script>
+  <script src="kb-editor.js"></script>
+
+  <!-- Expose functions needed by onclick handlers -->
+  <script>
+    window.injectClientModal = injectClientModal;
+    window.injectWabaModal = injectWabaModal;
+    window.closeModal = closeModal;
+    window.closeWabaModal = closeWabaModal;
+    window.openClientModal = openClientModal;
+    window.openWabaModal = openWabaModal;
+    window.toggleFeature = toggleFeature;
+    window.deleteClient = deleteClient;
+    window.viewClient = viewClient;
+    window.toggleSecret = toggleSecret;
+    window.switchClientTab = switchClientTab;
+    window.openClientKbEditor = openClientKbEditor;
+    window.openClientPromptsEditor = openClientPromptsEditor;
+
+    function getRoute() { return window.location.hash.replace('#', '') || '/'; }
+
+    async function router() {
+      const route = getRoute();
+      if (!token) { renderLogin(); return; }
+      if (route === '/' || route === '') { renderDashboard(); return; }
+      if (route === '/clients') { renderClients(); return; }
+      if (route === '/wabas') { renderWabas(); return; }
+      if (route.startsWith('/clients/') && route.split('/').length === 3) {
+        const id = route.split('/')[2];
+        renderClientDetail(id);
+        return;
+      }
+    }
+
+    window.addEventListener('hashchange', router);
+    router();
+  </script>
+</body>
+</html>

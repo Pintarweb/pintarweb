@@ -26,83 +26,38 @@ Phase 4 is the official launch. You'll execute outreach to 10-15 prospects, clos
 
 **Process:**
 
-1. **Run scraper for multiple areas:**
+1. **Edit hunt profiles** with your target niches and areas:
    ```bash
-   cd packages/scraper
-   
-   # Cheras
-   npx tsx src/index.ts --category "Aircond" --location "Cheras" --limit 30
-   
-   # Ampang
-   npx tsx src/index.ts --category "Aircond" --location "Ampang" --limit 20
-   
-   # PJ
-   npx tsx src/index.ts --category "Aircond" --location "Petaling Jaya" --limit 20
+   bash packages/scraper/scripts/auto-hunt.sh --edit
+   ```
+   Add profiles like:
+   ```json
+   {"name": "aircond-cheras", "label": "Aircond Cheras", "category": "Aircond", "location": "Cheras", "limit": 30, "sources": "Maps,FB"}
    ```
 
-2. **Process all leads:**
+2. **Run all profiles** — sends directly to production D1 (no dev server needed):
    ```bash
-   cd data/leads
-   
-   # Process each area
-   node ../../packages/site-generator/scripts/process-leads.js leads-cheras.json leads-processed-cheras.json
-   node ../../packages/site-generator/scripts/process-leads.js leads-ampang.json leads-processed-ampang.json
-   node ../../packages/site-generator/scripts/process-leads.js leads-pj.json leads-processed-pj.json
+   bash packages/scraper/scripts/auto-hunt.sh --all
    ```
-
-3. **Merge and deduplicate:**
-   Create `scripts/merge-leads.js`:
-   ```javascript
-   const fs = require('fs');
-   
-   function mergeLeads(inputFiles, outputFile) {
-     const allLeads = [];
-     const seen = new Set();
-     
-     for (const file of inputFiles) {
-       const leads = JSON.parse(fs.readFileSync(file, 'utf8'));
-       for (const lead of leads) {
-         const key = lead.phone_normalized || lead.phone;
-         if (!seen.has(key)) {
-           seen.add(key);
-           allLeads.push(lead);
-         }
-       }
-     }
-     
-     // Sort by score
-     allLeads.sort((a, b) => b.score - a.score);
-     
-     fs.writeFileSync(outputFile, JSON.stringify(allLeads, null, 2));
-     console.log(`Merged ${allLeads.length} unique leads`);
-   }
-   
-   const inputFiles = process.argv.slice(2, -1);
-   const outputFile = process.argv[process.argv.length - 1];
-   
-   mergeLeads(inputFiles, outputFile);
-   ```
-
-   Run:
+   Or run specific ones:
    ```bash
-   node scripts/merge-leads.js \
-     leads-processed-cheras.json \
-     leads-processed-ampang.json \
-     leads-processed-pj.json \
-     leads-merged.json
+   bash packages/scraper/scripts/auto-hunt.sh aircond-cheras
    ```
 
-4. **Export final outreach list:**
+3. **Open dashboard** and select your best leads:
+   ```
+   https://pintarweb-scraper.yusmarin.workers.dev/dashboard
+   ```
+   - Review leads sorted by score
+   - ⭐ Star the promising ones (score ≥ 60, valid phone, no website ideally)
+   - Filter by "⭐ Selected" to see your final list
+
+4. **Export selected leads for outreach:**
    ```bash
-   node scripts/export-outreach-list.js leads-merged.json outreach-list-final.csv
+   curl -s "https://pintarweb-scraper.yusmarin.workers.dev/api/leads?selected=true" \
+     | jq -r '.[] | select(.pipeline_stage=="new") | [.business_name, .phone_normalized, .category, .address, .lead_score] | @csv' \
+     > data/outreach/leads-selected.csv
    ```
-
-5. **Select top 10-15:**
-   Open CSV in spreadsheet, filter by:
-   - Score >= 60
-   - No website (highest priority)
-   - Active on social (engaged business owners)
-   - Valid phone number
 
 **Time:** 2 hours
 

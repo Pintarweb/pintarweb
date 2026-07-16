@@ -81,27 +81,34 @@ Inbound message
 
 ---
 
-## 6. Per-client configuration (what makes it duplicable)
+## 6. Per-client configuration (v3 — multi-tenant)
 
-Every client gets one config record, not new code. Mirrors your existing `config.json` + token-replacement pattern:
+Every client gets one `clients` record + one `waba_accounts` entry, not new code. The `resolveTenantContext()` function resolves `phone_number_id` → `TenantContext` at the start of every webhook request.
 
 ```
-{
-  "client_id": "razif-aircond",
-  "business_name": "...",
-  "owner_whatsapp": "+60...",
-  "services": [...],
-  "service_area": [...],
-  "business_hours": {...},
-  "price_ranges": {...},           // optional, only if client approves
-  "faq": [...],                     // RAG source
-  "auto_confirm_simple_bookings": false,
-  "escalation_keywords": [...],     // extends default list
-  "language_default": "ms"          // or "en"
-}
+clients
+  id (UUID)           — primary key
+  company_name        — legal / display name
+  subscription_status — 'trial' | 'active' | 'suspended' | 'cancelled'
+  subscription_tier  — 'asas' | 'bisnes' | 'pro'
+  owner_phone        — notification target
+
+waba_accounts
+  id (UUID)
+  client_id          — FK to clients
+  waba_id           — Meta's WABA ID (external)
+  phone_number_id    — Meta's phone number ID (external)
+  phone_number       — human-readable e.g. +60121111111
+  access_token       — Meta long-lived token
+  display_name       — e.g. "Aircond Division"
+  is_default         — 1 = primary for outbound
+
+client_features     — per-feature booleans (replaces tier hardcoding)
+kb_knowledge        — per-client FAQ/KB (shared or per-department)
+bot_system_prompts — per-client system prompts
 ```
 
-The Worker logic reads this once per conversation and never hardcodes anything client-specific.
+The Worker logic reads `TenantContext` once per conversation and never hardcodes anything client-specific.
 
 ---
 
@@ -114,13 +121,15 @@ The Worker logic reads this once per conversation and never hardcodes anything c
 
 ---
 
-## 8. Layer Architecture (v2 — effective 2026-07-04)
+## 8. Knowledge Base — 3-Layer Architecture (v3.1, effective 2026-07-13)
 
 The bot uses a three-layer prompt/config system instead of fine-tuning. This is cheaper, instantly updateable, and matches the config-driven architecture.
 
-### Layer 1 — Base System Prompt (shared across ALL bots)
+> **v3.1 update (2026-07-13):** `whatsapp_bot_niche_knowledge` table added as Layer 2 (shared per trade). Layer 1 = `bot_system_prompts`, Layer 2 = `whatsapp_bot_niche_knowledge`, Layer 3 = `kb_knowledge`. Bot worker refactored into 5 modules. Admin dashboard exposes Layer 2 as read-only purple cards, Layer 3 as editable white cards.
 
-Core identity and guardrails. Written once, reused everywhere. This is your actual product IP.
+### Layer 1 — System Prompts (`bot_system_prompts`, per client)
+
+Core identity and guardrails. Stored in `bot_system_prompts`, scoped per `client_id`. This is your actual product IP.
 
 - **Core identity:** Acts as the business owner's direct representative — never says "I" or "we" freely. The bot IS the business.
 - **Tone:** Friendly Malay/English/Manglish. Short replies (1-2 sentences max). Conversational, not corporate.
@@ -130,9 +139,11 @@ Core identity and guardrails. Written once, reused everywhere. This is your actu
 - **No-first-person rule:** Never say "I" or "we" unless necessary. Prefer: "[Business name]Bot" framing.
 - **Fallback:** "Saya akan tanya team dan-balik pada anda." — never make up information.
 
-### Layer 2 — Niche Knowledge (shared across clients in same trade)
+Admin dashboard: visible in client → Prompts tab (Layer 1 label). Read-write per client.
 
-Common terminology, problem categories, pricing benchmarks, and customer question patterns for a specific trade. Written once per niche, reused across every client in that trade.
+### Layer 2 — Niche Knowledge (`whatsapp_bot_niche_knowledge`, 5 niches)
+
+Common terminology, problem categories, pricing benchmarks, and customer question patterns for a specific trade. Written once per niche, reused across every client in that trade. **Read-only in dashboard** (purple cards in KB tab). Source docs: `docs/deep-research/{niche} KB/`.
 
 **Niche: PintarWeb (private)** — website + WhatsApp bot + SEO for Malaysian SME tradespeople.
 
@@ -149,17 +160,30 @@ Common terminology, problem categories, pricing benchmarks, and customer questio
 - Pricing benchmarks: chemical wash RM80-180, gas top-up RM80-250, installation RM300-800+
 - Customer fears: overcharged, unnecessary work added, parts replaced when not needed
 
-**Niche: Trades/Reno (template)** — renovation, plumbing, electrical for Malaysian contractors.
+**Niche: Renovation (template)** — renovation, remodeling, and general contracting for Malaysian homeowners/property owners.
 
 - Renovation phases: design → permits → demo → structural → rough-in → finishing → handover
 - Common: plumbing leaks, blocked drains, electrical tripping, DB upgrades
 - Permit requirements in Malaysia: APDL/DBKL for structural changes
 - Timeline benchmarks: kitchen makeover ~3-4 weeks, full renovation 2-3 months
 - Customer fears: contractor ghosting, quote ballooning, quality不一致
+- Licensing: CIDB, SSM — bot should provide actual license detail if asked (not just "yes we're licensed")
 
-### Layer 3 — Client-Specific Config (unique per client)
+**Niche: Electrical (template)** — electrical installation, repair, and safety inspection for Malaysian homes/commercial.
 
-Thin, fast-to-fill layer. Onboarding a new client = filling in Layer 3, not writing new logic.
+- Electrical is the most safety-sensitive niche — nearly every job carries fire/shock risk if done wrong. Default toward caution more broadly than aircond/plumbing.
+- Emergency-tier symptoms (no DIY): burning smell, sparking, electrical shock — always escalate immediately
+- Licensing: Suruhanjaya Tenaga (ST) — bot should provide actual ST license detail if asked
+- Common: circuit breaker trips, power points not working, flickering lights, DB capacity upgrades
+- DB upgrade trigger: customer wants to add aircon/EV charger and breaker keeps tripping — surface DB capacity as underlying cause
+- DIY boundary: stricter than other niches — very little is genuinely DIY-safe in electrical work beyond a single breaker reset
+- Utility cross-scope: TNB (Tenaga Nasional) handles supply-side outages — distinguish from internal wiring issues
+
+Admin dashboard: GET `/admin/api/niches` returns all Layer 2 entries. Displayed as purple read-only cards. All 5 niches: aircond, plumbing, pintarweb, renovation, electrical.
+
+### Layer 3 — Client-Specific KB (`kb_knowledge`, unique per client)
+
+Thin, fast-to-fill layer. Onboarding a new client = filling in Layer 3, not writing new logic. **Editable in dashboard** (white cards in KB tab).
 
 ```json
 {
@@ -179,6 +203,8 @@ Thin, fast-to-fill layer. Onboarding a new client = filling in Layer 3, not writ
   "demo_expiry_days": 3
 }
 ```
+
+Admin dashboard: client → KB tab → Layer 3 section. Add/edit/delete FAQ rows, price ranges, objection-response pairs via kb-editor.js modal.
 
 ---
 

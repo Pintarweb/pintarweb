@@ -405,6 +405,18 @@ npx wrangler pages deployment list --project-name=pintarweb-preview
 
 ### Key Commands
 ```bash
+# Auto-hunt: run all profiles (sends direct to production D1)
+bash packages/scraper/scripts/auto-hunt.sh --all
+
+# Auto-hunt: interactive menu
+bash packages/scraper/scripts/auto-hunt.sh
+
+# Auto-hunt: install weekday 6am cron (one-time)
+bash packages/scraper/scripts/auto-hunt.sh --install-cron
+
+# Auto-hunt: list profiles + last-run dates
+bash packages/scraper/scripts/auto-hunt.sh --list
+
 # Deploy client sites to preview
 ./scripts/deploy-preview.sh
 
@@ -577,9 +589,15 @@ Seeded niches:
 
 ### Scraper / Outreach — Enhancements
 
+- [x] **Auto-hunt system** — `hunt-profiles.json` + `scripts/auto-hunt.sh` + `--remote` flag (2026-07-16)
+  - `bash scripts/auto-hunt.sh` (menu), `--all` (all profiles), `--install-cron` (weekdays 6am)
+  - Sends directly to production D1 — no `npx wrangler dev` needed
+  - Guardrail: `upsertLead()` returns `{action: 'created' | 'updated'}`, duplicates get score+2
+- [x] **Lead selection system** — `selected_for_pipeline` column, PATCH `/select` endpoint,
+      dashboard ⭐ toggle + "⭐ Selected" filter (2026-07-16)
+- [x] **D1 full schema migration** — 15 cols → 44+ cols including GMB fields, migrated live 2026-07-16
 - [ ] **Niche research** — Layer 2 knowledge for Aircond and Trades/Reno (see Layer 2 sections above)
 - [ ] **GMB scraper end-to-end test** — test `gmbDetail.ts` with real leads
-- [ ] **D1 GMB migration** — run migration to add GMB columns to existing DB (schema updated 2026-07-09, migration not executed)
 - [ ] **Review scraper** — collect Google reviews for lead enrichment
 
 ---
@@ -601,9 +619,17 @@ Seeded niches:
 
 ---
 
-**Last Updated:** 2026-07-09
+**Last Updated:** 2026-07-16
 **Owner:** Yusmarin
 **Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed (DeepSeek + 22-intent classifier), Razorpay live, domain migrated, Umami tracking, GMB integration COMPLETE ✅
+
+### Phase 3.6 — Scraper Automation (2026-07-16)
+
+- [x] **Auto-hunt system:** `hunt-profiles.json` + `scripts/auto-hunt.sh` — interactive menu, `--all`, `--silent`, `--install-cron`, `--list`, `--edit`
+- [x] **Lead selection:** `selected_for_pipeline` column, dashboard star toggle + filter, `PATCH /api/leads/:phone/select`
+- [x] **Guardrail:** `upsertLead()` returns `{action: 'created' | 'updated'}`, POST response includes `action`, scraper logs "X new + Y existing = Z total"
+- [x] **D1 production migration:** 15-col → 44+ col schema + `hunt_logs` table (live 2026-07-16)
+- [x] **Daily workflow:** No terminal needed (cron handles scraping) → open dashboard → star leads → process from "⭐ Selected" pool
 
 ---
 

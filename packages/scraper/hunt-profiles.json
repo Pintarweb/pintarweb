@@ -1,0 +1,42 @@
+[
+  {
+    "name": "aircond-kl",
+    "label": "Aircond — Kuala Lumpur",
+    "category": "Aircond Service",
+    "location": "Kuala Lumpur",
+    "limit": 20,
+    "sources": "Maps,FB"
+  },
+  {
+    "name": "plumber-kl",
+    "label": "Plumbing — Kuala Lumpur",
+    "category": "Plumber",
+    "location": "Kuala Lumpur",
+    "limit": 15,
+    "sources": "Maps,FB"
+  },
+  {
+    "name": "electrical-kl",
+    "label": "Electrical — Kuala Lumpur",
+    "category": "Electrical Contractor",
+    "location": "Kuala Lumpur",
+    "limit": 15,
+    "sources": "Maps"
+  },
+  {
+    "name": "aircond-selangor",
+    "label": "Aircond — Selangor",
+    "category": "Aircond Service",
+    "location": "Selangor",
+    "limit": 20,
+    "sources": "Maps,FB"
+  },
+  {
+    "name": "renovation-kl",
+    "label": "Renovation — Kuala Lumpur",
+    "category": "Renovation Contractor",
+    "location": "Kuala Lumpur",
+    "limit": 10,
+    "sources": "Maps"
+  }
+]

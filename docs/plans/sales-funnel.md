@@ -21,15 +21,19 @@ LEAD → DEMO BUILD → OUTREACH → ENGAGEMENT → CLOSE → ONBOARD
 - Facebook page/business scraper
 - Referrals
 
-**Output:** `leads-raw.json` → `leads-processed.json`
+**Output:** Auto-saved to D1 at `https://pintarweb-scraper.yusmarin.workers.dev/dashboard`
 
-**Lead data needed:**
-- Business name
-- Owner/contact name
-- Phone/WhatsApp number
-- Service areas
-- Google rating + review count
-- Existing website (if any)
+**Workflow (auto-hunt system — 2026-07-16):**
+1. Define profiles in `packages/scraper/hunt-profiles.json`
+2. `bash packages/scraper/scripts/auto-hunt.sh --all` → scrapes all profiles → posts directly to production D1
+3. Optional: `bash packages/scraper/scripts/auto-hunt.sh --install-cron` for weekday 6am auto-scrape
+4. Open dashboard → review leads → ⭐ star promising ones → filter "⭐ Selected"
+
+**Lead data stored in D1 (45 columns):**
+- Business name, phone (unique), address, category, maps URL
+- Website, WhatsApp, Facebook, Instagram, TikTok, email
+- Google rating, review count, photo count, GMB verification status
+- Lead score, pipeline stage, selected_for_pipeline flag
 
 ---
 
@@ -181,4 +185,4 @@ See: `docs/outreach/message-templates.md`
 
 ---
 
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-16

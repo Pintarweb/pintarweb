@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizePhone } from "../normalizePhone";
+import { normalizePhone } from "../normalizePhone.js";
 
 describe("normalizePhone", () => {
     it("should remove non-numeric characters", () => {

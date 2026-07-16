@@ -1,10 +1,13 @@
-import { scrapeGoogleMaps } from "./scrapers/googleMaps";
-import { scrapeFacebook } from "./scrapers/facebook";
-import { scrapeYellowPages } from "./scrapers/yellowPages";
-import { scrapeGMBDetail } from "./scrapers/gmbDetail";
+import { scrapeGoogleMaps } from "./scrapers/googleMaps.js";
+import { scrapeFacebook } from "./scrapers/facebook.js";
+import { scrapeYellowPages } from "./scrapers/yellowPages.js";
+import { scrapeGMBDetail } from "./scrapers/gmbDetail.js";
 import { v4 as uuidv4 } from "uuid";
 
-const WORKER_API_URL = "http://localhost:8787/api/leads";
+const WORKER_HOST = process.argv.includes("--remote")
+    ? "https://pintarweb-scraper.yusmarin.workers.dev"
+    : "http://localhost:8787";
+const WORKER_API_URL = WORKER_HOST + "/api/leads";
 
 /**
  * CLI Argument Parser Helper
@@ -19,7 +22,7 @@ function getArg(name: string, fallback: string): string {
  */
 async function logHunt(data: any) {
     try {
-        await fetch("http://localhost:8787/api/hunts", {
+        await fetch(WORKER_HOST + "/api/hunts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -49,6 +52,7 @@ async function runEngine() {
     console.log(`📡 MISSION: [${category}] @ [${location}] | Limit: ${maxPerSource}/source | Sources: ${sourcesStr}`);
 
     let totalNewCaptured = 0;
+    let totalExistingSkipped = 0;
     const allCaptured: any[] = [];
 
     // 2. Multi-Channel Intelligence Sweep
@@ -87,6 +91,7 @@ async function runEngine() {
                 lead.gmb_responds_to_reviews = gmbData.respondsToReviews ? 1 : 0;
                 lead.gmb_attributes = JSON.stringify(gmbData.attributes);
                 lead.gmb_listing_url = gmbData.listingUrl;
+                lead.business_hours = gmbData.businessHours ? JSON.stringify(gmbData.businessHours) : null;
             } catch (e) {
                 console.warn(`[GMB] Failed to scrape GMB for ${lead.business_name}:`, e);
             }
@@ -106,14 +111,19 @@ async function runEngine() {
             });
             if (res.ok) {
                 const data = await res.json() as any;
-                console.log(`✅ OK [Score: ${data.score} | DB Total: ${data.total}]`);
-                totalNewCaptured++;
+                if (data.action === 'created') {
+                    console.log(`✅ NEW [Score: ${data.score} | DB Total: ${data.total}]`);
+                    totalNewCaptured++;
+                } else {
+                    console.log(`⏭️ EXISTS [Score: ${data.score} | DB Total: ${data.total}]`);
+                    totalExistingSkipped++;
+                }
             } else {
                 const txt = await res.text();
                 console.log(`❌ FAILED (${res.status}): ${txt.substring(0, 50)}`);
             }
         } catch (e: any) {
-            console.log(`❌ SYNC ERROR: ${e.message} (Is 'npx wrangler dev' running on port 8787?)`);
+            console.log(`❌ SYNC ERROR: ${e.message} (Is 'npx wrangler dev' running on port 8787? Or use --remote for production API)`);
         }
     }
 
@@ -126,8 +136,9 @@ async function runEngine() {
         leads_found: allCaptured.length
     });
 
-    console.log(`\n🎯 Mission Success! Processed ${allCaptured.length} leads.`);
+    console.log(`\n🎯 Mission Success! ${totalNewCaptured} new + ${totalExistingSkipped} existing = ${allCaptured.length} total leads.`);
     console.log(`💡 Usage: npx tsx src/index.ts --category "Plumber" --location "KL" --limit 10 --sources "Maps,FB"`);
+    console.log(`   └─ Add --remote to send to production D1 (no wrangler dev needed)`);
 }
 
 runEngine().catch(console.error);

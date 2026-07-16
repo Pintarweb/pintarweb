@@ -1,25 +1,29 @@
-# Phase 2: CERMIN — Outreach Scripts (v4)
+# Phase 2: CERMIN — Outreach Scripts
 
-**Timing:** Weeks 5-8
-**Channel:** WhatsApp (017-4456243)
+**Timing:** weeks 5-8
+**Channel:** WhatsApp (+60196556243)
 **Pre-work:** Run lead audit + build demo site BEFORE outreach (build-first model)
-**v4 pricing:** RM 800 one-time (anchor) → RM 149/month subscription (pivot). 3-month advance (RM 447). Auto-renew monthly.
-**Aligned with:** `pintarweb-claude/docs/outreach-playbook.md`
+**Pricing:** RM297 setup + RM149 activation = RM446 total. Renewal starts month 3: RM149/month. No contract — opt-out anytime with 14 days notice.
+**Aligned with:** `docs/outreach/message-templates.md`
 
 ---
 
-## Anchor & Pivot Strategy
+## Pricing Model (Updated 2026-07-12)
 
-Every outreach conversation uses the same psychological pricing architecture:
+| Payment | When | What it covers |
+|---------|------|---------------|
+| RM297 | Day 0 (setup) | Build starts |
+| RM149 | Delivery day | Activation + Month 1 |
+| — | Bonus | Month 2 FREE |
+| RM149/month | Month 3 onward | Renewal |
 
-| Stage | What | Why |
-|-------|------|-----|
-| **Touch 1-2** | No price mention. Only customer data + demo link. | Build curiosity and value first. |
-| **Touch 3 / "How much?"** | "RM 800 one-time untuk website." | Sets anchor. RM 800 is real and buildable. |
-| **Pivot** | "Atau RM 149/bulan — website FREE, auto-reply + GMB + SEO included. 3 bulan advance (RM 447)." | RM 149 looks smart against RM 800. |
-| **Close** | "Satu job chemical wash (RM 180-350) dah cover sebulan." | Instant ROI proof. |
+**Total: RM446** covers setup + activation + 2 months. Renewal RM149/month starts month 3.
 
-The RM 800 anchor is NOT a fake price. If the prospect truly wants a one-time website, we build it. But the subscription is constructed to be obviously superior — same website, zero pay, ongoing support, plus automation tools.
+**Key selling points:**
+- Split payment (not all upfront)
+- 1 month FREE bonus
+- No contract — opt-out anytime
+- Instant ROI: " Satu job service (RM 150-300) dah cover sebulan"
 
 ---
 
@@ -127,18 +131,20 @@ Kalau tak, okay je. Takde hard feelings.
 ## Handling Replies
 
 ### "Berapa harga?"
-Never answer with a number immediately. Build value first. Use anchor + pivot.
+Never answer with a number immediately. Build value first. Then present pricing clearly.
 
 ```
-Bergantung sikit pada apa yang awak nak. Tapi sebelum tu —
-awak dah tengok demo tu? Sebab senang cerita —
+Bergantung pada apa yang awak nak. Tapi sebelum tu —
+awak dah tengok demo tu? Baru senang cerita.
 
-Option A: RM 800 one-time untuk website je.
-Option B: RM 149/bulan — website FREE, auto-reply WhatsApp
-tangkapp lead masa awak atas bumbung, Google Business diuruskan,
-SEO semua. 3 bulan advance (RM 447), lepas tu auto-renew.
+Dua pilihan:
 
-Satu job chemical wash RM 180-350 dah cover sebulan.
+1. RM 297 — fi setup. Saya bina website.
+2. RM 149 — activation + bulan pertama. Balance RM149
+   untuk activate + bulan pertama. Renewal RM149/bulan
+   bermula bulan ke-3.
+
+Satu job chemical wash RM 150-300 dah cover sebulan.
 Awak dah tengok demo ke belum?
 ```
 
@@ -159,24 +165,26 @@ tengok apa competitor awak nampak. Menarik.
 The "cuba Google sendiri" hook keeps them thinking.
 
 ### "Macam mana nak proceed?"
-Green light. Move fast. Use RM 800 anchor → RM 149 pivot.
+Green light. Move fast.
 
 ```
 Senang je. Dua pilihan:
 
-1. RM 800 one-time — website jadi milik awak.
-2. RM 149/bulan — 3 bulan advance (RM 447). Website FREE.
-   Auto-reply WhatsApp, Google Business, SEO semua included.
-   Lepas 3 bulan auto-renew monthly.
+1. RM 297 — fi setup. Saya bina website.
+2. RM 149 — activation + bulan pertama. Renewal RM149/bulan
+   bermula bulan ke-3. Tiada kontrak.
 
-Option 2 lebih ramai pilih sebab auto-reply WhatsApp je
-dah boleh cover balik modal — bila awak atas bumbung fix
-compressor, bot reply customer terus.
+Payment ke Maybank: 562021737846 (PintarWeb Enterprise)
 
-Nak proceed yang mana?
+Selepas payment, saya WhatsApp awak untuk collect:
+→ Logo bisnes (file atau link FB page)
+→ Gambar kerja sebenar
+→ Maklumat servis dan kawasan
+
+Website live dalam 4 minggu.
 ```
 
-Notice: Price mentioned only **after** they've initiated. RM 800 anchor makes RM 149 look smart.
+Notice: Price mentioned only **after** they've initiated.
 
 ### "Tak berminat"
 Never argue. Pivot to referral.
@@ -216,17 +224,15 @@ WhatsApp tangkap lead — customer baru punya inquiry
 tak miss. Kita handle semua — awak fokus buat kerja.
 ```
 
-**Step 5 — State price with anchor pivot**
+**Step 5 — State price clearly**
 ```
 Dua pilihan:
 
-RM 800 one-time — untuk website je.
-Atau RM 149/bulan — 3 bulan advance (RM 447). Website
-FREE, termasuk auto-reply WhatsApp, Google Business,
-SEO, hosting, domain, support. Lepas 3 bulan auto-renew.
+1. RM 297 — fi setup. Saya bina website.
+2. RM 149 — activation + bulan pertama. Renewal RM149/bulan
+   bermula bulan ke-3. Tiada kontrak.
 
-Satu job chemical wash RM 180-350 dah cover sebulan.
-Auto-reply bot sorang je boleh tangkap 3-5 lead sebulan.
+Satu job RM 150-300 dah cover sebulan.
 ```
 
 **Step 6 — Remove payment friction**
@@ -245,8 +251,7 @@ Auto-reply bot sorang je boleh tangkap 3-5 lead sebulan.
 - [ ] Send live URL
 - [ ] Update tracking sheet: status = closed-won
 - [ ] **Remind them:** "Awak dah nampak kat Google sekarang. Customer baru akan mula call. Auto-reply WhatsApp dah on — bila awak tak dapat jawab, bot reply."
-- [ ] Set reminder for monthly check-in + auto-renew billing date
-- [ ] Billplz auto-renew configured for monthly billing after 3-month advance
+- [ ] Set reminder for Month 3 renewal follow-up
 
 ---
 
@@ -259,9 +264,10 @@ Every rejection = potential referral source. Every client = best referral source
 **For closed clients — after live:**
 ```
 Terima kasih [Name]! Dah nampak kat Google dah.
-Kalau ada kawan contractor yang nak dapat lebih
-customer gak — refer je. Dapat 1 bulan free (RM 149)
-kalau dia jadi subscriber.
+Kalau ada kawan contractor yang nak website jugak —
+refer je. Details referral program saya kongsikan kemudian.
 ```
 
 Track referral sources in tracking sheet under source column.
+
+**[FUTURE] Referral incentive TBD** — pending decision on referral reward structure.

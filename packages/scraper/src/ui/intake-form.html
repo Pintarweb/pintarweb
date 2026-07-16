@@ -798,6 +798,21 @@ html { scroll-padding-top: 80px; }
       }
     };
 
+    /* Save intake data to D1 */
+    var apiPhone = config.whatsapp;
+    fetch('/api/leads/' + apiPhone + '/intake', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tagline: config.tagline,
+        niche: niche,
+        services: [],
+        testimonials: []
+      })
+    }).catch(function(e) {
+      console.warn('Failed to save intake to D1:', e);
+    });
+
     var instr = '';
 
     function showResult() {

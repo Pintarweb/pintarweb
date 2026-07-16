@@ -13,7 +13,6 @@ Replace these in every message:
 | `{business_name}` | Ah Seng Plumbing |
 | `{demo_url}` | https://preview.pintarweb.com/ah-seng-plumbing/?ref=outreach&prospect=xyz |
 | `{audit_url}` | https://preview.pintarweb.com/ah-seng-plumbing/audit.html?ref=outreach&prospect=xyz |
-| `{razorpay_link}` | https://buy.pintarweb.com/pay/xxx |
 
 ---
 
@@ -172,7 +171,7 @@ Selepas payment, saya akan WhatsApp semula untuk collect:
 
 Website akan live dalam 4 minggu selepas saya dapat semua info tu.
 
-Kenapa fi persediaan? Fi ni memastikan kedua-dua pihak komitmen serius. Saya allocate masa dan resource untuk bina website anda dengan全心全意. Balance RM149 adalah untuk bulan pertama operasi. Lepas 4 bulan, Renewal RM149/bulan (RM446 untuk 4 bulan, dapat 1 bulan percuma).
+Kenapa fi persediaan? Fi ni pastikan kedua-dua pihakcommitment serius. Saya allocate masa dan resource untuk bina website anda dengan sepenuhnya. Balance RM149 adalah untuk activation + bulan pertama. Renewal bermula bulan ke-3: RM149/bulan. Tiada kontrak — boleh berhenti bila-bila, notify 14 hari awal.
 
 Terma': https://pintarweb.com/terms.html
 Privasi: https://pintarweb.com/privacy-policy.html
@@ -198,7 +197,7 @@ After payment, I'll WhatsApp you to collect:
 
 Your website will be live within 4 weeks after I receive all the info.
 
-Why a setup fee? This fee ensures both sides are seriously committed. I allocate time and resources to build your website with full focus. The balance RM149 is for your first month of operation. After 4 months, renewal RM149/month (RM446 for 4 months, get 1 month FREE).
+Why a setup fee? This fee ensures both sides are seriously committed. The RM149 balance is for activation + first month. Renewal starts month 3: RM149/month. No contract — opt-out anytime with 14 days notice.
 
 Terms: https://pintarweb.com/terms.html
 Privacy: https://pintarweb.com/privacy-policy.html
@@ -237,4 +236,4 @@ Optional: Add to email nurture sequence (Phase 2).
 
 ---
 
-**Last Updated:** 2026-06-28
+**Last Updated:** 2026-07-12

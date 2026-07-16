@@ -44,3 +44,24 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
 }
+
+/* Pipeline Stage Dots */
+.stage-dot {
+    transition: all 0.3s ease;
+}
+
+.stage-line {
+    transition: background-color 0.3s ease;
+}
+
+/* Intake Panel */
+#intake-panel textarea,
+#intake-panel input[type="text"],
+#intake-panel select {
+    background: white;
+}
+
+#intake-panel input[type="radio"]:checked + div {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}

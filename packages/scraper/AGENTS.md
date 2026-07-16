@@ -98,3 +98,29 @@ Standalone form served at `/clients/intake-form.html`. Opened from dashboard mod
 
 - Only one test file exists: `src/utils/__tests__/normalizePhone.test.ts` (Vitest)
 - No lint/format scripts configured despite `eslint` and `prettier` being in devDependencies
+
+## Auto-Hunt (Daily Automation)
+
+**One-command automation:**
+```
+bash scripts/auto-hunt.sh             # Interactive menu
+bash scripts/auto-hunt.sh aircond-kl  # Run specific profile
+bash scripts/auto-hunt.sh --all       # Run ALL profiles
+```
+
+**Cron setup (one-time):**
+```
+bash scripts/auto-hunt.sh --install-cron
+```
+After this, auto-hunt runs weekdays at 6am. Leads land in D1 automatically. Open dashboard when ready.
+
+**Profiles:** Edit `hunt-profiles.json` to add/remove search criteria.
+
+**--remote flag:** Scraper POSTs directly to production worker URL (no `npx wrangler dev` needed). Used automatically by auto-hunt.sh. Manual: `npx tsx src/index.ts --category "Aircond" --location "KL" --limit 10 --sources "Maps,FB" --remote`
+
+## Lead Selection System
+
+New column: `selected_for_pipeline` (INTEGER DEFAULT 0) — manually tag leads you want to process:
+- Dashboard: ⭐ checkbox on each lead card → toggles via `PATCH /api/leads/:phone/select`
+- Filter: "⭐ Selected" shows only tagged leads
+- This creates a stockpile: scrape big batch → tag promising leads → process daily from your selected pool

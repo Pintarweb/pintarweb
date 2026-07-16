@@ -32,8 +32,12 @@ Target audience: Malaysian business owners in Selangor/KL. All bot communication
 
 - Worker: `workers/whatsapp-bot/src/index.ts`
 - Deployed: https://pintarweb-whatsapp-bot.yusmarin.workers.dev
-- WABA ID: 727271803683109 / Phone Number ID: 872026605987484
 - D1 DB: pintarweb-claude-db (1ca959be-b1bc-4b03-87df-8e4610659993)
+- **Multi-tenant (2026-07-12):** `resolveTenantContext()` resolves `phone_number_id` → `TenantContext`
+  - Tenant key: `client_id` UUID (`a1b2c3d4-e5f6-7890-abcd-ef1234567890` for PintarWeb)
+  - WABA config: `waba_accounts` table (maps phone_number_id → client_id)
+  - Features: `client_features` table (per-feature booleans, replaces tier logic)
+  - KB: `kb_knowledge` table (per-client, shared or per-department scope)
 
 ## LLM Architecture
 
@@ -62,7 +66,7 @@ Target audience: Malaysian business owners in Selangor/KL. All bot communication
 - **No conversation history fed to LLM** — prevents hallucination carryover
 - System prompt is config-based (business_name from D1 config), not D1 stored prompt
 
-## Intent Classification (22 intents, keyword-based)
+## Intent Classification (28 intents, keyword-based)
 
 GREETING, FAQ_PACKAGES, FAQ_SETUP_FEE, FAQ_SUBSCRIBE, FAQ_CONTRACT, FAQ_TIMELINE,
 FAQ_REQUIREMENTS, FAQ_SUPPORT, FAQ_OWNERSHIP, FAQ_UPDATE, FAQ_RENEWAL, FAQ_DOMAIN,
@@ -85,6 +89,39 @@ After user asks "Harga?" or sees pricing:
 
 Detection: System checks last assistant message for "Jawab dengan nombor" (pricing) or "Soalan lain"/"tolong dengan" (greeting).
 
+### Suggestion Flow (after every reply)
+After every bot reply (except suppressed intents), 2 numbered suggestions are appended:
+
+```
+1️⃣ [question 1]
+2️⃣ [question 2]
+(Taip apa-apa soalan sendiri)
+```
+
+No header line (e.g. "Ada apa-apa lagi yang nak tanya?" removed 2026-07-11 — was too repetitive).
+
+The suggestion block ends with `(Taip apa-apa soalan sendiri)` — **do not change** this exact text as it's used for suggestion-click detection regex.
+
+**Suppression rules:** No suggestions shown when:
+- Intents: CLOSING_READY, ESCALATE (sensitive flow)
+- Menus active: GREETING, PRICE_ENQUIRY, SUBSCRIBE (have own numbered menus)
+- Customer sends simple acknowledgement: "okay", "terima kasih", "thanks", "bye", etc.
+
+**Suggestion click routing:** If user taps "1" or "2" and last bot reply had suggestions:
+- Looks up the last assistant message to infer the previous intent
+- Maps via `SUGGESTION_MAP[inferredIntent].onSelect` to the next intent
+- Fallback: "1" → PRICE_ENQUIRY, "2" → FAQ_TIMELINE
+
+**Order of precedence for numeric "1"/"2" replies:**
+1. Pricing menu (if `Jawab dengan nombor` in last message)
+2. Greeting menu (if `Soalan lain`/`tolong dengan` in last message)
+3. Suggestion click (if suggestion block detected in last message)
+4. Normal classifyIntent flow
+
+**All suggestions are pre-defined (no LLM generation).** Zero hallucination risk. Defined in `SUGGESTION_MAP` in `src/index.ts`.
+
+**CRITICAL BUG FIX (2026-07-11):** `getConversationHistory()` used `ORDER BY ASC LIMIT N` — returned N oldest messages, not N most recent. Changed to `ORDER BY DESC + .reverse()` so limit=N returns N most recent in chronological order. Without this, suggestion click detection always looked at old messages, never found the suggestion block, and fell through to LLM.
+
 ## System Prompt Rules
 
 When editing the LLM system prompt:
@@ -102,10 +139,17 @@ When editing the LLM system prompt:
 ## FAQ Answers
 
 All 20 FAQ answers are hardcoded in `src/index.ts`. When adding/editing:
-- Keep answers short (1-3 sentences)
+- Keep answers to 1-2 short sentences max — WhatsApp is conversational, not brochure
+- No trailing questions that compete with suggestion block
 - Use Malaysian Malay only
 - No Indonesian words
 - Match the intent taxonomy
+
+## Contract (UPDATED 2026-07-11)
+
+- **NO contract binding** — customers can opt-out anytime
+- Only need 14 days notice
+- No penalties
 
 ## Pricing (RM446 everywhere)
 
@@ -120,10 +164,11 @@ All 20 FAQ answers are hardcoded in `src/index.ts`. When adding/editing:
 - Path A (Ready to Start): Bot sends Maybank details, owner notified
 - Path B (Need to Know More): Bot sends FAQ, owner follows up personally
 
-## Bot Number Transfer
+## Bot Number Transfer (Legacy)
 
-- Bot stays on PintarWeb test number until activation paid
-- On delivery: customer pays RM149 → owner transfers phone in Meta Developer Console
+- **DEPRECATED as of 2026-07-12.** Bot number transfer process is being replaced.
+- New process: Client procures their own WhatsApp Business number → PintarWeb configures bot on that number via `waba_accounts` table. See ADR-001.
+- Old process (kept for reference until fully deprecated): Bot stays on PintarWeb test number until activation paid. On delivery: customer pays RM149 → owner transfers phone in Meta Developer Console.
 
 ## Managing LLM Requests
 

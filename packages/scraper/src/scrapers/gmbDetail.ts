@@ -12,6 +12,7 @@ export interface GMBData {
     respondsToReviews: boolean;
     attributes: Record<string, string>;
     listingUrl: string;
+    businessHours: Record<string, string> | null;
 }
 
 function defaultGMBData(listingUrl: string): GMBData {
@@ -26,7 +27,8 @@ function defaultGMBData(listingUrl: string): GMBData {
         rating: "0",
         respondsToReviews: false,
         attributes: {},
-        listingUrl
+        listingUrl,
+        businessHours: null
     };
 }
 
@@ -72,7 +74,9 @@ export async function scrapeGMBDetail(
         data.verificationStatus = await extractVerificationStatus(page);
 
         // Extract basic info: hours, description, photos, reviews, rating
-        data.hasHours = await extractHours(page);
+        const hoursResult = await extractHours(page);
+        data.hasHours = hoursResult.hasHours;
+        data.businessHours = hoursResult.hoursData;
         data.hasDescription = await extractDescription(page);
         data.photoCount = await extractPhotoCount(page);
         data.reviewCount = await extractReviewCount(page);
@@ -132,18 +136,45 @@ async function extractVerificationStatus(page: any): Promise<"none" | "unverifie
     return "none";
 }
 
-async function extractHours(page: any): Promise<boolean> {
+async function extractHours(page: any): Promise<{ hasHours: boolean; hoursData: Record<string, string> | null }> {
     try {
         // Look for opening hours button or element
         const hoursBtn = await page.$('button[data-item-id="opening-hours"]');
+        if (hoursBtn) {
+            // Try to click and extract the hours data
+            await hoursBtn.click();
+            await page.waitForTimeout(1000);
+
+            // Extract hours data from the opened section
+            const hoursData: Record<string, string> = {};
+            const dayRows = await page.$$('tr');
+            for (const row of dayRows) {
+                const text = await row.innerText();
+                const parts = text.split('\t');
+                if (parts.length >= 2) {
+                    const day = parts[0].trim();
+                    const hours = parts[1].trim();
+                    if (day && hours && day !== hours) {
+                        hoursData[day] = hours;
+                    }
+                }
+            }
+
+            return {
+                hasHours: Object.keys(hoursData).length > 0,
+                hoursData: Object.keys(hoursData).length > 0 ? hoursData : null
+            };
+        }
+
+        // Fallback: look for hours text pattern
         const hoursSection = await page.$("text=/jam|hours|buka|tutup/i");
-        if (hoursBtn || hoursSection) {
-            return true;
+        if (hoursSection) {
+            return { hasHours: true, hoursData: null };
         }
     } catch (e) {
         // ignore
     }
-    return false;
+    return { hasHours: false, hoursData: null };
 }
 
 async function extractDescription(page: any): Promise<boolean> {
@@ -286,9 +317,9 @@ async function extractAttributes(page: any): Promise<Record<string, string>> {
 }
 
 // Optional Execution Block for testing when run directly
-if (require.main === module) {
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
     (async () => {
-        // Test with a sample Google Maps URL
         const testUrl = process.argv[2] || "https://www.google.com/maps/place/Example+Business";
         const result = await scrapeGMBDetail(testUrl);
         console.log("GMB Data:", JSON.stringify(result, null, 2));

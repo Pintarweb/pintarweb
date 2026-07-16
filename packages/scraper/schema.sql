@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS leads (
     services TEXT,
     testimonials TEXT,
     images_collected INTEGER DEFAULT 0,
+    selected_for_pipeline INTEGER DEFAULT 0,
     demo_built_at DATETIME,
     demo_url TEXT,
     audit_url TEXT,
