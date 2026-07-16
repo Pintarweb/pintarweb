@@ -1,0 +1,63 @@
+name: Hunt Rotation
+
+on:
+  schedule:
+    # Mon 6am MYT = Sun 22:00 UTC, Thu 6am MYT = Wed 22:00 UTC
+    - cron: "0 22 * * 0,3"
+  workflow_dispatch:
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Fetch rotation state
+        id: rotation
+        run: |
+          ROT=$(curl -sf https://pintarweb-scraper.yusmarin.workers.dev/api/rotation)
+          echo "current_index=$(echo $ROT | jq -r '.current_index')" >> $GITHUB_OUTPUT
+          echo "total=$(echo $ROT | jq -r '.total_profiles')" >> $GITHUB_OUTPUT
+          echo "name=$(echo $ROT | jq -r '.current_profile.name')" >> $GITHUB_OUTPUT
+          echo "label=$(echo $ROT | jq -r '.current_profile.label')" >> $GITHUB_OUTPUT
+          echo "category=$(echo $ROT | jq -r '.current_profile.category')" >> $GITHUB_OUTPUT
+          echo "location=$(echo $ROT | jq -r '.current_profile.location')" >> $GITHUB_OUTPUT
+          echo "limit=$(echo $ROT | jq -r '.current_profile.limit')" >> $GITHUB_OUTPUT
+          echo "sources=$(echo $ROT | jq -r '.current_profile.sources')" >> $GITHUB_OUTPUT
+
+      - name: Run hunt
+        if: steps.rotation.outputs.name != ''
+        run: |
+          cd packages/scraper
+          npx tsx src/index.ts \
+            --category "${{ steps.rotation.outputs.category }}" \
+            --location "${{ steps.rotation.outputs.location }}" \
+            --limit "${{ steps.rotation.outputs.limit }}" \
+            --sources "${{ steps.rotation.outputs.sources }}" \
+            --profile "${{ steps.rotation.outputs.name }}" \
+            --remote
+
+      - name: Advance rotation
+        if: steps.rotation.outputs.name != ''
+        run: |
+          RESULT=$(curl -sf -X POST https://pintarweb-scraper.yusmarin.workers.dev/api/rotation)
+          echo "Rotation advanced. Next index: $(echo $RESULT | jq -r '.current_index')"
+          echo "Next profile: $(echo $RESULT | jq -r '.next_profile.label // "none"')"
+
+      - name: No profiles configured
+        if: steps.rotation.outputs.name == ''
+        run: echo "⚠️  No enabled profiles found. Add profiles via Dashboard → Profiles tab."

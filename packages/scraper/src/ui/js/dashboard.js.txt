@@ -49,22 +49,33 @@ const MOODS = [
 ];
 
 function switchView(view) {
-    const leadsView = document.getElementById('leads-view');
-    const huntsView = document.getElementById('hunts-view');
-    const navLeads = document.getElementById('nav-leads');
-    const navHunts = document.getElementById('nav-hunts');
+    const lv = document.getElementById('leads-view');
+    const hv = document.getElementById('hunts-view');
+    const pv = document.getElementById('profiles-view');
+
+    [lv, hv, pv].forEach(v => {
+        if (!v) return;
+        v.style.display = 'none';
+        v.classList.remove('hidden');
+    });
+
+    ['nav-leads', 'nav-hunts', 'nav-profiles'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.className = "px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500";
+    });
 
     if (view === 'hunts') {
-        leadsView.classList.add('hidden');
-        huntsView.classList.remove('hidden');
-        navHunts.className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
-        navLeads.className = "px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500";
+        hv.style.display = '';
+        document.getElementById('nav-hunts').className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
         fetchHunts();
+    } else if (view === 'profiles') {
+        pv.style.display = '';
+        document.getElementById('nav-profiles').className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
+        fetchRotation();
+        fetchProfiles();
     } else {
-        leadsView.classList.remove('hidden');
-        huntsView.classList.add('hidden');
-        navLeads.className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
-        navHunts.className = "px-5 py-2 rounded-lg text-xs font-black transition-all text-slate-500";
+        lv.style.display = '';
+        document.getElementById('nav-leads').className = "px-5 py-2 rounded-lg text-xs font-black transition-all bg-slate-900 text-white shadow-sm";
     }
 }
 
@@ -1124,6 +1135,256 @@ async function fetchLeads() {
         const container = document.getElementById('leads-container');
         if (container) container.innerHTML = `<div class="text-center py-24 text-red-500 font-black">CRITICAL FAILURE: ${e.message}</div>`;
     }
+}
+
+// ── Profiles CRUD ────────────────────────────────────
+let allProfiles = [];
+
+async function fetchProfiles() {
+    try {
+        const res = await fetch('/api/profiles?t=' + Date.now());
+        if (!res.ok) throw new Error('Failed to fetch profiles: ' + res.status);
+        allProfiles = await res.json();
+        if (!Array.isArray(allProfiles)) allProfiles = [];
+        renderProfiles();
+    } catch (e) { console.error(e); }
+}
+
+function renderProfiles() {
+    const container = document.getElementById('profiles-container');
+    const countEl = document.getElementById('profile-count');
+    if (!container) return;
+    if (!allProfiles || allProfiles.length === 0) {
+        container.innerHTML = '<tr><td colspan="9" class="py-12 text-center text-slate-300 font-black uppercase tracking-widest">No profiles yet. Add your first one!</td></tr>';
+        if (countEl) countEl.innerText = '0 profiles';
+        return;
+    }
+    if (countEl) countEl.innerText = `${allProfiles.length} profile${allProfiles.length > 1 ? 's' : ''}`;
+
+    container.innerHTML = allProfiles.map((p, i) => {
+        const lastRun = p.last_run ? new Date(p.last_run + 'Z').toLocaleDateString() : '—';
+        return `
+        <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+            <td class="py-3 pr-2">
+                <div class="flex items-center gap-1">
+                    <button onclick="moveProfile(${p.sort_order}, -1)" title="Move up" class="text-slate-300 hover:text-slate-600 transition-colors ${i === 0 ? 'opacity-20 cursor-not-allowed' : ''}" ${i === 0 ? 'disabled' : ''}>↑</button>
+                    <button onclick="moveProfile(${p.sort_order}, 1)" title="Move down" class="text-slate-300 hover:text-slate-600 transition-colors ${i === allProfiles.length - 1 ? 'opacity-20 cursor-not-allowed' : ''}" ${i === allProfiles.length - 1 ? 'disabled' : ''}>↓</button>
+                    <span class="text-slate-400 font-bold text-xs ml-1">${p.sort_order}</span>
+                </div>
+            </td>
+            <td class="py-4 pr-4">
+                <p class="font-black text-slate-900 text-sm">${p.label || p.name}</p>
+                <p class="text-[10px] text-slate-400 font-mono">${p.name}</p>
+            </td>
+            <td class="py-4 pr-4"><span class="font-bold text-xs text-slate-700">${p.category}</span></td>
+            <td class="py-4 pr-4"><span class="font-bold text-xs text-slate-700">${p.location}</span></td>
+            <td class="py-4 pr-4 text-center"><span class="font-black text-sm text-slate-800">${p.limit}</span></td>
+            <td class="py-4 pr-4 text-center"><span class="text-[10px] font-black text-slate-500">${(p.sources || '').split(',').length}</span></td>
+            <td class="py-4 pr-4 text-center">
+                <button onclick="toggleProfile('${p.name}')" class="w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all ${p.enabled ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 text-slate-300'}">
+                    ${p.enabled ? '✓' : '✗'}
+                </button>
+            </td>
+            <td class="py-4 pr-4"><span class="text-xs text-slate-500">${lastRun}</span></td>
+            <td class="py-4 text-right">
+                <div class="flex items-center justify-end gap-2">
+                    <button onclick="showProfileHistory('${p.name}', '${p.label || p.name}')" class="text-[10px] font-black text-blue-600 hover:text-blue-800 uppercase tracking-widest">History</button>
+                    <button onclick="editProfile('${p.name}')" class="text-[10px] font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest">Edit</button>
+                    <button onclick="deleteProfile('${p.name}')" class="text-[10px] font-black text-red-400 hover:text-red-600 uppercase tracking-widest">Del</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+async function moveProfile(currentSort, direction) {
+    const newOrder = allProfiles.map((p, i) => p.name);
+    const idx = allProfiles.findIndex(p => p.sort_order === currentSort);
+    if (idx === -1) return;
+    const target = idx + direction;
+    if (target < 0 || target >= newOrder.length) return;
+    [newOrder[idx], newOrder[target]] = [newOrder[target], newOrder[idx]];
+    try {
+        await fetch('/api/profiles/reorder', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ names: newOrder })
+        });
+        await fetchProfiles();
+    } catch (e) { console.error(e); }
+}
+
+async function toggleProfile(name) {
+    const p = allProfiles.find(x => x.name === name);
+    if (!p) return;
+    try {
+        await fetch(`/api/profiles/${name}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ enabled: p.enabled ? 0 : 1 })
+        });
+        await fetchProfiles();
+        await fetchRotation();
+    } catch (e) { console.error(e); }
+}
+
+function showAddProfile() {
+    document.getElementById('profile-form-title').innerText = 'Add Profile';
+    document.getElementById('pf-id').value = '';
+    document.getElementById('pf-name').value = '';
+    document.getElementById('pf-name').disabled = false;
+    document.getElementById('pf-label').value = '';
+    document.getElementById('pf-category').value = '';
+    document.getElementById('pf-location').value = '';
+    document.getElementById('pf-limit').value = '50';
+    document.getElementById('pf-sources').value = 'Maps,FB';
+    document.getElementById('pf-enabled').checked = true;
+    document.getElementById('profile-form-modal').classList.remove('hidden');
+}
+
+function editProfile(name) {
+    const p = allProfiles.find(x => x.name === name);
+    if (!p) return;
+    document.getElementById('profile-form-title').innerText = 'Edit Profile';
+    document.getElementById('pf-id').value = name;
+    document.getElementById('pf-name').value = p.name;
+    document.getElementById('pf-name').disabled = true; // name is primary key
+    document.getElementById('pf-label').value = p.label || '';
+    document.getElementById('pf-category').value = p.category || '';
+    document.getElementById('pf-location').value = p.location || '';
+    document.getElementById('pf-limit').value = p.limit || 50;
+    document.getElementById('pf-sources').value = p.sources || 'Maps,FB';
+    document.getElementById('pf-enabled').checked = p.enabled === 1;
+    document.getElementById('profile-form-modal').classList.remove('hidden');
+}
+
+function closeProfileForm() {
+    document.getElementById('profile-form-modal').classList.add('hidden');
+}
+
+async function saveProfile(e) {
+    e.preventDefault();
+    const id = document.getElementById('pf-id').value;
+    const name = document.getElementById('pf-name').value;
+    const label = document.getElementById('pf-label').value;
+    const category = document.getElementById('pf-category').value;
+    const location = document.getElementById('pf-location').value;
+    const limit = parseInt(document.getElementById('pf-limit').value) || 50;
+    const sources = document.getElementById('pf-sources').value;
+    const enabled = document.getElementById('pf-enabled').checked ? 1 : 0;
+
+    const body = { name, label, category, location, limit, sources, enabled };
+
+    try {
+        if (id) {
+            await fetch(`/api/profiles/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+        } else {
+            await fetch('/api/profiles', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+        }
+        closeProfileForm();
+        await fetchProfiles();
+        await fetchRotation();
+    } catch (e) { console.error(e); alert('Failed to save profile: ' + e.message); }
+}
+
+async function deleteProfile(name) {
+    if (!confirm(`Delete profile "${name}"?`)) return;
+    try {
+        await fetch(`/api/profiles/${name}`, { method: 'DELETE' });
+        await fetchProfiles();
+        await fetchRotation();
+    } catch (e) { console.error(e); }
+}
+
+async function showProfileHistory(name, label) {
+    document.getElementById('history-title').innerText = 'Hunt History';
+    document.getElementById('history-subtitle').innerText = label;
+    const body = document.getElementById('history-body');
+    body.innerHTML = '<div class="text-center py-8 text-slate-300 font-black uppercase tracking-widest">Loading...</div>';
+    document.getElementById('profile-history-modal').classList.remove('hidden');
+
+    try {
+        const res = await fetch(`/api/profiles/${name}/history?t=${Date.now()}`);
+        const history = await res.json();
+        if (!Array.isArray(history) || history.length === 0) {
+            body.innerHTML = '<div class="text-center py-8 text-slate-300 font-black uppercase tracking-widest">No hunt history yet</div>';
+            return;
+        }
+        body.innerHTML = `
+            <div class="space-y-3">
+                ${history.map(h => `
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-black text-sm text-slate-800">${h.category} — ${h.location}</p>
+                                <p class="text-[10px] text-slate-400">${h.sources} · ${h.leads_found} leads</p>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-mono">${new Date(h.created_at + 'Z').toLocaleString()}</span>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>`;
+    } catch (e) {
+        body.innerHTML = '<div class="text-center py-8 text-red-500 font-black">Failed to load history</div>';
+    }
+}
+
+function closeHistoryModal() {
+    document.getElementById('profile-history-modal').classList.add('hidden');
+}
+
+// ── Rotation ─────────────────────────────────────────
+async function fetchRotation() {
+    const display = document.getElementById('rotation-display');
+    if (!display) return;
+    try {
+        const res = await fetch('/api/rotation?t=' + Date.now());
+        if (!res.ok) throw new Error('Failed to fetch rotation: ' + res.status);
+        const rot = await res.json();
+        const idx = rot.current_index || 0;
+        const total = rot.total_profiles || 0;
+        const profile = rot.current_profile;
+
+        if (total === 0 || !profile) {
+            display.innerHTML = '<span class="text-slate-400">⚠️ No enabled profiles. Add profiles and enable them first.</span>';
+            return;
+        }
+
+        display.innerHTML = `
+            <div class="flex items-center gap-4 flex-wrap">
+                <span class="text-2xl font-black text-white">${profile.label || profile.name}</span>
+                <span class="px-3 py-1 bg-blue-600 text-white rounded-lg text-xs font-black">Index ${idx + 1} / ${total}</span>
+                <span class="text-sm text-slate-400">${profile.category} — ${profile.location}</span>
+            </div>
+            <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
+                <span class="font-mono">${profile.limit} leads</span>
+                <span class="opacity-50">·</span>
+                <span class="font-mono">${profile.sources}</span>
+                <span class="opacity-50">·</span>
+                <span class="${profile.enabled ? 'text-emerald-400' : 'text-red-400'}">${profile.enabled ? 'Enabled' : 'Disabled'}</span>
+            </div>
+        `;
+    } catch (e) {
+        display.innerHTML = '<span class="text-red-400">Failed to load rotation state</span>';
+        console.error(e);
+    }
+}
+
+async function resetRotation() {
+    if (!confirm('Reset rotation to index 0?')) return;
+    try {
+        await fetch('/api/rotation/reset', { method: 'PUT' });
+        await fetchRotation();
+        await fetchProfiles();
+    } catch (e) { console.error(e); }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -128,7 +128,9 @@ async function runEngine() {
     }
 
     // 4. Update the Campaign Vault
+    const profileName = getArg("--profile", "");
     await logHunt({
+        profile_name: profileName || undefined,
         category,
         location,
         sources: sourcesStr,

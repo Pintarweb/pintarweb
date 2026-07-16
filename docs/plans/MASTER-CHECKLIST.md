@@ -619,7 +619,7 @@ Seeded niches:
 
 ---
 
-**Last Updated:** 2026-07-16
+**Last Updated:** 2026-07-17
 **Owner:** Yusmarin
 **Status:** Phase 1 COMPLETE ✅ — Phase 2 COMPLETE ✅ — Phase 3 IN PROGRESS: WhatsApp bot deployed (DeepSeek + 22-intent classifier), Razorpay live, domain migrated, Umami tracking, GMB integration COMPLETE ✅
 
@@ -630,6 +630,7 @@ Seeded niches:
 - [x] **Guardrail:** `upsertLead()` returns `{action: 'created' | 'updated'}`, POST response includes `action`, scraper logs "X new + Y existing = Z total"
 - [x] **D1 production migration:** 15-col → 44+ col schema + `hunt_logs` table (live 2026-07-16)
 - [x] **Daily workflow:** No terminal needed (cron handles scraping) → open dashboard → star leads → process from "⭐ Selected" pool
+- [x] **Bug fix (2026-07-17):** Profiles/Command Center tabs blank — missing `</div>` in `PipelineView.html` (29 opens vs 28 closes). The `<div id="leads-view">` swallowed subsequent views as children via HTML5 auto-close. When Pipeline was hidden, everything was hidden.
 
 ---
 

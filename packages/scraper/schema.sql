@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS leads (
 
 CREATE TABLE IF NOT EXISTS hunt_logs (
     id TEXT PRIMARY KEY,
+    profile_name TEXT,
     category TEXT,
     location TEXT,
     sources TEXT,
@@ -61,3 +62,25 @@ CREATE TABLE IF NOT EXISTS hunt_logs (
     leads_found INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS hunt_profiles (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
+    label TEXT NOT NULL,
+    category TEXT NOT NULL,
+    location TEXT NOT NULL,
+    `limit` INTEGER DEFAULT 50,
+    sources TEXT DEFAULT 'Maps,FB',
+    sort_order INTEGER DEFAULT 0,
+    enabled INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS rotation_state (
+    id INTEGER PRIMARY KEY DEFAULT 1,
+    current_index INTEGER DEFAULT 0,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT OR IGNORE INTO rotation_state (id, current_index) VALUES (1, 0);

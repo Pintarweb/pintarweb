@@ -3,6 +3,7 @@ import Header from "../ui/components/Header.html";
 import PipelineView from "../ui/components/PipelineView.html";
 import CommandCenter from "../ui/components/CommandCenter.html";
 import ScorecardModal from "../ui/components/ScorecardModal.html";
+import ProfilesView from "../ui/components/ProfilesView.html";
 import dashboardCss from "../ui/css/dashboard.css.txt";
 import dashboardJs from "../ui/js/dashboard.js.txt";
 import intakeFormHtml from "../ui/intake-form.html";
@@ -221,12 +222,16 @@ export default {
                 .replace("/* CSS_PLACEHOLDER */", () => dashboardCss as string)
                 .replace("<!-- HEADER_COMPONENT -->", () => Header as string)
                 .replace("<!-- PIPELINE_VIEW_COMPONENT -->", () => PipelineView as string)
+                .replace("<!-- PROFILES_VIEW_COMPONENT -->", () => ProfilesView as string)
                 .replace("<!-- COMMAND_CENTER_COMPONENT -->", () => CommandCenter as string)
                 .replace("<!-- SCORECARD_MODAL_COMPONENT -->", () => ScorecardModal as string)
                 .replace("/* JS_PLACEHOLDER */", () => dashboardJs as string);
 
             return new Response(html, {
-                headers: { "Content-Type": "text/html" }
+                headers: {
+                    "Content-Type": "text/html",
+                    "Cache-Control": "no-cache, no-store, must-revalidate"
+                }
             });
         }
 
@@ -347,11 +352,203 @@ export default {
             try {
                 const hunt = await request.json() as any;
                 await env.pintarweb_scraper_db.prepare(
-                    `INSERT INTO hunt_logs (id, category, location, sources, max_leads, leads_found) 
-                     VALUES (?, ?, ?, ?, ?, ?)`
-                ).bind(hunt.id, hunt.category, hunt.location, hunt.sources, hunt.max_leads, hunt.leads_found).run();
+                    `INSERT INTO hunt_logs (id, profile_name, category, location, sources, max_leads, leads_found) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?)`
+                ).bind(hunt.id, hunt.profile_name || null, hunt.category, hunt.location, hunt.sources, hunt.max_leads, hunt.leads_found).run();
 
                 return new Response(JSON.stringify({ success: true }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // ── Profile Management ─────────────────────────────────
+
+        // POST /api/profiles/seed — import profiles from JSON array
+        if (url.pathname === "/api/profiles/seed" && request.method === "POST") {
+            try {
+                const profiles = await request.json() as any[];
+                let count = 0;
+                for (const p of profiles) {
+                    const id = p.id || p.name.replace(/[^a-z0-9-]/gi, '-').toLowerCase();
+                    await env.pintarweb_scraper_db.prepare(
+                        `INSERT OR REPLACE INTO hunt_profiles (id, name, label, category, location, "limit", sources, sort_order, enabled)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                    ).bind(id, p.name, p.label || p.name, p.category, p.location, p.limit || 50, p.sources || 'Maps,FB', count, 1).run();
+                    count++;
+                }
+                return new Response(JSON.stringify({ success: true, count }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // GET /api/profiles — list all profiles with last-run info
+        if (url.pathname === "/api/profiles" && request.method === "GET") {
+            try {
+                const { results } = await env.pintarweb_scraper_db.prepare(
+                    `SELECT p.*, 
+                        (SELECT created_at FROM hunt_logs WHERE profile_name = p.name ORDER BY created_at DESC LIMIT 1) as last_run,
+                        (SELECT leads_found FROM hunt_logs WHERE profile_name = p.name ORDER BY created_at DESC LIMIT 1) as last_leads
+                     FROM hunt_profiles p ORDER BY p.sort_order ASC`
+                ).all();
+                return new Response(JSON.stringify(results), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // POST /api/profiles — create new profile
+        if (url.pathname === "/api/profiles" && request.method === "POST") {
+            try {
+                const p = await request.json() as any;
+                const id = p.id || crypto.randomUUID();
+                // get max sort_order
+                const maxRow: any = await env.pintarweb_scraper_db.prepare(`SELECT COALESCE(MAX(sort_order), -1) + 1 as next FROM hunt_profiles`).first();
+                const sortOrder = maxRow?.next || 0;
+                await env.pintarweb_scraper_db.prepare(
+                    `INSERT INTO hunt_profiles (id, name, label, category, location, "limit", sources, sort_order, enabled)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                ).bind(id, p.name, p.label || p.name, p.category, p.location, p.limit || 50, p.sources || 'Maps,FB', sortOrder, p.enabled !== undefined ? (p.enabled ? 1 : 0) : 1).run();
+                return new Response(JSON.stringify({ success: true, id }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // PUT /api/profiles/reorder — bulk reorder
+        if (url.pathname === "/api/profiles/reorder" && request.method === "PUT") {
+            try {
+                const { names } = await request.json() as { names: string[] };
+                for (let i = 0; i < names.length; i++) {
+                    await env.pintarweb_scraper_db.prepare(
+                        `UPDATE hunt_profiles SET sort_order = ?, updated_at = CURRENT_TIMESTAMP WHERE name = ?`
+                    ).bind(i, names[i]).run();
+                }
+                return new Response(JSON.stringify({ success: true }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // PUT /api/profiles/:id — update profile
+        if (url.pathname.match(/^\/api\/profiles\/[^\/]+$/) && request.method === "PUT") {
+            try {
+                const id = url.pathname.split("/")[3];
+                if (id === 'reorder' || id === 'seed') { return new Response('Not found', { status: 404 }); }
+                const p = await request.json() as any;
+                // Only update fields that are provided (partial update support)
+                const existing: any = await env.pintarweb_scraper_db.prepare(`SELECT * FROM hunt_profiles WHERE name = ?`).bind(id).first();
+                if (!existing) return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
+                const label = p.label !== undefined ? p.label : existing.label;
+                const category = p.category !== undefined ? p.category : existing.category;
+                const location = p.location !== undefined ? p.location : existing.location;
+                const lim = p.limit !== undefined ? p.limit : existing.limit;
+                const sources = p.sources !== undefined ? p.sources : existing.sources;
+                const enabled = p.enabled !== undefined ? (p.enabled ? 1 : 0) : existing.enabled;
+                await env.pintarweb_scraper_db.prepare(
+                    `UPDATE hunt_profiles SET label = ?, category = ?, location = ?, "limit" = ?, sources = ?, enabled = ?, updated_at = CURRENT_TIMESTAMP WHERE name = ?`
+                ).bind(label, category, location, lim, sources, enabled, id).run();
+                return new Response(JSON.stringify({ success: true }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // DELETE /api/profiles/:id — delete profile
+        if (url.pathname.match(/^\/api\/profiles\/[^\/]+$/) && request.method === "DELETE") {
+            try {
+                const id = url.pathname.split("/")[3];
+                await env.pintarweb_scraper_db.prepare(`DELETE FROM hunt_profiles WHERE name = ?`).bind(id).run();
+                return new Response(JSON.stringify({ success: true }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // GET /api/profiles/:id/history — get hunt history for a profile
+        if (url.pathname.match(/^\/api\/profiles\/[^\/]+\/history$/) && request.method === "GET") {
+            try {
+                const name = url.pathname.split("/")[3];
+                const { results } = await env.pintarweb_scraper_db.prepare(
+                    `SELECT * FROM hunt_logs WHERE profile_name = ? ORDER BY created_at DESC LIMIT 20`
+                ).bind(name).all();
+                return new Response(JSON.stringify(results), { headers: { "Content-Type": "application/json" } });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // ── Rotation Management ───────────────────────────────
+
+        // GET /api/rotation — get current rotation state + profile info
+        if (url.pathname === "/api/rotation" && request.method === "GET") {
+            try {
+                const stateRow: any = await env.pintarweb_scraper_db.prepare(`SELECT current_index FROM rotation_state WHERE id = 1`).first();
+                const currentIndex = stateRow?.current_index || 0;
+                const { results: allProfiles } = await env.pintarweb_scraper_db.prepare(
+                    `SELECT * FROM hunt_profiles WHERE enabled = 1 ORDER BY sort_order ASC`
+                ).all();
+                const total = allProfiles.length;
+                const safeIndex = total > 0 ? currentIndex % total : 0;
+                const currentProfile = total > 0 ? allProfiles[safeIndex] : null;
+                const nextIndex = total > 0 ? (safeIndex + 1) % total : 0;
+                const nextProfile = total > 0 ? allProfiles[nextIndex] : null;
+
+                return new Response(JSON.stringify({
+                    current_index: safeIndex,
+                    total_profiles: total,
+                    current_profile: currentProfile,
+                    next_profile: nextProfile
+                }), { headers: { "Content-Type": "application/json" } });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // POST /api/rotation — advance rotation by 1, return next profile
+        if (url.pathname === "/api/rotation" && request.method === "POST") {
+            try {
+                const stateRow: any = await env.pintarweb_scraper_db.prepare(`SELECT current_index FROM rotation_state WHERE id = 1`).first();
+                const { results: allProfiles } = await env.pintarweb_scraper_db.prepare(
+                    `SELECT * FROM hunt_profiles WHERE enabled = 1 ORDER BY sort_order ASC`
+                ).all();
+                const total = allProfiles.length;
+                const currentIndex = stateRow?.current_index || 0;
+                const nextIndex = total > 0 ? (currentIndex + 1) % total : 0;
+                await env.pintarweb_scraper_db.prepare(`UPDATE rotation_state SET current_index = ?, updated_at = CURRENT_TIMESTAMP WHERE id = 1`).bind(nextIndex).run();
+                const nextProfile = total > 0 ? allProfiles[nextIndex] : null;
+
+                return new Response(JSON.stringify({
+                    success: true,
+                    current_index: nextIndex,
+                    total_profiles: total,
+                    next_profile: nextProfile
+                }), { headers: { "Content-Type": "application/json" } });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // PUT /api/rotation/reset — reset rotation to 0
+        if (url.pathname === "/api/rotation/reset" && request.method === "PUT") {
+            try {
+                await env.pintarweb_scraper_db.prepare(`UPDATE rotation_state SET current_index = 0, updated_at = CURRENT_TIMESTAMP WHERE id = 1`).run();
+                return new Response(JSON.stringify({ success: true, current_index: 0 }), {
                     headers: { "Content-Type": "application/json" }
                 });
             } catch (e: any) {
