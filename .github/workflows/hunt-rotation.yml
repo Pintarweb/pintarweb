@@ -22,6 +22,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
+        working-directory: packages/scraper
         run: npx playwright install chromium
 
       - name: Fetch rotation state
