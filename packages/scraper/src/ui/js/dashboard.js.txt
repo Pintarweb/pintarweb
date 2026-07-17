@@ -813,13 +813,12 @@ function openIntakePanel(phone) {
 
 function openAddLeadModal() {
     const catSelect = document.getElementById('add-lead-category');
-    const currentVal = catSelect.value;
     const cats = [...new Set(allLeads.filter(l => l.category && l.category !== 'null').map(l => l.category))].sort();
     catSelect.innerHTML = '<option value="">Select category...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
-    if (currentVal) catSelect.value = currentVal;
 
     document.getElementById('add-lead-name').value = '';
     document.getElementById('add-lead-phone').value = '';
+    document.getElementById('add-lead-category').value = '';
     document.getElementById('add-lead-website').value = '';
     document.getElementById('add-lead-address').value = '';
 
@@ -831,6 +830,11 @@ function closeAddLeadModal() {
 }
 
 async function submitManualLead() {
+    const btn = document.querySelector('#add-lead-panel .bg-blue-600');
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.innerText = 'Adding...';
+
     const name = document.getElementById('add-lead-name').value.trim();
     const phone = document.getElementById('add-lead-phone').value.trim();
     const category = document.getElementById('add-lead-category').value;
@@ -838,12 +842,16 @@ async function submitManualLead() {
     const address = document.getElementById('add-lead-address').value.trim() || null;
 
     if (!name || !phone || !category) {
+        btn.disabled = false;
+        btn.innerText = 'Add Lead';
         alert('Please fill in all required fields (Business Name, Phone, Category).');
         return;
     }
 
     const digitsOnly = phone.replace(/[^0-9+]/g, '');
     if (digitsOnly.length < 8) {
+        btn.disabled = false;
+        btn.innerText = 'Add Lead';
         alert('Please enter a valid phone number.');
         return;
     }
@@ -864,9 +872,13 @@ async function submitManualLead() {
             const err = await res.json();
             throw new Error(err.error || 'Failed to create lead');
         }
+        btn.disabled = false;
+        btn.innerText = 'Add Lead';
         closeAddLeadModal();
         fetchLeads();
     } catch (e) {
+        btn.disabled = false;
+        btn.innerText = 'Add Lead';
         alert('Error: ' + e.message);
     }
 }

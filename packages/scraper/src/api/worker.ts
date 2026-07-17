@@ -7,6 +7,8 @@ import ProfilesView from "../ui/components/ProfilesView.html";
 import dashboardCss from "../ui/css/dashboard.css.txt";
 import dashboardJs from "../ui/js/dashboard.js.txt";
 import intakeFormHtml from "../ui/intake-form.html";
+import { v4 as uuidv4 } from "uuid";
+import { normalizePhone } from "../utils/normalizePhone.js";
 import { upsertLead } from "../db/upsertLead.js";
 import { performTechnicalAudit, applyAuditScores } from "../workers/technicalAudit.js";
 import { detectAiPainPoints, applyAiPainPoint } from "../workers/aiQualification.js";
@@ -85,6 +87,60 @@ export default {
             } catch (e: any) {
                 const msg = e.message?.includes("D1_ERROR") ? "Database error — check column count matches" : e.message;
                 return new Response(JSON.stringify({ error: msg }), { status: 500 });
+            }
+        }
+
+        // POST /api/leads/manual — Manual lead insertion (bypasses upsert score filter + background audits)
+        if (url.pathname === "/api/leads/manual" && request.method === "POST") {
+            try {
+                const body = await request.json() as any;
+
+                if (!body.business_name || !body.phone || !body.category) {
+                    return new Response(JSON.stringify({ error: "business_name, phone, and category are required" }), { status: 400 });
+                }
+
+                const phoneNormalized = normalizePhone(body.phone);
+
+                if (!phoneNormalized) {
+                    return new Response(JSON.stringify({ error: "Invalid phone number" }), { status: 400 });
+                }
+
+                // Check for duplicate
+                const existing = await env.pintarweb_scraper_db.prepare(
+                    `SELECT phone_normalized FROM leads WHERE phone_normalized = ?`
+                ).bind(phoneNormalized).first();
+
+                if (existing) {
+                    return new Response(JSON.stringify({ error: "Lead with this phone number already exists" }), { status: 409 });
+                }
+
+                const id = uuidv4();
+                const whatsappLink = `https://wa.me/${phoneNormalized}`;
+
+                await env.pintarweb_scraper_db.prepare(`
+                    INSERT INTO leads (
+                        id, phone_normalized, business_name, source_origin, website_url,
+                        whatsapp_link, lead_score, address, category, status, pipeline_stage
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                `).bind(
+                    id,
+                    phoneNormalized,
+                    body.business_name,
+                    "Manual",
+                    body.website_url || null,
+                    whatsappLink,
+                    1,
+                    body.address || null,
+                    body.category,
+                    "New",
+                    "new"
+                ).run();
+
+                return new Response(JSON.stringify({ success: true, id, phone_normalized: phoneNormalized }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
             }
         }
 
