@@ -42,11 +42,16 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<{action: 
         ).bind(lead.phone_normalized).first();
 
         if (!existingResult) {
-            // IF NEW: Create a new record
-            console.log(`[Upsert] creating NEW lead for: ${lead.business_name}`);
-
             // Base score is 1. If no website, add +3 bonus (Total 4).
             const newScore = (!lead.website_url || lead.website_url === 'null') ? 4 : 1;
+
+            if (newScore <= 3) {
+                console.log(`[Skip] Lead "${lead.business_name}" score ${newScore} ≤ 3 — not capturing`);
+                return { action: 'updated' as const };
+            }
+
+            // IF NEW: Create a new record
+            console.log(`[Upsert] creating NEW lead for: ${lead.business_name}`);
 
             // Collect the initial source link
             const initialLink = lead.maps_url || lead.source_url || null;
@@ -144,6 +149,11 @@ export async function upsertLead(db: any, lead: ExpectedLead): Promise<{action: 
                 : existingRecord.business_name;
 
             const newScore = existingRecord.lead_score + scoreIncrement;
+
+            if (newScore <= 3) {
+                console.log(`[Skip] Existing lead "${existingRecord.business_name}" score ${newScore} ≤ 3 — not capturing`);
+                return { action: 'updated' as const };
+            }
 
             const updateQuery = `
         UPDATE leads 
