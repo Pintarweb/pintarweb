@@ -811,6 +811,66 @@ function openIntakePanel(phone) {
     document.getElementById('intake-panel').classList.remove('hidden');
 }
 
+function openAddLeadModal() {
+    const catSelect = document.getElementById('add-lead-category');
+    const currentVal = catSelect.value;
+    const cats = [...new Set(allLeads.filter(l => l.category && l.category !== 'null').map(l => l.category))].sort();
+    catSelect.innerHTML = '<option value="">Select category...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    if (currentVal) catSelect.value = currentVal;
+
+    document.getElementById('add-lead-name').value = '';
+    document.getElementById('add-lead-phone').value = '';
+    document.getElementById('add-lead-website').value = '';
+    document.getElementById('add-lead-address').value = '';
+
+    document.getElementById('add-lead-panel').classList.remove('hidden');
+}
+
+function closeAddLeadModal() {
+    document.getElementById('add-lead-panel').classList.add('hidden');
+}
+
+async function submitManualLead() {
+    const name = document.getElementById('add-lead-name').value.trim();
+    const phone = document.getElementById('add-lead-phone').value.trim();
+    const category = document.getElementById('add-lead-category').value;
+    const website = document.getElementById('add-lead-website').value.trim() || null;
+    const address = document.getElementById('add-lead-address').value.trim() || null;
+
+    if (!name || !phone || !category) {
+        alert('Please fill in all required fields (Business Name, Phone, Category).');
+        return;
+    }
+
+    const digitsOnly = phone.replace(/[^0-9+]/g, '');
+    if (digitsOnly.length < 8) {
+        alert('Please enter a valid phone number.');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/leads/manual', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                business_name: name,
+                phone: digitsOnly,
+                category,
+                website_url: website,
+                address
+            })
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Failed to create lead');
+        }
+        closeAddLeadModal();
+        fetchLeads();
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
+}
+
 function closeIntakePanel() {
     document.getElementById('intake-panel').classList.add('hidden');
 }
