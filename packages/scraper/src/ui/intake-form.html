@@ -109,83 +109,76 @@ html { scroll-padding-top: 80px; }
   margin-top: 4px;
 }
 
-/* Multi-select area grid */
-.area-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+/* Area dropdown rows */
+.area-row {
+  display: flex;
+  align-items: center;
   gap: 8px;
+  margin-bottom: 8px;
 }
 
-.area-grid label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+.area-row select {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 36px 12px 14px;
   border: 1.5px solid #d4d4d4;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231B4332' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 14px center;
+  font-size: 15px;
+  font-family: inherit;
   color: #1a1a1a;
-  background: #fff;
-  transition: all 0.15s;
-  user-select: none;
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
 }
 
-.area-grid label:hover {
-  border-color: #1B4332;
-  background: #f0f7f4;
-}
+.area-row select:focus { border-color: #1B4332; }
 
-.area-grid label.selected {
-  border-color: #1B4332;
-  background: #1B4332;
-  color: #fff;
-}
+.area-row select:disabled { opacity: 0.5; }
 
-.area-grid label input[type="checkbox"] {
-  width: auto;
-  min-height: auto;
-  padding: 0;
-  accent-color: #1B4332;
-}
-
-.area-grid label.selected input[type="checkbox"] {
-  accent-color: #fff;
-}
-
-.area-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-height: 32px;
-}
-
-.area-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  background: #1B4332;
-  color: #fff;
-  border-radius: 20px;
-  font-size: 12px;
+.area-row .area-label {
+  font-size: 13px;
   font-weight: 600;
+  color: #1B4332;
+  white-space: nowrap;
+  min-width: 56px;
 }
 
-.area-tag button {
-  background: none;
-  border: none;
-  color: #fff;
+.area-row .btn-remove-area {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #dc2626;
+  background: #fff;
+  color: #dc2626;
+  font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 14px;
-  line-height: 1;
-  padding: 0;
-  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
 }
 
-.area-tag button:hover {
-  opacity: 1;
+.area-row .btn-remove-area:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn-add-area {
+  padding: 10px 20px;
+  border: 1.5px dashed #1B4332;
+  background: transparent;
+  color: #1B4332;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+
+.btn-add-area:hover {
+  background: #f0f7f4;
+  border-style: solid;
 }
 
 /* Image preview area */
@@ -360,6 +353,42 @@ html { scroll-padding-top: 80px; }
   opacity: 1;
 }
 
+/* Draft indicator */
+.draft-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: #fef3c7;
+  border: 1.5px solid #f59e0b;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #92400e;
+}
+.draft-bar.visible { display: flex; }
+.draft-bar .draft-info { display: flex; align-items: center; gap: 6px; }
+.draft-bar .draft-dot {
+  width: 8px; height: 8px;
+  background: #f59e0b;
+  border-radius: 50%;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.draft-bar .btn-clear-draft {
+  background: none;
+  border: none;
+  color: #92400e;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 2px 6px;
+}
+.draft-bar .btn-clear-draft:hover { color: #dc2626; }
+
 /* Section heading */
 .section-heading {
   font-size: 15px;
@@ -403,10 +432,10 @@ html { scroll-padding-top: 80px; }
 
     <div class="card">
       <label>Service Area <span class="required">*</span></label>
-      <div id="area-grid" class="area-grid mb-3"></div>
-      <div id="area-selected" class="area-tags mb-2"></div>
+      <div id="area-rows"></div>
       <input type="hidden" id="area-input" name="area">
-      <div class="hint">Select all areas you serve</div>
+      <button type="button" class="btn-add-area" id="btnAddArea">+ Add Area</button>
+      <div class="hint">Pilih kawasan perkhidmatan — minimum satu kawasan</div>
     </div>
 
     <div class="card">
@@ -492,6 +521,15 @@ html { scroll-padding-top: 80px; }
       <div class="preview-area" id="gallery_preview"></div>
     </div>
 
+    <!-- Draft indicator -->
+    <div class="draft-bar" id="draftBar">
+      <span class="draft-info">
+        <span class="draft-dot"></span>
+        <span>Draf disimpan — <span id="draftTime"></span></span>
+      </span>
+      <button type="button" class="btn-clear-draft" id="btnClearDraft">Padam Draf</button>
+    </div>
+
     <!-- Submit -->
     <button type="submit" class="btn-submit">Hasilkan Config</button>
   </form>
@@ -529,13 +567,7 @@ html { scroll-padding-top: 80px; }
   var currentConfig = null;
   var currentId = null;
 
-  var AREAS = [
-    'Kuala Lumpur', 'Petaling Jaya', 'Shah Alam', 'Klang', 'Subang Jaya',
-    'Cheras', 'Puchong', 'Ampang', 'Kajang', 'Setapak', 'Wangsa Maju',
-    'Gombak', 'Bangsar', 'Mont Kiara', 'TTDI', 'Penang', 'Johor Bahru', 'Melaka'
-  ];
-
-  var selectedAreas = [];
+  var areaList = [];
 
   function showToast(msg) {
     toast.textContent = msg;
@@ -575,70 +607,217 @@ html { scroll-padding-top: 80px; }
     }
     if (maps) document.getElementById('google_maps_url').value = maps;
     if (website) document.getElementById('existing_website').value = website;
-    if (fb) document.getElementById('facebook_url').value = 'https://www.facebook.com/' + fb;
+    if (fb) document.getElementById('facebook_url').value = fb.startsWith('http') ? fb : 'https://www.facebook.com/' + fb;
     if (ig) document.getElementById('instagram').value = ig.replace(/^@/, '');
     if (tt) document.getElementById('tiktok_handle').value = tt.replace(/^@/, '');
     if (email) document.getElementById('email').value = email;
     if (id) sessionStorage.setItem('intake_lead_id', id);
   }
 
-  function initAreaGrid() {
-    var grid = document.getElementById('area-grid');
-    var tagsContainer = document.getElementById('area-selected');
-    var hiddenInput = document.getElementById('area-input');
-
-    var areaParam = new URLSearchParams(window.location.search).get('area') || '';
-    if (areaParam) {
-      var normalized = areaParam.toLowerCase().trim();
-      var matched = AREAS.filter(function (a) {
-        return a.toLowerCase() === normalized ||
-               normalized.includes(a.toLowerCase()) ||
-               a.toLowerCase().includes(normalized);
+  function syncAreaInput() {
+    var selects = document.querySelectorAll('.area-row select');
+    var selected = [];
+    selects.forEach(function (sel) {
+      if (sel.value) selected.push(sel.value);
+    });
+    document.getElementById('area-input').value = selected.join(', ');
+    selects.forEach(function (sel) {
+      var val = sel.value;
+      sel.querySelectorAll('option').forEach(function (opt) {
+        if (!opt.value) return;
+        var taken = selected.filter(function (s) { return s !== val; });
+        opt.disabled = taken.indexOf(opt.value) !== -1;
       });
-      selectedAreas = matched.slice(0, 1);
-    }
-
-    function renderGrid() {
-      grid.innerHTML = AREAS.map(function (area) {
-        var checked = selectedAreas.indexOf(area) !== -1 ? 'checked' : '';
-        var cls = selectedAreas.indexOf(area) !== -1 ? 'selected' : '';
-        return '<label class="' + cls + '"><input type="checkbox" value="' + area + '" ' + checked + '>' + area + '</label>';
-      }).join('');
-
-      grid.querySelectorAll('input').forEach(function (cb) {
-        cb.addEventListener('change', function () {
-          if (this.checked) {
-            if (selectedAreas.indexOf(this.value) === -1) selectedAreas.push(this.value);
-          } else {
-            selectedAreas = selectedAreas.filter(function (a) { return a !== this.value; }, this);
-          }
-          renderTags();
-          syncHidden();
-        });
-      });
-    }
-
-    function renderTags() {
-      tagsContainer.innerHTML = selectedAreas.map(function (area) {
-        return '<span class="area-tag">' + area + '<button type="button" onclick="removeArea(\'' + area + '\')">&times;</button></span>';
-      }).join('');
-    }
-
-    function syncHidden() {
-      hiddenInput.value = selectedAreas.join(', ');
-    }
-
-    window.removeArea = function (area) {
-      selectedAreas = selectedAreas.filter(function (a) { return a !== area; });
-      renderGrid();
-      renderTags();
-      syncHidden();
-    };
-
-    renderGrid();
-    renderTags();
-    syncHidden();
+    });
+    triggerAutosave();
   }
+
+  function renderAreaRows(count) {
+    var container = document.getElementById('area-rows');
+    container.innerHTML = '';
+    for (var i = 0; i < count; i++) {
+      var row = document.createElement('div');
+      row.className = 'area-row';
+      var label = document.createElement('span');
+      label.className = 'area-label';
+      label.textContent = 'Area ' + (i + 1);
+      var select = document.createElement('select');
+      var blank = document.createElement('option');
+      blank.value = '';
+      blank.textContent = '— Pilih kawasan —';
+      select.appendChild(blank);
+      areaList.forEach(function (a) {
+        var opt = document.createElement('option');
+        opt.value = a;
+        opt.textContent = a;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', syncAreaInput);
+
+      row.appendChild(label);
+      row.appendChild(select);
+
+      if (i > 0) {
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-remove-area';
+        removeBtn.innerHTML = '&minus;';
+        removeBtn.setAttribute('aria-label', 'Remove area');
+        removeBtn.addEventListener('click', function () {
+          var rows = container.querySelectorAll('.area-row');
+          if (rows.length <= 1) return;
+          row.remove();
+          renumberAreaRows();
+          syncAreaInput();
+        });
+        row.appendChild(removeBtn);
+      }
+
+      container.appendChild(row);
+    }
+    syncAreaInput();
+  }
+
+  function renumberAreaRows() {
+    var rows = document.querySelectorAll('#area-rows .area-row');
+    rows.forEach(function (r, idx) {
+      r.querySelector('.area-label').textContent = 'Area ' + (idx + 1);
+    });
+  }
+
+  function applyPendingAreas() {
+    var pendingAreas = window._pendingAreaList;
+    if (!pendingAreas || pendingAreas.length === 0) return;
+    var count = Math.max(pendingAreas.length, 3);
+    renderAreaRows(count);
+    var selects = document.querySelectorAll('#area-rows .area-row select');
+    selects.forEach(function (sel, i) {
+      if (i < pendingAreas.length && pendingAreas[i]) sel.value = pendingAreas[i];
+    });
+    syncAreaInput();
+    if (window._pendingDraftTime) showDraftIndicator(window._pendingDraftTime);
+    window._pendingAreaList = null;
+    window._pendingDraftTime = null;
+  }
+
+  function initAreas() {
+    fetch('/api/areas').then(function (res) {
+      if (!res.ok) throw new Error('Failed to load areas');
+      return res.json();
+    }).then(function (areas) {
+      areaList = areas;
+      renderAreaRows(3);
+      applyPendingAreas();
+    }).catch(function () {
+      areaList = [
+        'Kuala Lumpur', 'Petaling Jaya', 'Shah Alam', 'Klang', 'Subang Jaya',
+        'Cheras', 'Puchong', 'Ampang', 'Kajang', 'Bangi', 'Setapak',
+        'Wangsa Maju', 'Gombak', 'Bangsar', 'Mont Kiara', 'TTDI',
+        'Penang', 'Johor Bahru', 'Melaka'
+      ];
+      renderAreaRows(3);
+      applyPendingAreas();
+    });
+  }
+
+  document.getElementById('btnAddArea').addEventListener('click', function () {
+    var rows = document.querySelectorAll('#area-rows .area-row');
+    renderAreaRows(rows.length + 1);
+  });
+
+  // ── Draft Save / Resume ─────────────────────────────
+
+  var draftTimer = null;
+
+  function getDraftKey() {
+    var id = sessionStorage.getItem('intake_lead_id') || '';
+    return 'pintarweb_intake_draft' + (id ? '_' + id : '');
+  }
+
+  function collectDraftData() {
+    var areaSelects = document.querySelectorAll('#area-rows .area-row select');
+    var areaValues = [];
+    areaSelects.forEach(function (s) { if (s.value) areaValues.push(s.value); });
+    return {
+      id: sessionStorage.getItem('intake_lead_id') || '',
+      business_name: document.getElementById('business_name').value,
+      niche: document.getElementById('niche').value,
+      tagline: document.getElementById('tagline').value,
+      phone: document.getElementById('phone').value,
+      google_maps_url: document.getElementById('google_maps_url').value,
+      instagram: document.getElementById('instagram').value,
+      facebook_url: document.getElementById('facebook_url').value,
+      tiktok_handle: document.getElementById('tiktok_handle').value,
+      email: document.getElementById('email').value,
+      existing_website: document.getElementById('existing_website').value,
+      area_list: areaValues,
+      saved_at: new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' })
+    };
+  }
+
+  function saveDraft() {
+    try {
+      var data = collectDraftData();
+      localStorage.setItem(getDraftKey(), JSON.stringify(data));
+      showDraftIndicator(data.saved_at);
+    } catch (e) {}
+  }
+
+  function loadDraftData() {
+    try {
+      var raw = localStorage.getItem(getDraftKey());
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      var urlId = new URLSearchParams(window.location.search).get('id') || '';
+      if (data.id && urlId && data.id !== urlId) return null;
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function applyDraftValues(draft) {
+    if (!draft) return;
+    var set = function (id, val) { if (val) { var el = document.getElementById(id); if (el) el.value = val; } };
+    set('business_name', draft.business_name);
+    set('tagline', draft.tagline);
+    set('phone', draft.phone);
+    set('google_maps_url', draft.google_maps_url);
+    set('instagram', draft.instagram);
+    set('facebook_url', draft.facebook_url);
+    set('tiktok_handle', draft.tiktok_handle);
+    set('email', draft.email);
+    set('existing_website', draft.existing_website);
+    if (draft.niche) {
+      var nm = { 'aircond': 'aircond-contractor', 'aircond-contractor': 'aircond-contractor', 'plumbing': 'plumbing', 'electrical': 'electrical', 'renovation': 'renovation', 'general': 'general' };
+      var nv = document.getElementById('niche');
+      if (nv) nv.value = nm[draft.niche] || draft.niche;
+    }
+    window._pendingAreaList = draft.area_list || [];
+    window._pendingDraftTime = draft.saved_at || '';
+  }
+
+  function showDraftIndicator(timeStr) {
+    var bar = document.getElementById('draftBar');
+    var timeEl = document.getElementById('draftTime');
+    if (timeStr) timeEl.textContent = timeStr;
+    bar.classList.add('visible');
+  }
+
+  function hideDraftIndicator() {
+    document.getElementById('draftBar').classList.remove('visible');
+  }
+
+  function clearDraft() {
+    try { localStorage.removeItem(getDraftKey()); } catch (e) {}
+    hideDraftIndicator();
+    showToast('Draf dipadam');
+  }
+
+  function triggerAutosave() {
+    if (draftTimer) clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveDraft, 600);
+  }
+
+  document.getElementById('btnClearDraft').addEventListener('click', clearDraft);
 
   function handleFilePreview(inputId, previewId) {
     var input = document.getElementById(inputId);
@@ -670,8 +849,8 @@ html { scroll-padding-top: 80px; }
     var btn = document.getElementById('gen-tagline-btn');
     var taglineEl = document.getElementById('tagline');
     var niche = document.getElementById('niche').value;
-    var areasVal = document.getElementById('area-input').value || '';
-    var areas = areasVal ? areasVal.split(',').map(function (a) { return a.trim(); }).filter(Boolean) : [];
+    var area1 = document.querySelector('.area-row select');
+    var firstArea = area1 ? area1.value : '';
 
     if (!niche) {
       document.getElementById('niche').focus();
@@ -717,8 +896,8 @@ html { scroll-padding-top: 80px; }
       };
 
       var list = templates[niche] || templates['general'];
-      var seed = (areas[0] ? areas[0].length : 0) + (niche.length * 3);
-      var tagline = list[seed % list.length].replace('{area}', areas[0] || 'Kuala Lumpur');
+      var seed = (firstArea ? firstArea.length : 0) + (niche.length * 3);
+      var tagline = list[seed % list.length].replace('{area}', firstArea || 'Kuala Lumpur');
 
       taglineEl.value = tagline;
       taglineEl.focus();
@@ -752,7 +931,7 @@ html { scroll-padding-top: 80px; }
 
     if (!businessName) { document.getElementById('business_name').focus(); showToast('Sila isi nama perniagaan'); return; }
     if (!niche) { document.getElementById('niche').focus(); showToast('Sila pilih niche'); return; }
-    if (!area) { document.getElementById('area-grid').scrollIntoView({ behavior: 'smooth', block: 'center' }); showToast('Sila pilih sekurang-kurangnya satu kawasan'); return; }
+    if (!area) { document.getElementById('area-rows').scrollIntoView({ behavior: 'smooth', block: 'center' }); showToast('Sila pilih sekurang-kurangnya satu kawasan'); return; }
     if (!phone) { document.getElementById('phone').focus(); showToast('Sila isi nombor telefon'); return; }
 
     var id = sessionStorage.getItem('intake_lead_id') || businessName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/--+/g, '-').replace(/^-|-$/g, '');
@@ -826,6 +1005,7 @@ html { scroll-padding-top: 80px; }
 
     /* Upload images first if any */
     if (!hasImages) {
+      clearDraft();
       instr = 'No images uploaded — add images manually to clients/' + id + '/images/ if needed.';
       showResult();
       return;
@@ -838,7 +1018,7 @@ html { scroll-padding-top: 80px; }
     var uploadFormData = new FormData();
     logos.forEach(function (f) { uploadFormData.append('logo', f); });
     heroes.forEach(function (f) { uploadFormData.append('hero', f); });
-    galleries.forEach(function (f) { uploadFormData.append('gallery', f); });
+    galleries.forEach(function (f, i) { uploadFormData.append('gallery_' + i, f); });
 
           fetch('/api/upload/' + id, {
       method: 'POST',
@@ -861,6 +1041,7 @@ html { scroll-padding-top: 80px; }
         instr += 'Gallery: ' + files.gallery_urls.length + ' image(s) uploaded\n';
       }
 
+      clearDraft();
       showResult();
     }).catch(function (err) {
       instr = 'Image upload failed: ' + err.message + '\nImages saved in browser only — download config and re-upload images later.';
@@ -898,10 +1079,20 @@ html { scroll-padding-top: 80px; }
 
   /* Init */
   prefillaFromUrl();
-  initAreaGrid();
+  var draft = loadDraftData();
+  if (draft) applyDraftValues(draft);
+  initAreas();
   handleFilePreview('logo', 'logo_preview');
   handleFilePreview('hero', 'hero_preview');
   handleFilePreview('gallery', 'gallery_preview');
+
+  /* Auto-save: text inputs, textarea, select */
+  var autoSaveInputs = document.querySelectorAll('#intakeForm input[type="text"], #intakeForm input[type="tel"], #intakeForm input[type="url"], #intakeForm input[type="email"], #intakeForm textarea, #intakeForm select');
+  autoSaveInputs.forEach(function (el) {
+    el.addEventListener('input', triggerAutosave);
+    el.addEventListener('change', triggerAutosave);
+  });
+  /* syncAreaInput already calls triggerAutosave() directly */
 })();
 </script>
 

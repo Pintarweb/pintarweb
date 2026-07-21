@@ -812,9 +812,8 @@ function openIntakePanel(phone) {
 }
 
 function openAddLeadModal() {
-    const catSelect = document.getElementById('add-lead-category');
     const cats = [...new Set(allLeads.filter(l => l.category && l.category !== 'null').map(l => l.category))].sort();
-    catSelect.innerHTML = '<option value="">Select category...</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    document.getElementById('add-lead-category-list').innerHTML = cats.map(c => `<option value="${c}">`).join('');
 
     document.getElementById('add-lead-name').value = '';
     document.getElementById('add-lead-phone').value = '';
@@ -1066,12 +1065,14 @@ function renderLeads() {
 
     renderPipelineBar();
 
-    // Update Today's New badge
+    // Update Today's New badge (leads with stage 'new' created today)
     const todaysBadge = document.getElementById('todays-new-count');
     if (todaysBadge) {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
         const freshCount = allLeads.filter(l => {
-            const leadTime = new Date((l.updated_at || l.created_at) + 'Z').getTime();
-            return (l.pipeline_stage || 'new') === 'new' && Math.abs(leadTime - latestHuntTime) < 900000;
+            const leadTime = new Date((l.created_at || l.updated_at) + 'Z').getTime();
+            return (l.pipeline_stage || 'new') === 'new' && leadTime >= todayStart.getTime();
         }).length;
         if (freshCount > 0) {
             todaysBadge.innerText = `${freshCount} NEW TODAY`;

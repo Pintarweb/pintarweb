@@ -68,10 +68,19 @@ The scraper sends leads to `http://localhost:8787/api/leads`. Worker must be run
 | PATCH | `/api/leads/:phone/outreach` | Mark outreach sent |
 | POST | `/api/generate-tagline` | Generate tagline from niche + area (template-based, instant) |
 | POST | `/api/upload/:leadId` | Upload images to R2 (logo, hero, gallery) |
+| GET | `/api/areas` | Return dynamic list of 44 Malaysian areas |
 | GET | `/api/hunts` | List hunt history |
 | POST | `/api/hunts` | Record a new hunt |
 | GET | `/dashboard` | Serve dashboard UI |
 | GET | `/clients/intake-form.html` | Serve intake form |
+
+## Google Maps Scraper — Web Results Social Scraper
+
+After extracting core business data from the side panel, `scrapeGoogleMaps` scrolls to the bottom to trigger the lazy-loaded "Web results" section. It then parses those results for actual Facebook, Instagram, and TikTok URLs — which are more accurate than the page-level fallback (which picks up Google's own Facebook share link).
+
+**First pass** (page-level): uses `a[data-item-id^="social"]` for dedicated social link. Falls back to scanning all `a[href*="facebook.com"]` with path filters.
+
+**Second pass** (web results): scrolls `div[role="main"]` to bottom, waits 3s, finds the "Web results" heading, then extracts Facebook/Instagram/TikTok from that section. Prefers web results URLs over first-pass.
 
 ## Scoring logic (from `src/db/upsertLead.ts`)
 
@@ -87,7 +96,10 @@ Standalone form served at `/clients/intake-form.html`. Opened from dashboard mod
 **URL params pre-fill** (from dashboard): `id`, `name`, `phone`, `area`, `category`, `niche`, `tagline`, `website`, `maps`, `fb`, `ig`, `tt`, `email`
 
 **Features:**
-- Service Area: multi-select checkbox grid (18 Malaysian areas)
+- Service Area: **Dynamic dropdowns** (Area 1/2/3 + "+ Add Area" button) loaded from `GET /api/areas` (44 areas). Selected areas are disabled in other dropdowns to prevent duplicates. Area list can be updated by editing the array in worker.ts.
+- Facebook URL pre-fill: now handles both full URLs and handles (detects `http` prefix).
+- Gallery upload: sends each file as `gallery_0`, `gallery_1`, ... (numbered keys). Server reads them individually and properly awaits each R2 put.
+- **Draft auto-save/resume**: all text inputs, selects, and area dropdowns auto-save to `localStorage` 600ms after last change. Draft keyed by lead ID. Restores on page load (overlays URL prefill). Orange indicator bar shows "Draf disimpan" with timestamp + "Padam Draf" button. Draft cleared on successful submit.
 - Tagline: client-side generation via `✨ Generate` button (template-based, no API call)
 - Images: uploads to R2 bucket `pintarweb-client-images` on submit
 - On submit: generates `config.json` with `logo_image`, `hero_image`, `gallery_images` pointing to R2 URLs

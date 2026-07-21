@@ -354,7 +354,11 @@ export default {
 
                 const logoFile = formData.get("logo") as File | null;
                 const heroFile = formData.get("hero") as File | null;
-                const galleryFiles = formData.getAll("gallery") as File[];
+                const galleryFiles: File[] = [];
+                for (let gi = 0; gi < 5; gi++) {
+                    const f = formData.get("gallery_" + gi);
+                    if (f && typeof f !== "string") galleryFiles.push(f as File);
+                }
 
                 if (logoFile && logoFile.size > 0) {
                     const ext = logoFile.name.split(".").pop() || "webp";
@@ -376,14 +380,17 @@ export default {
 
                 if (galleryFiles.length > 0) {
                     results.gallery = [];
-                    galleryFiles.slice(0, 5).forEach((f, i) => {
+                    for (let gi = 0; gi < galleryFiles.length; gi++) {
+                        const f = galleryFiles[gi];
                         const ext = f.name.split(".").pop() || "webp";
-                        const key = `${leadId}/gallery-${String(i + 1).padStart(3, "0")}.${ext}`;
-                        env.CLIENT_IMAGES.put(key, f.stream(), {
-                            httpMetadata: { contentType: f.type }
-                        }).catch(() => {});
-                        (results.gallery as string[]).push(key);
-                    });
+                        const key = `${leadId}/gallery-${String(gi + 1).padStart(3, "0")}.${ext}`;
+                        try {
+                            await env.CLIENT_IMAGES.put(key, f.stream(), {
+                                httpMetadata: { contentType: f.type }
+                            });
+                            (results.gallery as string[]).push(key);
+                        } catch (_) {}
+                    }
                 }
 
                 const r2Base = `https://pub-${env.CLOUDFLARE_ACCOUNT_ID || 'ACCOUNT'}.r2.dev/pintarweb-client-images`;
@@ -547,6 +554,24 @@ export default {
             } catch (e: any) {
                 return new Response(JSON.stringify({ error: e.message }), { status: 500 });
             }
+        }
+
+        // GET /api/areas — return dynamic area list
+        if (url.pathname === "/api/areas" && request.method === "GET") {
+            const areas = [
+                "Kuala Lumpur", "Petaling Jaya", "Shah Alam", "Klang", "Subang Jaya",
+                "Cheras", "Puchong", "Ampang", "Kajang", "Bangi", "Setapak",
+                "Wangsa Maju", "Gombak", "Batu Caves", "Bangsar", "Mont Kiara",
+                "TTDI", "Damansara", "Seri Kembangan", "Balakong", "Semenyih",
+                "Putrajaya", "Cyberjaya", "Rawang", "Selayang", "Kepong",
+                "Sentul", "Sri Petaling", "Old Klang Road", "Bukit Jalil",
+                "Bandar Tun Razak", "Pandan Indah", "Taman Melati", "Keramat",
+                "Penang", "Johor Bahru", "Melaka", "Ipoh", "Kota Kinabalu",
+                "Kuching", "Seremban", "Kuantan", "Alor Setar", "Kota Bharu"
+            ];
+            return new Response(JSON.stringify(areas), {
+                headers: { "Content-Type": "application/json" }
+            });
         }
 
         // ── Rotation Management ───────────────────────────────
