@@ -115,38 +115,15 @@ export async function scrapeGoogleMaps(
                     const fbEl = document.querySelector('a[data-item-id^="social"]');
                     const emailEl = document.querySelector('a[data-item-id^="email"]');
 
-                    // Extract social links from page content
+                    // Extract social links — only from dedicated Google Maps elements
                     let facebookUrl = null;
                     let email = null;
 
-                    // Find Facebook URL: prefer dedicated social link, then search page links
                     if (fbEl) {
                         const href = fbEl.getAttribute('href') || '';
                         facebookUrl = href.startsWith('http') ? href.split('?')[0] : null;
                     }
-                    if (!facebookUrl) {
-                        const allLinks = Array.from(document.querySelectorAll('a[href]'));
-                        for (const link of allLinks) {
-                            const href = link.getAttribute('href') || '';
-                            // Skip Google redirect/tracking links and Maps own Facebook links
-                            if (!href.includes('facebook.com')) continue;
-                            if (href.includes('facebook.com/l/')) continue;          // Facebook login/tracking redirect
-                            if (href.includes('facebook.com/pages/')) continue;     // Facebook internal pages
-                            if (href.includes('facebook.com/ctx/')) continue;       // Facebook redirector
-                            if (href.includes('l.facebook.com/')) continue;          // Facebook external redirect
-                            if (href.includes('lm.facebook.com/')) continue;        // Facebook lite redirect
-                            // Accept only URLs with a real page path (e.g. /BusinessName/)
-                            // Reject bare /share/facebook, /plugins, /dialog paths
-                            const cleanUrl = href.split('?')[0];
-                            const path = cleanUrl.replace('https://www.facebook.com', '').replace('https://facebook.com', '');
-                            if (path.length <= 1) continue;                        // root path = Maps' own FB link
-                            if (['/share', '/plugins', '/dialog', '/sharer', '/common'].some(p => path.startsWith(p))) continue;
-                            facebookUrl = cleanUrl.startsWith('http') ? cleanUrl : `https://${cleanUrl}`;
-                            break;
-                        }
-                    }
 
-                    // Find email
                     if (emailEl) {
                         const href = emailEl.getAttribute('href') || '';
                         if (href.startsWith('mailto:')) {
@@ -180,58 +157,6 @@ export async function scrapeGoogleMaps(
                     continue;
                 }
 
-                // Scroll side panel to bottom to trigger lazy-loaded Web results section
-                await page.evaluate(() => {
-                    const panel = document.querySelector('div[role="main"]') || document.querySelector('.m6QErb');
-                    if (panel) {
-                        (panel as HTMLElement).scrollTop = (panel as HTMLElement).scrollHeight;
-                    }
-                });
-                await page.waitForTimeout(3000);
-
-                // Extract social links from Web results (more accurate than page-level fallback)
-                const webSocial = await page.evaluate(() => {
-                    const result: { facebook?: string; instagram?: string; tiktok?: string } = {};
-                    const headings = document.querySelectorAll('h2, h3, h4');
-                    let sectionEl: Element | null = null;
-                    for (const h of headings) {
-                        const text = h.textContent?.toLowerCase() || '';
-                        if (text.includes('web result') || text.includes('result from the web')) {
-                            sectionEl = h.closest('[class]')?.parentElement || h.parentElement;
-                            break;
-                        }
-                    }
-                    if (sectionEl) {
-                        const links = sectionEl.querySelectorAll('a[href]');
-                        for (const link of Array.from(links)) {
-                            const href = link.getAttribute('href') || '';
-                            if (!href.startsWith('http')) continue;
-                            const cleanUrl = href.split('?')[0];
-                            if (!result.facebook && cleanUrl.includes('facebook.com/')) {
-                                const p = cleanUrl.replace(/https?:\/\/(www\.)?facebook\.com/, '');
-                                if (p.length > 1 && !['/share', '/l/', '/plugins', '/dialog', '/sharer', '/common'].some(x => p.startsWith(x))) {
-                                    result.facebook = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
-                                }
-                            }
-                            if (!result.instagram && cleanUrl.includes('instagram.com/')) {
-                                const p = cleanUrl.replace(/https?:\/\/(www\.)?instagram\.com/, '');
-                                if (p.length > 1 && !['/share', '/p/'].some(x => p.startsWith(x))) {
-                                    result.instagram = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
-                                }
-                            }
-                            if (!result.tiktok && cleanUrl.includes('tiktok.com/@')) {
-                                result.tiktok = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
-                            }
-                        }
-                    }
-                    return result;
-                });
-
-                // Prefer web results social URLs (more accurate), fall back to page-level scrape
-                const facebookUrl = webSocial.facebook || details.facebookUrl;
-                const instagramUrl = webSocial.instagram || null;
-                const tiktokUrl = webSocial.tiktok || null;
-
                 if (business_name !== "Unknown") {
                     const lead: ExpectedLead = {
                         business_name,
@@ -241,13 +166,13 @@ export async function scrapeGoogleMaps(
                         category: details.category,
                         address: details.address,
                         maps_url: url,
-                        facebook_url: facebookUrl,
-                        instagram_url: instagramUrl,
-                        tiktok_url: tiktokUrl,
+                        facebook_url: details.facebookUrl,
+                        instagram_url: null,
+                        tiktok_url: null,
                         email: details.email || null
                     };
                     leads.push(lead);
-                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'} | FB: ${facebookUrl || 'None'} | IG: ${instagramUrl || 'None'} | TT: ${tiktokUrl || 'None'} | Email: ${details.email || 'None'}`);
+                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'} | FB: ${details.facebookUrl || 'None'} | IG: None | TT: None | Email: ${details.email || 'None'}`);
                 }
 
             } catch (err) {
