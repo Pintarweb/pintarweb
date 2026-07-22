@@ -738,7 +738,7 @@ function openIntakePanel(phone) {
 
             <!-- Open Full Form Button -->
             <a href="${fullFormUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full px-6 py-4 rounded-2xl bg-[#1B4332] hover:bg-[#2d5a42] text-white font-black text-sm uppercase shadow-xl shadow-green-900/20 transition-all">
-                <span>📝 Open Full Intake Form</span>
+                <span>📝 View / Edit Intake Form</span>
                 <span class="text-[10px] opacity-70">(Pre-filled with scraped data)</span>
             </a>
 

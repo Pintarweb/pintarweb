@@ -941,7 +941,8 @@ html { scroll-padding-top: 80px; }
     var logos = Array.prototype.slice.call(logoInput.files);
     var heroes = Array.prototype.slice.call(heroInput.files);
     var galleries = Array.prototype.slice.call(galleryInput.files).slice(0, 5);
-    var hasImages = logos.length > 0 || heroes.length > 0 || galleries.length > 0;
+      var photoCount = logos.length + heroes.length + galleries.length;
+      var hasImages = photoCount > 0;
 
     /* Build config with placeholder image paths */
     var config = {
@@ -1041,6 +1042,13 @@ html { scroll-padding-top: 80px; }
         instr += 'Gallery: ' + files.gallery_urls.length + ' image(s) uploaded\n';
       }
 
+      // Save image count to D1
+      fetch('/api/leads/' + apiPhone + '/intake', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images_collected: photoCount })
+      }).catch(function () {});
+
       clearDraft();
       showResult();
     }).catch(function (err) {
@@ -1077,10 +1085,118 @@ html { scroll-padding-top: 80px; }
     showToast('Config dimuat turun!');
   });
 
+  // ── Load lead from API (fills area/services/testimonials/images) ──
+
+  function loadLeadFromApi(phone) {
+    if (!phone) return;
+    var draftKey = getDraftKey();
+    try { if (localStorage.getItem(draftKey)) return; } catch(e) {}
+
+    fetch('/api/leads/' + encodeURIComponent(phone))
+      .then(function (res) {
+        if (!res.ok) throw new Error('Not found: ' + res.status);
+        return res.json();
+      })
+      .then(function (lead) {
+        if (lead.tagline && !document.getElementById('tagline').value) {
+          document.getElementById('tagline').value = lead.tagline;
+        }
+        if (lead.niche && !document.getElementById('niche').value) {
+          var nm = { 'aircond': 'aircond-contractor', 'aircond-contractor': 'aircond-contractor', 'plumbing': 'plumbing', 'electrical': 'electrical', 'renovation': 'renovation', 'general': 'general' };
+          document.getElementById('niche').value = nm[lead.niche] || lead.niche;
+        }
+        if (lead.facebook_url && !document.getElementById('facebook_url').value) {
+          document.getElementById('facebook_url').value = lead.facebook_url;
+        }
+        if (lead.instagram_url && !document.getElementById('instagram').value) {
+          document.getElementById('instagram').value = lead.instagram_url.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '');
+        }
+        if (lead.tiktok_url && !document.getElementById('tiktok_handle').value) {
+          document.getElementById('tiktok_handle').value = lead.tiktok_url.replace(/^https?:\/\/(www\.)?tiktok\.com\/@/, '').replace(/\/$/, '');
+        }
+        if (lead.email && !document.getElementById('email').value) {
+          document.getElementById('email').value = lead.email;
+        }
+        if (lead.website_url && !document.getElementById('existing_website').value) {
+          document.getElementById('existing_website').value = lead.website_url;
+        }
+        if (lead.maps_url && !document.getElementById('google_maps_url').value) {
+          document.getElementById('google_maps_url').value = lead.maps_url;
+        }
+
+        var areaFromAddr = (lead.address || '').split(',')[0].trim();
+        if (areaFromAddr) {
+          var selects = document.querySelectorAll('#area-rows .area-row select');
+          if (selects.length > 0 && !selects[0].value) {
+            selects[0].value = areaFromAddr;
+            syncAreaInput();
+          } else if (selects.length === 0) {
+            window._pendingAreaList = window._pendingAreaList || [areaFromAddr];
+          }
+        }
+
+        // Show services/testimonials as info block
+        var services = [];
+        var testimonials = [];
+        try { if (lead.services) services = JSON.parse(lead.services); } catch(e) {}
+        try { if (lead.testimonials) testimonials = JSON.parse(lead.testimonials); } catch(e) {}
+
+        if (services.length > 0 || testimonials.length > 0) {
+          var existingInfo = document.getElementById('d1-data-info');
+          if (!existingInfo) {
+            var infoDiv = document.createElement('div');
+            infoDiv.id = 'd1-data-info';
+            infoDiv.className = 'card';
+            infoDiv.style.borderLeftColor = '#1B4332';
+            var html = '<label>Saved Data from D1</label>';
+            if (services.length > 0) {
+              html += '<div style="margin-bottom:8px;font-size:14px;"><strong>Services:</strong> ' + services.join(', ') + '</div>';
+            }
+            if (testimonials.length > 0) {
+              html += '<div style="font-size:14px;"><strong>Testimonials:</strong></div>';
+              testimonials.forEach(function(t) {
+                html += '<div style="font-size:13px;color:#555;padding:4px 0 4px 12px;border-left:2px solid #B45309;margin:4px 0;">' + (t.name ? '<strong>'+t.name+'</strong>: ' : '') + (t.text || t) + '</div>';
+              });
+            }
+            infoDiv.innerHTML = html;
+            var imagesHeading = document.querySelector('.section-heading');
+            if (imagesHeading) {
+              imagesHeading.parentNode.insertBefore(infoDiv, imagesHeading);
+            }
+          }
+        }
+
+        // Image status badge
+        if (lead.images_collected > 0) {
+          var existingBadge = document.getElementById('existing-images-badge');
+          if (!existingBadge) {
+            var badge = document.createElement('div');
+            badge.id = 'existing-images-badge';
+            badge.style.cssText = 'background:#f0f7f4;border:1.5px solid #1B4332;padding:12px 16px;margin-bottom:12px;font-size:14px;display:flex;align-items:center;gap:8px;';
+            badge.innerHTML = '<span style="font-size:18px;">🖼️</span> <strong>' + lead.images_collected + ' image(s)</strong> already uploaded. Upload again to replace.';
+            var imagesSection = document.getElementById('logo');
+            if (imagesSection) {
+              imagesSection.closest('.card').parentNode.insertBefore(badge, imagesSection.closest('.card'));
+            }
+          }
+        }
+
+        triggerAutosave();
+      })
+      .catch(function (e) {
+        console.warn('Could not load lead data from API:', e);
+      });
+  }
+
   /* Init */
   prefillaFromUrl();
   var draft = loadDraftData();
-  if (draft) applyDraftValues(draft);
+  if (draft) {
+    applyDraftValues(draft);
+  } else {
+    var phone = new URLSearchParams(window.location.search).get('phone') || '';
+    if (phone) loadLeadFromApi(phone);
+  }
   initAreas();
   handleFilePreview('logo', 'logo_preview');
   handleFilePreview('hero', 'hero_preview');

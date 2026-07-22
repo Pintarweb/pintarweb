@@ -183,10 +183,17 @@ export default {
         if (url.pathname.match(/^\/api\/leads\/[^\/]+\/intake$/) && request.method === "PATCH") {
             try {
                 const phone = url.pathname.split("/")[3];
-                const { tagline, niche, services, testimonials } = await request.json() as any;
-                await env.pintarweb_scraper_db.prepare(
-                    `UPDATE leads SET tagline = ?, niche = ?, services = ?, testimonials = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
-                ).bind(tagline || null, niche || null, services ? JSON.stringify(services) : null, testimonials ? JSON.stringify(testimonials) : null, phone).run();
+                const { tagline, niche, services, testimonials, images_collected } = await request.json() as any;
+                if (images_collected !== undefined) {
+                    await env.pintarweb_scraper_db.prepare(
+                        `UPDATE leads SET images_collected = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
+                    ).bind(images_collected, phone).run();
+                }
+                if (tagline || niche || services || testimonials) {
+                    await env.pintarweb_scraper_db.prepare(
+                        `UPDATE leads SET tagline = ?, niche = ?, services = ?, testimonials = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
+                    ).bind(tagline || null, niche || null, services ? JSON.stringify(services) : null, testimonials ? JSON.stringify(testimonials) : null, phone).run();
+                }
                 return new Response(JSON.stringify({ success: true }), {
                     headers: { "Content-Type": "application/json" }
                 });
@@ -270,6 +277,24 @@ export default {
                     "Cache-Control": "no-store"
                 }
             });
+        }
+
+        // GET /api/leads/:phone — single lead with all intake fields
+        if (url.pathname.match(/^\/api\/leads\/[^\/]+$/) && request.method === "GET") {
+            try {
+                const phone = url.pathname.split("/")[3];
+                const lead = await env.pintarweb_scraper_db.prepare(
+                    `SELECT * FROM leads WHERE phone_normalized = ?`
+                ).bind(phone).first();
+                if (!lead) {
+                    return new Response(JSON.stringify({ error: "Lead not found" }), { status: 404 });
+                }
+                return new Response(JSON.stringify(lead), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
         }
 
         // Serve the Dashboard UI
