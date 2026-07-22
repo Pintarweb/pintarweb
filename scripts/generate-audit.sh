@@ -1,11 +1,12 @@
 #!/bin/bash
 # Generate P.A.S.T. audit HTML for a lead
-# Usage: bash scripts/generate-audit.sh "Business Name" "Area" "Niche" "output-dir" [--competitors "Name,Rating,Reviews;Name,Rating,Reviews"] [--gmb "listing_status,verification,photo_count,has_hours,has_description,review_count,rating"]
+# Usage: bash scripts/generate-audit.sh "Business Name" "Area" "Niche" "output-dir" [--competitors "Name,Rating,Reviews;Name,Rating,Reviews"] [--gmb "listing_status,verification,photo_count,has_hours,has_description,review_count,rating"] [--social "fb_url,ig_url,tt_url"]
 #
 # Examples:
 #   bash scripts/generate-audit.sh "Ah Seng Plumbing" "Klang" "plumbing" "data/audits"
 #   bash scripts/generate-audit.sh "Tai Aircond" "Kuala Lumpur" "aircond" "data/audits" --competitors "Boost Aircond,4.5,67;Super Aircond,4.8,156"
 #   bash scripts/generate-audit.sh "Razif Aircond" "Shah Alam" "aircond" "data/audits" --gmb "found,verified,12,1,1,23,4.5"
+#   bash scripts/generate-audit.sh "Nurisa Aircond" "Bangi" "aircond" "data/audits" --social "https://facebook.com/nurisa,https://instagram.com/nurisa,https://tiktok.com/@nurisa"
 
 set -e
 
@@ -15,6 +16,7 @@ NICHE="${3:-}"
 OUTPUT_DIR="${4:-}"
 USE_COMPETITORS=""
 USE_GMB=""
+USE_SOCIAL=""
 
 # Parse arguments
 POSITIONAL_ARGS=()
@@ -26,6 +28,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --gmb)
             USE_GMB="$2"
+            shift 2
+            ;;
+        --social)
+            USE_SOCIAL="$2"
             shift 2
             ;;
         *)
@@ -69,7 +75,7 @@ case "$NICHE" in
 esac
 
 if [ -z "$BUSINESS_NAME" ] || [ -z "$AREA" ] || [ -z "$NICHE" ] || [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: bash scripts/generate-audit.sh \"Business Name\" \"Area\" \"Niche\" \"output-dir\" [--competitors \"Name,Rating,Reviews;...\"] [--gmb \"listing_status,verification,photo_count,has_hours,has_description,review_count,rating\"]"
+    echo "Usage: bash scripts/generate-audit.sh \"Business Name\" \"Area\" \"Niche\" \"output-dir\" [--competitors \"Name,Rating,Reviews;...\"] [--gmb \"listing_status,verification,photo_count,has_hours,has_description,review_count,rating\"] [--social \"fb_url,ig_url,tt_url\"]"
     echo ""
     echo "Arguments:"
     echo "  1. Business name"
@@ -78,6 +84,7 @@ if [ -z "$BUSINESS_NAME" ] || [ -z "$AREA" ] || [ -z "$NICHE" ] || [ -z "$OUTPUT
     echo "  4. Output directory"
     echo "  --competitors \"Name,Rating,Reviews;Name,Rating,Reviews\" (optional)"
     echo "  --gmb \"listing_status,verification,photo_count,has_hours,has_description,review_count,rating\" (optional)"
+    echo "  --social \"fb_url,ig_url,tt_url\" (optional — shows social media section in audit)"
     echo ""
     echo "GMB --gmb values:"
     echo "  listing_status: found | not-found"
@@ -272,6 +279,50 @@ if [ -n "$USE_GMB" ] && [ "$USE_GMB" != "--gmb" ]; then
     fi
 fi
 
+# Social Media Data Processing
+SOCIAL_MEDIA_HTML=""
+
+if [ -n "$USE_SOCIAL" ] && [ "$USE_SOCIAL" != "--social" ]; then
+    IFS=',' read -ra SOCIAL_FIELDS <<< "$USE_SOCIAL"
+    FB_URL="${SOCIAL_FIELDS[0]:-}"
+    IG_URL="${SOCIAL_FIELDS[1]:-}"
+    TT_URL="${SOCIAL_FIELDS[2]:-}"
+
+    SOCIAL_PLATFORMS=""
+    HAS_SOCIAL=0
+
+    if [ -n "$FB_URL" ]; then
+        SOCIAL_PLATFORMS="${SOCIAL_PLATFORMS}<span class=\"social-platform-icon\">📘</span>"
+        HAS_SOCIAL=1
+    fi
+    if [ -n "$IG_URL" ]; then
+        SOCIAL_PLATFORMS="${SOCIAL_PLATFORMS}<span class=\"social-platform-icon\">📸</span>"
+        HAS_SOCIAL=1
+    fi
+    if [ -n "$TT_URL" ]; then
+        SOCIAL_PLATFORMS="${SOCIAL_PLATFORMS}<span class=\"social-platform-icon\">🎵</span>"
+        HAS_SOCIAL=1
+    fi
+
+    if [ "$HAS_SOCIAL" -eq 1 ]; then
+        SOCIAL_MEDIA_HTML="
+    <section class=\"section\">
+      <span class=\"section-label\">M</span>
+      <h2 class=\"section-title\">Media Sosial — Data Pelanggan Bukan Milik Anda</h2>
+      <p class=\"section-subtitle\">Anda dah usaha bina audiens — tapi data itu hak milik platform, bukan bisnes anda.</p>
+      <div class=\"social-platforms\">
+        ${SOCIAL_PLATFORMS}
+        <p style=\"margin-top: 1rem; font-size: 0.9rem; line-height: 1.5; color: var(--color-text);\">
+          Platform ni bagus untuk reach — tapi data follower, engagement, dan hubungan dengan pelanggan anda semua tersimpan dalam platform milik syarikat asing. Bila algoritma bertukar, reach boleh drop. Kalau akaun kena masalah, anda hilang contact dengan pelanggan yang dah dibina bertahun-tahun.
+        </p>
+        <p style=\"margin-top: 0.75rem; font-size: 0.9rem; line-height: 1.5; color: var(--color-text);\">
+          Laman web adalah satu-satunya aset digital yang anda <strong>miliki sepenuhnya</strong>. Dengan website, data pelanggan, kandungan, dan trafik semuanya dibawah kawalan anda.
+        </p>
+      </div>
+    </section>"
+    fi
+fi
+
 # Audit date
 AUDIT_DATE=$(date "+%B %d, %Y")
 
@@ -311,6 +362,7 @@ replacements = {
     "{{GMB_STATS_HTML}}": """$GMB_STATS_HTML""",
     "{{GMB_CHECKLIST_HTML}}": """$GMB_CHECKLIST_HTML""",
     "{{GMB_OPTIONS_HTML}}": """$GMB_OPTIONS_HTML""",
+    "{{SOCIAL_MEDIA_HTML}}": """$SOCIAL_MEDIA_HTML""",
 }
 
 for placeholder, value in replacements.items():

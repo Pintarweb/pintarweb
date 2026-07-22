@@ -183,16 +183,41 @@ export default {
         if (url.pathname.match(/^\/api\/leads\/[^\/]+\/intake$/) && request.method === "PATCH") {
             try {
                 const phone = url.pathname.split("/")[3];
-                const { tagline, niche, services, testimonials, images_collected } = await request.json() as any;
+                const { tagline, niche, services, testimonials, images_collected, facebook_url, instagram_url, tiktok_url } = await request.json() as any;
                 if (images_collected !== undefined) {
                     await env.pintarweb_scraper_db.prepare(
                         `UPDATE leads SET images_collected = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
                     ).bind(images_collected, phone).run();
                 }
-                if (tagline || niche || services || testimonials) {
+                if (tagline || niche || services || testimonials || facebook_url !== undefined || instagram_url !== undefined || tiktok_url !== undefined) {
+                    // Check if lead has no website + social URLs → add social bonus
+                    const existing = await env.pintarweb_scraper_db.prepare(
+                        `SELECT website_url, lead_score FROM leads WHERE phone_normalized = ?`
+                    ).bind(phone).first() as any;
+
+                    const hasSocial = facebook_url || instagram_url || tiktok_url;
+                    const hasNoWebsite = !existing?.website_url || existing.website_url === 'null';
+                    let scoreBonus = 0;
+
+                    if (hasSocial && hasNoWebsite) {
+                        // Social-active + no website = +3 bonus (marketing opportunity)
+                        scoreBonus = 3;
+                    }
+
+                    let setClause = `tagline = ?, niche = ?, services = ?, testimonials = ?, facebook_url = COALESCE(?, facebook_url), instagram_url = COALESCE(?, instagram_url), tiktok_url = COALESCE(?, tiktok_url), updated_at = CURRENT_TIMESTAMP`;
+                    let bindArgs = [tagline || null, niche || null, services ? JSON.stringify(services) : null, testimonials ? JSON.stringify(testimonials) : null, facebook_url || null, instagram_url || null, tiktok_url || null];
+
+                    if (scoreBonus > 0) {
+                        setClause += `, lead_score = lead_score + ?`;
+                        bindArgs.push(scoreBonus);
+                    }
+
+                    setClause += ` WHERE phone_normalized = ?`;
+                    bindArgs.push(phone);
+
                     await env.pintarweb_scraper_db.prepare(
-                        `UPDATE leads SET tagline = ?, niche = ?, services = ?, testimonials = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
-                    ).bind(tagline || null, niche || null, services ? JSON.stringify(services) : null, testimonials ? JSON.stringify(testimonials) : null, phone).run();
+                        `UPDATE leads SET ${setClause}`
+                    ).bind(...bindArgs).run();
                 }
                 return new Response(JSON.stringify({ success: true }), {
                     headers: { "Content-Type": "application/json" }

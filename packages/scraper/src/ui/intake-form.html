@@ -980,6 +980,9 @@ html { scroll-padding-top: 80px; }
 
     /* Save intake data to D1 */
     var apiPhone = config.whatsapp;
+    var socialFbUrl = facebookUrl || null;
+    var socialIgUrl = instagram ? 'https://instagram.com/' + instagram : null;
+    var socialTtUrl = tiktokHandle ? 'https://tiktok.com/@' + tiktokHandle : null;
     fetch('/api/leads/' + apiPhone + '/intake', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -987,7 +990,10 @@ html { scroll-padding-top: 80px; }
         tagline: config.tagline,
         niche: niche,
         services: [],
-        testimonials: []
+        testimonials: [],
+        facebook_url: socialFbUrl,
+        instagram_url: socialIgUrl,
+        tiktok_url: socialTtUrl
       })
     }).catch(function(e) {
       console.warn('Failed to save intake to D1:', e);
