@@ -1098,39 +1098,25 @@ html { scroll-padding-top: 80px; }
         return res.json();
       })
       .then(function (lead) {
-        if (lead.tagline && !document.getElementById('tagline').value) {
-          document.getElementById('tagline').value = lead.tagline;
-        }
-        if (lead.niche && !document.getElementById('niche').value) {
+        if (lead.tagline) document.getElementById('tagline').value = lead.tagline;
+        if (lead.niche) {
           var nm = { 'aircond': 'aircond-contractor', 'aircond-contractor': 'aircond-contractor', 'plumbing': 'plumbing', 'electrical': 'electrical', 'renovation': 'renovation', 'general': 'general' };
           document.getElementById('niche').value = nm[lead.niche] || lead.niche;
         }
-        if (lead.facebook_url && !document.getElementById('facebook_url').value) {
-          document.getElementById('facebook_url').value = lead.facebook_url;
-        }
-        if (lead.instagram_url && !document.getElementById('instagram').value) {
-          document.getElementById('instagram').value = lead.instagram_url.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '');
-        }
-        if (lead.tiktok_url && !document.getElementById('tiktok_handle').value) {
-          document.getElementById('tiktok_handle').value = lead.tiktok_url.replace(/^https?:\/\/(www\.)?tiktok\.com\/@/, '').replace(/\/$/, '');
-        }
-        if (lead.email && !document.getElementById('email').value) {
-          document.getElementById('email').value = lead.email;
-        }
-        if (lead.website_url && !document.getElementById('existing_website').value) {
-          document.getElementById('existing_website').value = lead.website_url;
-        }
-        if (lead.maps_url && !document.getElementById('google_maps_url').value) {
-          document.getElementById('google_maps_url').value = lead.maps_url;
-        }
+        if (lead.facebook_url) document.getElementById('facebook_url').value = lead.facebook_url;
+        if (lead.instagram_url) document.getElementById('instagram').value = lead.instagram_url.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '');
+        if (lead.tiktok_url) document.getElementById('tiktok_handle').value = lead.tiktok_url.replace(/^https?:\/\/(www\.)?tiktok\.com\/@/, '').replace(/\/$/, '');
+        if (lead.email) document.getElementById('email').value = lead.email;
+        if (lead.website_url) document.getElementById('existing_website').value = lead.website_url;
+        if (lead.maps_url) document.getElementById('google_maps_url').value = lead.maps_url;
 
         var areaFromAddr = (lead.address || '').split(',')[0].trim();
         if (areaFromAddr) {
           var selects = document.querySelectorAll('#area-rows .area-row select');
-          if (selects.length > 0 && !selects[0].value) {
+          if (selects.length > 0) {
             selects[0].value = areaFromAddr;
             syncAreaInput();
-          } else if (selects.length === 0) {
+          } else {
             window._pendingAreaList = window._pendingAreaList || [areaFromAddr];
           }
         }

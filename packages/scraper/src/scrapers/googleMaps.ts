@@ -106,7 +106,7 @@ export async function scrapeGoogleMaps(
                     continue; // Skip noise
                 }
 
-                // 2. Use specific attribute selectors for Website, Phone, Category, Address, and Social
+                // 2. Extract core details from dedicated Google Maps elements
                 const details = await page.evaluate(() => {
                     const webEl = document.querySelector('a[data-item-id="authority"]');
                     const phoneEl = document.querySelector('button[data-item-id^="phone:tel:"]');
@@ -115,7 +115,6 @@ export async function scrapeGoogleMaps(
                     const fbEl = document.querySelector('a[data-item-id^="social"]');
                     const emailEl = document.querySelector('a[data-item-id^="email"]');
 
-                    // Extract social links — only from dedicated Google Maps elements
                     let facebookUrl = null;
                     let email = null;
 
@@ -131,7 +130,6 @@ export async function scrapeGoogleMaps(
                         }
                     }
 
-                    // Fallback: search page text for email pattern
                     if (!email) {
                         const pageText = document.body.innerText;
                         const emailMatch = pageText.match(/[\w.-]+@[\w.-]+\.\w+/);
@@ -157,6 +155,86 @@ export async function scrapeGoogleMaps(
                     continue;
                 }
 
+                // 3. Scroll side panel to bottom to trigger lazy-loaded Web results section
+                await page.evaluate(() => {
+                    const panel = document.querySelector('div[role="main"]') || document.querySelector('.m6QErb');
+                    if (panel) {
+                        (panel as HTMLElement).scrollTop = (panel as HTMLElement).scrollHeight;
+                    }
+                });
+
+                // 4. Poll for web results heading to appear (500ms intervals, max 8s)
+                let webLoaded = false;
+                for (let poll = 0; poll < 16; poll++) {
+                    const foundHeading = await page.evaluate(() => {
+                        const headings = document.querySelectorAll('h2, h3, h4');
+                        for (const h of headings) {
+                            const text = h.textContent?.toLowerCase() || '';
+                            if (text.includes('web result') || text.includes('result from the web') || text.includes('keputusan daripada web') || text.includes('hasil web')) {
+                                const section = h.closest('[class]')?.parentElement || h.parentElement;
+                                return section ? true : false;
+                            }
+                        }
+                        return false;
+                    });
+                    if (foundHeading) {
+                        webLoaded = true;
+                        await page.waitForTimeout(600);
+                        break;
+                    }
+                    await page.waitForTimeout(500);
+                }
+
+                // 5. Extract social links from Web results section
+                let webFacebookUrl: string | null = null;
+                let instagramUrl: string | null = null;
+                let tiktokUrl: string | null = null;
+
+                if (webLoaded) {
+                    const webSocial = await page.evaluate(() => {
+                        const result: { facebook?: string; instagram?: string; tiktok?: string } = {};
+                        const headings = document.querySelectorAll('h2, h3, h4');
+                        let sectionEl: Element | null = null;
+                        for (const h of headings) {
+                            const text = h.textContent?.toLowerCase() || '';
+                            if (text.includes('web result') || text.includes('result from the web') || text.includes('keputusan daripada web') || text.includes('hasil web')) {
+                                sectionEl = h.closest('[class]')?.parentElement || h.parentElement;
+                                break;
+                            }
+                        }
+                        if (sectionEl) {
+                            const links = sectionEl.querySelectorAll('a[href]');
+                            for (const link of Array.from(links)) {
+                                const href = link.getAttribute('href') || '';
+                                if (!href.startsWith('http')) continue;
+                                const cleanUrl = href.split('?')[0];
+                                if (!result.facebook && cleanUrl.includes('facebook.com/')) {
+                                    const p = cleanUrl.replace(/https?:\/\/(www\.)?facebook\.com/, '');
+                                    if (p.length > 1 && !['/share', '/l/', '/plugins', '/dialog', '/sharer', '/common'].some(x => p.startsWith(x))) {
+                                        result.facebook = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
+                                    }
+                                }
+                                if (!result.instagram && cleanUrl.includes('instagram.com/')) {
+                                    const p = cleanUrl.replace(/https?:\/\/(www\.)?instagram\.com/, '');
+                                    if (p.length > 1 && !['/share', '/p/'].some(x => p.startsWith(x))) {
+                                        result.instagram = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
+                                    }
+                                }
+                                if (!result.tiktok && cleanUrl.includes('tiktok.com/@')) {
+                                    result.tiktok = cleanUrl.endsWith('/') ? cleanUrl : cleanUrl + '/';
+                                }
+                            }
+                        }
+                        return result;
+                    });
+                    webFacebookUrl = webSocial.facebook || null;
+                    instagramUrl = webSocial.instagram || null;
+                    tiktokUrl = webSocial.tiktok || null;
+                }
+
+                // 6. Merge: dedicated social link preferred, web results fills gaps
+                const facebookUrl = details.facebookUrl || webFacebookUrl;
+
                 if (business_name !== "Unknown") {
                     const lead: ExpectedLead = {
                         business_name,
@@ -166,13 +244,13 @@ export async function scrapeGoogleMaps(
                         category: details.category,
                         address: details.address,
                         maps_url: url,
-                        facebook_url: details.facebookUrl,
-                        instagram_url: null,
-                        tiktok_url: null,
+                        facebook_url: facebookUrl,
+                        instagram_url: instagramUrl,
+                        tiktok_url: tiktokUrl,
                         email: details.email || null
                     };
                     leads.push(lead);
-                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'} | FB: ${details.facebookUrl || 'None'} | IG: None | TT: None | Email: ${details.email || 'None'}`);
+                    console.log(`[+] Valid Lead: ${business_name} | Phone: ${phone_normalized} | Web: ${details.website || 'None'} | FB: ${facebookUrl || 'None'} | IG: ${instagramUrl || 'None'} | TT: ${tiktokUrl || 'None'} | Email: ${details.email || 'None'}`);
                 }
 
             } catch (err) {
