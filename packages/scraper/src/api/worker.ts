@@ -168,6 +168,16 @@ export default {
                 if (!validStages.includes(pipeline_stage)) {
                     return new Response(JSON.stringify({ error: "Invalid stage" }), { status: 400 });
                 }
+                if (pipeline_stage === "images_collected") {
+                    const lead = await env.pintarweb_scraper_db.prepare(
+                        `SELECT images_collected FROM leads WHERE phone_normalized = ?`
+                    ).bind(phone).first() as any;
+                    if (!lead || !lead.images_collected || lead.images_collected < 1) {
+                        return new Response(JSON.stringify({
+                            error: "Lead must have at least 1 image uploaded before advancing to images_collected stage"
+                        }), { status: 400 });
+                    }
+                }
                 await env.pintarweb_scraper_db.prepare(
                     `UPDATE leads SET pipeline_stage = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
                 ).bind(pipeline_stage, phone).run();
@@ -188,19 +198,40 @@ export default {
                     await env.pintarweb_scraper_db.prepare(
                         `UPDATE leads SET images_collected = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
                     ).bind(images_collected, phone).run();
+                    if (images_collected > 0) {
+                        const cur = await env.pintarweb_scraper_db.prepare(
+                            `SELECT pipeline_stage FROM leads WHERE phone_normalized = ?`
+                        ).bind(phone).first() as any;
+                        if (!cur || cur.pipeline_stage === 'new' || cur.pipeline_stage === null) {
+                            await env.pintarweb_scraper_db.prepare(
+                                `UPDATE leads SET pipeline_stage = 'images_collected', updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
+                            ).bind(phone).run();
+                        }
+                    }
                 }
                 if (tagline || niche || services || testimonials || facebook_url !== undefined || instagram_url !== undefined || tiktok_url !== undefined) {
-                    // Check if lead has no website + social URLs → add social bonus
+                    // Ensure lead exists before updating (intake form may create leads not yet in D1)
                     const existing = await env.pintarweb_scraper_db.prepare(
+                        `SELECT id, website_url, lead_score FROM leads WHERE phone_normalized = ?`
+                    ).bind(phone).first() as any;
+
+                    if (!existing) {
+                        await env.pintarweb_scraper_db.prepare(
+                            `INSERT INTO leads (id, phone_normalized, lead_score, status, pipeline_stage, images_collected, updated_at)
+                             VALUES (?, ?, 1, 'New', 'new', 0, CURRENT_TIMESTAMP)`
+                        ).bind(crypto.randomUUID(), phone).run();
+                    }
+
+                    // Re-fetch to get latest state (lead_score may have been set by insert)
+                    const leadRow = await env.pintarweb_scraper_db.prepare(
                         `SELECT website_url, lead_score FROM leads WHERE phone_normalized = ?`
                     ).bind(phone).first() as any;
 
                     const hasSocial = facebook_url || instagram_url || tiktok_url;
-                    const hasNoWebsite = !existing?.website_url || existing.website_url === 'null';
+                    const hasNoWebsite = !leadRow?.website_url || leadRow.website_url === 'null';
                     let scoreBonus = 0;
 
                     if (hasSocial && hasNoWebsite) {
-                        // Social-active + no website = +3 bonus (marketing opportunity)
                         scoreBonus = 3;
                     }
 
@@ -409,6 +440,13 @@ export default {
                     const f = formData.get("gallery_" + gi);
                     if (f && typeof f !== "string") galleryFiles.push(f as File);
                 }
+                let existingGalleryCount = 0;
+                if (galleryFiles.length > 0) {
+                    try {
+                        const existing = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/gallery-` });
+                        existingGalleryCount = existing.objects.length;
+                    } catch (_) {}
+                }
 
                 if (logoFile && logoFile.size > 0) {
                     const ext = logoFile.name.split(".").pop() || "webp";
@@ -428,12 +466,20 @@ export default {
                     results.hero = key;
                 }
 
+                const r2Base = `https://pub-${env.CLOUDFLARE_ACCOUNT_ID || 'ACCOUNT'}.r2.dev/pintarweb-client-images`;
+                const resp: Record<string, unknown> = {};
+
                 if (galleryFiles.length > 0) {
                     results.gallery = [];
+                    // Collect existing gallery URLs first so the client gets the full set
+                    const allGallery = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/gallery-` });
+                    const existingUrls: string[] = allGallery.objects
+                        .filter((o: any) => o.key !== undefined)
+                        .map((o: any) => `${r2Base}/${o.key}`);
                     for (let gi = 0; gi < galleryFiles.length; gi++) {
                         const f = galleryFiles[gi];
                         const ext = f.name.split(".").pop() || "webp";
-                        const key = `${leadId}/gallery-${String(gi + 1).padStart(3, "0")}.${ext}`;
+                        const key = `${leadId}/gallery-${String(existingGalleryCount + gi + 1).padStart(3, "0")}.${ext}`;
                         try {
                             await env.CLIENT_IMAGES.put(key, f.stream(), {
                                 httpMetadata: { contentType: f.type }
@@ -441,16 +487,41 @@ export default {
                             (results.gallery as string[]).push(key);
                         } catch (_) {}
                     }
+                    // Merge existing + new gallery URLs, deduplicate by key
+                    const newUrls: string[] = (results.gallery as string[]).map((k: string) => `${r2Base}/${k}`);
+                    const seen = new Set(newUrls);
+                    existingUrls.forEach((u: string) => { if (!seen.has(u)) { seen.add(u); newUrls.unshift(u); } });
+                    resp.gallery_urls = newUrls;
                 }
 
-                const r2Base = `https://pub-${env.CLOUDFLARE_ACCOUNT_ID || 'ACCOUNT'}.r2.dev/pintarweb-client-images`;
-                const resp: Record<string, unknown> = {};
                 if (results.logo) resp.logo_url = `${r2Base}/${results.logo}`;
                 if (results.hero) resp.hero_url = `${r2Base}/${results.hero}`;
-                if (results.gallery) resp.gallery_urls = (results.gallery as string[]).map((k: string) => `${r2Base}/${k}`);
                 resp.keys = results;
+                // Report total images in R2 so client can save accurate images_collected
+                try {
+                    const all = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/` });
+                    resp.total_images = all.objects.length;
+                } catch (_) {}
 
                 return new Response(JSON.stringify({ success: true, files: resp }), {
+                    headers: { "Content-Type": "application/json" }
+                });
+            } catch (e: any) {
+                return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+            }
+        }
+
+        // GET /api/gallery/:leadId — list gallery* image URLs from R2 (excludes logo, hero)
+        const galleryMatch = url.pathname.match(/^\/api\/gallery\/([^\/]+)$/);
+        if (galleryMatch && request.method === "GET") {
+            try {
+                const leadId = decodeURIComponent(galleryMatch[1]);
+                const r2Base = `https://pub-${env.CLOUDFLARE_ACCOUNT_ID || 'ACCOUNT'}.r2.dev/pintarweb-client-images`;
+                const objects = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/` });
+                const images: { key: string; url: string }[] = objects.objects
+                    .filter((o: any) => o.key && o.key.includes('gallery-'))
+                    .map((o: any) => ({ key: o.key, url: `${r2Base}/${o.key}` }));
+                return new Response(JSON.stringify({ images }), {
                     headers: { "Content-Type": "application/json" }
                 });
             } catch (e: any) {

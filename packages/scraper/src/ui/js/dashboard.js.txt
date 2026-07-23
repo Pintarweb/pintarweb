@@ -499,12 +499,30 @@ function exportToCRM() {
 
 function applyFilters() { renderLeads(); }
 
+function showToast(msg, type) {
+    var t = document.createElement('div');
+    t.className = 'fixed bottom-6 right-6 z-[9999] px-5 py-3 rounded-xl text-white font-bold text-sm shadow-2xl transition-all duration-300 ' + (type === 'error' ? 'bg-red-600' : 'bg-emerald-600');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 4000);
+}
+
 function updatePipelineStage(phone, stage) {
-    fetch(`/api/leads/${encodeURIComponent(phone)}/stage`, {
+    return fetch(`/api/leads/${encodeURIComponent(phone)}/stage`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pipeline_stage: stage })
-    }).then(() => fetchLeads()).catch(e => console.error(e));
+    }).then(function(r) {
+        if (!r.ok) {
+            return r.json().then(function(data) {
+                throw new Error(data.error || 'Failed to advance stage');
+            });
+        }
+        fetchLeads();
+    }).catch(function(e) {
+        console.error(e);
+        showToast(e.message, 'error');
+    });
 }
 
 async function saveIntake(phone) {
@@ -911,20 +929,25 @@ function buildDemo(phone) {
         body: JSON.stringify({ tagline, niche, services, testimonials })
     }).catch(e => console.warn('Failed to save intake:', e));
 
-    const buildCmd = `bash scripts/build-client.sh ${leadId}`;
-    const deployCmd = `bash scripts/deploy-preview.sh`;
-    const fullCmd = `cd ~/projects/pintarweb && ${buildCmd} && ${deployCmd}`;
+    const preCmd = 'bash scripts/prepare-demo-images.sh ' + leadId + ' "' + (niche || 'general') + '"';
+    const buildCmd = 'bash scripts/build-client.sh ' + leadId;
+    const deployCmd = 'bash scripts/deploy-preview.sh';
+    const fullCmd = 'cd ~/projects/pintarweb && ' + preCmd + ' && ' + buildCmd + ' && ' + deployCmd;
 
     const output = document.getElementById('intake-body');
     if (output) {
         output.innerHTML = `
             <div class="space-y-4">
                 <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
-                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 1: Build CSS</div>
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 1: Prepare Images</div>
+                    <pre class="whitespace-pre-wrap">${preCmd}</pre>
+                </div>
+                <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 2: Build CSS</div>
                     <pre class="whitespace-pre-wrap">${buildCmd}</pre>
                 </div>
                 <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
-                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 2: Deploy</div>
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 3: Deploy</div>
                     <pre class="whitespace-pre-wrap">${deployCmd}</pre>
                 </div>
                 <div class="text-center pt-2">
@@ -939,7 +962,7 @@ function buildDemo(phone) {
 
     /* Copy full command to clipboard */
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(fullCmd).catch(() => {});
+        navigator.clipboard.writeText(fullCmd).catch(function() {});
     }
 }
 

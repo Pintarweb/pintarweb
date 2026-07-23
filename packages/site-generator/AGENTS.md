@@ -37,8 +37,18 @@ This applies to all text in generated sites: headings, body copy, CTAs, FAQ answ
 ## Image Pipeline (mandatory — no gradient placeholders)
 1. **PRIORITY 1 (Client Specific):** Check `clients/{id}/images/` first. Use relative paths (e.g., `images/hero.webp`, `images/service-1.webp`, `images/gallery-1.webp`).
 2. **PRIORITY 2 (System Fallback):** If client images are missing, use `design-system/references/image-collections/{category}/` — select matching filenames (hero.webp, service-1.webp, gallery-1.webp, etc.).
-3. **FORBIDDEN:** No external URLs (Unsplash, etc.). No gradient div placeholders. No colored boxes with icons. Every image slot must use a real `<img>` tag with a real photo.
-4. Image categories available: aircond-service, aircond-install, aircond-repair, plumbing, electrical, renovation.
+3. **Logo:** Always reference `images/logo.{svg|webp|png}` in the nav and footer. Use `<img src="images/logo.svg" alt="{Business Name}" class="h-8 w-auto">` left of the business name text. If the file doesn't exist, fall back to business name text only. The `prepare-demo-images.sh` script always generates a `logo.svg` with initials, so the file will exist for demo builds.
+4. **FORBIDDEN:** No external URLs (Unsplash, etc.). No gradient div placeholders. No colored boxes with icons. Every image slot must use a real `<img>` tag with a real photo.
+5. Image categories available: aircond-service, aircond-install, aircond-repair, plumbing, electrical, renovation.
+
+## Logo Placement
+
+Every demo site must include the logo image in:
+
+1. **Navigation header**: `<img src="images/logo.svg" alt="{Business Name}" class="h-8 w-auto">` placed left of the business name text, wrapped in a container with `flex items-center gap-2`
+2. **Footer**: Same `<img>` before or above the business name `<p>` tag in the business info column
+
+Both slots fall back to text-only display if the image file doesn't exist.
 
 ## Language toggle (mandatory on every site)
 Every site must support BM/EN toggle.
