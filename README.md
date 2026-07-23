@@ -71,6 +71,15 @@ pintarweb/
 ## Key Scripts
 
 ```bash
+# Prepare demo images (download R2 + stock fill + logo gen)
+bash scripts/prepare-demo-images.sh {lead-id} {niche}
+
+# Build client CSS (after generating HTML)
+bash scripts/build-client.sh {client-id}
+
+# Deploy all client previews
+bash scripts/deploy-preview.sh
+
 # Generate demo site + audit + WhatsApp link
 bash scripts/generate-demo.sh --name "Business" --phone "60123456789" --area "KL" --niche "aircond"
 
@@ -126,11 +135,10 @@ bash scripts/create-subscription.sh "[lead-id]" "monthly"
 # Install
 pnpm install
 
-# Build site CSS (after generating HTML)
-bash packages/site-generator/scripts/build-client.sh {client-id}
-
-# Deploy site to preview
-bash scripts/deploy-preview.sh
+# 3-step demo build pipeline
+bash scripts/prepare-demo-images.sh {lead-id} {niche}   # Download R2 + stock fill + logo
+bash scripts/build-client.sh {client-id}                 # Build CSS
+bash scripts/deploy-preview.sh                           # Deploy to preview
 
 # Deploy WhatsApp bot
 cd workers/whatsapp-bot && npx wrangler deploy

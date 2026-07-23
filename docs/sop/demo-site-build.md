@@ -9,8 +9,8 @@ Standard operating procedure for building a client demo site from lead to deploy
 ## Overview
 
 ```
-GATHER INFO → CREATE CONFIG → GENERATE SITE → BUILD → DEPLOY → VERIFY
-     15 min           5 min        30-45 min      5 min     1 min       5 min
+GATHER INFO → CREATE CONFIG → GENERATE SITE → PREP IMAGES → BUILD CSS → DEPLOY → VERIFY
+     15 min           5 min        30-45 min      3 min      5 min      1 min       5 min
 ```
 
 ---
@@ -30,10 +30,11 @@ Collect these from scraper/lead list:
 - [ ] Instagram handle (if available)
 
 **Photos strategy:**
-1. Check their Facebook page for real work photos
-2. Check their Instagram
-3. If no photos available → use AI-generated from `packages/site-generator/assets/image-collections/`
-4. Mark photo sources in notes for client onboarding later
+1. Client uploads real photos via intake form gallery upload (R2 bucket `pintarweb-client-images`)
+2. `prepare-demo-images.sh` downloads R2 images, fills missing slots from niche stock directory
+3. Stock images available per niche: `aircond-service/`, `electrical/`, `plumbing/` (hero + service + gallery sets)
+4. Initials logo SVG auto-generated with mood-appropriate color
+5. Mark photo sources in notes for client onboarding later
 
 ---
 
@@ -122,7 +123,42 @@ Or create from scratch:
 
 ---
 
-## Step 4: Build CSS
+## Step 4: Prepare Demo Images
+
+**Time:** 3 minutes
+
+Downloads R2 client images, fills missing slots from niche stock, generates initials logo:
+
+```bash
+bash scripts/prepare-demo-images.sh {lead-id} {niche}
+```
+
+**Niche → stock image mapping:**
+| Niche | Stock Dir | Images Available |
+|-------|-----------|-----------------|
+| aircond-contractor | `aircond-service/` | hero, service-1/2/3, gallery-1/2/3 |
+| plumbing | `plumbing/` | hero, service-1/2/3, gallery-1/2/3 |
+| electrical | `electrical/` | hero, service-1/2/3, gallery-1/2/3 |
+| renovation | `renovation/` | (empty — no stock) |
+| general / other | — | (no stock — uses only client images) |
+
+**What it does:**
+1. Downloads uploaded images from R2 (`pintarweb-client-images`) for this lead
+2. Checks which image slots are still missing (hero, service-1/2/3, gallery-1/2/3)
+3. Fills missing slots from `packages/site-generator/design-system/references/image-collections/{category}/`
+4. Generates `images/logo.svg` with business initials + mood-appropriate color
+5. Places all images into `packages/site-generator/clients/{client-id}/images/`
+
+**Verify output:**
+```
+✅ Images ready: packages/site-generator/clients/{client-id}/images/
+   - logo.svg, hero.webp, service-1.webp, service-2.webp, service-3.webp
+   - gallery-1.webp, gallery-2.webp, gallery-3.webp
+```
+
+---
+
+## Step 5: Build CSS
 
 **Time:** 5 minutes
 
@@ -140,7 +176,7 @@ This compiles Tailwind + custom styles from `input.css` into `clients/{new-id}/s
 
 ---
 
-## Step 5: Deploy
+## Step 6: Deploy
 
 **Time:** 1 minute
 
@@ -157,7 +193,7 @@ This deploys the entire `clients/` directory. All client demos are under `previe
 
 ---
 
-## Step 6: Verify
+## Step 7: Verify
 
 **Time:** 5 minutes
 
@@ -186,7 +222,7 @@ Test on both mobile and desktop:
 
 ---
 
-## Step 7: Generate Audit Report (Optional)
+## Step 8: Generate Audit Report (Optional)
 
 **Time:** 15 minutes
 
@@ -204,7 +240,7 @@ If scraper data available:
 
 ---
 
-## Step 8: Prepare Outreach
+## Step 9: Prepare Outreach
 
 **Add UTM params to demo URL:**
 ```
@@ -224,14 +260,19 @@ https://preview.pintarweb.com/{new-id}/?ref=outreach&prospect={lead-id}
 ## Quick Commands Reference
 
 ```bash
+# Prepare demo images (download R2 + stock fill + logo)
+bash scripts/prepare-demo-images.sh {lead-id} {niche}
+
 # Build single client CSS
 bash scripts/build-client.sh {id}
 
 # Deploy all client previews
 bash scripts/deploy-preview.sh
 
-# Both together
-bash scripts/build-client.sh {id} && bash scripts/deploy-preview.sh
+# Full pipeline (3 steps)
+bash scripts/prepare-demo-images.sh {lead-id} {niche} && \
+bash scripts/build-client.sh {id} && \
+bash scripts/deploy-preview.sh
 ```
 
 ---
@@ -252,11 +293,12 @@ bash scripts/build-client.sh {id} && bash scripts/deploy-preview.sh
 
 | Metric | Target | Ideal |
 |--------|--------|-------|
-| Build time | 60 min | 30 min |
+| Image prep time | 3 min | 1 min |
+| Build time | 5 min | 2 min |
 | Deploy time | 5 min | 2 min |
 | QA time | 10 min | 5 min |
-| **Total** | **75 min** | **37 min** |
+| **Total** | **78 min** | **35 min** |
 
 ---
 
-**Last Updated:** 2026-06-28
+**Last Updated:** 2026-07-23

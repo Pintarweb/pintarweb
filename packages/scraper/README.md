@@ -6,10 +6,12 @@ Professional-grade lead generation and intelligence pipeline designed for Malays
 
 1.  **Search & Extract**: Automated Playwright scrapers (`src/scrapers`) hunt for specific business categories across Google Maps, Facebook, and Yellow Pages.
 2.  **Intelligence Pipeline**: Leads are piped into a local **Cloudflare Worker** (`src/api/worker.ts`), triggering a multi-layer intelligence suite:
-    *   **No-Website Bonus (+3 Points)**: Instantly identifies "Digitally Invisible" businesses.
-    *   **Technical Audit (+SSL, +Speed)**: Checks for missing HTTPS and slow mobile response times.
-    *   **AI Pain-Point Detection (+2 Points)**: Analyzes customer reviews using LLMs to identify specific communication or service gaps.
-3.  **Pipeline Pro Dashboard**: A premium, real-time interface (`localhost:8787/dashboard`) for sales triage, filtering, and lead management.
+     *   **No-Website Bonus (+3 Points)**: Instantly identifies "Digitally Invisible" businesses.
+     *   **Social + No Website Bonus (+3 Points)**: Social presence without a website = high-priority marketing opportunity.
+     *   **Technical Audit (+SSL, +Speed)**: Checks for missing HTTPS and slow mobile response times.
+     *   **AI Pain-Point Detection (+2 Points)**: Analyzes customer reviews using LLMs to identify specific communication or service gaps.
+3.  **Intake Form**: Standalone form (`/clients/intake-form.html`) for collecting social URLs, service areas, tagline, and gallery image uploads (stored in R2). Auto-advances leads through pipeline stages.
+4.  **Pipeline Pro Dashboard**: A premium, real-time interface (`localhost:8787/dashboard`) for sales triage, filtering, and lead management.
 
 ## 📊 Pipeline Pro Features
 

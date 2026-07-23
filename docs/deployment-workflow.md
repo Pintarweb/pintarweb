@@ -23,10 +23,18 @@
        └── config.json
    ```
 
-2. Run the deploy script:
+2. Run the 3-step build pipeline (from project root):
    ```bash
    cd ~/projects/pintarweb
-   ./scripts/deploy-preview.sh
+
+   # Step 1: Prepare demo images (download R2 + stock fill + logo)
+   bash scripts/prepare-demo-images.sh {lead-id} {niche}
+
+   # Step 2: Build client CSS
+   bash scripts/build-client.sh {business-id}
+
+   # Step 3: Deploy to preview.pintarweb.com
+   bash scripts/deploy-preview.sh
    ```
 
 3. Verify the site is live:
@@ -129,9 +137,29 @@ git checkout <last-good-commit> -- packages/site-generator/clients/
 
 ---
 
-## Deploy Script Reference
+## Deploy Scripts Reference
 
-File: `scripts/deploy-preview.sh`
+### Full 3-step pipeline
+```bash
+# All 3 steps in sequence
+bash scripts/prepare-demo-images.sh {lead-id} {niche} && \
+bash scripts/build-client.sh {business-id} && \
+bash scripts/deploy-preview.sh
+```
+
+### Individual scripts
+
+**File: `scripts/prepare-demo-images.sh`**
+- Downloads client images from R2 bucket `pintarweb-client-images`
+- Fills missing image slots from niche stock directory
+- Generates `images/logo.svg` with business initials + mood color
+- Output: `packages/site-generator/clients/{id}/images/`
+
+**File: `scripts/build-client.sh`**
+- Compiles Tailwind CSS + custom styles into purged `style.css`
+- Scans HTML for used Tailwind classes
+
+**File: `scripts/deploy-preview.sh`**
 ```bash
 #!/bin/sh
 set -e
@@ -150,4 +178,4 @@ echo "Latest:   https://main.pintarweb-preview.pages.dev"
 
 ---
 
-**Last Updated:** 2026-06-24
+**Last Updated:** 2026-07-23

@@ -823,7 +823,9 @@ html { scroll-padding-top: 80px; }
     var input = document.getElementById(inputId);
     var preview = document.getElementById(previewId);
     input.addEventListener('change', function () {
-      preview.innerHTML = '';
+      if (inputId !== 'gallery') {
+        preview.innerHTML = '';
+      }
       var files = inputId === 'gallery' ? Array.prototype.slice.call(this.files, 0, 5) : (this.files.length ? [this.files[0]] : []);
       files.forEach(function (file) {
         var reader = new FileReader();
@@ -843,6 +845,35 @@ html { scroll-padding-top: 80px; }
         reader.readAsDataURL(file);
       });
     });
+  }
+
+  function loadGalleryThumbs(leadId) {
+    if (!leadId) return;
+    var preview = document.getElementById('gallery_preview');
+    preview.innerHTML = '';
+    var idx = { n: 0 };
+    fetch('/api/gallery/' + encodeURIComponent(leadId))
+      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function (data) {
+        if (!data.images || !data.images.length) return;
+        data.images.forEach(function (img) {
+          idx.n++;
+          var wrap = document.createElement('div');
+          wrap.style.textAlign = 'center';
+          var el = document.createElement('img');
+          el.src = img.url;
+          el.className = 'thumb';
+          el.alt = 'Gallery ' + idx.n;
+          el.onerror = function () { this.style.display = 'none'; };
+          var label = document.createElement('div');
+          label.className = 'thumb-label';
+          label.textContent = 'Gambar ' + idx.n;
+          wrap.appendChild(el);
+          wrap.appendChild(label);
+          preview.appendChild(wrap);
+        });
+      })
+      .catch(function () {});
   }
 
   function generateTagline() {
@@ -1036,6 +1067,9 @@ html { scroll-padding-top: 80px; }
     }).then(function (data) {
       var files = data.files || {};
 
+      // Use server's total image count (accounts for prior uploads)
+      var totalImages = files.total_images || photoCount;
+
       /* Update config with R2 image URLs */
       if (files.logo_url) config.logo_image = files.logo_url;
       if (files.hero_url) config.hero_image = files.hero_url;
@@ -1045,14 +1079,14 @@ html { scroll-padding-top: 80px; }
       instr += 'Logo: ' + (files.logo_url || 'not uploaded') + '\n';
       instr += 'Hero: ' + (files.hero_url || 'not uploaded') + '\n';
       if (files.gallery_urls && files.gallery_urls.length) {
-        instr += 'Gallery: ' + files.gallery_urls.length + ' image(s) uploaded\n';
+        instr += 'Gallery: ' + files.gallery_urls.length + ' new image(s) uploaded (total: ' + totalImages + ')\n';
       }
 
       // Save image count to D1
       fetch('/api/leads/' + apiPhone + '/intake', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ images_collected: photoCount })
+        body: JSON.stringify({ images_collected: totalImages })
       }).catch(function () {});
 
       clearDraft();
@@ -1193,6 +1227,8 @@ html { scroll-padding-top: 80px; }
   handleFilePreview('logo', 'logo_preview');
   handleFilePreview('hero', 'hero_preview');
   handleFilePreview('gallery', 'gallery_preview');
+  var leadIdParam = new URLSearchParams(window.location.search).get('id') || '';
+  if (leadIdParam) loadGalleryThumbs(leadIdParam);
 
   /* Auto-save: text inputs, textarea, select */
   var autoSaveInputs = document.querySelectorAll('#intakeForm input[type="text"], #intakeForm input[type="tel"], #intakeForm input[type="url"], #intakeForm input[type="email"], #intakeForm textarea, #intakeForm select');

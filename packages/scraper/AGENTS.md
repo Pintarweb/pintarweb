@@ -63,11 +63,13 @@ The scraper sends leads to `http://localhost:8787/api/leads`. Worker must be run
 | PATCH | `/api/leads` | Update lead status (archive) |
 | DELETE | `/api/leads` | Delete a lead |
 | PATCH | `/api/leads/:phone/stage` | Update pipeline stage |
-| PATCH | `/api/leads/:phone/intake` | Save intake data (tagline, niche, services, testimonials) |
+| PATCH | `/api/leads/:phone/intake` | Save intake data (tagline, niche, services, testimonials, social URLs). Upserts lead row if phone_normalized missing. Auto-advances to `images_collected` if `images_collected > 0`. Applies +3 social bonus if social URL saved + no website_url. |
 | PATCH | `/api/leads/:phone/demo` | Save demo URL |
 | PATCH | `/api/leads/:phone/outreach` | Mark outreach sent |
+| PATCH | `/api/leads/:phone/stage` | Update pipeline stage. Validates: rejects `images_collected` if `images_collected < 1` (400). |
 | POST | `/api/generate-tagline` | Generate tagline from niche + area (template-based, instant) |
-| POST | `/api/upload/:leadId` | Upload images to R2 (logo, hero, gallery) |
+| POST | `/api/upload/:leadId` | Upload images to R2 (logo, hero, gallery). Gallery keys auto-indexed from existing count. Returns `total_images` = all R2 objects after upload. |
+| GET | `/api/gallery/:leadId` | List gallery images from R2: `{ images: [{ key, url }] }` filtered to `gallery-*` |
 | GET | `/api/areas` | Return dynamic list of 44 Malaysian areas |
 | GET | `/api/hunts` | List hunt history |
 | POST | `/api/hunts` | Record a new hunt |
@@ -85,9 +87,12 @@ After extracting core business data from the side panel, `scrapeGoogleMaps` scro
 ## Scoring logic (from `src/db/upsertLead.ts`)
 
 - New lead with website: base score 1. No website: base score 4 (+3 "digitally invisible" bonus)
+- Social + no website: +3 bonus applied on PATCH /intake when any social URL saved + no website_url (stored in `lead_score`)
 - Duplicate from new source: +2
 - SSL missing: +3. Slow mobile response: +2 (from `src/workers/technicalAudit.ts`)
 - AI pain point detected: +2 (from `src/workers/aiQualification.ts`)
+
+**Priority target:** Leads with social presence but no website are high-priority marketing opportunities (digitally invisible + already active on social = quick win for PintarWeb).
 
 ## Intake Form (src/ui/intake-form.html)
 
@@ -97,12 +102,14 @@ Standalone form served at `/clients/intake-form.html`. Opened from dashboard mod
 
 **Features:**
 - Service Area: **Dynamic dropdowns** (Area 1/2/3 + "+ Add Area" button) loaded from `GET /api/areas` (44 areas). Selected areas are disabled in other dropdowns to prevent duplicates. Area list can be updated by editing the array in worker.ts.
-- Facebook URL pre-fill: now handles both full URLs and handles (detects `http` prefix).
-- Gallery upload: sends each file as `gallery_0`, `gallery_1`, ... (numbered keys). Server reads them individually and properly awaits each R2 put.
+- Social URLs: `facebook_url`, `instagram_url`, `tiktok_url` fields saved via PATCH /intake. Server applies COALESCE save (keeps existing if new value empty). +3 lead_score bonus if any social saved + lead has no website_url.
+- Gallery upload: gallery file input appends to existing (doesn't clear). Sends each file as `gallery_0`, `gallery_1`, ... (numbered keys). Server auto-indexes from existing R2 `gallery-*` count + 1. Returns `total_images` = all R2 objects after upload.
+- Gallery load on init: `loadGalleryThumbs(leadId)` fetches existing gallery from `GET /api/gallery/:leadId` on page load, shows thumbnails below upload area.
+- On submit: sends `images_collected` count (from `files.total_images || photoCount`). Server auto-advances pipeline_stage to `images_collected` if `images_collected > 0` and current stage is `new` or null.
 - **Draft auto-save/resume**: all text inputs, selects, and area dropdowns auto-save to `localStorage` 600ms after last change. Draft keyed by lead ID. Restores on page load (overlays URL prefill). Orange indicator bar shows "Draf disimpan" with timestamp + "Padam Draf" button. Draft cleared on successful submit.
 - Tagline: client-side generation via `✨ Generate` button (template-based, no API call)
 - Images: uploads to R2 bucket `pintarweb-client-images` on submit
-- On submit: generates `config.json` with `logo_image`, `hero_image`, `gallery_images` pointing to R2 URLs
+- On submit: sends `facebook_url`, `instagram_url`, `tiktok_url`, and `images_collected` count to PATCH /intake. `config.json` generation now handled by `scripts/prepare-demo-images.sh` during build pipeline.
 
 **R2 bucket**: `pintarweb-client-images` — public URL: `https://pub-{ACCOUNT_ID}.r2.dev/pintarweb-client-images`
 
