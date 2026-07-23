@@ -164,7 +164,7 @@ export default {
             try {
                 const phone = url.pathname.split("/")[3];
                 const { pipeline_stage } = await request.json() as any;
-                const validStages = ["new", "images_collected", "demo_ready", "demo_built", "audit_ready", "screenshot", "outreach_sent", "in_chat", "qualified", "payment", "active"];
+                const validStages = ["new", "images_collected", "demo_built", "audit_ready", "screenshot", "outreach_sent", "in_chat", "qualified", "payment", "active"];
                 if (!validStages.includes(pipeline_stage)) {
                     return new Response(JSON.stringify({ error: "Invalid stage" }), { status: 400 });
                 }
@@ -195,6 +195,15 @@ export default {
                 const phone = url.pathname.split("/")[3];
                 const { tagline, niche, services, testimonials, images_collected, facebook_url, instagram_url, tiktok_url } = await request.json() as any;
                 if (images_collected !== undefined) {
+                    const existing = await env.pintarweb_scraper_db.prepare(
+                        `SELECT id FROM leads WHERE phone_normalized = ?`
+                    ).bind(phone).first() as any;
+                    if (!existing) {
+                        await env.pintarweb_scraper_db.prepare(
+                            `INSERT INTO leads (id, phone_normalized, lead_score, status, pipeline_stage, images_collected, updated_at)
+                             VALUES (?, ?, 1, 'New', 'new', 0, CURRENT_TIMESTAMP)`
+                        ).bind(crypto.randomUUID(), phone).run();
+                    }
                     await env.pintarweb_scraper_db.prepare(
                         `UPDATE leads SET images_collected = ?, updated_at = CURRENT_TIMESTAMP WHERE phone_normalized = ?`
                     ).bind(images_collected, phone).run();

@@ -76,7 +76,7 @@ Words that are DIFFERENT in Malaysian vs Indonesian:
 - Intake Form: served at `/clients/intake-form.html` from scraper worker
 
 ### Pipeline Stages (11 total)
-`new → images_collected → demo_ready → demo_built → audit_ready → screenshot → outreach_sent → in_chat → qualified → payment → active`
+`new → images_collected → demo_built → audit_ready → screenshot → outreach_sent → in_chat → qualified → payment → active`
 
 ### Intake Form Flow
 1. Dashboard → click lead "Open Intake →" → modal with scraped data

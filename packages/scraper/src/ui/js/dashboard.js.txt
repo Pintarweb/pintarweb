@@ -3,12 +3,11 @@ let allHunts = [];
 let currentFolder = 'active';
 let sortMode = 'date';
 
-const STAGES = ['new', 'images_collected', 'demo_ready', 'demo_built', 'audit_ready', 'screenshot', 'outreach_sent', 'in_chat', 'qualified', 'payment', 'active'];
+const STAGES = ['new', 'images_collected', 'demo_built', 'audit_ready', 'screenshot', 'outreach_sent', 'in_chat', 'qualified', 'payment', 'active'];
 
 const STAGE_LABELS = {
     'new': 'New Lead',
     'images_collected': 'Images',
-    'demo_ready': 'Ready',
     'demo_built': 'Built',
     'audit_ready': 'Audit',
     'screenshot': 'Screenshot',
@@ -22,7 +21,6 @@ const STAGE_LABELS = {
 const STAGE_COLORS = {
     'new': { bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500' },
     'images_collected': { bg: 'bg-purple-50', text: 'text-purple-600', dot: 'bg-purple-500' },
-    'demo_ready': { bg: 'bg-indigo-50', text: 'text-indigo-600', dot: 'bg-indigo-500' },
     'demo_built': { bg: 'bg-violet-50', text: 'text-violet-600', dot: 'bg-violet-500' },
     'audit_ready': { bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500' },
     'screenshot': { bg: 'bg-orange-50', text: 'text-orange-600', dot: 'bg-orange-500' },
@@ -691,7 +689,7 @@ function openIntakePanel(phone) {
     const services = lead.services ? JSON.parse(lead.services) : [];
     const testimonials = lead.testimonials ? JSON.parse(lead.testimonials) : [];
 
-    const nextStage = STAGES[currentStageIdx + 1] || 'demo_ready';
+    const nextStage = STAGES[currentStageIdx + 1] || 'demo_built';
     const nextStageLabel = STAGE_LABELS[nextStage] || nextStage;
 
     const area = (lead.address || '').split(',')[0]?.trim() || '';
@@ -971,8 +969,8 @@ function renderPipelineBar() {
     const labelsContainer = document.getElementById('pipeline-labels');
     if (!container || !labelsContainer) return;
 
-    const SHORTS = ['N','I','D','B','A','S','O','C','Q','P','★'];
-    const LABEL_NAMES = ['New','Images','Ready','Built','Audit','Shot','Outreach','Chat','Qual','Pay','Active'];
+    const SHORTS = ['N','I','B','A','S','O','C','Q','P','★'];
+    const LABEL_NAMES = ['New','Images','Built','Audit','Shot','Outreach','Chat','Qual','Pay','Active'];
     const counts = {};
     STAGES.forEach(s => counts[s] = 0);
     allLeads.forEach(l => {
