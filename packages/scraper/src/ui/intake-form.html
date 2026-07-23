@@ -398,13 +398,168 @@ html { scroll-padding-top: 80px; }
   padding-bottom: 6px;
   border-bottom: 2px solid #B45309;
 }
+
+/* Success screen */
+#intakeForm.hidden { display: none; }
+
+.success-screen { display: none; text-align: center; padding: 48px 16px; }
+.success-screen.visible { display: block; }
+
+.success-checkmark {
+  width: 72px; height: 72px;
+  background: #059669;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 36px;
+  color: #fff;
+  line-height: 1;
+}
+
+.success-screen h2 {
+  font-size: 22px;
+  color: #059669;
+  margin-bottom: 4px;
+}
+
+.success-screen .success-sub {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.success-summary {
+  text-align: left;
+  background: #fff;
+  border-left: 4px solid #059669;
+  padding: 20px 16px;
+  margin-bottom: 24px;
+}
+
+.success-summary .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.success-summary .row:last-child { border-bottom: none; }
+
+.success-summary .label { color: #666; font-weight: 500; }
+.success-summary .value { color: #1a1a1a; font-weight: 600; text-align: right; max-width: 55%; }
+
+.success-next {
+  background: #f0f7f4;
+  border: 1.5px solid #1B4332;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #1B4332;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.success-next strong { display: block; margin-bottom: 4px; }
+
+.btn-dashboard {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: #1B4332;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  border: 2px solid #1a1a1a;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 4px 4px 0px 0px #1a1a1a;
+  margin-bottom: 12px;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+
+.btn-dashboard:hover {
+  box-shadow: 2px 2px 0px 0px #1a1a1a;
+  transform: translate(2px, 2px);
+}
+
+.btn-dashboard:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
+}
+
+.tech-toggle {
+  background: none;
+  border: none;
+  color: #1B4332;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 8px 4px;
+}
+
+.tech-toggle:hover { color: #2D6A4F; }
+
+.tech-details {
+  display: none;
+  margin-top: 16px;
+}
+
+.tech-details.visible { display: block; }
+
+.tech-details textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #f5f2ed;
+  border: 1.5px solid #d4d4d4;
+  color: #1a1a1a;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.tech-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tech-actions button {
+  flex: 1;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 2px solid #1a1a1a;
+  cursor: pointer;
+  background: #fff;
+  color: #1a1a1a;
+  box-shadow: 3px 3px 0px 0px #1a1a1a;
+  transition: box-shadow 0.1s, transform 0.1s;
+}
+
+.tech-actions button:hover {
+  box-shadow: 1px 1px 0px 0px #1a1a1a;
+  transform: translate(2px, 2px);
+}
+
+.tech-actions button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+.tech-actions .btn-copy { background: #1B4332; color: #fff; }
+.tech-actions .btn-download { background: #B45309; color: #fff; }
 </style>
 </head>
 <body>
 
 <header class="header">
   <h1>Pintarweb — Client Intake Form</h1>
-  <p>Isi maklumat untuk hasilkan config.json</p>
+  <p>Isi maklumat perniagaan pelanggan</p>
 </header>
 
 <div class="container">
@@ -531,21 +686,31 @@ html { scroll-padding-top: 80px; }
     </div>
 
     <!-- Submit -->
-    <button type="submit" class="btn-submit">Hasilkan Config</button>
+    <button type="submit" class="btn-submit">Simpan & Selesai</button>
   </form>
 
-  <!-- Output -->
-  <div class="output-section" id="outputSection">
-    <h2>Generated Config</h2>
-    <textarea id="configOutput" readonly></textarea>
-    <div class="output-actions">
-      <button class="btn-copy" id="copyBtn">Salin Config</button>
-      <button class="btn-download" id="downloadBtn">Muat Turun</button>
+  <!-- Success Screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-checkmark">&#10003;</div>
+    <h2>Berjaya! Data Disimpan</h2>
+    <p class="success-sub">Maklumat pelanggan berjaya disimpan ke database</p>
+
+    <div class="success-summary" id="successSummary"></div>
+
+    <div class="success-next">
+      <strong>Langkah seterusnya:</strong>
+      Buka Dashboard &rarr; cari lead ini &rarr; klik <strong>"Build Demo"</strong> untuk hasilkan website demo menggunakan gambar yang telah dimuat naik.
     </div>
 
-    <h2 style="margin-top:28px;">Image Placement Instructions</h2>
-    <div class="instructions" id="instructionsBlock">
-      <code id="instructionsCode"></code>
+    <button class="btn-dashboard" id="btnDashboard">Kembali ke Dashboard</button>
+    <button class="tech-toggle" id="btnTechToggle">Tunjuk Technical Details</button>
+
+    <div class="tech-details" id="techDetails">
+      <textarea id="configOutput" readonly></textarea>
+      <div class="tech-actions">
+        <button class="btn-copy" id="copyBtn">Salin Config</button>
+        <button class="btn-download" id="downloadBtn">Muat Turun</button>
+      </div>
     </div>
   </div>
 </div>
@@ -557,15 +722,17 @@ html { scroll-padding-top: 80px; }
 <script>
 (function () {
   var form = document.getElementById('intakeForm');
-  var outputSection = document.getElementById('outputSection');
+  var successScreen = document.getElementById('successScreen');
+  var successSummary = document.getElementById('successSummary');
   var configOutput = document.getElementById('configOutput');
   var copyBtn = document.getElementById('copyBtn');
   var downloadBtn = document.getElementById('downloadBtn');
-  var instructionsCode = document.getElementById('instructionsCode');
+  var techToggle = document.getElementById('btnTechToggle');
+  var techDetails = document.getElementById('techDetails');
+  var dashboardBtn = document.getElementById('btnDashboard');
   var toast = document.getElementById('toast');
 
   var currentConfig = null;
-  var currentId = null;
 
   var areaList = [];
 
@@ -574,6 +741,22 @@ html { scroll-padding-top: 80px; }
     toast.classList.add('show');
     setTimeout(function () { toast.classList.remove('show'); }, 2200);
   }
+
+  function goToDashboard() {
+    if (window.opener) {
+      try { window.opener.location.href = '/dashboard'; } catch (e) {}
+      window.close();
+    } else {
+      window.location.href = '/dashboard';
+    }
+  }
+
+  dashboardBtn.addEventListener('click', goToDashboard);
+
+  techToggle.addEventListener('click', function () {
+    techDetails.classList.toggle('visible');
+    techToggle.textContent = techDetails.classList.contains('visible') ? 'Sembunyi Technical Details' : 'Tunjuk Technical Details';
+  });
 
   function prefillaFromUrl() {
     var params = new URLSearchParams(window.location.search);
@@ -942,6 +1125,39 @@ html { scroll-padding-top: 80px; }
   /* Expose generateTagline globally so onclick="generateTagline()" can find it */
   window.generateTagline = generateTagline;
 
+  function showSuccess(config, totalImages, statusMsg) {
+    currentConfig = config;
+    configOutput.value = JSON.stringify(config, null, 4);
+
+    /* Build summary */
+    var socialParts = [];
+    if (config.facebook_url) socialParts.push('Facebook');
+    if (config.social.instagram_handle) socialParts.push('Instagram');
+    if (config.social.tiktok_handle) socialParts.push('TikTok');
+
+    var html = '';
+    html += '<div class="row"><span class="label">Perniagaan</span><span class="value">' + escapeHtml(config.business_name) + '</span></div>';
+    html += '<div class="row"><span class="label">Kawasan</span><span class="value">' + escapeHtml(config.area) + '</span></div>';
+    html += '<div class="row"><span class="label">Niche</span><span class="value">' + escapeHtml(config.niches[0]) + '</span></div>';
+    html += '<div class="row"><span class="label">Gambar dimuat naik</span><span class="value">' + (totalImages || 0) + '</span></div>';
+    html += '<div class="row"><span class="label">Social Media</span><span class="value">' + (socialParts.length ? socialParts.join(', ') : '—') + '</span></div>';
+    html += '<div class="row"><span class="label">Website sedia ada</span><span class="value">' + (config.audit.has_website ? 'Ada' : 'Tiada') + '</span></div>';
+    successSummary.innerHTML = html;
+
+    /* Hide form, show success */
+    form.classList.add('hidden');
+    successScreen.classList.add('visible');
+    successScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showToast(statusMsg || 'Data berjaya disimpan! ✅');
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(str));
+    return d.innerHTML;
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -966,16 +1182,15 @@ html { scroll-padding-top: 80px; }
     if (!phone) { document.getElementById('phone').focus(); showToast('Sila isi nombor telefon'); return; }
 
     var id = sessionStorage.getItem('intake_lead_id') || businessName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/--+/g, '-').replace(/^-|-$/g, '');
-    currentId = id;
 
     var hasWebsite = existingWebsite.length > 0;
     var logos = Array.prototype.slice.call(logoInput.files);
     var heroes = Array.prototype.slice.call(heroInput.files);
     var galleries = Array.prototype.slice.call(galleryInput.files).slice(0, 5);
-      var photoCount = logos.length + heroes.length + galleries.length;
-      var hasImages = photoCount > 0;
+    var photoCount = logos.length + heroes.length + galleries.length;
+    var hasImages = photoCount > 0;
 
-    /* Build config with placeholder image paths */
+    /* Build config */
     var config = {
       id: id,
       business_name: businessName,
@@ -1030,35 +1245,27 @@ html { scroll-padding-top: 80px; }
       console.warn('Failed to save intake to D1:', e);
     });
 
-    var instr = '';
-
-    function showResult() {
-      currentConfig = config;
-      configOutput.value = JSON.stringify(config, null, 4);
-      outputSection.classList.add('visible');
-      instructionsCode.textContent = instr;
-      outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      showToast('Config berjaya dihasilkan!');
+    function onDone(totalImages) {
+      clearDraft();
+      showSuccess(config, totalImages || 0, 'Data berjaya disimpan! ✅');
     }
 
     /* Upload images first if any */
     if (!hasImages) {
-      clearDraft();
-      instr = 'No images uploaded — add images manually to clients/' + id + '/images/ if needed.';
-      showResult();
+      onDone(0);
       return;
     }
 
     var submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '⏳ Uploading images...';
+    submitBtn.innerHTML = '⏳ Memuat naik gambar...';
 
     var uploadFormData = new FormData();
     logos.forEach(function (f) { uploadFormData.append('logo', f); });
     heroes.forEach(function (f) { uploadFormData.append('hero', f); });
     galleries.forEach(function (f, i) { uploadFormData.append('gallery_' + i, f); });
 
-          fetch('/api/upload/' + id, {
+    fetch('/api/upload/' + id, {
       method: 'POST',
       body: uploadFormData
     }).then(function (res) {
@@ -1066,37 +1273,23 @@ html { scroll-padding-top: 80px; }
       return res.json();
     }).then(function (data) {
       var files = data.files || {};
-
-      // Use server's total image count (accounts for prior uploads)
       var totalImages = files.total_images || photoCount;
 
-      /* Update config with R2 image URLs */
       if (files.logo_url) config.logo_image = files.logo_url;
       if (files.hero_url) config.hero_image = files.hero_url;
       if (files.gallery_urls) config.gallery_images = files.gallery_urls;
 
-      instr = 'Images uploaded to R2!\n';
-      instr += 'Logo: ' + (files.logo_url || 'not uploaded') + '\n';
-      instr += 'Hero: ' + (files.hero_url || 'not uploaded') + '\n';
-      if (files.gallery_urls && files.gallery_urls.length) {
-        instr += 'Gallery: ' + files.gallery_urls.length + ' new image(s) uploaded (total: ' + totalImages + ')\n';
-      }
-
-      // Save image count to D1
       fetch('/api/leads/' + apiPhone + '/intake', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ images_collected: totalImages })
       }).catch(function () {});
 
-      clearDraft();
-      showResult();
-    }).catch(function (err) {
-      instr = 'Image upload failed: ' + err.message + '\nImages saved in browser only — download config and re-upload images later.';
-      showResult();
+      onDone(totalImages);
+    }).catch(function () {
+      onDone(photoCount);
     }).finally(function () {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Hasilkan Config';
     });
   });
 
