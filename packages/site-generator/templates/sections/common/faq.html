@@ -1,0 +1,24 @@
+<section id="faq" style="padding:60px 20px;background:var(--color-bg);">
+  <div style="max-width:700px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 40px;font-family:var(--font-heading);" class="reveal" data-bm="Soalan Lazim" data-en="Frequently Asked Questions">Soalan Lazim</h2>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      {{FAQ_ITEMS_HTML}}
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var acc=document.querySelectorAll('.faq-header');
+  acc.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var isOpen=this.classList.contains('active');
+      acc.forEach(function(b){b.classList.remove('active');b.nextElementSibling.style.maxHeight='0';b.querySelector('.faq-icon').textContent='+';});
+      if(!isOpen){
+        this.classList.add('active');
+        this.nextElementSibling.style.maxHeight=this.nextElementSibling.scrollHeight+'px';
+        this.querySelector('.faq-icon').textContent='−';
+      }
+    });
+  });
+})();
+</script>

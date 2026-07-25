@@ -59,7 +59,7 @@ The scraper sends leads to `http://localhost:8787/api/leads`. Worker must be run
 | Method | Path | Purpose |
 |--------|------|---------|
 | POST | `/api/leads` | Receive scraped leads |
-| GET | `/api/leads` | List all leads |
+| GET | `/api/leads` | List all leads. Query: `?stage=images_collected` to filter by pipeline stage |
 | PATCH | `/api/leads` | Update lead status (archive) |
 | DELETE | `/api/leads` | Delete a lead |
 | PATCH | `/api/leads/:phone/stage` | Update pipeline stage |
@@ -143,3 +143,13 @@ New column: `selected_for_pipeline` (INTEGER DEFAULT 0) — manually tag leads y
 - Dashboard: ⭐ checkbox on each lead card → toggles via `PATCH /api/leads/:phone/select`
 - Filter: "⭐ Selected" shows only tagged leads
 - This creates a stockpile: scrape big batch → tag promising leads → process daily from your selected pool
+
+## Auto-Build Pipeline (2026-07-25)
+
+After intake form submit (images uploaded + pipeline_stage → `images_collected`), demo sites are auto-built:
+
+**Watcher:** `scripts/watch-build.sh` polls `GET /api/leads?stage=images_collected` every 30s, generates `config.json` from D1 data via jq, runs `scripts/generate-site.sh`, saves demo URL, and advances pipeline to `demo_built`. Runs as daemon (`--daemon`) or single pass (`--once`).
+
+**Gallery upload error handling (fixed 2026-07-25):** 3 silent `catch (_) {}` blocks in `worker.ts` upload handler were swallowing R2 errors — only 1 image would succeed per batch. Replaced with proper error logging and `results.errors[]` tracking returned alongside `gallery_urls`.
+
+**saveDemoUrl() bug fix:** Dashboard `saveDemoUrl()` was calling non-existent `renderAllLeads()` — fixed to `renderLeads()`.

@@ -1,0 +1,45 @@
+<!-- CTA banner | variant: polished-dark | Mood: premium-modern -->
+<section class="reveal w-full relative overflow-hidden my-12">
+  <!-- Gradient accent bar at top -->
+  <div class="h-1 w-full bg-gradient-to-r from-[var(--color-accent,#C08457)] via-[var(--color-accent-soft,#E5C29F)] to-[var(--color-accent,#C08457)]"></div>
+
+  <!-- Background -->
+  <div class="bg-[var(--color-primary,#111827)] py-16 md:py-20 px-4 relative">
+    <!-- Decorative blur circle -->
+    <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[var(--color-accent,#C08457)] opacity-5 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-[var(--color-accent-soft,#E5C29F)] opacity-5 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight"
+          style="font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif)"
+          data-bm="Percaya Dengan {{BUSINESS_NAME}}?"
+          data-en="Trust {{BUSINESS_NAME}}?">
+        Percaya Dengan {{BUSINESS_NAME}}?
+      </h2>
+      <p class="text-gray-300 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed"
+         data-bm="{{TAGLINE}} — Kami dah berkhidmat sejak {{ESTABLISHED}} di {{AREA}}. Harga mesra, mutu terjamin."
+         data-en="{{TAGLINE_EN}} — We've been serving since {{ESTABLISHED}} in {{AREA}}. Fair prices, guaranteed quality.">
+        {{TAGLINE}} — Kami dah berkhidmat sejak {{ESTABLISHED}} di {{AREA}}. Harga mesra, mutu terjamin.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/{{WHATSAPP}}?text={{WHATSAPP_TEXT_BM}}"
+           class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] text-white font-bold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:brightness-110 text-sm"
+           data-wa-bm="{{WHATSAPP_TEXT_BM}}" data-wa-en="{{WHATSAPP_TEXT_EN}}">
+          <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+          </svg>
+          <span data-bm="Whatsapp Kami" data-en="WhatsApp Us">Whatsapp Kami</span>
+        </a>
+        <a href="tel:{{PHONE}}"
+           class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white font-semibold px-7 py-3.5 rounded-xl border border-white/20 transition-all duration-200 hover:bg-white/20 text-sm">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>{{PHONE}}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

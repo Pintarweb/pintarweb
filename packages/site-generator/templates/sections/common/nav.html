@@ -1,0 +1,50 @@
+<nav id="navbar" style="position:fixed;top:46px;left:0;right:0;z-index:100;background:var(--color-surface);border-bottom:1px solid var(--color-border);box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:top 0.3s ease;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:50px;">
+    <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--color-text);font-weight:700;font-size:20px;font-family:var(--font-heading);">
+      {{LOGO_HTML}}
+      <span>{{BUSINESS_NAME}}</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div id="nav-links" class="nav-links">
+        <a href="#services" class="nav-link" data-bm="Perkhidmatan" data-en="Services">Perkhidmatan</a>
+        <a href="#gallery" class="nav-link" data-bm="Galeri" data-en="Gallery">Galeri</a>
+        <a href="#testimonials" class="nav-link" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+        <a href="#contact" class="nav-link" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+      </div>
+      <div class="lang-toggle">
+        <button id="btn-bm" class="lang-btn active" onclick="setLang('bm')" aria-pressed="true">BM</button>
+        <button id="btn-en" class="lang-btn" onclick="setLang('en')" aria-pressed="false">EN</button>
+      </div>
+      <button id="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<style>
+#nav-links { display:none; }
+#hamburger { display:flex; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:8px; }
+#hamburger span { display:block; width:20px; height:2px; background:var(--color-text); border-radius:2px; transition:all 0.3s; }
+@media (min-width:768px) {
+  #hamburger { display:none; }
+  #nav-links { display:flex !important; position:static; flex-direction:row; gap:20px; background:transparent; border:none; padding:0; box-shadow:none; }
+}
+.nav-link { color:var(--color-text); text-decoration:none; font-size:14px; font-weight:500; }
+.nav-link:hover { color:var(--color-primary); }
+</style>
+<script>
+function toggleMobileMenu(){
+  var el=document.getElementById('nav-links');
+  el.style.display=el.style.display==='flex'?'none':'flex';
+}
+document.querySelectorAll('.nav-link').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('nav-links').style.display='none';});
+});
+document.addEventListener('click',function(e){
+  var nav=document.getElementById('nav-links');
+  var hb=document.getElementById('hamburger');
+  if(nav.style.display==='flex'&&!nav.contains(e.target)&&!hb.contains(e.target)){
+    nav.style.display='none';
+  }
+});
+</script>

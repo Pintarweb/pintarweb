@@ -1,0 +1,39 @@
+<section id="testimonials" class="py-12 md:py-16 reveal">
+  <div class="max-w-4xl mx-auto px-4">
+
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2"
+          style="color:var(--color-text);"
+          data-bm="Apa Kata Pelanggan" data-en="What Customers Say">
+        Apa Kata Pelanggan
+      </h2>
+      <p class="text-sm" style="color:var(--color-text);opacity:0.65;"
+         data-bm="Pendapat sebenar dari pelanggan yang dah servis dengan kami" data-en="Real feedback from customers who've used our service">
+        Pendapat sebenar dari pelanggan yang dah servis dengan kami
+      </p>
+      <div class="flex items-center justify-center gap-2 mt-4 reveal reveal-delay-1">
+        <div class="flex">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <span class="text-sm font-bold" style="color:var(--color-text);"
+              data-bm="{{GOOGLE_RATING}} — {{GOOGLE_REVIEW_COUNT}} ulasan" data-en="{{GOOGLE_RATING}} — {{GOOGLE_REVIEW_COUNT}} reviews">
+          {{GOOGLE_RATING}} — {{GOOGLE_REVIEW_COUNT}} ulasan
+        </span>
+        <a href="https://maps.google.com/?q={{BUSINESS_NAME}}" target="_blank"
+           class="text-xs font-semibold underline" style="color:var(--color-primary);"
+           data-bm="Semua Ulasan" data-en="All Reviews">Semua Ulasan</a>
+      </div>
+    </div>
+
+    <!-- Full-width stacked cards (not grid) -->
+    <div class="space-y-6">
+      {{TESTIMONIALS_HTML}}
+    </div>
+
+  </div>
+</section>

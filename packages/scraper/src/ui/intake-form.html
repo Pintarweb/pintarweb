@@ -604,6 +604,12 @@ html { scroll-padding-top: 80px; }
       <div class="hint">Headline untuk website — ringkas, jelas, mudah ingat</div>
     </div>
 
+    <div class="card">
+      <label for="tagline_en">Tagline (English)</label>
+      <textarea id="tagline_en" name="tagline_en" rows="2" placeholder="e.g. Aircond Service Kuala Lumpur — Fast & Reliable"></textarea>
+      <div class="hint">English version of tagline for language toggle</div>
+    </div>
+
     <!-- Contact -->
     <div class="section-heading">Contact</div>
 
@@ -699,7 +705,7 @@ html { scroll-padding-top: 80px; }
 
     <div class="success-next">
       <strong>Langkah seterusnya:</strong>
-      Buka Dashboard &rarr; cari lead ini &rarr; klik <strong>"Build Demo"</strong> untuk hasilkan website demo menggunakan gambar yang telah dimuat naik.
+      Demo website akan dibina secara automatik dalam 1-2 minit. Status boleh dipantau di Dashboard.
     </div>
 
     <button class="btn-dashboard" id="btnDashboard">Kembali ke Dashboard</button>
@@ -767,6 +773,7 @@ html { scroll-padding-top: 80px; }
     var phone = params.get('phone') || '';
     var niche = params.get('niche') || params.get('category') || '';
     var tagline = params.get('tagline') || '';
+    var taglineEn = params.get('tagline_en') || '';
     var website = params.get('website') || '';
     var maps = params.get('maps') || '';
     var fb = params.get('fb') || '';
@@ -777,6 +784,7 @@ html { scroll-padding-top: 80px; }
     if (name) document.getElementById('business_name').value = name;
     if (phone) document.getElementById('phone').value = phone;
     if (tagline) document.getElementById('tagline').value = tagline;
+    if (taglineEn) document.getElementById('tagline_en').value = taglineEn;
     if (niche) {
       var nicheMap = {
         'aircond': 'aircond-contractor',
@@ -926,6 +934,7 @@ html { scroll-padding-top: 80px; }
       business_name: document.getElementById('business_name').value,
       niche: document.getElementById('niche').value,
       tagline: document.getElementById('tagline').value,
+      tagline_en: document.getElementById('tagline_en').value,
       phone: document.getElementById('phone').value,
       google_maps_url: document.getElementById('google_maps_url').value,
       instagram: document.getElementById('instagram').value,
@@ -962,6 +971,7 @@ html { scroll-padding-top: 80px; }
     var set = function (id, val) { if (val) { var el = document.getElementById(id); if (el) el.value = val; } };
     set('business_name', draft.business_name);
     set('tagline', draft.tagline);
+    set('tagline_en', draft.tagline_en);
     set('phone', draft.phone);
     set('google_maps_url', draft.google_maps_url);
     set('instagram', draft.instagram);
@@ -1165,6 +1175,7 @@ html { scroll-padding-top: 80px; }
     var niche = document.getElementById('niche').value;
     var area = document.getElementById('area-input').value.trim();
     var tagline = document.getElementById('tagline').value.trim();
+    var taglineEn = document.getElementById('tagline_en').value.trim();
     var phone = document.getElementById('phone').value.trim();
     var googleMapsUrl = document.getElementById('google_maps_url').value.trim();
     var instagram = document.getElementById('instagram').value.trim().replace(/^@/, '');
@@ -1234,6 +1245,7 @@ html { scroll-padding-top: 80px; }
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tagline: config.tagline,
+        tagline_en: taglineEn,
         niche: niche,
         services: [],
         testimonials: [],

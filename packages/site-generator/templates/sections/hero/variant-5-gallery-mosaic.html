@@ -1,0 +1,27 @@
+<section id="hero" class="pt-20 pb-12 md:pb-16" style="background:var(--color-bg);">
+  <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+    <div class="flex-1 space-y-6">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold uppercase tracking-wider reveal" style="background:var(--color-accent-soft);color:var(--color-text);" data-bm="Kami Sedia Membantu" data-en="We're Here to Help">Kami Sedia Membantu</span>
+      <h1 class="text-3xl md:text-5xl font-bold leading-tight tracking-tight reveal reveal-delay-1" style="color:var(--color-text);font-family:var(--font-heading);" data-bm="{{BUSINESS_NAME}}" data-en="{{BUSINESS_NAME}}">{{BUSINESS_NAME}}</h1>
+      <p class="text-base md:text-lg leading-relaxed reveal reveal-delay-2" style="color:var(--color-muted);" data-bm="{{TAGLINE}}" data-en="{{TAGLINE_EN}}">{{TAGLINE}}</p>
+      <div class="flex flex-wrap gap-4 pt-2 reveal reveal-delay-3">
+        <a href="https://wa.me/{{WHATSAPP}}?text={{WHATSAPP_TEXT_BM}}" data-wa-bm="{{WHATSAPP_TEXT_BM}}" data-wa-en="{{WHATSAPP_TEXT_EN}}" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:#25D366;color:#fff;border:2px solid var(--color-text);box-shadow:var(--shadow-style, 4px 4px 0px 0px var(--color-primary));" data-bm="WhatsApp Sekarang" data-en="WhatsApp Now">WhatsApp Sekarang</a>
+        <a href="tel:{{PHONE}}" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:var(--color-surface);color:var(--color-text);border:2px solid var(--color-border);" data-bm="Panggil {{PHONE}}" data-en="Call {{PHONE}}">Panggil {{PHONE}}</a>
+      </div>
+    </div>
+    <div class="flex-1 grid grid-cols-2 gap-2 reveal reveal-delay-2">
+      <div class="overflow-hidden" style="border:2px solid var(--color-border);box-shadow:var(--shadow-style, 3px 3px 0px 0px var(--color-primary));">
+        <img src="images/gallery-1.webp" alt="" class="w-full h-32 md:h-40 object-cover" loading="lazy" />
+      </div>
+      <div class="overflow-hidden mt-4" style="border:2px solid var(--color-border);box-shadow:var(--shadow-style, 3px 3px 0px 0px var(--color-primary));">
+        <img src="images/gallery-2.webp" alt="" class="w-full h-32 md:h-40 object-cover" loading="lazy" />
+      </div>
+      <div class="overflow-hidden -mt-4" style="border:2px solid var(--color-border);box-shadow:var(--shadow-style, 3px 3px 0px 0px var(--color-primary));">
+        <img src="images/gallery-3.webp" alt="" class="w-full h-32 md:h-40 object-cover" loading="lazy" />
+      </div>
+      <div class="overflow-hidden" style="border:2px solid var(--color-border);box-shadow:var(--shadow-style, 3px 3px 0px 0px var(--color-primary));">
+        <img src="{{HERO_IMAGE}}" alt="" class="w-full h-32 md:h-40 object-cover" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>

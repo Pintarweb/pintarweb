@@ -1,0 +1,25 @@
+<section id="hero" class="relative overflow-hidden pt-16">
+  <div class="relative w-full" style="min-height:460px;background:var(--color-primary);">
+    <div class="absolute inset-0">
+      <img src="{{HERO_IMAGE}}" alt="{{BUSINESS_NAME}}" class="w-full h-full object-cover" loading="eager" />
+      <div class="absolute inset-0" style="background:linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);"></div>
+    </div>
+    <div class="relative z-10 max-w-6xl mx-auto px-4 py-16 md:py-24 flex flex-col items-start justify-center" style="min-height:460px;">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 font-black text-xs uppercase tracking-widest mb-4 reveal" style="background:var(--color-accent);color:#fff;" data-bm="Kecemasan? Kami Sedia 24/7" data-en="Emergency? We're Ready 24/7">Kecemasan? Kami Sedia 24/7</span>
+      <h1 class="text-3xl md:text-5xl font-black leading-tight tracking-tight text-white max-w-2xl reveal reveal-delay-1" style="font-family:var(--font-heading);" data-bm="{{BUSINESS_NAME}}" data-en="{{BUSINESS_NAME}}">{{BUSINESS_NAME}}</h1>
+      <p class="text-base md:text-lg text-gray-300 max-w-xl mt-3 reveal reveal-delay-2" data-bm="{{TAGLINE}}" data-en="{{TAGLINE_EN}}">{{TAGLINE}}</p>
+      <div class="flex flex-wrap gap-4 mt-6 reveal reveal-delay-3">
+        <a href="https://wa.me/{{WHATSAPP}}?text={{WHATSAPP_TEXT_BM}}" data-wa-bm="{{WHATSAPP_TEXT_BM}}" data-wa-en="{{WHATSAPP_TEXT_EN}}" class="inline-flex items-center gap-2 px-6 py-3 font-extrabold text-sm uppercase tracking-wider transition-all" style="background:#25D366;color:#000;border:2px solid #000;box-shadow:5px 5px 0px 0px #000;" data-bm="WhatsApp Sekarang" data-en="WhatsApp Now">WhatsApp Sekarang</a>
+        <a href="tel:{{PHONE}}" class="inline-flex items-center gap-2 px-6 py-3 font-extrabold text-sm uppercase tracking-wider transition-all bg-white" style="color:var(--color-text);border:2px solid var(--color-text);box-shadow:5px 5px 0px 0px var(--color-primary);" data-bm="Panggil {{PHONE}}" data-en="Call {{PHONE}}">Panggil {{PHONE}}</a>
+      </div>
+    </div>
+  </div>
+  <div class="py-4 md:py-5 border-y-2" style="background:var(--color-surface);border-color:var(--color-border);">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div class="reveal"><span class="block text-lg font-black" style="color:var(--color-primary);">{{GOOGLE_RATING}}★</span><span class="text-xs" style="color:var(--color-muted);" data-bm="Rating Google" data-en="Google Rating">Rating Google</span></div>
+      <div class="reveal reveal-delay-1"><span class="block text-lg font-black" style="color:var(--color-primary);">{{ESTABLISHED}}</span><span class="text-xs" style="color:var(--color-muted);" data-bm="Sejak" data-en="Since">Sejak</span></div>
+      <div class="reveal reveal-delay-2"><span class="block text-lg font-black" style="color:var(--color-primary);">{{GOOGLE_REVIEW_COUNT}}+</span><span class="text-xs" style="color:var(--color-muted);" data-bm="Ulasan" data-en="Reviews">Ulasan</span></div>
+      <div class="reveal reveal-delay-3"><span class="block text-lg font-black" style="color:var(--color-primary);">{{AREA}}</span><span class="text-xs" style="color:var(--color-muted);" data-bm="Kawasan Servis" data-en="Service Area">Kawasan Servis</span></div>
+    </div>
+  </div>
+</section>

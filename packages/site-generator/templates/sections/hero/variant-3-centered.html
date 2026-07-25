@@ -1,0 +1,23 @@
+<section id="hero" class="relative overflow-hidden pt-16">
+  <div class="relative w-full" style="min-height:500px;">
+    <div class="absolute inset-0">
+      <img src="{{HERO_IMAGE}}" alt="{{BUSINESS_NAME}}" class="w-full h-full object-cover" loading="eager" />
+      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 100%);"></div>
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-16 md:py-24 flex flex-col items-center justify-center text-center" style="min-height:500px;">
+      <div class="flex items-center gap-4 mb-6 reveal" style="color:var(--color-accent);">
+        <span class="text-sm font-bold" data-bm="{{GOOGLE_RATING}} ★" data-en="{{GOOGLE_RATING}} ★">{{GOOGLE_RATING}} ★</span>
+        <span class="w-1 h-1 rounded-full" style="background:var(--color-accent);"></span>
+        <span class="text-sm font-bold" data-bm="Sejak {{ESTABLISHED}}" data-en="Since {{ESTABLISHED}}">Sejak {{ESTABLISHED}}</span>
+        <span class="w-1 h-1 rounded-full" style="background:var(--color-accent);"></span>
+        <span class="text-sm font-bold" data-bm="{{AREA}}" data-en="{{AREA}}">{{AREA}}</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold leading-tight tracking-tight text-white max-w-3xl reveal reveal-delay-1" style="font-family:var(--font-heading);" data-bm="{{BUSINESS_NAME}}" data-en="{{BUSINESS_NAME}}">{{BUSINESS_NAME}}</h1>
+      <p class="text-base md:text-lg text-gray-300 max-w-xl mt-4 reveal reveal-delay-2" data-bm="{{TAGLINE}}" data-en="{{TAGLINE_EN}}">{{TAGLINE}}</p>
+      <div class="flex flex-wrap justify-center gap-4 mt-8 reveal reveal-delay-3">
+        <a href="https://wa.me/{{WHATSAPP}}?text={{WHATSAPP_TEXT_BM}}" data-wa-bm="{{WHATSAPP_TEXT_BM}}" data-wa-en="{{WHATSAPP_TEXT_EN}}" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:#25D366;color:#fff;border-radius:var(--radius-style, 0.75rem);box-shadow:0 4px 12px rgba(0,0,0,0.3);" data-bm="WhatsApp Sekarang" data-en="WhatsApp Now">WhatsApp Sekarang</a>
+        <a href="tel:{{PHONE}}" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:rgba(255,255,255,0.15);color:#fff;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-style, 0.75rem);" data-bm="Panggil {{PHONE}}" data-en="Call {{PHONE}}">Panggil {{PHONE}}</a>
+      </div>
+    </div>
+  </div>
+</section>

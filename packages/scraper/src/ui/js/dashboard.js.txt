@@ -563,19 +563,25 @@ function generateConfig(phone) {
 
     const area = (lead.address || '').split(',')[0]?.trim() || (lead.address || 'Kuala Lumpur');
 
+    const servicesEn = lead.services_en ? JSON.parse(lead.services_en) : [];
+    const testimonialsEn = lead.testimonials_en ? JSON.parse(lead.testimonials_en) : [];
+
     const config = {
         id: lead.id,
         business_name: lead.business_name || '',
         tagline: tagline,
+        tagline_en: lead.tagline_en || '',
         phone: lead.phone_normalized || '',
         whatsapp: (lead.phone_normalized || '').replace(/\D/g, ''),
         area: area,
         niches: [niche],
         services: services,
+        services_en: servicesEn.length === services.length ? servicesEn : [],
         mood: selectedMood,
         google_rating: 0,
         google_review_count: 0,
         testimonials: [],
+        testimonials_en: testimonialsEn.length > 0 ? testimonialsEn : [],
         gallery_images: [],
         social: {
             instagram_handle: (lead.instagram_url || '').replace('https://www.instagram.com/', '').replace('@', ''),
@@ -705,6 +711,7 @@ function openIntakePanel(phone) {
         `&category=${encodeURIComponent(lead.category || '')}` +
         `&niche=${encodeURIComponent(lead.niche || '')}` +
         `&tagline=${encodeURIComponent(lead.tagline || '')}` +
+        `&tagline_en=${encodeURIComponent(lead.tagline_en || '')}` +
         `&website=${encodeURIComponent(lead.website_url || '')}` +
         `&maps=${encodeURIComponent(lead.maps_url || '')}` +
         `&fb=${encodeURIComponent(fbHandle)}` +
@@ -927,41 +934,63 @@ function buildDemo(phone) {
         body: JSON.stringify({ tagline, niche, services, testimonials })
     }).catch(e => console.warn('Failed to save intake:', e));
 
-    const preCmd = 'bash scripts/prepare-demo-images.sh ' + leadId + ' "' + (niche || 'general') + '"';
-    const buildCmd = 'bash scripts/build-client.sh ' + leadId;
-    const deployCmd = 'bash scripts/deploy-preview.sh';
-    const fullCmd = 'cd ~/projects/pintarweb && ' + preCmd + ' && ' + buildCmd + ' && ' + deployCmd;
+    const genCmd = 'bash scripts/generate-site.sh ' + leadId + ' "' + (niche || 'general') + '" &';
+    const fullCmd = 'cd ~/projects/pintarweb && ' + genCmd;
 
     const output = document.getElementById('intake-body');
     if (output) {
         output.innerHTML = `
             <div class="space-y-4">
                 <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
-                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 1: Prepare Images</div>
-                    <pre class="whitespace-pre-wrap">${preCmd}</pre>
+                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Generate Site (Images + HTML + CSS + Deploy)</div>
+                    <pre class="whitespace-pre-wrap">${genCmd}</pre>
                 </div>
-                <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
-                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 2: Build CSS</div>
-                    <pre class="whitespace-pre-wrap">${buildCmd}</pre>
-                </div>
-                <div class="bg-slate-900 text-green-400 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
-                    <div class="text-[9px] text-green-600 mb-1 uppercase tracking-wider">Step 3: Deploy</div>
-                    <pre class="whitespace-pre-wrap">${deployCmd}</pre>
+                <div class="bg-slate-700 text-yellow-300 px-5 py-4 rounded-2xl font-mono text-xs overflow-x-auto">
+                    <div class="text-[9px] text-yellow-500 mb-1 uppercase tracking-wider">Save Demo URL to D1</div>
+                    <div class="mb-2">After deploy, run this to save the URL + advance stage:</div>
+                    <pre class="whitespace-pre-wrap mb-2">PATCH /api/leads/${phone}/stage { "stage": "demo_built" }
+PATCH /api/leads/${phone}/demo { "demo_url": "https://preview.pintarweb.com/${leadId}/" }</pre>
+                    <button onclick="saveDemoUrl('${phone}')" class="px-4 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white font-black text-xs uppercase transition-all">
+                        ⚡ Save Demo URL Automatically
+                    </button>
                 </div>
                 <div class="text-center pt-2">
                     <button onclick="navigator.clipboard.writeText('${fullCmd}')" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase transition-all">
                         Copy Full Command
                     </button>
-                    <p class="text-xs text-slate-400 mt-2">Copied to clipboard!</p>
+                    <p class="text-xs text-slate-400 mt-2">Run in server terminal</p>
                 </div>
             </div>
         `;
     }
 
-    /* Copy full command to clipboard */
     if (navigator.clipboard) {
         navigator.clipboard.writeText(fullCmd).catch(function() {});
     }
+}
+
+function saveDemoUrl(phone) {
+    const lead = allLeads.find(l => l.phone_normalized === phone);
+    if (!lead) return;
+    const leadId = lead.id || phone;
+    const demoUrl = 'https://preview.pintarweb.com/' + leadId + '/';
+    updatePipelineStage(phone, 'demo_built');
+    fetch('/api/leads/' + phone + '/demo', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ demo_url: demoUrl })
+    }).then(function(r) { return r.json(); }).then(function(d) {
+        if (d.success) {
+            lead.demo_url = demoUrl;
+            lead.pipeline_stage = 'demo_built';
+            renderLeads();
+            showToast('✅ Demo URL saved & stage advanced to demo_built!');
+        } else {
+            showToast('❌ Failed: ' + (d.error || 'unknown'));
+        }
+    }).catch(function(e) {
+        showToast('❌ Network error: ' + e.message);
+    });
 }
 
 function renderPipelineBar() {

@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS leads (
     outreach_sent_at DATETIME,
     -- Link to production client (after subscription)
     client_id TEXT,
+    -- English translations (dual-language support)
+    tagline_en TEXT,
+    services_en TEXT,
+    testimonials_en TEXT,
     -- AI enrichment
     audit_results TEXT,
     ai_pain_point TEXT,
@@ -84,3 +88,8 @@ CREATE TABLE IF NOT EXISTS rotation_state (
 );
 
 INSERT OR IGNORE INTO rotation_state (id, current_index) VALUES (1, 0);
+
+-- Migration 2026-07-24: Add English translation columns (dual-language support)
+ALTER TABLE leads ADD COLUMN tagline_en TEXT;
+ALTER TABLE leads ADD COLUMN services_en TEXT;
+ALTER TABLE leads ADD COLUMN testimonials_en TEXT;

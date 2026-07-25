@@ -1,0 +1,42 @@
+<section id="contact" style="padding:60px 20px;background:var(--color-surface);">
+  <div style="max-width:600px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 8px;font-family:var(--font-heading);" class="reveal" data-bm="Ada Soalan? Hubungi Kami" data-en="Got Questions? Contact Us">Ada Soalan? Hubungi Kami</h2>
+    <p style="text-align:center;color:var(--color-muted);margin:0 0 36px;font-size:15px;" class="reveal reveal-delay-1" data-bm="Sebut harga percuma, tanpa komitmen" data-en="Free quote, no obligation">Sebut harga percuma, tanpa komitmen</p>
+    <form id="contact-form" onsubmit="submitContact(event)" style="display:flex;flex-direction:column;gap:16px;" class="reveal reveal-delay-2">
+      <input type="text" id="cf-name" class="form-input" placeholder="Nama" required style="border-radius:10px;" data-bm="Nama" data-en="Name" />
+      <input type="tel" id="cf-phone" class="form-input" placeholder="Telefon" required style="border-radius:10px;" data-bm="Telefon" data-en="Phone" />
+      <select id="cf-service" class="form-input" required style="border-radius:10px;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 14px center;" onchange="toggleOtherService(this)">
+        <option value="" disabled selected data-bm="Pilih perkhidmatan" data-en="Select a service">Pilih perkhidmatan</option>
+        {{SERVICE_OPTIONS}}
+        <option value="__other__" data-bm="Lain-lain" data-en="Others">Lain-lain</option>
+      </select>
+      <input type="text" id="cf-service-other" class="form-input" placeholder="Nyatakan servis lain" style="border-radius:10px;display:none;" data-bm="Nyatakan servis lain" data-en="Specify other service" />
+      <textarea id="cf-message" class="form-input" placeholder="Mesej" rows="4" style="border-radius:10px;resize:vertical;" data-bm="Mesej" data-en="Message"></textarea>
+      <button type="submit" style="width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:opacity 0.2s;font-family:var(--font-heading);" data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">Hantar via WhatsApp</button>
+    </form>
+  </div>
+</section>
+<script>
+function toggleOtherService(sel){
+  var other=document.getElementById('cf-service-other');
+  if(!other)return;
+  other.style.display=sel.value==='__other__'?'block':'none';
+}
+function submitContact(e){
+  e.preventDefault();
+  var lang=localStorage.getItem('pw_lang')||'bm';
+  var isBM=lang==='bm';
+  var name=document.getElementById('cf-name').value.trim();
+  var phone=document.getElementById('cf-phone').value.trim();
+  var sel=document.getElementById('cf-service');
+  var service=sel.value==='__other__'?document.getElementById('cf-service-other').value.trim():sel.value;
+  var message=document.getElementById('cf-message').value.trim();
+  var text=isBM?'Hi {{BUSINESS_NAME}}!%0A%0A':'Hello {{BUSINESS_NAME}}!%0A%0A';
+  text+=(isBM?'Nama: ':'Name: ')+encodeURIComponent(name)+'%0A';
+  text+=(isBM?'Telefon: ':'Phone: ')+encodeURIComponent(phone)+'%0A';
+  if(service)text+=(isBM?'Perkhidmatan: ':'Service: ')+encodeURIComponent(service)+'%0A';
+  if(message)text+=(isBM?'Mesej: ':'Message: ')+encodeURIComponent(message)+'%0A';
+  text+='%0A'+(isBM?'(Dari laman web)':'(From website)');
+  window.open('https://wa.me/{{WHATSAPP}}?text='+text,'_blank');
+}
+</script>

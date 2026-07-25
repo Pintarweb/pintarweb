@@ -1,0 +1,22 @@
+<section id="gallery" style="padding:60px 20px;background:var(--color-bg);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 8px;font-family:var(--font-heading);" class="reveal" data-bm="Galeri Kami" data-en="Our Gallery">Galeri Kami</h2>
+    <p style="text-align:center;color:var(--color-muted);margin:0 0 40px;font-size:15px;" class="reveal reveal-delay-1" data-bm="Hasil kerja terkini dari kami" data-en="Our latest work">Hasil kerja terkini dari kami</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:900px;margin:0 auto;">
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);" class="reveal hover-lift">
+        <img src="images/gallery-1.webp" alt="Gallery image 1" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);" class="reveal reveal-delay-1 hover-lift">
+        <img src="images/gallery-2.webp" alt="Gallery image 2" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);grid-column:span 2;" class="reveal reveal-delay-2 hover-lift">
+        <img src="images/gallery-3.webp" alt="Gallery image 3" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="lightbox" onclick="closeLightbox(event)" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;padding:40px;cursor:pointer;">
+  <button class="lightbox-close" onclick="closeLightbox(event)" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#fff;font-size:36px;cursor:pointer;line-height:1;z-index:2;">×</button>
+  <img id="lightbox-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;cursor:default;" onclick="event.stopPropagation()" />
+</div>

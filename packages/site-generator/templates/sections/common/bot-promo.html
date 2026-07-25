@@ -1,0 +1,6 @@
+<div id="bot-promo-banner" style="position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,var(--color-primary) 0%,var(--color-primary-soft) 100%);border-bottom:1px solid rgba(0,0,0,0.15);padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:12px;z-index:9999;font-family:'Inter',sans-serif;">
+  <span style="color:#fff;font-size:13px;" data-bm="Nak try bot WhatsApp kami dulu sebelum decide?" data-en="Want to try our WhatsApp bot first?">Nak try bot WhatsApp kami dulu sebelum decide?</span>
+  <a href="https://pintarweb.com" target="_blank" style="background:#25D366;color:#fff;text-decoration:none;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;">Cuba Bot Kami →</a>
+  <button onclick="this.parentElement.style.display='none';sessionStorage.setItem('banner-dismissed','1');" style="background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 4px;line-height:1;">×</button>
+</div>
+<script>if(sessionStorage.getItem('banner-dismissed')){var b=document.getElementById('bot-promo-banner');if(b)b.style.display='none';}</script>

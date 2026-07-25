@@ -7,6 +7,23 @@
 
   ## [Unreleased]
 
+## 2026-07-26 — Default Fallbacks & Auto-Build Watcher
+
+- `scripts/generate-site.mjs`: Config normalization layer (line 30-100) — cleans stale config fields
+  - Area extraction: `extractSuburb()` strips emoji prefixes, derives suburb from address
+  - Shared defaults at module level: `DEFAULT_SERVICES`, `SERVICES_EN` (BM/EN per-niche translations), `DEFAULT_TESTIMONIALS` (with nameEn/textEn/areaEn)
+  - Google rating derived from testimonial average when 0, review count from testimonials.length
+  - `established` defaults to "2018", `tagline_en` auto-generated from niche+area
+  - Niche backward compat: handles both `niche` (string) and `niches[]` (array)
+  - Service dropdown: `generateServiceOptions()` now accepts niche, uses shared defaults with EN translations
+  - Bug: variant 4 `sEn` undefined — fixed
+  - Bug: `GOOGLE_RATING || ''` falsy 0 → `!= null` check
+- `scripts/watch-build.sh`: Polls `GET /api/leads?stage=images_collected`, generates config.json from D1 via jq with clean area/address/service_areas/niche/social URLs, builds demo site, saves URL, advances pipeline
+- Worker: Gallery upload silent `catch (_) {}` → proper error tracking with `results.errors[]`
+- Worker: `GET /api/leads?stage=` query filter
+- Dashboard: `saveDemoUrl()` bug fix (`renderAllLeads` → `renderLeads`)
+- 4 demo sites live at preview.pintarweb.com with full BM/EN translation
+
   ## 2026-07-23 — Demo Image Pipeline & Social Scoring
 
   - `scripts/prepare-demo-images.sh`: downloads R2 images, fills missing from niche stock, generates initials logo SVG with mood color

@@ -193,7 +193,7 @@ export default {
         if (url.pathname.match(/^\/api\/leads\/[^\/]+\/intake$/) && request.method === "PATCH") {
             try {
                 const phone = url.pathname.split("/")[3];
-                const { tagline, niche, services, testimonials, images_collected, facebook_url, instagram_url, tiktok_url } = await request.json() as any;
+                const { tagline, tagline_en, niche, services, services_en, testimonials, testimonials_en, images_collected, facebook_url, instagram_url, tiktok_url } = await request.json() as any;
                 if (images_collected !== undefined) {
                     const existing = await env.pintarweb_scraper_db.prepare(
                         `SELECT id FROM leads WHERE phone_normalized = ?`
@@ -218,7 +218,7 @@ export default {
                         }
                     }
                 }
-                if (tagline || niche || services || testimonials || facebook_url !== undefined || instagram_url !== undefined || tiktok_url !== undefined) {
+                if (tagline || tagline_en || niche || services || services_en || testimonials || testimonials_en || facebook_url !== undefined || instagram_url !== undefined || tiktok_url !== undefined) {
                     // Ensure lead exists before updating (intake form may create leads not yet in D1)
                     const existing = await env.pintarweb_scraper_db.prepare(
                         `SELECT id, website_url, lead_score FROM leads WHERE phone_normalized = ?`
@@ -244,8 +244,8 @@ export default {
                         scoreBonus = 3;
                     }
 
-                    let setClause = `tagline = ?, niche = ?, services = ?, testimonials = ?, facebook_url = COALESCE(?, facebook_url), instagram_url = COALESCE(?, instagram_url), tiktok_url = COALESCE(?, tiktok_url), updated_at = CURRENT_TIMESTAMP`;
-                    let bindArgs = [tagline || null, niche || null, services ? JSON.stringify(services) : null, testimonials ? JSON.stringify(testimonials) : null, facebook_url || null, instagram_url || null, tiktok_url || null];
+                    let setClause = `tagline = ?, tagline_en = ?, niche = ?, services = ?, services_en = ?, testimonials = ?, testimonials_en = ?, facebook_url = COALESCE(?, facebook_url), instagram_url = COALESCE(?, instagram_url), tiktok_url = COALESCE(?, tiktok_url), updated_at = CURRENT_TIMESTAMP`;
+                    let bindArgs = [tagline || null, tagline_en || null, niche || null, services ? JSON.stringify(services) : null, services_en ? JSON.stringify(services_en) : null, testimonials ? JSON.stringify(testimonials) : null, testimonials_en ? JSON.stringify(testimonials_en) : null, facebook_url || null, instagram_url || null, tiktok_url || null];
 
                     if (scoreBonus > 0) {
                         setClause += `, lead_score = lead_score + ?`;
@@ -330,11 +330,18 @@ export default {
             }
         }
 
-        // Endpoint to retrieve All Leads
+        // Endpoint to retrieve All Leads (optional ?stage= filter)
         if (url.pathname === "/api/leads" && request.method === "GET") {
-            const { results } = await env.pintarweb_scraper_db.prepare(
-                `SELECT * FROM leads ORDER BY updated_at DESC, created_at DESC`
-            ).all();
+            const stageFilter = url.searchParams.get("stage");
+            let query: string, bindings: string[];
+            if (stageFilter) {
+                query = "SELECT * FROM leads WHERE pipeline_stage = ? ORDER BY updated_at DESC, created_at DESC";
+                bindings = [stageFilter];
+            } else {
+                query = "SELECT * FROM leads ORDER BY updated_at DESC, created_at DESC";
+                bindings = [];
+            }
+            const { results } = await env.pintarweb_scraper_db.prepare(query).bind(...bindings).all();
 
             return new Response(JSON.stringify(results), {
                 headers: {
@@ -441,6 +448,7 @@ export default {
                 const leadId = url.pathname.split("/")[3];
                 const formData = await request.formData();
                 const results: Record<string, string | string[]> = {};
+                results.errors = [];
 
                 const logoFile = formData.get("logo") as File | null;
                 const heroFile = formData.get("hero") as File | null;
@@ -454,7 +462,7 @@ export default {
                     try {
                         const existing = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/gallery-` });
                         existingGalleryCount = existing.objects.length;
-                    } catch (_) {}
+                    } catch (e: any) { console.error("Failed to list existing gallery:", e); }
                 }
 
                 if (logoFile && logoFile.size > 0) {
@@ -494,7 +502,7 @@ export default {
                                 httpMetadata: { contentType: f.type }
                             });
                             (results.gallery as string[]).push(key);
-                        } catch (_) {}
+                        } catch (e: any) { console.error("Gallery upload failed for key", key, ":", e); (results.errors as string[]).push(e.message || "Unknown upload error"); }
                     }
                     // Merge existing + new gallery URLs, deduplicate by key
                     const newUrls: string[] = (results.gallery as string[]).map((k: string) => `${r2Base}/${k}`);
@@ -506,11 +514,12 @@ export default {
                 if (results.logo) resp.logo_url = `${r2Base}/${results.logo}`;
                 if (results.hero) resp.hero_url = `${r2Base}/${results.hero}`;
                 resp.keys = results;
+                if (results.errors && (results.errors as string[]).length > 0) resp.upload_errors = results.errors;
                 // Report total images in R2 so client can save accurate images_collected
                 try {
                     const all = await env.CLIENT_IMAGES.list({ prefix: `${leadId}/` });
                     resp.total_images = all.objects.length;
-                } catch (_) {}
+                } catch (e: any) { console.error("Failed to count total images:", e); }
 
                 return new Response(JSON.stringify({ success: true, files: resp }), {
                     headers: { "Content-Type": "application/json" }

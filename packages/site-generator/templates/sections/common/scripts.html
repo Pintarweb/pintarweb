@@ -1,0 +1,37 @@
+<script>
+(function(){var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(function(e){o.observe(e);});})();
+</script>
+<script>
+(function(){var saved=localStorage.getItem('pw_lang')||'bm';setLang(saved,true);})();
+function setLang(lang,silent){
+  var isBM=lang==='bm';
+  document.documentElement.lang=isBM?'ms':'en';
+  document.documentElement.setAttribute('data-lang',lang);
+  document.querySelectorAll('[data-bm]').forEach(function(el){
+    var target=isBM?el.getAttribute('data-bm'):el.getAttribute('data-en');
+    if(!target)return;
+    if(el.children.length===0){
+      if(!silent)el.style.opacity='0';
+      setTimeout(function(){
+        el.textContent=target;
+        if(!silent)el.style.opacity='1';
+      },silent?0:80);
+    }
+  });
+  var titleEl=document.querySelector('title');
+  if(titleEl)titleEl.textContent=isBM?titleEl.getAttribute('data-bm'):titleEl.getAttribute('data-en');
+  document.getElementById('btn-bm').classList.toggle('active',isBM);
+  document.getElementById('btn-en').classList.toggle('active',!isBM);
+  document.getElementById('btn-bm').setAttribute('aria-pressed',isBM);
+  document.getElementById('btn-en').setAttribute('aria-pressed',!isBM);
+  localStorage.setItem('pw_lang',lang);
+  if(typeof updateWaLinks==='function')updateWaLinks();
+}
+</script>
+<script>
+function openLightbox(src){var lb=document.getElementById('lightbox');lb.style.display='flex';document.getElementById('lightbox-img').src=src;document.body.style.overflow='hidden';}
+function closeLightbox(e){if(e.target===e.currentTarget||e.target.classList.contains('lightbox-close')){document.getElementById('lightbox').style.display='none';document.body.style.overflow='';}}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var lb=document.getElementById('lightbox');if(lb&&lb.style.display==='flex'){lb.style.display='none';document.body.style.overflow='';}}});
+</script>
+</body>
+</html>
