@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ms" data-lang="bm">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-bm="My Aircond Service KL — Pakar Aircond Batu Caves | Aircond Profesional Kuala Lumpur — Harga Telus" data-en="My Aircond Service KL — Aircond Expert Batu Caves | Professional Aircond Kuala Lumpur — Transparent Pricing">My Aircond Service KL — Pakar Aircond Batu Caves | Aircond Profesional Kuala Lumpur — Harga Telus</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-primary: #1B4332;
+      --color-primary-soft: #2D5A46;
+      --color-accent: #F59E0B;
+      --color-accent-soft: #FCD34D;
+      --color-bg: #F8F4F0;
+      --color-surface: #FFFFFF;
+      --color-text: #1C1917;
+      --color-border: #E7E5E4;
+      --color-muted: #57534E;
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --radius-style: 0;
+      --shadow-style: 4px 4px 0px 0px #1B4332;
+      --color-lang-toggle-bg: #E7E5E4;
+      --color-lang-btn: #57534E;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); }
+    h1, h2, h3, h4, h5 { font-family: var(--font-heading); }
+    html { scroll-padding-top: 50px; scroll-behavior: smooth; }
+    .lang-toggle { display: inline-flex; background: var(--color-lang-toggle-bg, #E7E5E4); border-radius: 999px; padding: 3px; gap: 2px; }
+    .lang-btn { padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--color-lang-btn, #78716C); transition: all 0.2s ease; font-family: var(--font-heading); }
+    .lang-btn.active { background: var(--color-primary); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+    .wa-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #25D366; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; box-shadow: 0 -2px 12px rgba(0,0,0,0.12); }
+    .form-input { width: 100%; padding: 12px 16px; border: 2px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-size: 15px; transition: all 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent); }
+    .form-input::placeholder { color: var(--color-muted); }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    @media (max-width: 767px) { .wa-sticky a { font-size: 15px; } }
+  </style>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="1e8f3b8d-2b18-44c7-98bb-0bfb691e712c"></script>
+</head>
+<body class="pb-20" style="padding-top: 50px;">
+
+<div id="bot-promo-banner" style="position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,var(--color-primary) 0%,var(--color-primary-soft) 100%);border-bottom:1px solid rgba(0,0,0,0.15);padding:10px 16px;display:flex;align-items:center;justify-content:center;gap:12px;z-index:9999;font-family:'Inter',sans-serif;">
+  <span style="color:#fff;font-size:13px;" data-bm="Nak try bot WhatsApp kami dulu sebelum decide?" data-en="Want to try our WhatsApp bot first?">Nak try bot WhatsApp kami dulu sebelum decide?</span>
+  <a href="https://pintarweb.com" target="_blank" style="background:#25D366;color:#fff;text-decoration:none;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;">Cuba Bot Kami →</a>
+  <button onclick="this.parentElement.style.display='none';sessionStorage.setItem('banner-dismissed','1');" style="background:none;border:none;color:rgba(255,255,255,0.5);cursor:pointer;font-size:18px;padding:0 4px;line-height:1;">×</button>
+</div>
+<script>if(sessionStorage.getItem('banner-dismissed')){var b=document.getElementById('bot-promo-banner');if(b)b.style.display='none';}</script>
+
+<nav id="navbar" style="position:fixed;top:46px;left:0;right:0;z-index:100;background:var(--color-surface);border-bottom:1px solid var(--color-border);box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:top 0.3s ease;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:50px;">
+    <a href="#hero" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--color-text);font-weight:700;font-size:20px;font-family:var(--font-heading);">
+      <img src="images/logo.svg" alt="My Aircond Service KL" style="height:40px;width:auto;" />
+      <span>My Aircond Service KL</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div id="nav-links" class="nav-links">
+        <a href="#services" class="nav-link" data-bm="Perkhidmatan" data-en="Services">Perkhidmatan</a>
+        <a href="#gallery" class="nav-link" data-bm="Galeri" data-en="Gallery">Galeri</a>
+        <a href="#testimonials" class="nav-link" data-bm="Testimoni" data-en="Testimonials">Testimoni</a>
+        <a href="#contact" class="nav-link" data-bm="Hubungi" data-en="Contact">Hubungi</a>
+      </div>
+      <div class="lang-toggle">
+        <button id="btn-bm" class="lang-btn active" onclick="setLang('bm')" aria-pressed="true">BM</button>
+        <button id="btn-en" class="lang-btn" onclick="setLang('en')" aria-pressed="false">EN</button>
+      </div>
+      <button id="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<style>
+#nav-links { display:none; }
+#hamburger { display:flex; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:8px; }
+#hamburger span { display:block; width:20px; height:2px; background:var(--color-text); border-radius:2px; transition:all 0.3s; }
+@media (min-width:768px) {
+  #hamburger { display:none; }
+  #nav-links { display:flex !important; position:static; flex-direction:row; gap:20px; background:transparent; border:none; padding:0; box-shadow:none; }
+}
+.nav-link { color:var(--color-text); text-decoration:none; font-size:14px; font-weight:500; }
+.nav-link:hover { color:var(--color-primary); }
+</style>
+<script>
+function toggleMobileMenu(){
+  var el=document.getElementById('nav-links');
+  el.style.display=el.style.display==='flex'?'none':'flex';
+}
+document.querySelectorAll('.nav-link').forEach(function(a){
+  a.addEventListener('click',function(){document.getElementById('nav-links').style.display='none';});
+});
+document.addEventListener('click',function(e){
+  var nav=document.getElementById('nav-links');
+  var hb=document.getElementById('hamburger');
+  if(nav.style.display==='flex'&&!nav.contains(e.target)&&!hb.contains(e.target)){
+    nav.style.display='none';
+  }
+});
+</script>
+
+<section id="hero" class="relative overflow-hidden pt-16">
+  <div class="relative w-full" style="min-height:500px;">
+    <div class="absolute inset-0">
+      <img src="images/hero.webp" alt="My Aircond Service KL" class="w-full h-full object-cover" loading="eager" />
+      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.7) 100%);"></div>
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-16 md:py-24 flex flex-col items-center justify-center text-center" style="min-height:500px;">
+      <div class="flex items-center gap-4 mb-6 reveal" style="color:var(--color-accent);">
+        <span class="text-sm font-bold" data-bm="4.5 ★" data-en="4.5 ★">4.5 ★</span>
+        <span class="w-1 h-1 rounded-full" style="background:var(--color-accent);"></span>
+        <span class="text-sm font-bold" data-bm="Sejak 2020" data-en="Since 2020">Sejak 2020</span>
+        <span class="w-1 h-1 rounded-full" style="background:var(--color-accent);"></span>
+        <span class="text-sm font-bold" data-bm="Batu Caves" data-en="Batu Caves">Batu Caves</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold leading-tight tracking-tight text-white max-w-3xl reveal reveal-delay-1" style="font-family:var(--font-heading);" data-bm="My Aircond Service KL" data-en="My Aircond Service KL">My Aircond Service KL</h1>
+      <p class="text-base md:text-lg text-gray-300 max-w-xl mt-4 reveal reveal-delay-2" data-bm="Aircond Profesional Kuala Lumpur — Harga Telus" data-en="Professional Aircond Kuala Lumpur — Transparent Pricing">Aircond Profesional Kuala Lumpur — Harga Telus</p>
+      <div class="flex flex-wrap justify-center gap-4 mt-8 reveal reveal-delay-3">
+        <a href="https://wa.me/60169580449?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis" data-wa-bm="Hi%2C%20saya%20nak%20tanya%20pasal%20servis" data-wa-en="Hi%2C%20I'd%20like%20to%20ask%20about%20your%20services" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:#25D366;color:#fff;border-radius:var(--radius-style, 0.75rem);box-shadow:0 4px 12px rgba(0,0,0,0.3);" data-bm="WhatsApp Sekarang" data-en="WhatsApp Now">WhatsApp Sekarang</a>
+        <a href="tel:016-958 0449" class="inline-flex items-center gap-2 px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all" style="background:rgba(255,255,255,0.15);color:#fff;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius-style, 0.75rem);" data-bm="Panggil 016-958 0449" data-en="Call 016-958 0449">Panggil 016-958 0449</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="py-14 md:py-20 bg-[var(--color-bg)]">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-11">
+      <span class="inline-block px-3 py-1 bg-[var(--color-primary)] text-white text-xs font-bold uppercase tracking-wider mb-3 reveal" data-bm="Servis Kami" data-en="Our Services">Servis Kami</span>
+      <h2 class="text-2xl md:text-3xl font-bold text-[var(--color-text)] tracking-tight reveal" data-bm="Apa Yang Kami Tawarkan" data-en="What We Offer">Apa Yang Kami Tawarkan</h2>
+      <p class="text-[var(--color-muted)] text-sm mt-2 max-w-xl mx-auto reveal reveal-delay-1" data-bm="Servis profesional untuk setiap keperluan — dari kecil hingga besar" data-en="Professional service for every need — small to large">Servis profesional untuk setiap keperluan — dari kecil hingga besar</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      
+<div class="md:col-span-2 flex flex-col sm:flex-row overflow-hidden" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-style);box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+  <div class="sm:w-2/5 overflow-hidden"><img src="images/service-1.webp" alt="Servis & Cuci Aircond" class="w-full h-36 sm:h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" /></div>
+  <div class="flex-1 p-5 flex flex-col justify-center">
+    <h3 class="font-bold text-sm md:text-base" style="color:var(--color-text);font-family:var(--font-heading);" data-bm="Servis & Cuci Aircond" data-en="Aircond Service & Cleaning">Servis & Cuci Aircond</h3>
+  </div>
+</div>
+
+<div class=" flex flex-col sm:flex-row overflow-hidden" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-style);box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+  <div class="sm:w-2/5 overflow-hidden"><img src="images/service-2.webp" alt="Pemasangan Aircond Baru" class="w-full h-36 sm:h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" /></div>
+  <div class="flex-1 p-5 flex flex-col justify-center">
+    <h3 class="font-bold text-sm md:text-base" style="color:var(--color-text);font-family:var(--font-heading);" data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">Pemasangan Aircond Baru</h3>
+  </div>
+</div>
+
+<div class=" flex flex-col sm:flex-row overflow-hidden" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-style);box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+  <div class="sm:w-2/5 overflow-hidden"><img src="images/service-3.webp" alt="Pembaikan Aircond Rosak" class="w-full h-36 sm:h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" /></div>
+  <div class="flex-1 p-5 flex flex-col justify-center">
+    <h3 class="font-bold text-sm md:text-base" style="color:var(--color-text);font-family:var(--font-heading);" data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">Pembaikan Aircond Rosak</h3>
+  </div>
+</div>
+
+<div class="md:col-span-2 flex flex-col sm:flex-row overflow-hidden" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-style);box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+  <div class="sm:w-2/5 overflow-hidden"><img src="images/service-1.webp" alt="Top Up Gas Aircond" class="w-full h-36 sm:h-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" /></div>
+  <div class="flex-1 p-5 flex flex-col justify-center">
+    <h3 class="font-bold text-sm md:text-base" style="color:var(--color-text);font-family:var(--font-heading);" data-bm="Top Up Gas Aircond" data-en="Aircond Gas Top Up">Top Up Gas Aircond</h3>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" style="padding:60px 20px;background:var(--color-bg);">
+  <div style="max-width:1200px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 8px;font-family:var(--font-heading);" class="reveal" data-bm="Galeri Kami" data-en="Our Gallery">Galeri Kami</h2>
+    <p style="text-align:center;color:var(--color-muted);margin:0 0 40px;font-size:15px;" class="reveal reveal-delay-1" data-bm="Hasil kerja terkini dari kami" data-en="Our latest work">Hasil kerja terkini dari kami</p>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:900px;margin:0 auto;">
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);" class="reveal hover-lift">
+        <img src="images/gallery-1.webp" alt="Gallery image 1" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);" class="reveal reveal-delay-1 hover-lift">
+        <img src="images/gallery-2.webp" alt="Gallery image 2" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+      <div style="border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:var(--color-surface);grid-column:span 2;" class="reveal reveal-delay-2 hover-lift">
+        <img src="images/gallery-3.webp" alt="Gallery image 3" style="width:100%;height:100%;object-fit:cover;display:block;" onclick="openLightbox(this.src)" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="lightbox" onclick="closeLightbox(event)" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;padding:40px;cursor:pointer;">
+  <button class="lightbox-close" onclick="closeLightbox(event)" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#fff;font-size:36px;cursor:pointer;line-height:1;z-index:2;">×</button>
+  <img id="lightbox-img" src="" alt="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;cursor:default;" onclick="event.stopPropagation()" />
+</div>
+
+<section id="testimonials" class="py-12 md:py-16 reveal">
+  <div class="max-w-4xl mx-auto px-4">
+
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2"
+          style="color:var(--color-text);"
+          data-bm="Apa Kata Pelanggan" data-en="What Customers Say">
+        Apa Kata Pelanggan
+      </h2>
+      <p class="text-sm" style="color:var(--color-text);opacity:0.65;"
+         data-bm="Pendapat sebenar dari pelanggan yang dah servis dengan kami" data-en="Real feedback from customers who've used our service">
+        Pendapat sebenar dari pelanggan yang dah servis dengan kami
+      </p>
+      <div class="flex items-center justify-center gap-2 mt-4 reveal reveal-delay-1">
+        <div class="flex">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-accent);"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <span class="text-sm font-bold" style="color:var(--color-text);"
+              data-bm="4.5 — 8 ulasan" data-en="4.5 — 8 reviews">
+          4.5 — 8 ulasan
+        </span>
+        <a href="https://maps.google.com/?q=My Aircond Service KL" target="_blank"
+           class="text-xs font-semibold underline" style="color:var(--color-primary);"
+           data-bm="Semua Ulasan" data-en="All Reviews">Semua Ulasan</a>
+      </div>
+    </div>
+
+    <!-- Full-width stacked cards (not grid) -->
+    <div class="space-y-6">
+      
+<div class="flex flex-col sm:flex-row items-start gap-4 p-5 reveal " style="background:var(--color-surface);border:2px solid var(--color-border);box-shadow:var(--shadow-style);">
+  <div class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center text-xl font-black" style="background:var(--color-primary);color:#fff;border-radius:9999px;">ER</div>
+  <div class="flex-1">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="font-bold text-sm" style="color:var(--color-text);" data-bm="En. Rahim" data-en="Mr. Rahim">En. Rahim</span>
+      <span class="text-xs" style="color:var(--color-muted);" data-bm="Batu Caves" data-en="Batu Caves">Batu Caves</span>
+    </div>
+    <div style="color:var(--color-accent);font-size:14px;letter-spacing:2px;">★★★★★</div>
+    <p class="text-sm mt-2 leading-relaxed" style="color:var(--color-text);" data-bm="Aircond tak sejuk, servis terus jadi okay. Harga berpatutan." data-en="Aircond wasn't cooling, service fixed it right away. Fair price.">"Aircond tak sejuk, servis terus jadi okay. Harga berpatutan."</p>
+  </div>
+</div>
+
+<div class="flex flex-col sm:flex-row items-start gap-4 p-5 reveal reveal-delay-1" style="background:var(--color-surface);border:2px solid var(--color-border);box-shadow:var(--shadow-style);">
+  <div class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center text-xl font-black" style="background:var(--color-primary);color:#fff;border-radius:9999px;">PS</div>
+  <div class="flex-1">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="font-bold text-sm" style="color:var(--color-text);" data-bm="Puan Salmah" data-en="Ms. Salmah">Puan Salmah</span>
+      <span class="text-xs" style="color:var(--color-muted);" data-bm="Selayang" data-en="Selayang">Selayang</span>
+    </div>
+    <div style="color:var(--color-accent);font-size:14px;letter-spacing:2px;">★★★★☆</div>
+    <p class="text-sm mt-2 leading-relaxed" style="color:var(--color-text);" data-bm="Pasang aircond baru untuk bilik anak. Cepat dan kemas." data-en="Installed new aircond for my child's room. Fast and neat.">"Pasang aircond baru untuk bilik anak. Cepat dan kemas."</p>
+  </div>
+</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA banner | variant: polished-dark | Mood: premium-modern -->
+<section class="reveal w-full relative overflow-hidden my-12">
+  <!-- Gradient accent bar at top -->
+  <div class="h-1 w-full bg-gradient-to-r from-[var(--color-accent,#C08457)] via-[var(--color-accent-soft,#E5C29F)] to-[var(--color-accent,#C08457)]"></div>
+
+  <!-- Background -->
+  <div class="bg-[var(--color-primary,#111827)] py-16 md:py-20 px-4 relative">
+    <!-- Decorative blur circle -->
+    <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[var(--color-accent,#C08457)] opacity-5 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-[var(--color-accent-soft,#E5C29F)] opacity-5 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight"
+          style="font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif)"
+          data-bm="Percaya Dengan My Aircond Service KL?"
+          data-en="Trust My Aircond Service KL?">
+        Percaya Dengan My Aircond Service KL?
+      </h2>
+      <p class="text-gray-300 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed"
+         data-bm="Aircond Profesional Kuala Lumpur — Harga Telus — Kami dah berkhidmat sejak 2020 di Batu Caves. Harga mesra, mutu terjamin."
+         data-en="Professional Aircond Kuala Lumpur — Transparent Pricing — We've been serving since 2020 in Batu Caves. Fair prices, guaranteed quality.">
+        Aircond Profesional Kuala Lumpur — Harga Telus — Kami dah berkhidmat sejak 2020 di Batu Caves. Harga mesra, mutu terjamin.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://wa.me/60169580449?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis"
+           class="inline-flex items-center justify-center gap-2.5 bg-[#25D366] text-white font-bold px-7 py-3.5 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:brightness-110 text-sm"
+           data-wa-bm="Hi%2C%20saya%20nak%20tanya%20pasal%20servis" data-wa-en="Hi%2C%20I'd%20like%20to%20ask%20about%20your%20services">
+          <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.526 5.845L.057 23.885l6.197-1.624A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.366l-.358-.213-3.722.976.993-3.63-.234-.373A9.818 9.818 0 1112 21.818z"/>
+          </svg>
+          <span data-bm="Whatsapp Kami" data-en="WhatsApp Us">Whatsapp Kami</span>
+        </a>
+        <a href="tel:016-958 0449"
+           class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm text-white font-semibold px-7 py-3.5 rounded-xl border border-white/20 transition-all duration-200 hover:bg-white/20 text-sm">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>016-958 0449</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding:60px 20px;background:var(--color-surface);">
+  <div style="max-width:600px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 8px;font-family:var(--font-heading);" class="reveal" data-bm="Ada Soalan? Hubungi Kami" data-en="Got Questions? Contact Us">Ada Soalan? Hubungi Kami</h2>
+    <p style="text-align:center;color:var(--color-muted);margin:0 0 36px;font-size:15px;" class="reveal reveal-delay-1" data-bm="Sebut harga percuma, tanpa komitmen" data-en="Free quote, no obligation">Sebut harga percuma, tanpa komitmen</p>
+    <form id="contact-form" onsubmit="submitContact(event)" style="display:flex;flex-direction:column;gap:16px;" class="reveal reveal-delay-2">
+      <input type="text" id="cf-name" class="form-input" placeholder="Nama" required style="border-radius:10px;" data-bm="Nama" data-en="Name" />
+      <input type="tel" id="cf-phone" class="form-input" placeholder="Telefon" required style="border-radius:10px;" data-bm="Telefon" data-en="Phone" />
+      <select id="cf-service" class="form-input" required style="border-radius:10px;appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 14px center;" onchange="toggleOtherService(this)">
+        <option value="" disabled selected data-bm="Pilih perkhidmatan" data-en="Select a service">Pilih perkhidmatan</option>
+        <option value="Servis & Cuci Aircond" data-bm="Servis & Cuci Aircond" data-en="Aircond Service & Cleaning">Servis & Cuci Aircond</option>
+      <option value="Pemasangan Aircond Baru" data-bm="Pemasangan Aircond Baru" data-en="New Aircond Installation">Pemasangan Aircond Baru</option>
+      <option value="Pembaikan Aircond Rosak" data-bm="Pembaikan Aircond Rosak" data-en="Aircond Repair">Pembaikan Aircond Rosak</option>
+      <option value="Top Up Gas Aircond" data-bm="Top Up Gas Aircond" data-en="Aircond Gas Top Up">Top Up Gas Aircond</option>
+        <option value="__other__" data-bm="Lain-lain" data-en="Others">Lain-lain</option>
+      </select>
+      <input type="text" id="cf-service-other" class="form-input" placeholder="Nyatakan servis lain" style="border-radius:10px;display:none;" data-bm="Nyatakan servis lain" data-en="Specify other service" />
+      <textarea id="cf-message" class="form-input" placeholder="Mesej" rows="4" style="border-radius:10px;resize:vertical;" data-bm="Mesej" data-en="Message"></textarea>
+      <button type="submit" style="width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:opacity 0.2s;font-family:var(--font-heading);" data-bm="Hantar via WhatsApp" data-en="Send via WhatsApp">Hantar via WhatsApp</button>
+    </form>
+  </div>
+</section>
+<script>
+function toggleOtherService(sel){
+  var other=document.getElementById('cf-service-other');
+  if(!other)return;
+  other.style.display=sel.value==='__other__'?'block':'none';
+}
+function submitContact(e){
+  e.preventDefault();
+  var lang=localStorage.getItem('pw_lang')||'bm';
+  var isBM=lang==='bm';
+  var name=document.getElementById('cf-name').value.trim();
+  var phone=document.getElementById('cf-phone').value.trim();
+  var sel=document.getElementById('cf-service');
+  var service=sel.value==='__other__'?document.getElementById('cf-service-other').value.trim():sel.value;
+  var message=document.getElementById('cf-message').value.trim();
+  var text=isBM?'Hi My Aircond Service KL!%0A%0A':'Hello My Aircond Service KL!%0A%0A';
+  text+=(isBM?'Nama: ':'Name: ')+encodeURIComponent(name)+'%0A';
+  text+=(isBM?'Telefon: ':'Phone: ')+encodeURIComponent(phone)+'%0A';
+  if(service)text+=(isBM?'Perkhidmatan: ':'Service: ')+encodeURIComponent(service)+'%0A';
+  if(message)text+=(isBM?'Mesej: ':'Message: ')+encodeURIComponent(message)+'%0A';
+  text+='%0A'+(isBM?'(Dari laman web)':'(From website)');
+  window.open('https://wa.me/60169580449?text='+text,'_blank');
+}
+</script>
+
+<section id="faq" style="padding:60px 20px;background:var(--color-bg);">
+  <div style="max-width:700px;margin:0 auto;">
+    <h2 style="text-align:center;font-size:28px;margin:0 0 40px;font-family:var(--font-heading);" class="reveal" data-bm="Soalan Lazim" data-en="Frequently Asked Questions">Soalan Lazim</h2>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      
+<div class="border" style="border-color:var(--color-border);border-radius:var(--radius-style);overflow:hidden;">
+    <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 text-left font-bold text-sm transition-all" style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-heading);"><span data-bm="Apa servis aircond yang disediakan?" data-en="What aircond services do you provide?">Apa servis aircond yang disediakan?</span> <span class="faq-icon text-lg transition-transform duration-200" style="color:var(--color-muted);">+</span></button>
+  <div class="faq-answer hidden px-4 pb-4 text-sm leading-relaxed" style="color:var(--color-muted);background:var(--color-surface);" data-bm="Kami sediakan servis cuci aircond, pemasangan baru, pembaikan, dan top-up gas. Servis untuk semua jenama utama." data-en="We provide aircond cleaning, new installation, repair, and gas top-up. Services for all major brands.">Kami sediakan servis cuci aircond, pemasangan baru, pembaikan, dan top-up gas. Servis untuk semua jenama utama.</div>
+</div>
+
+<div class="border" style="border-color:var(--color-border);border-radius:var(--radius-style);overflow:hidden;">
+    <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 text-left font-bold text-sm transition-all" style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-heading);"><span data-bm="Berapa lama tempoh siap servis?" data-en="How long does service take?">Berapa lama tempoh siap servis?</span> <span class="faq-icon text-lg transition-transform duration-200" style="color:var(--color-muted);">+</span></button>
+  <div class="faq-answer hidden px-4 pb-4 text-sm leading-relaxed" style="color:var(--color-muted);background:var(--color-surface);" data-bm="Servis biasa ambil 30 minit hingga 1 jam. Pemasangan baru ambil 2-4 jam bergantung pada kerumitan." data-en="Regular service takes 30 minutes to 1 hour. New installation takes 2-4 hours depending on complexity.">Servis biasa ambil 30 minit hingga 1 jam. Pemasangan baru ambil 2-4 jam bergantung pada kerumitan.</div>
+</div>
+
+<div class="border" style="border-color:var(--color-border);border-radius:var(--radius-style);overflow:hidden;">
+    <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 text-left font-bold text-sm transition-all" style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-heading);"><span data-bm="Area servis mana yang kami cover?" data-en="What areas do you cover?">Area servis mana yang kami cover?</span> <span class="faq-icon text-lg transition-transform duration-200" style="color:var(--color-muted);">+</span></button>
+  <div class="faq-answer hidden px-4 pb-4 text-sm leading-relaxed" style="color:var(--color-muted);background:var(--color-surface);" data-bm="Kami cover Batu Caves, Selayang, Gombak, Setapak & Wangsa Maju. Call kami untuk area lain." data-en="We cover Batu Caves, Selayang, Gombak, Setapak & Wangsa Maju. Call us for other areas.">Kami cover Batu Caves, Selayang, Gombak, Setapak & Wangsa Maju. Call kami untuk area lain.</div>
+</div>
+
+<div class="border" style="border-color:var(--color-border);border-radius:var(--radius-style);overflow:hidden;">
+    <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 text-left font-bold text-sm transition-all" style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-heading);"><span data-bm="Ada warranty untuk servis?" data-en="Is there a warranty?">Ada warranty untuk servis?</span> <span class="faq-icon text-lg transition-transform duration-200" style="color:var(--color-muted);">+</span></button>
+  <div class="faq-answer hidden px-4 pb-4 text-sm leading-relaxed" style="color:var(--color-muted);background:var(--color-surface);" data-bm="Ya, kami bagi warranty untuk servis dan pemasangan. Detail warranty akan diterangkan sebelum kerja bermula." data-en="Yes, we provide warranty for service and installation. Details will be explained before work starts.">Ya, kami bagi warranty untuk servis dan pemasangan. Detail warranty akan diterangkan sebelum kerja bermula.</div>
+</div>
+
+<div class="border" style="border-color:var(--color-border);border-radius:var(--radius-style);overflow:hidden;">
+    <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-4 text-left font-bold text-sm transition-all" style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-heading);"><span data-bm="Cara nak booking servis?" data-en="How to book a service?">Cara nak booking servis?</span> <span class="faq-icon text-lg transition-transform duration-200" style="color:var(--color-muted);">+</span></button>
+  <div class="faq-answer hidden px-4 pb-4 text-sm leading-relaxed" style="color:var(--color-muted);background:var(--color-surface);" data-bm="WhatsApp kami terus atau call. Kami akan arrange masa yang sesuai untuk awak." data-en="WhatsApp or call us directly. We'll arrange a convenient time for you.">WhatsApp kami terus atau call. Kami akan arrange masa yang sesuai untuk awak.</div>
+</div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var acc=document.querySelectorAll('.faq-header');
+  acc.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var isOpen=this.classList.contains('active');
+      acc.forEach(function(b){b.classList.remove('active');b.nextElementSibling.style.maxHeight='0';b.querySelector('.faq-icon').textContent='+';});
+      if(!isOpen){
+        this.classList.add('active');
+        this.nextElementSibling.style.maxHeight=this.nextElementSibling.scrollHeight+'px';
+        this.querySelector('.faq-icon').textContent='−';
+      }
+    });
+  });
+})();
+</script>
+
+
+<script>
+function toggleFaq(btn){
+  var answer=btn.nextElementSibling;
+  var isHidden=answer.classList.contains('hidden');
+  document.querySelectorAll('.faq-answer').forEach(function(el){el.classList.add('hidden');var icon=el.previousElementSibling.querySelector('.faq-icon');if(icon)icon.textContent='+';});
+  if(isHidden){answer.classList.remove('hidden');var icon=btn.querySelector('.faq-icon');if(icon)icon.textContent='−';}
+}
+</script>
+<footer style="background:var(--color-surface);border-top:1px solid var(--color-border);padding:32px 20px 100px;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="images/logo.svg" alt="My Aircond Service KL" style="height:40px;width:auto;" />
+        <span style="font-weight:700;font-size:17px;font-family:var(--font-heading);color:var(--color-text);">My Aircond Service KL</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--color-muted);opacity:0.55;cursor:default;" aria-label="Instagram (tiada)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="#fff"/><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z" fill="none"/></svg></span>
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--color-muted);opacity:0.55;cursor:default;" aria-label="Facebook (tiada)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></span>
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;color:var(--color-muted);opacity:0.55;cursor:default;" aria-label="TikTok (tiada)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.89 2.89 2.89 0 0 1 2.88-2.89c.33 0 .64.06.94.15V8.78a6.37 6.37 0 0 0-.94-.07 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V9.75a8.28 8.28 0 0 0 4.94 1.56v-3.4a4.87 4.87 0 0 1-1.42-.22z"/></svg></span>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--color-border);padding-top:16px;text-align:center;color:var(--color-muted);font-size:13px;">
+      <span data-bm="© 2026 My Aircond Service KL · Sejak 2020 · Batu Caves" data-en="© 2026 My Aircond Service KL · Since 2020 · Batu Caves">© 2026 My Aircond Service KL · Sejak 2020 · Batu Caves</span>
+    </div>
+  </div>
+</footer>
+
+<div class="wa-sticky" style="display:none;">
+  <a id="wa-sticky-link" href="https://wa.me/60169580449?text=Hi%2C%20saya%20nak%20tanya%20pasal%20servis" target="_blank" rel="noopener" style="color:#fff;text-decoration:none;font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;" data-wa-bm="Hi%2C%20saya%20nak%20tanya%20pasal%20servis" data-wa-en="Hi%2C%20I'd%20like%20to%20ask%20about%20your%20services">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <span data-bm="Hubungi via WhatsApp" data-en="Contact via WhatsApp">Hubungi via WhatsApp</span>
+  </a>
+</div>
+<script>
+(function(){
+  var wa=document.querySelector('.wa-sticky');
+  if(window.innerWidth<768&&wa)wa.style.display='flex';
+  var checkWa=function(){if(wa)wa.style.display=window.innerWidth<768?'flex':'none';};
+  window.addEventListener('resize',checkWa);
+})();
+function updateWaLinks(){
+  var lang=localStorage.getItem('pw_lang')||'bm';
+  document.querySelectorAll('[data-wa-bm]').forEach(function(el){
+    var msg=lang==='bm'?el.getAttribute('data-wa-bm'):el.getAttribute('data-wa-en');
+    if(msg&&el.tagName==='A')el.href=el.href.split('?')[0]+'?text='+msg;
+  });
+}
+document.addEventListener('DOMContentLoaded',updateWaLinks);
+</script>
+
+<script>
+(function(){var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target);}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(function(e){o.observe(e);});})();
+</script>
+<script>
+(function(){var saved=localStorage.getItem('pw_lang')||'bm';setLang(saved,true);})();
+function setLang(lang,silent){
+  var isBM=lang==='bm';
+  document.documentElement.lang=isBM?'ms':'en';
+  document.documentElement.setAttribute('data-lang',lang);
+  document.querySelectorAll('[data-bm]').forEach(function(el){
+    var target=isBM?el.getAttribute('data-bm'):el.getAttribute('data-en');
+    if(!target)return;
+    if(el.children.length===0){
+      if(!silent)el.style.opacity='0';
+      setTimeout(function(){
+        el.textContent=target;
+        if(!silent)el.style.opacity='1';
+      },silent?0:80);
+    }
+  });
+  var titleEl=document.querySelector('title');
+  if(titleEl)titleEl.textContent=isBM?titleEl.getAttribute('data-bm'):titleEl.getAttribute('data-en');
+  document.getElementById('btn-bm').classList.toggle('active',isBM);
+  document.getElementById('btn-en').classList.toggle('active',!isBM);
+  document.getElementById('btn-bm').setAttribute('aria-pressed',isBM);
+  document.getElementById('btn-en').setAttribute('aria-pressed',!isBM);
+  localStorage.setItem('pw_lang',lang);
+  if(typeof updateWaLinks==='function')updateWaLinks();
+}
+</script>
+<script>
+function openLightbox(src){var lb=document.getElementById('lightbox');lb.style.display='flex';document.getElementById('lightbox-img').src=src;document.body.style.overflow='hidden';}
+function closeLightbox(e){if(e.target===e.currentTarget||e.target.classList.contains('lightbox-close')){document.getElementById('lightbox').style.display='none';document.body.style.overflow='';}}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var lb=document.getElementById('lightbox');if(lb&&lb.style.display==='flex'){lb.style.display='none';document.body.style.overflow='';}}});
+</script>
+</body>
+</html>

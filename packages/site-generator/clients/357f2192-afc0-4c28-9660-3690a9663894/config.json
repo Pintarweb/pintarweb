@@ -1,0 +1,40 @@
+{
+  "id": "357f2192-afc0-4c28-9660-3690a9663894",
+  "business_name": "CN Air-Cond & Electrical Service",
+  "tagline": "Aircond Profesional Kuala Lumpur — Harga Telus",
+  "tagline_en": "",
+  "phone": "60162151500",
+  "whatsapp": "60162151500",
+  "address": "\n23, Jalan Orkid 3, Taman Orkid, 43200 Cheras, Selangor, Malaysia",
+  "area": "Taman Orkid",
+  "niche": "aircond-contractor",
+  "services": [],
+  "services_en": [],
+  "service_areas": [
+    "Taman Orkid"
+  ],
+  "mood": "premium-modern",
+  "google_rating": null,
+  "google_review_count": 0,
+  "testimonials": [],
+  "testimonials_en": [],
+  "gallery_images": [],
+  "facebook_url": "https://www.facebook.com/profile.php?id=61554601118958#",
+  "instagram_url": "",
+  "tiktok_url": "",
+  "social": {
+    "instagram_handle": "",
+    "instagram_followers": 0,
+    "instagram_active": false,
+    "instagram_content_type": "project-photos",
+    "instagram_link_in_bio": "whatsapp",
+    "tiktok_handle": "",
+    "tiktok_followers": 0,
+    "tiktok_active": false
+  },
+  "audit": {
+    "has_website": false,
+    "website_url": null,
+    "google_maps_url": "https://www.google.com/maps/place/CN+Air-Cond+%26+Electrical+Service/data=!4m7!3m6!1s0x31cc345a2c2f85b3:0xf69c9062796f54ad!8m2!3d3.0773532!4d101.7669598!16s%2Fg%2F1tr9kyh7!19sChIJs4UvLFo0zDERrVRveWKQnPY?authuser=0&hl=en&rclk=1"
+  }
+}

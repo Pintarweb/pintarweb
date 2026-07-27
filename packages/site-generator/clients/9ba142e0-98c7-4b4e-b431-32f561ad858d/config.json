@@ -1,0 +1,40 @@
+{
+  "id": "9ba142e0-98c7-4b4e-b431-32f561ad858d",
+  "business_name": "My Aircond Service KL",
+  "tagline": "Aircond Profesional Kuala Lumpur — Harga Telus",
+  "tagline_en": "",
+  "phone": "60169580449",
+  "whatsapp": "60169580449",
+  "address": "\nNo 168, Jalan Bendahara 13, Kampung Bendahara, 68100 Batu Caves, Selangor, Malaysia",
+  "area": "Kampung Bendahara",
+  "niche": "aircond-contractor",
+  "services": [],
+  "services_en": [],
+  "service_areas": [
+    "Kampung Bendahara"
+  ],
+  "mood": "premium-modern",
+  "google_rating": null,
+  "google_review_count": 0,
+  "testimonials": [],
+  "testimonials_en": [],
+  "gallery_images": [],
+  "facebook_url": "",
+  "instagram_url": "",
+  "tiktok_url": "",
+  "social": {
+    "instagram_handle": "",
+    "instagram_followers": 0,
+    "instagram_active": false,
+    "instagram_content_type": "project-photos",
+    "instagram_link_in_bio": "whatsapp",
+    "tiktok_handle": "",
+    "tiktok_followers": 0,
+    "tiktok_active": false
+  },
+  "audit": {
+    "has_website": false,
+    "website_url": null,
+    "google_maps_url": "https://www.google.com/maps/place/My+Aircond+Service+KL/data=!4m7!3m6!1s0x31cc478b4687f963:0x452583f752ae014b!8m2!3d3.2641763!4d101.674681!16s%2Fg%2F11hz6q70ly!19sChIJY_mHRotHzDERSwGuUveDJUU?authuser=0&hl=en&rclk=1"
+  }
+}

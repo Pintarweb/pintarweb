@@ -519,6 +519,14 @@ const ctx = {
   TIKTOK_HANDLE: tt,
   NICHE: niche,
   MOOD: config.mood || '',
+  CATEGORY: (() => {
+    const labels = { 'aircond-contractor': 'Aircond', 'plumbing': 'Paip', 'electrical': 'Elektrik', 'renovation': 'Renovation', 'general': 'Servis' };
+    return labels[niche] || 'Servis';
+  })(),
+  CATEGORY_EN: (() => {
+    const labels = { 'aircond-contractor': 'Aircond', 'plumbing': 'Plumbing', 'electrical': 'Electrical', 'renovation': 'Renovation', 'general': 'Service' };
+    return labels[niche] || 'Service';
+  })(),
   YEAR: '2026',
   SERVICE_AREAS_HTML: areasList,
   SERVICE_AREAS_LIST: areasText,

@@ -1,0 +1,26 @@
+{
+    "id": "60169580449",
+    "business_name": "My Aircond Service KL",
+    "tagline": "Aircond Profesional Kuala Lumpur — Harga Telus",
+    "tagline_en": "Professional Aircond Kuala Lumpur — Transparent Pricing",
+    "phone": "016-958 0449",
+    "whatsapp": "60169580449",
+    "area": "Batu Caves",
+    "service_areas": ["Batu Caves", "Selayang", "Gombak", "Setapak", "Wangsa Maju"],
+    "service_areas_en": ["Batu Caves", "Selayang", "Gombak", "Setapak", "Wangsa Maju"],
+    "niche": "aircond-contractor",
+    "services": ["Servis & Cuci Aircond", "Pemasangan Aircond Baru", "Pembaikan Aircond Rosak", "Top Up Gas Aircond"],
+    "services_en": ["Aircond Service & Cleaning", "New Aircond Installation", "Aircond Repair", "Aircond Gas Top Up"],
+    "established": "2020",
+    "mood": "trustworthy-local",
+    "google_rating": 4.5,
+    "google_review_count": 8,
+    "testimonials": [
+        {"name": "En. Rahim", "area": "Batu Caves", "text": "Aircond tak sejuk, servis terus jadi okay. Harga berpatutan.", "rating": 5},
+        {"name": "Puan Salmah", "area": "Selayang", "text": "Pasang aircond baru untuk bilik anak. Cepat dan kemas.", "rating": 4}
+    ],
+    "testimonials_en": [
+        {"name": "Mr. Rahim", "area": "Batu Caves", "text": "Aircond wasn't cooling, service fixed it right away. Fair price.", "rating": 5},
+        {"name": "Ms. Salmah", "area": "Selayang", "text": "Installed new aircond for my child's room. Fast and neat.", "rating": 4}
+    ]
+}

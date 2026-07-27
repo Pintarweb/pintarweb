@@ -1,0 +1,40 @@
+{
+  "id": "407c64c0-09c3-42a4-bcc6-65e6f690be1d",
+  "business_name": "Aircond Services & Repairing",
+  "tagline": "Servis Aircond Cheras — Cepat & Berpengalaman",
+  "tagline_en": "",
+  "phone": "601111711470",
+  "whatsapp": "601111711470",
+  "address": "\nNear 2-20, Jalan Temenggung 7/9, Bandar Mahkota Cheras, Bandar Mahkota, 43200 Cheras, Selangor, Malaysia",
+  "area": "Bandar Mahkota Cheras",
+  "niche": "aircond-contractor",
+  "services": [],
+  "services_en": [],
+  "service_areas": [
+    "Bandar Mahkota Cheras"
+  ],
+  "mood": "premium-modern",
+  "google_rating": null,
+  "google_review_count": 0,
+  "testimonials": [],
+  "testimonials_en": [],
+  "gallery_images": [],
+  "facebook_url": "",
+  "instagram_url": "",
+  "tiktok_url": "",
+  "social": {
+    "instagram_handle": "",
+    "instagram_followers": 0,
+    "instagram_active": false,
+    "instagram_content_type": "project-photos",
+    "instagram_link_in_bio": "whatsapp",
+    "tiktok_handle": "",
+    "tiktok_followers": 0,
+    "tiktok_active": false
+  },
+  "audit": {
+    "has_website": false,
+    "website_url": null,
+    "google_maps_url": "https://www.google.com/maps/place/Aircond+Services+%26+Repairing/data=!4m7!3m6!1s0x31cc35d685d163c9:0x10e29adbc658ba82!8m2!3d3.0524382!4d101.7869594!16s%2Fg%2F11njxbv8gr!19sChIJyWPRhdY1zDERgrpYxtua4hA?authuser=0&hl=en&rclk=1"
+  }
+}

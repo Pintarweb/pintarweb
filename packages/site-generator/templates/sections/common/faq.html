@@ -6,19 +6,3 @@
     </div>
   </div>
 </section>
-<script>
-(function(){
-  var acc=document.querySelectorAll('.faq-header');
-  acc.forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var isOpen=this.classList.contains('active');
-      acc.forEach(function(b){b.classList.remove('active');b.nextElementSibling.style.maxHeight='0';b.querySelector('.faq-icon').textContent='+';});
-      if(!isOpen){
-        this.classList.add('active');
-        this.nextElementSibling.style.maxHeight=this.nextElementSibling.scrollHeight+'px';
-        this.querySelector('.faq-icon').textContent='−';
-      }
-    });
-  });
-})();
-</script>
