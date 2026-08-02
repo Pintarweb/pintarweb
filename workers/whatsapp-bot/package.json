@@ -1,0 +1,11 @@
+{
+  "name": "pintarweb-whatsapp-bot",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@cloudflare/workers-types": "^4.20250420.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "files.watcherExclude": {
+    "**/.wrangler/**": true,
+    "**/packages/site-generator/_legacy/**": true,
+    "**/packages/site-generator/design-system/references/**": true,
+    "**/docs/deep-research/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.turbo/**": true
+  },
+  "files.exclude": {
+    "**/.wrangler": true
+  },
+  "search.exclude": {
+    "**/.wrangler": true,
+    "**/packages/site-generator/_legacy": true,
+    "**/packages/site-generator/design-system/references": true,
+    "**/docs/deep-research": true
+  }
+}

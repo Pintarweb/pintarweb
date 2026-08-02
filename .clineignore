@@ -1,0 +1,87 @@
+# ==========================================
+# Dependencies & Package Managers
+# ==========================================
+node_modules/
+.pnpm-store/
+.yarn/
+vendor/
+
+# ==========================================
+# Build Outputs & Framework Caches
+# ==========================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.astro/
+.turbo/
+.cache/
+
+# ==========================================
+# Version Control & Metadata
+# ==========================================
+.git/
+.github/
+.svn/
+.hg/
+
+# ==========================================
+# Environment & Secret Files (Security)
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# Log Files & Runtime Data
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# ==========================================
+# Binary, Media, and Large Assets
+# ==========================================
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.svg
+*.pdf
+*.zip
+*.tar
+*.gz
+*.mp4
+*.mp3
+
+# ==========================================
+# IDE, OS, and Lock Files
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# ==========================================
+# Cloudflare Workers Local Dev State
+# ==========================================
+.wrangler/
+
+# ==========================================
+# Legacy & Large Directories (Cline crash guards)
+# ==========================================
+packages/site-generator/_legacy/
+packages/site-generator/design-system/references/
+docs/deep-research/

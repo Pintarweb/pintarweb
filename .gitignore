@@ -10,3 +10,11 @@ dist/
 .turbo/
 *.tsbuildinfo
 packages/site-generator/_legacy/
+
+# Large binary files (keep on disk, exclude from Cline/git indexing)
+docs/deep-research/*.docx
+packages/site-generator/design-system/references/**/*.jpg
+packages/site-generator/design-system/references/**/*.jpeg
+packages/site-generator/design-system/references/**/*.png
+packages/site-generator/design-system/references/**/*.webp
+packages/site-generator/design-system/references/**/*.gif
