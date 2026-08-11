@@ -124,11 +124,11 @@ export async function getConversationHistory(
   wabaId: string,
   customerPhone: string,
   limit?: number
-): Promise<Array<{ role: string; content: string }>> {
+): Promise<Array<{ role: string; content: string; created_at?: string }>> {
   const limitClause = limit ? `LIMIT ${limit}` : 'LIMIT 10';
   const result = await db
     .prepare(
-      `SELECT role, message FROM whatsapp_bot_conversations
+      `SELECT role, message, created_at FROM whatsapp_bot_conversations
        WHERE waba_id = ? AND customer_phone = ?
        ORDER BY created_at DESC
        ${limitClause}`
@@ -139,6 +139,7 @@ export async function getConversationHistory(
   return (result.results || []).reverse().map((row: any) => ({
     role: row.role,
     content: row.message,
+    created_at: row.created_at,
   }));
 }
 

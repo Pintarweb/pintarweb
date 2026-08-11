@@ -10,6 +10,7 @@ export interface Env {
   BANK_ACCOUNT_NUMBER: string;
   ANTHROPIC_API_KEY: string;
   ADMIN_SECRET: string;
+  BOOKING_SECRET: string;
   pintarweb_outreach_db: any;
   AI: {
     run(model: string, options: { messages: Array<{ role: string; content: string }>; max_tokens?: number; temperature?: number }): Promise<{ response?: string; content: string }>;
@@ -44,6 +45,7 @@ export type Intent =
   | 'HOW_IT_WORKS'
   | 'SUPPORT'
   | 'ESCALATE'
+  | 'BOOKING_REQUEST'
   | 'UNCLEAR';
 
 export interface FaqEntry {
@@ -170,3 +172,7 @@ export const GREETING_ANSWER =
   '2️⃣ Cara nak subscribe\n' +
   '3️⃣ Soalan lain tentang servis\n\n' +
   'Apa yang anda nak tahu hari ini?';
+
+export const SUGGESTION_FOOTER = '(Taip apa-apa soalan sendiri)';
+
+export const MENU_EXPIRY_MINUTES = 5;

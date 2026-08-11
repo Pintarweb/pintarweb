@@ -1,5 +1,5 @@
 import type { Env, Intent, TenantContext, SuggestionDef } from './types';
-import { PINTARWEB_FAQ, SUGGESTION_MAP, GREETING_ANSWER, PRICING_ANSWER, CLOSING_READY_ANSWER, HOW_IT_WORKS_ANSWER } from './types';
+import { PINTARWEB_FAQ, SUGGESTION_MAP, GREETING_ANSWER, PRICING_ANSWER, CLOSING_READY_ANSWER, HOW_IT_WORKS_ANSWER, SUGGESTION_FOOTER, MENU_EXPIRY_MINUTES } from './types';
 import { sendWhatsAppMessage, storeMessage, getConversationHistory, wasGreetingSent, markGreetingSent, notifyOwner } from './kb';
 
 const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
@@ -33,6 +33,7 @@ export function classifyIntent(msg: string): Intent {
   if (/maintain|maintenance|selepas|after|support/i.test(lower)) return 'FAQ_MAINTENANCE';
   if (/tech savvy|teknikal|reti|tak reti|beginner|technically challenged/i.test(lower)) return 'FAQ_TECH_SAVVY';
   if (/tambah|add more|extra|servis tambahan|page baru|new page/i.test(lower)) return 'FAQ_ADD_SERVICES';
+  if (/book|tempah|jadual|slot|appointment|janji temu/i.test(lower)) return 'BOOKING_REQUEST';
 
   return 'UNCLEAR';
 }
@@ -46,8 +47,13 @@ export function getSuggestions(intent: Intent): SuggestionDef | null {
   return SUGGESTION_MAP[intent] ?? null;
 }
 
+/**
+ * Only show 1️⃣/2️⃣ suggestions on high-value discovery intents.
+ * GREETING uses its own 3-option menu (separate system).
+ * FAQ answers don't need suggestions — the customer asked a specific question.
+ */
 export function intentHasSuggestions(intent: Intent): boolean {
-  return !['GREETING', 'PRICE_ENQUIRY', 'SUBSCRIBE', 'CLOSING_READY', 'ESCALATE'].includes(intent);
+  return ['PRICE_ENQUIRY', 'FAQ_PACKAGES'].includes(intent);
 }
 
 export function shouldSuppressForReply(customerMessageText: string): boolean {
@@ -63,7 +69,18 @@ export function shouldSuppressForReply(customerMessageText: string): boolean {
 }
 
 export function hasSuggestionBlock(msg: string): boolean {
-  return /\(Taip apa-apa soalan sendiri\)/.test(msg);
+  return msg.includes(SUGGESTION_FOOTER);
+}
+
+/**
+ * Check if the last assistant message with a menu is older than MENU_EXPIRY_MINUTES.
+ * Returns true if the menu is expired (cached dropdown expired in Meta's app).
+ */
+export function isMenuExpired(lastAssistantMsg: { created_at?: string } | undefined): boolean {
+  if (!lastAssistantMsg?.created_at) return true;
+  const msgTime = new Date(lastAssistantMsg.created_at.replace(' ', 'T') + 'Z').getTime();
+  const now = Date.now();
+  return (now - msgTime) > (MENU_EXPIRY_MINUTES * 60 * 1000);
 }
 
 export function inferIntentFromAssistantMsg(msg: string): Intent | null {
@@ -95,8 +112,64 @@ export function formatSuggestionBlock(def: SuggestionDef): string {
   return (
     `1️⃣ ${def.questions[0]}\n` +
     `2️⃣ ${def.questions[1]}\n` +
-    '(Taip apa-apa soalan sendiri)'
+    SUGGESTION_FOOTER
   );
+}
+
+/**
+ * Generate an HMAC-signed booking token.
+ * Format: base64({customerPhone}|{timestamp}|{hmacSig})
+ */
+export async function generateBookingToken(customerPhone: string, secret: string): Promise<string> {
+  const enc = new TextEncoder();
+  const payload = `${customerPhone}|${Date.now()}`;
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(payload));
+  const sigB64 = btoa(String.fromCharCode(...new Uint8Array(sig)));
+  // URL-safe base64: + → -, / → _, strip =
+  const urlSafe = (s: string) => s.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return urlSafe(btoa(`${payload}|${sigB64}`));
+}
+
+/**
+ * Generate the full booking URL.
+ * Returns the worker-hosted booking form URL with HMAC-signed token.
+ */
+export async function generateBookingLink(customerPhone: string, companyName: string, bookingSecret: string): Promise<string> {
+  const token = await generateBookingToken(customerPhone, bookingSecret);
+  return `https://pintarweb-whatsapp-bot.yusmarin.workers.dev/booking?token=${encodeURIComponent(token)}&company=${encodeURIComponent(companyName)}`;
+}
+
+/**
+ * Verify an HMAC-signed booking token.
+ * Returns the customer phone number if valid, null if invalid or expired.
+ */
+export async function verifyBookingToken(token: string, secret: string, maxAgeMs: number = 60 * 60 * 1000): Promise<string | null> {
+  try {
+    // Reverse URL-safe encoding
+    const standardB64 = token.replace(/-/g, '+').replace(/_/g, '/');
+    const decoded = atob(standardB64);
+    const parts = decoded.split('|');
+    if (parts.length !== 3) return null;
+
+    const [phone, ts, sigB64] = parts;
+    const timestamp = parseInt(ts);
+    if (isNaN(timestamp)) return null;
+
+    // Check expiry
+    if (Date.now() - timestamp > maxAgeMs) return null;
+
+    // Verify signature
+    const enc = new TextEncoder();
+    const payload = `${phone}|${ts}`;
+    const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
+    const sig = Uint8Array.from(atob(sigB64), (c) => c.charCodeAt(0));
+    const valid = await crypto.subtle.verify('HMAC', key, sig, enc.encode(payload));
+
+    return valid ? phone : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function sendFormattedReply(
@@ -166,6 +239,9 @@ export function handleIntent(intent: Intent, customerName: string, businessName:
       return CLOSING_READY_ANSWER;
     case 'HOW_IT_WORKS':
       return HOW_IT_WORKS_ANSWER;
+    case 'BOOKING_REQUEST':
+      return 'Nak book slot konsultasi percuma? Saya boleh sediakan link booking untuk anda. Klik link di bawah untuk pilih masa yang sesuai:\n\n' +
+        '__BOOKING_LINK_PLACEHOLDER__' + '\n\nBooking percuma, 15 minit. Kami akan bincangkan keperluan bisnes anda. 💬';
     case 'SUPPORT':
     case 'ESCALATE':
       return 'Okay, saya akan forward ini ke team kami. Mereka akan hubungi anda tidak lama. 💬\n\nUntuk respons yang lebih cepat, anda boleh WhatsApp kami terus: +60196556243';
@@ -259,38 +335,48 @@ export async function handleIncomingMessage(
     await storeMessage(db, wabaId, customerPhone, 'customer', messageText);
     const alreadyGreeted = await wasGreetingSent(db, wabaId, customerPhone);
 
+    // --- Numeric menu handler (1/2/3) with expiry check ---
     if (['1', '2', '3'].includes(messageText.trim())) {
       const recentHistory = await getConversationHistory(db, wabaId, customerPhone, 4);
-      const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string }) => m.role === 'assistant').at(-1);
-      const hasPricingMenu = lastAssistantMsg && /Jawab dengan nombor/i.test(lastAssistantMsg.content);
-      const hasGreetingMenu = lastAssistantMsg && /Soalan lain|tolong dengan/i.test(lastAssistantMsg.content);
+      const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string; created_at?: string }) => m.role === 'assistant').at(-1);
+      const menuExpired = isMenuExpired(lastAssistantMsg);
 
-      if (hasPricingMenu) {
-        const pmIntent = messageText.trim() === '1' ? 'CLOSING_READY' : 'HOW_IT_WORKS';
-        const reply = handleIntent(pmIntent, customerName, companyName);
-        await sendFormattedReply(env, tenantContext, customerPhone, reply, pmIntent, messageText, db);
-        return;
-      }
+      if (!menuExpired) {
+        const hasPricingMenu = lastAssistantMsg && /Jawab dengan nombor/i.test((lastAssistantMsg as any).content);
+        const hasGreetingMenu = lastAssistantMsg && /Soalan lain|tolong dengan/i.test((lastAssistantMsg as any).content);
 
-      if (hasGreetingMenu) {
-        const greetingIntents: Record<string, Intent> = { '1': 'PRICE_ENQUIRY', '2': 'SUBSCRIBE', '3': 'UNCLEAR' };
-        const intent = greetingIntents[messageText.trim()];
-        const reply = handleIntent(intent, customerName, companyName);
-        await sendFormattedReply(env, tenantContext, customerPhone, reply, intent, messageText, db);
-        return;
+        if (hasPricingMenu) {
+          const pmIntent = messageText.trim() === '1' ? 'CLOSING_READY' : 'HOW_IT_WORKS';
+          const reply = handleIntent(pmIntent, customerName, companyName);
+          await sendFormattedReply(env, tenantContext, customerPhone, reply, pmIntent, messageText, db);
+          return;
+        }
+
+        if (hasGreetingMenu) {
+          const greetingIntents: Record<string, Intent> = { '1': 'PRICE_ENQUIRY', '2': 'SUBSCRIBE', '3': 'UNCLEAR' };
+          const intent = greetingIntents[messageText.trim()];
+          const reply = handleIntent(intent, customerName, companyName);
+          await sendFormattedReply(env, tenantContext, customerPhone, reply, intent, messageText, db);
+          return;
+        }
       }
+      // If menu expired, fall through to normal classifyIntent below
     }
 
+    // --- Suggestion click handler (1/2) with expiry check ---
     if (['1', '2'].includes(messageText.trim()) && alreadyGreeted) {
       const recentHistory = await getConversationHistory(db, wabaId, customerPhone, 5);
-      const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string }) => m.role === 'assistant').at(-1);
+      const lastAssistantMsg = recentHistory.filter((m: { role: string; content: string; created_at?: string }) => m.role === 'assistant').at(-1);
 
-      if (lastAssistantMsg && hasSuggestionBlock(lastAssistantMsg.content)) {
-        const clickedNumber = messageText.trim() as '1' | '2';
-        const suggestionIntent = mapSuggestionClick(lastAssistantMsg.content, clickedNumber);
-        const reply = handleIntent(suggestionIntent, customerName, companyName);
-        await sendFormattedReply(env, tenantContext, customerPhone, reply, suggestionIntent, messageText, db);
-        return;
+      if (lastAssistantMsg && hasSuggestionBlock((lastAssistantMsg as any).content)) {
+        const suggestionExpired = isMenuExpired(lastAssistantMsg);
+        if (!suggestionExpired) {
+          const clickedNumber = messageText.trim() as '1' | '2';
+          const suggestionIntent = mapSuggestionClick((lastAssistantMsg as any).content, clickedNumber);
+          const reply = handleIntent(suggestionIntent, customerName, companyName);
+          await sendFormattedReply(env, tenantContext, customerPhone, reply, suggestionIntent, messageText, db);
+          return;
+        }
       }
     }
 
@@ -318,15 +404,13 @@ export async function handleIncomingMessage(
         if (!isSimpleGreeting) {
           const systemPrompt = `You are a WhatsApp assistant for ${companyName} in ${tenantContext.area}. ${companyName} builds websites, WhatsApp auto-reply bots, and local SEO for small businesses. NEVER mention AC, plumbing, electrical, or any physical service. NEVER invent business names, websites, or services not listed here.
 
-STRICT LANGUAGE RULES:
-- Reply Malaysian Bahasa Melayu ONLY. Never Indonesian.
-- Use "tolong" for help, NOT "bantu" in requests like "apa boleh tolong"
-- Use "bergantung" or "terpulang" for "depends", NOT "tergantung"
-- Use "butiran" or "keterangan" for "details", NOT "rincian"
-- Use "untuk" as preposition "for", NOT as a substitute for other words
-- Use "bagi" sparingly, prefer "untuk"
-- Never use "sama" to mean "with" — use "dengan" instead (e.g., "untuk kamu dengan saya")
-- Keep replies 1-2 short sentences. Keep it conversational.`;
+STRICT LANGUAGE RULES — MALAYSIAN BAHASA MELAYU ONLY:
+- NEVER use Indonesian. If unsure, default to simple conversational Malaysian Malay.
+- FORBIDDEN WORDS (Indonesian): "kirim"/"kirimkan" → use "hantar"; "kamu"/"Anda" → use "awak"; "setelah" → use "selepas" or "lepas"; "bagi" as a preposition → use "untuk"; "mengapa" for why → use "kenapa"; "rincian" → use "butiran" or "keterangan"; "tergantung" for depends → use "bergantung" or "terpulang"; "bantu" in requests like "apa boleh bantu" → use "tolong"; "sama" meaning "with" → use "dengan".
+- FORBIDDEN PHRASES: "emitkan" (send), "para" (grammar prefix), "diantara" (between, use "antara"), "dibawah" (below, use "di bawah"), "diawali" (starts with, use "bermula dengan").
+- Keep replies 1-2 short sentences. Keep it conversational.
+- Use "saya" not "aku". Use "awak" not "kamu" or "Anda".
+- "apa khabar" not "apa kabar". "cuba" not "coba".`;
 
           const chatMessages = [{ role: 'user', content: messageText }];
           reply = await callClaude(env, systemPrompt, chatMessages, 80);
@@ -348,7 +432,11 @@ STRICT LANGUAGE RULES:
       }
     }
 
-    const reply = handleIntent(intent, customerName, companyName);
+    let reply = handleIntent(intent, customerName, companyName);
+    if (intent === 'BOOKING_REQUEST') {
+      const bookingLink = await generateBookingLink(customerPhone, companyName, env.BOOKING_SECRET);
+      reply = reply.replace('__BOOKING_LINK_PLACEHOLDER__', bookingLink);
+    }
     await notifyOwner(token, phoneNumberId, tenantContext.ownerPhone, customerName, customerPhone, messageText, intent, companyName);
     await sendFormattedReply(env, tenantContext, customerPhone, reply, intent, messageText, db);
   } catch (err) {
